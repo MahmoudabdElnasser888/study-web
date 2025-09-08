@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>صندوق الشكاوي والاقتراحات</title>
+  <style>
+    body {
+      font-family: "Cairo", sans-serif;
+      background: linear-gradient(135deg, #000, #222);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 15px;
+    }
+
+    .form-box {
+      background: #fff;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 400px;
+      direction: rtl;
+      transition: transform 0.3s ease;
+    }
+
+    .form-box:hover {
+      transform: translateY(-5px);
+    }
+
+    .form-box h2 {
+      margin-bottom: 15px;
+      text-align: center;
+     color: #0f1183;
+    }
+
+    .form-box label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .form-box input,
+    .form-box textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      outline: none;
+      font-size: 14px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-box input:focus,
+    .form-box textarea:focus {
+      border-color: goldenrod;
+      box-shadow: 0 0 5px rgba(218,165,32,0.6);
+    }
+
+    .form-box textarea {
+      resize: vertical;
+      min-height: 120px;
+      max-height: 250px;
+    }
+
+    .form-box button {
+      width: 100%;
+      background: linear-gradient(120deg, #0d42d3, #1e0661);
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .form-box button:hover {
+      background:linear-gradient(120deg, #1e0661, #0d42d3);
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      color: #fff;
+      display: none;
+      z-index: 9999;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      animation: fadeIn 0.5s, fadeOut 0.5s 2.5s;
+    }
+
+    .toast.success {
+      background: #28a745;
+    }
+
+    .toast.error {
+      background: #dc3545;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -20px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translate(-50%, 0); }
+      to { opacity: 0; transform: translate(-50%, -20px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h2>صندوق الشكاوي والاقتراحات</h2>
+    <form id="complaintForm" action="https://formsubmit.co/modynasser164@gmail.com" method="POST">
+      <!-- منع Captcha الافتراضية -->
+      <input type="hidden" name="_captcha" value="false">
+      <!-- إعادة التوجيه بعد الإرسال -->
+      <input type="hidden" name="_next" value="https://yourwebsite.com/thanks.html">
+
+      <label for="name">الاسم</label>
+      <input type="text" id="name" name="name" placeholder="اكتب اسمك" required>
+
+      <label for="message">رسالتك</label>
+      <textarea id="message" name="message" placeholder="اكتب الشكوى أو الاقتراح هنا" required></textarea>
+
+      <button type="submit">إرسال</button>
+    </form>
+  </div>
+
+  <!-- Toast message -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const form = document.getElementById("complaintForm");
+    const toast = document.getElementById("toast");
+
+    function showToast(message, type) {
+      toast.textContent = message;
+      toast.className = "toast " + type;
+      toast.style.display = "block";
+
+      // يخفيه تلقائيًا بعد 3 ثواني
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 3000);
+    }
+
+
+    form.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const data = new FormData(form);
+
+  fetch(form.action, {
+    method: form.method,
+    body: data,
+  }).then(response => {
+    // أي رد من السيرفر اعتبره نجاح
+    if (response.ok || response.status === 200 || response.redirected) {
+      showToast("✅ تم إرسال رسالتك بنجاح!", "success");
+      form.reset();
+    } else {
+      showToast("❌ حصل خطأ، حاول مرة أخرى.", "error");
+    }
+  }).catch(() => {
+    showToast("✅تم إرسال رسالتك بنجاح!", "error");
+  });
+});
+
+
+ 
+  </script>
+</body>
+</html>
