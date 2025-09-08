@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz</title>
+  <style>
+    body {
+      font-family: Tahoma, sans-serif;
+      margin: 0;
+      background: linear-gradient(120deg, #6e8efb, #a777e3);
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .question {
+      margin-bottom: 25px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+    .question h3 { margin: 0 0 10px; }
+    .option {
+      display: block;
+      margin: 8px 0;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      transition: 0.3s;
+    }
+    .option.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+    .option.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+    .buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+    button { padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+    #showAnswers { background: linear-gradient(120deg, #345ce0, #8848d6); color: white; }
+    #timer { font-weight: bold; text-align: center; margin-bottom: 20px; font-size: 18px; }
+    .result { text-align: center; margin-top: 20px; font-size: 18px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div id="timer">الوقت المتبقي: 00:00</div>
+
+  <div class="question" data-correct="2">
+    <h3>1- ما هي عاصمة مصر؟</h3>
+    <label class="option"><input type="radio" name="q1" value="1"> الإسكندرية</label>
+    <label class="option"><input type="radio" name="q1" value="2"> القاهرة</label>
+    <label class="option"><input type="radio" name="q1" value="3"> الجيزة</label>
+    <label class="option"><input type="radio" name="q1" value="4"> أسوان</label>
+  </div>
+
+  <div class="question" data-correct="7">
+    <h3>2- كم عدد قارات العالم؟</h3>
+    <label class="option"><input type="radio" name="q2" value="5"> 5</label>
+    <label class="option"><input type="radio" name="q2" value="6"> 6</label>
+    <label class="option"><input type="radio" name="q2" value="7"> 7</label>
+    <label class="option"><input type="radio" name="q2" value="8"> 8</label>
+  </div>
+
+  <div class="buttons">
+    <button id="showAnswers">إظهار الإجابات</button>
+  </div>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+  // ----------------- تعديل الوقت هنا بسهولة -----------------
+  const QUIZ_MINUTES = 1; // <-- عدل الرقم هنا لتغيير الوقت بالدقائق
+
+  let totalSeconds = QUIZ_MINUTES * 60;
+  const timerDiv = document.getElementById("timer");
+  const resultDiv = document.getElementById("result");
+
+  function updateTimer() {
+    let minutes = Math.floor(totalSeconds / 60).toString().padStart(2,'0');
+    let seconds = (totalSeconds % 60).toString().padStart(2,'0');
+    timerDiv.innerText = `الوقت المتبقي: ${minutes}:${seconds}`;
+    if (totalSeconds <= 0) {
+      clearInterval(timerInterval);
+      showResults();
+      timerDiv.innerText = "انتهى الوقت!";
+    }
+    totalSeconds--;
+  }
+
+  const timerInterval = setInterval(updateTimer, 1000);
+  updateTimer();
+
+  // ----------------- إظهار النتائج -----------------
+  function showResults() {
+    let questions = document.querySelectorAll(".question");
+    let correctCount = 0;
+
+    questions.forEach((q, index) => {
+      const correctAnswer = parseInt(q.dataset.correct);
+      const selected = document.querySelector(`input[name="q${index+1}"]:checked`);
+
+      q.querySelectorAll(".option").forEach(opt => {
+        const val = parseInt(opt.querySelector("input").value);
+        if (val === correctAnswer) opt.classList.add("correct");
+        if (selected && parseInt(selected.value) === val && val !== correctAnswer) opt.classList.add("wrong");
+      });
+
+      if (selected && parseInt(selected.value) === correctAnswer) correctCount++;
+    });
+
+    resultDiv.innerHTML = `درجتك: ${correctCount} من ${questions.length}`;
+  }
+
+  document.getElementById("showAnswers").addEventListener("click", showResults);
+</script>
+
+</body>
+</html>

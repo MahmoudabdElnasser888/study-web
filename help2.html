@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>START PAGE</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===== Reset & Fonts ===== */
+* {margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif;}
+body {background-color:#41498b;color:#fff;overflow-x:hidden;}
+
+/* ===== Header ===== */
+header {
+  position:fixed; width:100%; top:0; left:0;
+  background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);
+  padding:12px 30px; display:flex; justify-content:space-between; align-items:center;
+  z-index:1000;
+}
+header h1 {font-size:24px; color:#fff;}
+.icons {
+  position: absolute; /* أو fixed حسب مكانك */
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 15px; /* مسافة بين الايقونات */
+}
+
+.icons a {
+  font-size: 24px;
+  color: white;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.icons a:hover {
+  color: rgb(122, 218, 32);
+}
+
+/* ===== Hero Section ===== */
+.hero {
+  width: 100%;
+  height: 150vh;
+  background-image: url(bg2.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+.hero-text {color:#fff; max-width:700px; padding:20px; z-index:1; animation:fadeInUp 1.5s ease;}
+.hero-text h2 {font-size:48px; font-weight:700; margin-bottom:20px; animation:fadeInUp 1s ease;}
+.start-btn {
+  display:inline-block; padding:14px 40px; font-size:20px;font-weight:700;color:#fff;
+  border:none;border-radius:50px;background: linear-gradient(45deg,#17c726,#0974ee);
+  cursor:pointer;position:relative;overflow:hidden; box-shadow:0 0 15px rgb(9,107,163);
+  transition:transform .3s ease,box-shadow .3s ease; animation:fadeInUp 1.5s ease 0.5s; 
+}
+.start-btn::before {
+  content:""; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background: rgba(255,255,255,0.3); transform: skewX(-25deg); transition:0.5s;
+}
+.start-btn:hover::before {left:120%;}
+.start-btn:hover {transform:scale(1.1); box-shadow:0 0 25px rgb(8,90,167),0 0 50px rgba(9,32,238,0.8);}
+
+/* ===== Content Section ===== */
+.content {
+  padding: 100px 20px 60px 20px; text-align:center; background:linear-gradient(120deg, #345ce0, #8848d6);color:#222;
+}
+.content-title {font-size:2.5rem; margin-bottom:50px; font-weight:700;}
+.cards-container {
+  display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:30px; max-width:1200px; margin:auto;
+}
+.card {
+  background:#fff; border-radius:20px; padding:30px 20px;
+  box-shadow:0 6px 20px rgba(34, 10, 167, 0.479); display:flex; flex-direction:column; align-items:center;
+  transition: transform .3s ease, box-shadow .3s ease; animation:fadeInUp 1s ease;
+}
+.card:hover {transform:translateY(-10px); box-shadow:0 10px 30px rgb(36, 4, 126);}
+.card h3 {font-size:1.8rem; margin-bottom:25px;}
+.card .btn {display:inline-block; padding:12px 25px; background:#111; color:#fff;
+  text-decoration:none; border-radius:10px; font-weight:600; margin:5px; transition:.3s;}
+.card .btn:hover {background:#0ebcd6; transform:scale(1.05);}
+
+
+.ribbon {
+  position: absolute;
+  top: 15px;
+  right: -30px;
+  transform: rotate(45deg);
+  background: crimson;
+  color: #fff;
+  padding: 5px 40px;
+  font-weight: bold;
+  box-shadow: 0 3px 6px rgba(0,0,0,.3);
+  font-size: 14px;
+}
+
+.btn-disabled {
+  background: #3b3b3bb2;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* ===== Footer ===== */
+footer {
+  background:#111; color:#fff; text-align:center; padding:20px; font-size:16px;
+}
+footer a {color:goldenrod; text-decoration:none; font-weight:700;}
+footer a:hover {color:#0c66b9; text-decoration:underline;}
+
+/* ===== Animations ===== */
+@keyframes fadeInUp {
+  from {opacity:0; transform:translateY(40px);}
+  to {opacity:1; transform:translateY(0);}
+}
+
+/* ===== Responsive ===== */
+@media(max-width:768px){
+  .hero-text h2{font-size:32px;}
+  .start-btn{font-size:16px; padding:12px 30px;}
+  .card h3{font-size:1.5rem;}
+  .card .btn{padding:10px 20px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Mr.Nasser</h1>
+  <div class="icons">
+  <!-- واتساب -->
+  <a href="https://wa.me/201143384275" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- النوت -->
+  <a href="notes.html" title="ملاحظاتي">
+    <i class="fas fa-sticky-note"></i>
+  </a>
+</div>
+ 
+</header>
+
+<section class="hero">
+  <div class="hero-text">
+    <h2>Your Success Starts Here</h2>
+    <button class="start-btn" onclick="document.getElementById('content').scrollIntoView({behavior:'smooth'});">Start</button>
+  </div>
+</section>
+
+<section id="content" class="content">
+  <h2 class="content-title">Choose Your Prep</h2>
+  <div class="cards-container">
+
+    <div class="card">
+      <h3>Prep 1</h3>
+      <a href="code.html" class="btn">START</a>
+      
+    </div>
+
+    <div class="card">
+      <h3>Prep 2</h3>
+      <a href="code.html" class="btn">START</a>
+    </div>
+
+    <div class="card">
+      <h3>Prep 3</h3>
+      <a href="code.html" class="btn">START</a>
+    </div>
+
+  </div>
+</section>
+
+
+<footer>
+  <p>Website made by <a href="https://www.instagram.com/mahmoud___nasser__77/profilecard/?igsh=MXM3NW1jcm1vZmVlaA==" target="_blank">Mahmoud Nasser</a></p>
+</footer>
+
+</body>
+</html>

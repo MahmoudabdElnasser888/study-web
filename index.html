@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #252323;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container {
+      background: #000000;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      width: 100%;
+      max-width: 350px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ff6f61;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    input:focus {
+      outline: 2px solid #ff6f61;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: #ff6f61;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #e65b50;
+    }
+    .note {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+      authDomain: "my-web-c23de.firebaseapp.com",
+      projectId: "my-web-c23de",
+      storageBucket: "my-web-c23de.appspot.com",
+      messagingSenderId: "846339445873",
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
+      measurementId: "G-3SE0GBRS8C"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    async function signUp() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        await userCredential.user.updateProfile({
+          displayName: name
+        });
+
+        alert("تم التسجيل بنجاح ✅");
+        window.location.href = "start.html";
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        window.location.href = "start.html";
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>Sign Up</h2>
+    <input type="text" id="name" placeholder="Enter your name">
+    <input type="email" id="email" placeholder="Enter your email">
+    <input type="password" id="password" placeholder="Enter your password">
+    <button onclick="signUp()">Sign Up</button>
+    <p class="note">Already have an account? Login from the app</p>
+  </div>
+</body>
+</html>

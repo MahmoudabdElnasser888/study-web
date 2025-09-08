@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sticky Notes</title>
+<style>
+body{background:#000;color:#fff;font-family:'Segoe UI',Tahoma,sans-serif;margin:0;padding:0;}
+header{width:100%;background:#111;display:flex;justify-content:center;gap:10px;padding:10px;}
+header button{padding:8px 12px;border:none;border-radius:6px;background:#333;color:#fff;cursor:pointer;}
+header button:hover{background:#555;}
+#noteSection{display:flex;flex-wrap:wrap;gap:15px;padding:20px;justify-content:center;}
+.note-card{width:250px;min-height:200px;border-radius:12px;padding:10px;box-shadow:0 4px 15px rgba(255,255,255,0.2);display:flex;flex-direction:column;}
+.note-card textarea{flex:1;width:100%;background:transparent;color:#000;border:none;resize:none;font-size:1em;font-family:inherit;outline:none;}
+@media(max-width:500px){.note-card{width:90%;}.note-card textarea{font-size:0.9em;}}
+</style>
+</head>
+<body>
+
+<header>
+<button onclick="selectColor('yellow')">Yellow</button>
+<button onclick="selectColor('green')">Green</button>
+<button onclick="selectColor('pink')">Pink</button>
+<button onclick="selectColor('blue')">Blue</button>
+<button onclick="selectColor('orange')">Orange</button>
+</header>
+
+<section id="noteSection"></section>
+
+<script>
+const colors=['yellow','green','pink','blue','orange'];
+let currentColor='yellow';
+const noteSection=document.getElementById('noteSection');
+
+function createNote(color){
+  // إنشاء الكرتة
+  const card=document.createElement('div');
+  card.className='note-card';
+  card.style.background=color;
+  const ta=document.createElement('textarea');
+  ta.placeholder='Write your note...';
+
+  // تحميل النص من localStorage
+  const saved=localStorage.getItem('note_'+color);
+  if(saved) ta.value=saved;
+
+  // حفظ النص عند الكتابة
+  ta.addEventListener('input',()=>{localStorage.setItem('note_'+color,ta.value);});
+
+  card.appendChild(ta);
+  noteSection.innerHTML=''; // مسح القديم وعرض الجديد
+  noteSection.appendChild(card);
+}
+
+function selectColor(color){
+  currentColor=color;
+  createNote(color);
+}
+
+// عرض اللون الافتراضي عند الدخول
+createNote(currentColor);
+</script>
+
+</body>
+</html>

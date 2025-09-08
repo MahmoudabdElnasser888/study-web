@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timer & Pomodoro Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif;}
+body{background:#000;color:#fff;}
+header{width:100%;background:#111;display:flex;justify-content:center;gap:20px;padding:10px 0;position:sticky;top:0;z-index:10;}
+header button{background:none;border:none;color:#fff;font-size:1em;cursor:pointer;padding:5px 10px;transition:0.3s;}
+header button:hover{background:#222;border-radius:5px;}
+section{min-height:80vh;display:flex;justify-content:center;align-items:center;flex-direction:column;padding:20px;}
+#clockSection{font-size:6em;}
+.card{background:#111;border-radius:12px;padding:20px;box-shadow:0 4px 15px rgba(255,255,255,0.2);text-align:center;margin-bottom:30px;width:300px;}
+.display{font-size:2em;margin-bottom:10px;}
+button,input[type="number"]{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;margin:2px;background:#333;color:#fff;}
+button:hover{background:#555;}
+@media(max-width:500px){#clockSection{font-size:4em;}}
+</style>
+</head>
+<body>
+
+<header>
+<button onclick="scrollToSection('clockSection')">Clock</button>
+<button onclick="scrollToSection('timerSection')">Timer</button>
+<button onclick="scrollToSection('pomodoroSection')">Pomodoro</button>
+</header>
+
+<section id="clockSection">
+<div id="bigClock">00:00:00</div>
+</section>
+
+<section id="timerSection">
+<div class="card">
+<h2>Timer</h2>
+<div class="display" id="timerDisplay">00:00:00</div>
+<input type="number" id="timerMinutes" placeholder="Minutes" min="1">
+<button id="startTimer">Start</button>
+<button id="stopTimer">Stop</button>
+<button id="resetTimer" style="display:none;">Reset</button>
+<button id="continueTimer" style="display:none;">Continue</button>
+</div>
+</section>
+
+<section id="pomodoroSection">
+<div class="card">
+<h2>Pomodoro</h2>
+<div class="display" id="pomodoroDisplay">25:00</div>
+<button id="startPomodoro">Start</button>
+<button id="stopPomodoro">Stop</button>
+<button id="resetPomodoro" style="display:none;">Reset</button>
+<button id="continuePomodoro" style="display:none;">Continue</button>
+</div>
+</section>
+
+<audio id="alarmAudio" src="https://www.soundjay.com/button/sounds/beep-07.mp3" preload="auto"></audio>
+
+<script>
+// ===== Clock =====
+function updateClock(){
+const now=new Date();
+const h=String(now.getHours()).padStart(2,'0');
+const m=String(now.getMinutes()).padStart(2,'0');
+const s=String(now.getSeconds()).padStart(2,'0');
+document.getElementById('bigClock').textContent=`${h}:${m}:${s}`;
+}
+setInterval(updateClock,1000); updateClock();
+function scrollToSection(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'center'});}
+
+// ===== Timer =====
+let timer={time:0,interval:null};
+const timerDisplay=document.getElementById('timerDisplay');
+const timerResetBtn=document.getElementById('resetTimer');
+const timerContinueBtn=document.getElementById('continueTimer');
+
+document.getElementById('startTimer').addEventListener('click',()=>{
+clearInterval(timer.interval);
+let min=parseInt(document.getElementById('timerMinutes').value);
+if(isNaN(min)||min<=0)return alert('Enter valid minutes!');
+timer.time=min*60; updateTimer(); startTimer(); timerResetBtn.style.display='none'; timerContinueBtn.style.display='none';
+});
+
+document.getElementById('stopTimer').addEventListener('click',()=>{
+clearInterval(timer.interval);
+timerResetBtn.style.display='inline-block';
+timerContinueBtn.style.display='inline-block';
+});
+
+timerResetBtn.addEventListener('click',()=>{
+timer.time=0; updateTimer();
+timerResetBtn.style.display='none';
+timerContinueBtn.style.display='none';
+});
+
+timerContinueBtn.addEventListener('click',()=>{
+startTimer();
+timerResetBtn.style.display='none';
+timerContinueBtn.style.display='none';
+});
+
+function startTimer(){
+timer.interval=setInterval(()=>{
+if(timer.time>0){timer.time--;updateTimer();}
+else{clearInterval(timer.interval);document.getElementById('alarmAudio').play();alert('Timer Finished!');}
+},1000);
+}
+
+function updateTimer(){
+const h=String(Math.floor(timer.time/3600)).padStart(2,'0');
+const m=String(Math.floor((timer.time%3600)/60)).padStart(2,'0');
+const s=String(timer.time%60).padStart(2,'0');
+timerDisplay.textContent=`${h}:${m}:${s}`;
+}
+
+// ===== Pomodoro =====
+let pomo={time:25*60,interval:null};
+const pomoDisplay=document.getElementById('pomodoroDisplay');
+const pomoResetBtn=document.getElementById('resetPomodoro');
+const pomoContinueBtn=document.getElementById('continuePomodoro');
+
+document.getElementById('startPomodoro').addEventListener('click',()=>{
+clearInterval(pomo.interval); pomo.time=25*60; updatePomodoro(); startPomodoro(); pomoResetBtn.style.display='none'; pomoContinueBtn.style.display='none';
+});
+document.getElementById('stopPomodoro').addEventListener('click',()=>{
+clearInterval(pomo.interval); pomoResetBtn.style.display='inline-block'; pomoContinueBtn.style.display='inline-block';
+});
+pomoResetBtn.addEventListener('click',()=>{
+pomo.time=25*60; updatePomodoro();
+pomoResetBtn.style.display='none'; pomoContinueBtn.style.display='none';
+});
+pomoContinueBtn.addEventListener('click',()=>{
+startPomodoro(); pomoResetBtn.style.display='none'; pomoContinueBtn.style.display='none';
+});
+
+function startPomodoro(){
+pomo.interval=setInterval(()=>{
+if(pomo.time>0){pomo.time--;updatePomodoro();}
+else{clearInterval(pomo.interval);document.getElementById('alarmAudio').play();alert('Pomodoro Finished! Take 5-min break.');}
+},1000);
+}
+
+function updatePomodoro(){
+const m=String(Math.floor(pomo.time/60)).padStart(2,'0');
+const s=String(pomo.time%60).padStart(2,'0');
+pomoDisplay.textContent=`${m}:${s}`;
+}
+
+</script>
+</body>
+</html>

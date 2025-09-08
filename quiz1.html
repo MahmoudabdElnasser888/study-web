@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solve Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+h2 { margin-bottom: 20px; }
+button {
+    padding: 12px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    background: #6a11cb;
+    color: white;
+    transition: transform 0.2s, background 0.3s;
+}
+button:hover { transform: scale(1.05); background: #2575fc; }
+.result {
+    margin-top: 20px;
+    text-align: left;
+}
+.correct { color: green; }
+.wrong { color: red; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Quiz Time!</h2>
+    <div id="quizArea"></div>
+    <div class="result" id="resultArea"></div>
+</div>
+
+<script>
+let questions = JSON.parse(localStorage.getItem('quizQuestions') || '[]');
+let current = 0;
+let score = 0;
+let answers = [];
+
+const quizArea = document.getElementById('quizArea');
+const resultArea = document.getElementById('resultArea');
+
+function showQuestion() {
+    if (current >= questions.length) {
+        showResults();
+        localStorage.removeItem('quizQuestions'); // حذف الأسئلة بعد الحل
+        return;
+    }
+
+    const q = questions[current];
+    quizArea.innerHTML = `
+        <p><strong>Q${current+1}:</strong> ${q.text}</p>
+        ${q.options.map((opt, i) => `<button onclick="answer(${i})">${opt}</button>`).join('')}
+    `;
+}
+
+function answer(selected) {
+    const q = questions[current];
+    const isCorrect = selected === q.correct;
+    if (isCorrect) score++;
+    answers.push({question: q.text, selected: q.options[selected], correct: q.options[q.correct], isCorrect});
+    current++;
+    showQuestion();
+}
+
+function showResults() {
+    quizArea.innerHTML = `<h3>Quiz Finished! Score: ${score}/${questions.length}</h3>`;
+    resultArea.innerHTML = answers.map(a => `
+        <p><strong>${a.question}</strong><br>
+        Your Answer: <span class="${a.isCorrect ? 'correct' : 'wrong'}">${a.selected}</span><br>
+        Correct Answer: ${a.correct}</p>
+    `).join('');
+}
+
+showQuestion();
+</script>
+</body>
+</html>

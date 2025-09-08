@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Questions</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+h2 { text-align: center; margin-bottom: 20px; }
+input[type=text], select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+button {
+    padding: 12px 20px;
+    background: #6a11cb;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+button:hover { background: #2575fc; }
+.question-list {
+    margin-top: 20px;
+}
+.question-item {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Add a Question</h2>
+    <input type="text" id="question" placeholder="Enter your question">
+    <input type="text" id="option1" placeholder="Option 1">
+    <input type="text" id="option2" placeholder="Option 2">
+    <input type="text" id="option3" placeholder="Option 3">
+    <input type="text" id="option4" placeholder="Option 4">
+    <select id="correct">
+        <option value="">Select Correct Option</option>
+        <option value="0">Option 1</option>
+        <option value="1">Option 2</option>
+        <option value="2">Option 3</option>
+        <option value="3">Option 4</option>
+    </select>
+    <button id="addQuestionBtn">Add Question</button>
+
+    <div class="question-list" id="questionList"></div>
+
+    <button id="startQuizBtn" style="margin-top:20px;">Start Quiz</button>
+</div>
+
+<script>
+let questions = JSON.parse(localStorage.getItem('quizQuestions') || '[]');
+const questionList = document.getElementById('questionList');
+
+function renderQuestions() {
+    questionList.innerHTML = '';
+    questions.forEach((q, idx) => {
+        const div = document.createElement('div');
+        div.className = 'question-item';
+        div.textContent = `${idx + 1}. ${q.text}`;
+        questionList.appendChild(div);
+    });
+}
+
+document.getElementById('addQuestionBtn').addEventListener('click', () => {
+    const text = document.getElementById('question').value.trim();
+    const opts = [
+        document.getElementById('option1').value.trim(),
+        document.getElementById('option2').value.trim(),
+        document.getElementById('option3').value.trim(),
+        document.getElementById('option4').value.trim()
+    ];
+    const correct = document.getElementById('correct').value;
+
+    if (!text || opts.includes('') || correct === '') {
+        alert('Please fill all fields!');
+        return;
+    }
+
+    questions.push({ text, options: opts, correct: parseInt(correct) });
+    localStorage.setItem('quizQuestions', JSON.stringify(questions));
+    renderQuestions();
+
+    // Reset inputs
+    document.getElementById('question').value = '';
+    opts.forEach((_, i) => document.getElementById('option'+(i+1)).value='');
+    document.getElementById('correct').value = '';
+});
+
+renderQuestions();
+
+document.getElementById('startQuizBtn').addEventListener('click', () => {
+    if (questions.length === 0) { alert('Add at least one question!'); return; }
+    window.location.href = 'quiz1.html';
+});
+</script>
+</body>
+</html>

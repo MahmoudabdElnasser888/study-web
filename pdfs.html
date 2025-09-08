@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Materials</title>
+<style>
+body{
+    font-family:'Poppins',sans-serif;
+    background: linear-gradient(135deg,#075596,#8975e4);
+    color:#fff;
+    margin:0;
+    padding:50px 20px;
+    transition: background 0.5s, color 0.5s;
+}
+h1{
+    text-align:center;
+    margin-bottom:40px;
+}
+.pdf-list{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    max-width:600px;
+    margin:0 auto;
+}
+.pdf-item{
+    background: rgba(0,0,0,0.6);
+    padding:20px;
+    border-radius:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.5s, color 0.5s;
+}
+.pdf-item:hover{
+    transform: translateY(-5px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.3);
+}
+.pdf-item button{
+    padding:8px 15px;
+    border:none;
+    border-radius:8px;
+    background:#ff6f61;
+    color:#fff;
+    cursor:pointer;
+    transition: background 0.3s, color 0.3s;
+}
+.pdf-item button:hover{
+    background:#ff3b2e;
+}
+
+/* Dark mode */
+body.dark{
+    background:#000;
+    color:#fff;
+}
+body.dark .pdf-item{
+    background: rgba(255,255,255,0.1);
+    color:#fff;
+}
+body.dark .pdf-item button{
+    background:#ff6f61;
+    color:#fff;
+}
+
+/* Light mode */
+body.light{
+    background:#f2f2f2;
+    color:#000;
+}
+body.light .pdf-item{
+    background: rgba(0,0,0,0.05);
+    color:#000;
+}
+body.light .pdf-item button{
+    background:#ff6f61;
+    color:#fff;
+}
+
+.theme-toggle{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ffcc00;
+    border: none;
+    border-radius:50%;
+    width:50px;
+    height:50px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    transition: background 0.5s, color 0.5s;
+}
+body.light .theme-toggle{
+    background:#333;
+    color:#ffcc00;
+}
+
+@media(max-width:500px){
+    .pdf-item{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+    .pdf-item button{
+        margin-top:10px;
+    }
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">
+    <i class="fa-solid fa-sun"></i>
+</button>
+
+<h1>Study Materials</h1>
+<div class="pdf-list" id="pdfList">
+    <!-- PDF Items will be loaded here -->
+</div>
+
+<script>
+const pdfs = [
+    { name: "درس 1 - مقدمة", url: "Ghost.pdf" },
+    { name: "درس 2 - القواعد", url: "pdfs/lesson2.pdf" },
+    { name: "درس 3 - أمثلة", url: "pdfs/lesson3.pdf" }
+];
+
+const pdfList = document.getElementById("pdfList");
+
+function loadPDFs(){
+    pdfList.innerHTML = '';
+    pdfs.forEach(pdf=>{
+        const div = document.createElement('div');
+        div.className = 'pdf-item';
+        div.innerHTML = `
+            <span>${pdf.name}</span>
+            <button onclick="window.open('${pdf.url}','_blank')">Open</button>
+        `;
+        pdfList.appendChild(div);
+    });
+}
+
+loadPDFs();
+
+// تفعيل الوضع حسب Local Storage عند تحميل الصفحة
+window.onload = function() {
+    const savedTheme = localStorage.getItem('theme');
+    const body = document.body;
+    const icon = document.querySelector('.theme-toggle i');
+
+    if(savedTheme === 'light'){
+        body.classList.add('light');
+        body.classList.remove('dark');
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+    } else {
+        body.classList.add('dark');
+        body.classList.remove('light');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+    }
+}
+
+function toggleTheme(){
+    const body = document.body;
+    const icon = document.querySelector('.theme-toggle i');
+
+    if(body.classList.contains('dark')){
+        body.classList.remove('dark');
+        body.classList.add('light');
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+        localStorage.setItem('theme','light');
+    } else {
+        body.classList.remove('light');
+        body.classList.add('dark');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+        localStorage.setItem('theme','dark');
+    }
+}
+</script>
+</body>
+</html>

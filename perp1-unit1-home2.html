@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Quiz</title>
+  <style>
+    body {
+      font-family: Tahoma, sans-serif;
+      margin: 0;
+      background: linear-gradient(120deg, #6e8efb, #a777e3);
+      color: #333;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(80, 78, 78, 0.4);
+      backdrop-filter: blur(10px);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+      color: rgb(255, 255, 255);
+    }
+    header a {
+      text-decoration: none;
+      background: #25d366;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-left: 35px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 100px auto 40px;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .question {
+      margin-bottom: 25px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+    .question h3 {
+      margin: 0 0 10px;
+    }
+    .option {
+      display: block;
+      margin: 8px 0;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      transition: 0.3s;
+    }
+    .option input { margin-left: 8px; }
+    .option.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+    .option.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+.cart-icon {font-size:26px;color:#fff;transition:.3s;}
+.cart-icon:hover {color:#25d366;cursor:pointer;}
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    #showAnswers {background: linear-gradient(120deg, #345ce0, #8848d6);  color: white; }
+    #whyBtn { background: #007bff; color: white; }
+    #whyBtn:disabled { background: #aaa; cursor: not-allowed; }
+    .result {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Quiz</h1>
+   
+</a>
+  
+  </header>
+
+  <div class="container">
+    <div class="question" data-correct="2">
+      <h3>1- ما هي عاصمة مصر؟</h3>
+      <label class="option"><input type="radio" name="q1" value="1"> الإسكندرية</label>
+      <label class="option"><input type="radio" name="q1" value="2"> القاهرة</label>
+      <label class="option"><input type="radio" name="q1" value="3"> الجيزة</label>
+      <label class="option"><input type="radio" name="q1" value="4"> أسوان</label>
+    </div>
+
+    <div class="question" data-correct="7">
+      <h3>2- كم عدد قارات العالم؟</h3>
+      <label class="option"><input type="radio" name="q2" value="5"> 5</label>
+      <label class="option"><input type="radio" name="q2" value="6"> 6</label>
+      <label class="option"><input type="radio" name="q2" value="7"> 7</label>
+      <label class="option"><input type="radio" name="q2" value="8"> 8</label>
+    </div>
+
+    <div class="buttons">
+      <button id="showAnswers">إظهار الإجابات</button>
+      <button id="whyBtn" disabled onclick="location.href='why.html'">???Why</button>
+    </div>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    document.getElementById("showAnswers").addEventListener("click", function() {
+      let questions = document.querySelectorAll(".question");
+      let correctCount = 0;
+
+      questions.forEach((q, index) => {
+        const correctAnswer = parseInt(q.dataset.correct);
+        const selected = document.querySelector(`input[name="q${index+1}"]:checked`);
+
+        // نلون كل الاختيارات
+        q.querySelectorAll(".option").forEach(opt => {
+          const val = parseInt(opt.querySelector("input").value);
+          if (val === correctAnswer) {
+            opt.classList.add("correct");
+          }
+          if (selected && parseInt(selected.value) === val && val !== correctAnswer) {
+            opt.classList.add("wrong");
+          }
+        });
+
+        if (selected && parseInt(selected.value) === correctAnswer) {
+          correctCount++;
+        }
+      });
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = `درجتك: ${correctCount} من ${questions.length}`;
+
+      // فعل زر "افهم ليه" بعد ما يجاوب
+      document.getElementById("whyBtn").disabled = false;
+    });
+  </script>
+</body>
+</html>

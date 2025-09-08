@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invincible (VARIANTS)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        font-family: "Cairo", sans-serif;
+
+    }
+    header{
+        width: 100%;
+        background-color: #111;
+        padding: 10px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        height: 70px;
+        gap: 30px;
+        justify-content: space-between;
+        height: 70px;
+    }
+    .logo{
+        height: auto;
+        width: 215px;
+        display: block;
+      
+        
+    }
+    .hero {
+        height: 100vh;
+        width: 100%;
+        background: url(variants2.jpg);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-size: cover;
+    }
+   
+    .start-btn{
+        padding: 15px 40px;
+        font-size: 20px;
+        font-weight: bold;
+       color: white;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0 ,0 ,0.5);
+        transition: 0.3s;
+        position: relative;
+        gap: 10px;
+        overflow: hidden;
+        background: linear-gradient(120deg,#0977d1,#9384d3);
+        background-size: 400% 400%;
+        animation: gradientShift 6s ease infinite;
+        transition: all 0.3 ease;
+        margin-bottom: 100px;
+
+
+    }
+
+    .start-btn:hover{
+        transform: scale(1.07);
+        box-shadow: color 0.3s, transform 0.3s;
+    }
+    .start-btn img {
+        position: absolute;
+        right: 5px;
+        width: 45px;
+        transition: transform 0.5s ease;
+    }
+    .start-btn:hover img{
+        transform: translateX(-150px);
+    }
+    .start-btn span {
+        position: relative;
+        z-index: 2;
+        transition: color 0.3s, transform 0.3s;
+    }
+    .start-btn:hover span {
+        transform: scale(1.1);
+        color: #000000;
+    }
+    header a{
+        text-decoration: none;
+        font-size: 20px;
+        font-weight: bold;
+        color:white;
+        position: relative;
+        transition: color 0.3s ease;
+    }
+    header a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -5px;
+        width: 0%;
+        height: 3px;
+        background: rgb(255, 255, 255);
+        transition: width 0.3s ease;
+    }
+
+    header a:hover {
+        color: goldenrod;
+    }
+    header a:hover::after{
+        width: 100%;
+    }
+    header nav{
+        display: flex;
+        gap: 30px;
+    }
+    :root {
+        --gold:#d4af37;
+        --dark:#0d0d0d;
+        --light:#f5f5f5;
+        --gray:#1a1a1a;
+    }
+    .variants-section{
+        background: var(--dark);
+        color: var(--light);
+        padding: 90px 20px;
+        text-align: center;
+    }
+    .variants-section .Main-title{
+        font-size: 3rem;
+        font-weight: bold;
+        color: var(--gold);
+        margin-bottom: 20px;
+    }
+    .variants-section .intro{
+        font-size: 1.2rem;
+        color: #ccc;
+        max-width: 800px;
+        margin: 0 auto 60px;
+        line-height: 1.7;
+    }
+     /* Variants Characters */
+    .variants-characters {
+      background: #0d0d0d;
+      padding: 100px 20px;
+      text-align: center;
+    }
+    .variants-title {
+      font-size: 3rem;
+      color: goldenrod;
+      margin-bottom: 80px;
+      text-transform: uppercase;
+    }
+    .character-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      margin-bottom: 100px;
+    }
+    .character-box.reverse {
+      flex-direction: row-reverse;
+    }
+    .char-info {
+      flex: 1;
+      text-align: left;
+    }
+    .char-info h3 {
+      font-size: 2rem;
+      color: goldenrod;
+      margin-bottom: 15px;
+    }
+    .char-info p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #ccc;
+    }
+    .char-shape {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* حلقة ذهبية متحركة حوالين الصورة */
+    .circle-animation {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .circle-animation::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, goldenrod, transparent 60%, goldenrod);
+      animation: rotate 5s linear infinite;
+      filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6));
+    }
+    .circle-animation img {
+      width: 200px;
+      height: auto;
+      border-radius: 50%;
+      border: 5px solid #000000;
+      background: #f5ecec;
+      position: relative;
+      z-index: 2;
+    }
+    @keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+ 
+    
+</style>
+
+
+</head>
+<body>
+    <header>
+       
+            <img src="Invincible-Font-removebg-preview.png" alt="headerbg" class="logo">
+        <nav>
+        <a href="">Main Characters</a>
+        <a href="">Other minor characters</a>
+        <a href="">My edits</a>
+        </nav>
+
+    </header>
+    <section class="hero">
+        <button class="start-btn">
+            <img src="fe1b345a176b99c660a8e4006e436d17-removebg-preview.png" alt="Character">
+            <span>START</span>
+
+        </button>
+        
+    </section>
+      <section id="variants" class="variants-section">
+    <div class="container">
+      <h1 class="Main-title">Who are Invincible variants?</h1>
+      <p class="intro">
+        The Invincible Variants are alternate versions of Mark Grayson, unleashed by the villain Angstrom Levy.  
+        By opening portals to different realities, Levy gathered twisted, darker versions of Invincible and sent them to Earth with one mission: destruction.
+        <br><br>
+        <strong>Their Purpose</strong><br>
+        These Variants were created to destroy cities, bring chaos, and most importantly—make humanity lose trust in Invincible.
+        <br><br>
+        <strong>The War of the Variants</strong><br>
+        The invasion of these evil Invincibles became known as the Invincible War.  
+        It was one of the bloodiest battles in history, claiming countless lives and pushing Earth’s heroes to their absolute limits.
+        <br><br>
+        <strong>The Aftermath</strong><br>
+        Most of the Variants were eventually defeated, but their existence left a scar.  
+        They were more than enemies—they were a living nightmare, a reminder that even a hero like Invincible could have darker reflections across the multiverse.
+      </p>
+    </div>
+ 
+        </div>
+          <section class="variants-characters">
+      <h2 class="variants-title">Invincible Variants</h2>
+
+      <!-- Character 1 -->
+      <div class="character-box">
+        <div class="char-shape">
+          <div class="circle-animation">
+            <img src="bug eyed mark.png" alt="Variant 1">
+          </div>
+        </div>
+        <div class="char-info">
+          <h3>BUG EYED MARK</h3>
+          <p>
+In his dimension, Bug Eyed Mark was very familiar with Rex Splode, and how his powers and equipment worked. On the second day of the Invincible War, Bug Eyed Mark injured Bulletproof and severely injured Monster Girl before threatening to kill her and being attacked by Bulletproof again. The alternate Mark then fought Rex Splode who sacrificed himself by converting his skeleton into a suicide bomb to kill this Mark and save his teammates.
+          </p>
+        </div>
+      </div>
+
+      <!-- Character 2 -->
+      <div class="character-box reverse">
+        <div class="char-shape">
+          <div class="circle-animation">
+            <img src="bald mark.png" alt="Variant 2">
+          </div>
+        </div>
+        <div class="char-info">
+          <h3>Bald Mark</h3>
+          <p>
+            Bald Mark fought Kurr Dragon, Mighty Man II, Angelica Murphy, and Superpatriot on the second day. He knocked Mighty Man and Superpatriot down while Savage Dragon jumped on him. He then choked Savage Dragon and shoved him against a structure. Savage Dragon killed Bald Mark,
+          </p>
+        </div>
+      </div>
+        <div class="character-box">
+        <div class="char-shape">
+          <div class="circle-animation">
+            <img src="wolf_cut_mark-removebg-preview.png" alt="Variant 1">
+          </div>
+        </div>
+        <div class="char-info">
+          <h3>Mask Less Mark</h3>
+          <p>
+           Mask less Mark killed the Atom Eve of his dimension quickly, because he fought the mainstream Atom Eve on the first day and told her he would kill her slowly. She escaped and reunited with the mainstream Mark. Mask Less Mark next fought Jackie Estacado on the second day. Then,Mask less Mark would go lay waste to Paris by the third day before becoming stranded in an alternate dimension with the other seven alive Alternate Marks.
+    
+          </p>
+        </div>
+      </div>
+       <div class="character-box reverse">
+        <div class="char-shape">
+          <div class="circle-animation">
+            <img src="full mask mark.png" alt="Variant 2">
+          </div>
+        </div>
+        <div class="char-info">
+          <h3>Full mask mark</h3>
+          <p>
+            Full mask mark is alternate version of 
+           Invincible who lost his mother when Omni-Man destroyed their home. Broken by grief, he wore a full black mask and turned darker than the original Mark. During the Invincible War, he fought Oliver and destroyed Sydney before being trapped in the Wasteland Dimension. Unlike other evil variants, his story is driven more by pain and loss than pure cruelty.
+          </p>
+        </div>
+      </div>
+
+      <div class="character-box">
+        <div class="char-shape">
+          <div class="circle-animation">
+            <img src="target_mark-removebg-preview.png" alt="Variant 1">
+          </div>
+        </div>
+        <div class="char-info">
+          <h3>Target Mark</h3>
+          <p>
+            Target Mark is an 
+            alternate version of Invincible recruited by Angstrom Levy during the Invincible War. Known for his arrogance and cruelty, he fought Jack Staff in the comics and attacked London in the show, even killing the hero British Knight. He is infamous for his taunt, claiming he wouldn’t even keep enemies as slaves in his empire. With his distinct suit marked by target-like emblems, Target Mark became one of the most recognizable and hated variants before being trapped in the Wasteland Dimension.
+           
+    
+          </p>
+        </div>
+      </div>
+    </section>
+  
+   
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced To-Do List</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg,#075596,#8975e4);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 50px 20px;
+  margin: 0;
+  transition: background 0.5s, color 0.5s;
+}
+
+.container {
+  background: rgba(255,255,255,0.95);
+  padding: 30px 20px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transition: background 0.5s, color 0.5s;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  font-size: 16px;
+}
+
+button.add-btn {
+  margin-top: 10px;
+  padding: 12px;
+  width: 100%;
+  background: #6a11cb;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+button.add-btn:hover {
+  background: #2575fc;
+  transform: scale(1.05);
+}
+
+ul {
+  list-style: none;
+  margin-top: 20px;
+  padding: 0;
+}
+
+li {
+  background: #f2f2f2;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s, background 0.3s, color 0.5s;
+}
+
+li span {
+  flex: 1;
+  margin-right: 10px;
+  word-break: break-word;
+}
+
+.actions button {
+  margin-left: 5px;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.actions button:hover {
+  transform: scale(1.1);
+}
+
+button.done { background: #28a745; }
+button.cancel { background: #dc3545; }
+button.edit { background: #ffc107; color: #333; }
+
+.progress-container {
+  background: #ddd;
+  border-radius: 10px;
+  height: 20px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #6a11cb;
+  transition: width 0.5s ease, background 0.5s ease;
+}
+
+#congrats {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: goldenrod;
+  margin-top: 20px;
+  display: none;
+}
+
+/* Theme toggle button */
+.theme-toggle{
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #ffcc00;
+  border: none;
+  border-radius:50%;
+  width:50px;
+  height:50px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  transition: background 0.5s, color 0.5s;
+}
+body.light .theme-toggle{
+  background:#333;
+  color:#ffcc00;
+}
+
+/* Dark mode */
+body.dark{
+  background:#000;
+  color:#fff;
+}
+body.dark .container{
+  background: rgba(30,30,30,0.95);
+  color: #fff;
+}
+body.dark input[type="text"]{
+  border-color:#555;
+  background:#222;
+  color:#fff;
+}
+body.dark li{
+  background:#333;
+  color:#fff;
+}
+body.dark .actions button.edit{ color:#333; }
+
+/* Light mode */
+body.light{
+  background:#f2f2f2;
+  color:#000;
+}
+body.light .container{
+  background: rgba(255,255,255,0.95);
+  color: #000;
+}
+body.light input[type="text"]{
+  border-color:#ddd;
+  background:#fff;
+  color:#000;
+}
+body.light li{
+  background:#f2f2f2;
+  color:#000;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()">
+  <i class="fa-solid fa-sun"></i>
+</button>
+
+<div class="container">
+  <h2>My To-Do List</h2>
+  <input type="text" id="taskInput" placeholder="Add new task">
+  <button class="add-btn" id="addBtn">Add Task</button>
+  <ul id="taskList"></ul>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div id="congrats">🎉 تهانينا! لقد أكملت كل المهام! 🎉</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+const taskInput = document.getElementById('taskInput');
+const addBtn = document.getElementById('addBtn');
+const taskList = document.getElementById('taskList');
+const progressBar = document.getElementById('progressBar');
+const congrats = document.getElementById('congrats');
+
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+renderTasks();
+
+addBtn.addEventListener('click', () => {
+  const taskText = taskInput.value.trim();
+  if(taskText !== ""){
+    tasks.push({ text: taskText, done: false });
+    saveTasks();
+    renderTasks();
+    taskInput.value = "";
+  }
+});
+
+function saveTasks(){
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+// تفعيل الوضع حسب Local Storage عند تحميل الصفحة
+window.onload = function() {
+    const savedTheme = localStorage.getItem('theme');
+    const body = document.body;
+    const icon = document.querySelector('.theme-toggle i');
+
+    if(savedTheme === 'light'){
+        body.classList.add('light');
+        body.classList.remove('dark');
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+    } else {
+        body.classList.add('dark');
+        body.classList.remove('light');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+    }
+}
+
+function toggleTheme(){
+    const body = document.body;
+    const icon = document.querySelector('.theme-toggle i');
+
+    if(body.classList.contains('dark')){
+        body.classList.remove('dark');
+        body.classList.add('light');
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+        localStorage.setItem('theme','light');
+    } else {
+        body.classList.remove('light');
+        body.classList.add('dark');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+        localStorage.setItem('theme','dark');
+    }
+}
+
+function renderTasks(){
+  taskList.innerHTML = "";
+  let doneCount = 0;
+
+  tasks.forEach((task,index)=>{
+    const li = document.createElement('li');
+    const span = document.createElement('span');
+    span.textContent = task.text;
+
+    const actions = document.createElement('div');
+    actions.classList.add('actions');
+
+    const doneBtn = document.createElement('button');
+    doneBtn.textContent = '✔';
+    doneBtn.classList.add('done');
+    doneBtn.addEventListener('click', () => {
+      task.done = !task.done;
+      saveTasks();
+      renderTasks();
+    });
+
+    const editBtn = document.createElement('button');
+    editBtn.textContent = '✎';
+    editBtn.classList.add('edit');
+    editBtn.addEventListener('click', () => {
+      const newText = prompt("Edit task:", task.text);
+      if(newText !== null && newText.trim() !== ""){
+        task.text = newText.trim();
+        saveTasks();
+        renderTasks();
+      }
+    });
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = '✖';
+    cancelBtn.classList.add('cancel');
+    cancelBtn.addEventListener('click', () => {
+      tasks.splice(index,1);
+      saveTasks();
+      renderTasks();
+    });
+
+    if(task.done) doneCount++;
+    if(task.done) span.style.textDecoration = "line-through"; else span.style.textDecoration = "none";
+
+    actions.appendChild(doneBtn);
+    actions.appendChild(editBtn);
+    actions.appendChild(cancelBtn);
+    li.appendChild(span);
+    li.appendChild(actions);
+    taskList.appendChild(li);
+  });
+
+  // تحديث progress bar
+  const progress = tasks.length ? (doneCount/tasks.length)*100 : 0;
+  progressBar.style.width = progress + "%";
+
+  if(progress < 50) progressBar.style.background = "#dc3545";
+  else if(progress < 100) progressBar.style.background = "#ffc107";
+  else progressBar.style.background = "#28a745";
+
+  if(doneCount === tasks.length && tasks.length>0){
+    congrats.style.display = "block";
+    confetti();
+  } else {
+    congrats.style.display = "none";
+  }
+}
+
+function confetti(){
+  confetti({
+    particleCount: 150,
+    spread: 70,
+    origin: { y: 0.6 }
+  });
+}
+</script>
+</body>
+</html>

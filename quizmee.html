@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quizzes</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg,#075596,#8975e4);
+    margin: 0;
+    padding: 40px 20px;
+    color: #fff;
+    transition: background 0.5s, color 0.5s;
+  }
+  h1 { text-align: center; margin-bottom: 30px; }
+  .quiz-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 900px;
+    margin: auto;
+  }
+  .quiz-card {
+    padding: 20px;
+    border-radius: 15px;
+    width: 200px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, background 0.3s, color 0.5s;
+  }
+  .quiz-card:hover {
+    transform: scale(1.05);
+  }
+  .quiz-card h2 {
+    margin: 0 0 10px;
+    font-size: 18px;
+  }
+  .quiz-card p {
+    margin: 0;
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  /* Dark mode */
+  body.dark{
+    background: #000;
+    color:#fff;
+  }
+  body.dark .quiz-card{
+    background: rgba(255,255,255,0.1);
+    color:#fff;
+  }
+  body.dark .quiz-card p{
+    color:#ccc;
+  }
+
+  /* Light mode */
+  body.light{
+    background: #f2f2f2;
+    color:#000;
+  }
+  body.light .quiz-card{
+    background: rgba(0,0,0,0.05);
+    color:#000;
+  }
+  body.light .quiz-card p{
+    color:#555;
+  }
+
+  .theme-toggle{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ffcc00;
+    border: none;
+    border-radius:50%;
+    width:50px;
+    height:50px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    transition: background 0.5s, color 0.5s;
+  }
+
+  body.light .theme-toggle{
+    background:#333;
+    color:#ffcc00;
+  }
+
+  @media(max-width:500px){
+    .quiz-card{
+      width:150px;
+      padding:15px;
+    }
+    .quiz-card h2{ font-size:16px; }
+    .quiz-card p{ font-size:12px; }
+  }
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">
+  <i class="fa-solid fa-sun"></i>
+</button>
+
+<h1>الكويزات المتاحة</h1>
+<div class="quiz-list" id="quizList"></div>
+
+<script>
+  const quizzes = [
+    { name: "Quiz 1", description: "", page: "quizmee-startquiz.html" },
+    { name: "Quiz 2", description: "", page: "quiz2.html" },
+    { name: "Quiz 3", description: "", page: "quiz3.html" },
+    { name: "Quiz 4", description: "", page: "quiz4.html" }
+  ];
+
+  const quizList = document.getElementById('quizList');
+
+  quizzes.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.innerHTML = `<h2>${q.name}</h2><p>${q.description}</p>`;
+    card.addEventListener('click', () => {
+      window.location.href = q.page;
+    });
+    quizList.appendChild(card);
+  });
+
+  // تفعيل الوضع حسب Local Storage عند تحميل الصفحة
+  window.onload = function() {
+    const savedTheme = localStorage.getItem('theme');
+    const body = document.body;
+    const icon = document.querySelector('.theme-toggle i');
+
+    if(savedTheme === 'light'){
+      body.classList.add('light');
+      body.classList.remove('dark');
+      icon.classList.remove('fa-sun');
+      icon.classList.add('fa-moon');
+    } else {
+      body.classList.add('dark');
+      body.classList.remove('light');
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+    }
+  }
+
+  function toggleTheme(){
+    const body = document.body;
+    const icon = document.querySelector('.theme-toggle i');
+
+    if(body.classList.contains('dark')){
+      body.classList.remove('dark');
+      body.classList.add('light');
+      icon.classList.remove('fa-sun');
+      icon.classList.add('fa-moon');
+      localStorage.setItem('theme','light');
+    } else {
+      body.classList.remove('light');
+      body.classList.add('dark');
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+      localStorage.setItem('theme','dark');
+    }
+  }
+</script>
+</body>
+</html>
