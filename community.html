@@ -24,7 +24,6 @@
       display: flex;
       justify-content: center;
       position: relative;
-      
     }
     .chat-container {
       flex: 1;
@@ -46,14 +45,8 @@
       from {opacity:0; transform: translateY(10px);}
       to {opacity:1; transform: translateY(0);}
     }
-    .sent {
-      background-color: #ff6f61;
-      align-self: flex-end;
-    }
-    .received {
-      background-color: #333;
-      align-self: flex-start;
-    }
+    .sent { background-color: #ff6f61; align-self: flex-end; }
+    .received { background-color: #333; align-self: flex-start; }
     .reply {
       font-size: 12px;
       color: #ccc;
@@ -117,7 +110,6 @@
       border-radius: 5px;
       display: none;
     }
-
     /* نافذة طلب الاسم */
     #namePrompt {
       position: fixed;
@@ -166,19 +158,17 @@
       width: 0%;
       height: 2px;
       background: #ff6f61;
-      transition: width 0.2s ease; /* الانيميشن */
+      transition: width 0.2s ease;
     }
-    .quiz:hover::after{
-      width: 100%;
-    }
+    .quiz:hover::after{ width: 100%; }
   </style>
 </head>
 <body>
   <header>💬 Community
     <a href="last-quiz.html" class="quiz">Last quiz</a>
   </header>
-  <div class="chat-container" id="chat"></div>
 
+  <div class="chat-container" id="chat"></div>
   <div class="reply-preview" id="replyPreview"></div>
 
   <div class="input-area">
@@ -220,25 +210,18 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // فلتر الشتايم
-    const badWords = ["كسم","كسك","fuck","shit","كس","خول","عرص","شرموط","متناك","خخ","خخخ","خخخخخخخ","يكس","قحب","علق","زاني","زنا","يركبك","وسخ","حمار"];
+    const badWords = ["كسم","كسك","fuck","shit","كس","خول","عرص","شرموط","متناك","يكس","قحب","علق","زاني","زنا","يركبك","وسخ","حمار"];
     function containsBadWords(text) {
       return badWords.some(word => text.toLowerCase().includes(word));
     }
 
-    // اسم المستخدم
     let username = localStorage.getItem("username") || "";
-
-    // نافذة طلب الاسم
     const namePrompt = document.getElementById("namePrompt");
     const nameInput = document.getElementById("nameInput");
     const saveNameBtn = document.getElementById("saveNameBtn");
 
-    if(!username){
-      namePrompt.style.display = "flex";
-    } else {
-      namePrompt.style.display = "none";
-    }
+    if(!username){ namePrompt.style.display = "flex"; }
+    else { namePrompt.style.display = "none"; }
 
     saveNameBtn.onclick = () => {
       const name = nameInput.value.trim();
@@ -246,21 +229,17 @@
         localStorage.setItem("username", name);
         username = name;
         namePrompt.style.display = "none";
-      } else {
-        alert("الرجاء كتابة اسمك!");
-      }
+      } else { alert("الرجاء كتابة اسمك!"); }
     }
 
-    // الرد على رسالة
     let replyTo = null;
     function setReply(msgText) {
       replyTo = msgText;
       const preview = document.getElementById("replyPreview");
-      preview.textContent = "↪️ " + msgText;
+      preview.textContent = "↪ " + msgText;
       preview.style.display = "block";
     }
 
-    // إرسال رسالة
     async function sendMessage() {
       const input = document.getElementById("messageInput");
       const text = input.value.trim();
@@ -291,17 +270,23 @@
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
 
+      // إرسال نسخة لـ Google Sheets
+      fetch("https://script.google.com/macros/s/AKfycby6Ab7CFXAI9Z8Ku0DG4r7AJJuk69Gz228idPOhWF3hPaWKqa2BBEcf1EkV5oPiez2z/exec", {
+        method: "POST",
+        body: JSON.stringify({ sender: username, message: text }),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => res.text())
+      .then(data => console.log("تم الإرسال للإيميل/Sheet:", data))
+      .catch(err => console.error("خطأ في الإرسال:", err));
+
+      // تنظيف الإدخال
       input.value = "";
       replyTo = null;
       document.getElementById("replyPreview").style.display = "none";
     }
 
-    // حذف رسالة
-    async function deleteMessage(id) {
-      await db.collection("messages").doc(id).delete();
-    }
-
-    // إبلاغ عن رسالة
+    async function deleteMessage(id) { await db.collection("messages").doc(id).delete(); }
     async function reportMessage(id, text, sender) {
       const user = auth.currentUser;
       await db.collection("reports").add({
@@ -314,7 +299,6 @@
       alert("✅ شكراً على بلاغك، تم إرساله للإدارة.");
     }
 
-    // عرض الرسائل
     db.collection("messages").orderBy("timestamp").onSnapshot(snapshot => {
       const chat = document.getElementById("chat");
       const oldHeight = chat.scrollHeight;
@@ -328,7 +312,7 @@
         if (msg.reply) {
           const replyDiv = document.createElement("div");
           replyDiv.classList.add("reply");
-          replyDiv.textContent = "↪️ " + msg.reply;
+          replyDiv.textContent = "↪ " + msg.reply;
           div.appendChild(replyDiv);
         }
 
@@ -385,9 +369,7 @@
       };
     });
 
-    if ("Notification" in window) {
-      Notification.requestPermission();
-    }
+    if ("Notification" in window) { Notification.requestPermission(); }
   </script>
 </body>
 </html>
