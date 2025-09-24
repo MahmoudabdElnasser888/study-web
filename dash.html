@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة الترتيب</title>
+  <style>
+    body {
+      font-family: Tahoma, sans-serif;
+      background: linear-gradient(120deg, #6e8efb, #a777e3);
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .dashboard {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #444;
+    }
+    .student {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 10px 15px;
+      margin: 10px 0;
+      transition: 0.3s;
+    }
+    .student:hover {
+      background: #f9f9f9;
+      transform: translateY(-2px);
+    }
+    .student img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-left: 15px;
+      border: 2px solid #6e8efb;
+    }
+    .student-info {
+      flex: 1;
+    }
+    .student-info h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #333;
+    }
+    .student-info p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      color: #666;
+    }
+    .points {
+      font-weight: bold;
+      font-size: 18px;
+      color: #6e8efb;
+    }
+    .badge {
+      font-size: 20px;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard">
+  <h2>🏆 لوحة الترتيب</h2>
+
+  <!-- طالب 1 -->
+  <div class="student">
+    <div class="student-info">
+      <h3>Youssef wael<span class="badge">🥇</span></h3>
+      <p>عدد النقاط: <span class="points">0</span></p>
+    </div>
+  </div>
+
+  <!-- طالب 2 -->
+  <div class="student">
+    <div class="student-info">
+      <h3> Mostafa said <span class="badge">🥈</span></h3>
+      <p>عدد النقاط: <span class="points">0</span></p>
+    </div>
+  </div>
+
+  <!-- طالب 3 -->
+  <div class="student">
+    <div class="student-info">
+      <h3> Youssef yasser <span class="badge">🥉</span></h3>
+      <p>عدد النقاط: <span class="points">0</span></p>
+    </div>
+  </div>
+
+  <!-- طالب 4 -->
+  <div class="student">
+    <div class="student-info">
+      <h3> Yehia Mostafa</h3>
+      <p>عدد النقاط: <span class="points">0</span></p>
+    </div>
+  </div>
+
+    <div class="student">
+    <div class="student-info">
+      <h3> Youssef Ahmed</h3>
+      <p>عدد النقاط: <span class="points">0</span></p>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
