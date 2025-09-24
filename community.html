@@ -210,7 +210,7 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    const badWords = ["كسم","كسك","fuck","shit","كس","خول","عرص","شرموط","متناك","يكس","قحب","علق","زاني","زنا","يركبك","وسخ","حمار"];
+    const badWords = ["كسم","كسك","fuck","shit","كس","خول","عرص","شرموط","متناك","يكس","قحب","علق","زاني","زنا","يركبك","وسخ","حمار","فحل"];
     function containsBadWords(text) {
       return badWords.some(word => text.toLowerCase().includes(word));
     }
