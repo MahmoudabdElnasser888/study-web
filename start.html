@@ -24,64 +24,64 @@ body {
   color: var(--text-color);
   scroll-behavior: smooth;
 }
-
 /* ===== Header ===== */
-header {
-  width: 96%;
-  background-color: #000000c0;
-  padding: 15px 30px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-  border-bottom: 2px solid #ff6f61;
-}
+header { width: 96%; background-color: #000000c0; padding: 15px 30px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0,0,0,0.4); border-bottom: 2px solid #ff6f61; }
 
-header nav a{
+/* الرصيد */
+.rased {
+  color: #fff;
+  font-weight: bold;
+  background: linear-gradient(120deg, #ff6f61, #ff3b2e);
+  border-radius: 30px;
+  padding: 6px 14px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+  font-size: 15px;
   text-decoration: none;
-  color: rgba(255,255,255,0.8);
-  font-weight: 600;
-  font-size: 16px;
-  margin-right: 20px;
-  position: relative;
 }
-header nav a::after{
-  content:"";
-  position:absolute;
-  bottom:-5px;
-  left:0;
-  width:0;
-  height:2px;
-  background:#ff6f61;
-  transition: width 0.3s ease;
+.rased:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
 }
-header nav a:hover::after{ width:100%; }
 
+/* يمين الهيدر */
 .header-right {
-  display:flex;
-  align-items:center;
-  gap:18px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
-/* ===== Theme Toggle Button ===== */
-.theme-toggle{
-  background: #ff6f61;
+/* حالة الاشتراك */
+#subscription-status {
+  font-weight: 600;
+  font-size: 15px;
+  color: #f9f9f9;
+  background: rgba(0,0,0,0.25);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+/* زرار تغيير الثيم */
+.theme-toggle {
+  background: #fff;
+  color: #2575fc;
   border: none;
-  width: 45px;
-  height: 45px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-  transition: transform 0.2s;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  transition: all 0.25s ease;
 }
-.theme-toggle:hover { transform: scale(1.1); }
+.theme-toggle:hover {
+  transform: rotate(15deg) scale(1.1);
+  background: #f0f0f0;
+}
 
 /* ===== Hero Section ===== */
 .hero{
@@ -298,20 +298,13 @@ body.dark-theme{
 <body>
 
 <header>
-  <nav>
-    <a href="to-do.html">To Do List</a>
-    <a href="quiz1-start.html">Quiz</a>
-    <a href="student.html">Learning</a>
-    <a href="timer.html">Study Timer</a>
-    <a href="community.html">Community</a>
-    <a href="note.html">Note</a>
-    <a href="feedback.html">FeedBack Box</a>
-  </nav>
+ 
 
   <div class="header-right">
-    <div style="color:white; font-weight:600; margin-right:10px;">
-      الرصيد: <span id="balance">0</span> ج
-    </div>
+    <a href="wallet.html" class="rased">
+  الرصيد: <span id="balance">0</span> ج
+</a>
+
 
     <div id="subscription-status" style="color:#fff; font-weight:600; margin-right:10px;">
       <!-- will be filled: "مش مشترك" or "متبقي X يوم" -->
@@ -467,7 +460,7 @@ body.dark-theme{
 
   // mapping amounts to durations (ms)
   const PACKAGE_MAP = {
-    10: 1 * 60 * 1000,    // 1 week
+    10: 7 * 24 * 60 * 60 * 1000,    // 1 week
     30: 14 * 24 * 60 * 60 * 1000,   // 2 weeks
     50: 30 * 24 * 60 * 60 * 1000    // 30 days (approx month)
   };
