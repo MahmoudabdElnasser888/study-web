@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Main Page</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -59,6 +59,12 @@ header nav a::after{
   transition: width 0.3s ease;
 }
 header nav a:hover::after{ width:100%; }
+
+.header-right {
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
 
 /* ===== Theme Toggle Button ===== */
 .theme-toggle{
@@ -151,6 +157,25 @@ header nav a:hover::after{ width:100%; }
   background:#2575fc;
 }
 
+/* locked state */
+.section-item.locked {
+  opacity: 0.85;
+  filter: saturate(0.9);
+  position: relative;
+}
+.lock-overlay {
+  position:absolute;
+  right:20px;
+  top:20px;
+  background:rgba(0,0,0,0.6);
+  padding:6px 10px;
+  border-radius:8px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  font-weight:600;
+}
+
 /* ===== Footer ===== */
 footer{
   background:#000000c0;
@@ -178,6 +203,48 @@ body.dark-theme{
   50%{background-position:100% 50%;}
   100%{background-position:0% 50%;}
 }
+
+/* ===== Modal ===== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+.modal {
+  width: 95%;
+  max-width: 520px;
+  background: linear-gradient(180deg,#fff,#f7f7f7);
+  color: #111;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.modal h3 { margin-top: 0; }
+.packages { display:flex; gap:12px; margin: 12px 0; flex-wrap:wrap; }
+.package {
+  flex: 1 1 140px;
+  background: #fff;
+  border-radius: 8px;
+  border: 2px solid #e6e6e6;
+  padding: 12px;
+  text-align:center;
+  cursor:pointer;
+  font-weight:700;
+  user-select:none;
+}
+.package.selected { border-color: #6a11cb; box-shadow: 0 8px 20px rgba(106,17,203,0.12); }
+.modal-footer { display:flex; justify-content:space-between; gap:12px; margin-top:16px; }
+.btn { padding:10px 14px; border-radius:8px; font-weight:700; cursor:pointer; border: none; }
+.btn.primary { background: #6a11cb; color:white; }
+.btn.ghost { background: transparent; border: 2px solid #ccc; }
+
+/* info line */
+.info-line { font-size:14px; margin-top:8px; color:#333; }
+
 /* ===== Media Queries ===== */
 @media (max-width: 768px){
   header{
@@ -226,7 +293,6 @@ body.dark-theme{
     font-size: 14px;
   }
 }
-
 </style>
 </head>
 <body>
@@ -242,10 +308,17 @@ body.dark-theme{
     <a href="feedback.html">FeedBack Box</a>
   </nav>
 
-   <div style="color:white; font-weight:600; margin-right:20px;">
-    الرصيد: <span id="balance">0</span> ج
+  <div class="header-right">
+    <div style="color:white; font-weight:600; margin-right:10px;">
+      الرصيد: <span id="balance">0</span> ج
+    </div>
+
+    <div id="subscription-status" style="color:#fff; font-weight:600; margin-right:10px;">
+      <!-- will be filled: "مش مشترك" or "متبقي X يوم" -->
+    </div>
+
+    <button class="theme-toggle"><i class="fas fa-sun"></i></button>
   </div>
-  <button class="theme-toggle"><i class="fas fa-sun"></i></button>
 </header>
 
 <section class="hero">
@@ -260,55 +333,65 @@ body.dark-theme{
       <h2>To Do List</h2>
       <p>Organize your daily tasks efficiently.</p>
       <a href="to-do.html"><button class="enter-btn">ENTER</button></a>
-
     </div>
   </div>
+
   <div id="quiz" class="section-item">
     <i class="fas fa-question-circle"></i>
     <div>
       <h2>Quiz</h2>
       <p>Test your knowledge with quizzes.</p>
-     <a href="quiz1-start.html"><button class="enter-btn">ENTER</button></a>
+      <a href="quiz1-start.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
-  <div id="learning" class="section-item">
+
+  <!-- LEARNING: now controlled -->
+  <div id="learning" class="section-item locked">
     <i class="fas fa-book"></i>
     <div>
       <h2>Learning Content</h2>
       <p>Access lessons and tutorials.</p>
-     <a href="student.html"><button class="enter-btn">ENTER</button></a>
+      <!-- button changed to not be direct link -->
+      <button id="learning-enter" class="enter-btn">ENTER</button>
+    </div>
+    <div class="lock-overlay" id="learning-overlay">
+      <i class="fas fa-lock"></i> مُقفل — اشترك
     </div>
   </div>
+
   <div id="timer" class="section-item">
     <i class="fas fa-stopwatch"></i>
     <div>
       <h2>Study Timer</h2>
       <p>Track your study sessions effectively.</p>
-     <a href="timer.html"><button class="enter-btn">ENTER</button></a>
+      <a href="timer.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
+
   <div id="community" class="section-item">
     <i class="fas fa-users"></i>
     <div>
       <h2>Community</h2>
       <p>Join discussions and connect with others.</p>
-     <a href="community.html"><button class="enter-btn">ENTER</button></a>
+      <a href="community.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
+
   <div id="note" class="section-item">
     <i class="fas fa-sticky-note"></i>
     <div>
       <h2>Note</h2>
       <p>Write and save your important notes.</p>
-     <a href="note.html"><button class="enter-btn">ENTER</button></a>
+      <a href="note.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
-  <div id="note" class="section-item">
+
+  <div id="top3" class="section-item">
     <i class="fa-solid fa-trophy"></i>
     <div>
       <h2>TOP 3</h2>
       <p>Be the best.</p>
-     <a href="dash.html"><button class="enter-btn">ENTER</button></a>
+      <a href="dash.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
 </section>
@@ -317,26 +400,32 @@ body.dark-theme{
   Follow us on <a href="https://www.instagram.com/7oda__807?igsh=MTBoYzZzbXg3dWE0NQ==" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
 </footer>
 
-<script>
-// START button scroll
-document.querySelector('.start-btn').addEventListener('click',()=>{
-  document.querySelector('.content').scrollIntoView({behavior:'smooth'});
-});
+<!-- ===== Modal for subscriptions ===== -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h3 id="modal-title">اختر باقة الاشتراك</h3>
+    <p class="info-line">اختر باقة وسيتم خصم المبلغ من رصيدك. مدة الباقة تظهر بعد الدفع.</p>
 
-// Theme toggle
-const themeBtn = document.querySelector('.theme-toggle');
-themeBtn.addEventListener('click',()=>{
-  document.body.classList.toggle('dark-theme');
-  if(document.body.classList.contains('dark-theme')){
-    localStorage.setItem('theme','dark');
-  }else{
-    localStorage.setItem('theme','light');
-  }
-});
-if(localStorage.getItem('theme')==='dark'){
-  document.body.classList.add('dark-theme');
-}
-</script>
+    <div class="packages" id="packages">
+      <div class="package" data-amount="10" id="pkg10">
+        10 ج — أسبوع
+      </div>
+      <div class="package" data-amount="30" id="pkg30">
+        30 ج — أسبوعين
+      </div>
+      <div class="package" data-amount="50" id="pkg50">
+        50 ج — شهر
+      </div>
+    </div>
+
+    <div id="modal-msg" class="info-line" style="color:#c33;"></div>
+
+    <div class="modal-footer">
+      <button class="btn ghost" id="modal-cancel">إلغاء</button>
+      <button class="btn primary" id="modal-confirm">ادفع واشترك</button>
+    </div>
+  </div>
+</div>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -344,6 +433,7 @@ if(localStorage.getItem('theme')==='dark'){
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
 <script>
+  // Firebase config (as you provided)
   const firebaseConfig = {
     apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
     authDomain: "my-web-c23de.firebaseapp.com",
@@ -354,26 +444,239 @@ if(localStorage.getItem('theme')==='dark'){
     measurementId: "G-3SE0GBRS8C"
   };
   firebase.initializeApp(firebaseConfig);
-
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      // متابعة أي تحديث في الرصيد
-      db.collection("users").doc(user.uid).onSnapshot((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          document.getElementById("balance").innerText = data.balance ?? 0;
+  // UI refs
+  const balanceSpan = document.getElementById('balance');
+  const subStatus = document.getElementById('subscription-status');
+  const learningItem = document.getElementById('learning');
+  const learningEnterBtn = document.getElementById('learning-enter');
+  const learningOverlay = document.getElementById('learning-overlay');
+
+  const modalBackdrop = document.getElementById('modal-backdrop');
+  const packagesDiv = document.getElementById('packages');
+  const modalMsg = document.getElementById('modal-msg');
+  const modalConfirm = document.getElementById('modal-confirm');
+  const modalCancel = document.getElementById('modal-cancel');
+
+  let currentUser = null;
+  let selectedPackage = null; // number
+  let userDocUnsub = null; // snapshot listener unsubscribe
+  let localUserData = {}; // cache
+
+  // mapping amounts to durations (ms)
+  const PACKAGE_MAP = {
+    10: 1 * 60 * 1000,    // 1 week
+    30: 14 * 24 * 60 * 60 * 1000,   // 2 weeks
+    50: 30 * 24 * 60 * 60 * 1000    // 30 days (approx month)
+  };
+
+  // helpers
+  function showModal() {
+    modalMsg.innerText = '';
+    selectedPackage = null;
+    document.querySelectorAll('.package').forEach(el => el.classList.remove('selected'));
+    modalBackdrop.style.display = 'flex';
+  }
+  function closeModal() { modalBackdrop.style.display = 'none'; }
+
+  // package select handler
+  packagesDiv.addEventListener('click', (e) => {
+    const pkg = e.target.closest('.package');
+    if(!pkg) return;
+    document.querySelectorAll('.package').forEach(el => el.classList.remove('selected'));
+    pkg.classList.add('selected');
+    selectedPackage = Number(pkg.dataset.amount);
+    modalMsg.innerText = `سوف يتم خصم ${selectedPackage} ج من رصيدك.`;
+  });
+
+  modalCancel.addEventListener('click', () => { closeModal(); });
+
+  // confirm purchase: run transaction to deduct balance and set/extend subscription
+  modalConfirm.addEventListener('click', async () => {
+    if(!currentUser) {
+      modalMsg.innerText = 'يرجى تسجيل الدخول أولاً.';
+      return;
+    }
+    if(!selectedPackage) {
+      modalMsg.innerText = 'اختر باقة أولاً.';
+      return;
+    }
+
+    modalConfirm.disabled = true;
+    modalConfirm.innerText = 'جاري المعالجة...';
+
+    const uid = currentUser.uid;
+    const userRef = db.collection('users').doc(uid);
+
+    try {
+      await db.runTransaction(async (tran) => {
+        const doc = await tran.get(userRef);
+        if(!doc.exists) throw new Error('مستخدم غير موجود.');
+        const data = doc.data();
+        const balance = Number(data.balance ?? 0);
+
+        if(balance < selectedPackage) {
+          throw new Error('رصيد غير كافٍ.');
         }
+
+        // compute new expiry
+        const now = Date.now();
+        const currentExpiryMillis = data.subscription?.expiresAt ? data.subscription.expiresAt.toMillis() : 0;
+        const addMs = PACKAGE_MAP[selectedPackage] || 0;
+        let newExpiryMillis = 0;
+        if(currentExpiryMillis && currentExpiryMillis > now) {
+          newExpiryMillis = currentExpiryMillis + addMs; // extend from existing expiry
+        } else {
+          newExpiryMillis = now + addMs; // start from now
+        }
+
+        // update: deduct balance and set subscription
+        const newBalance = balance - selectedPackage;
+        tran.update(userRef, {
+          balance: newBalance,
+          subscription: {
+            packageAmount: selectedPackage,
+            expiresAt: firebase.firestore.Timestamp.fromMillis(newExpiryMillis),
+            updatedAt: firebase.firestore.Timestamp.now()
+          }
+        });
       });
-    } else {
-      // لو مش مسجل يرجعه لصفحة التسجيل
-      window.location.href = "index.html";
+
+      // success: UI will update via onSnapshot listener
+      modalMsg.style.color = '#0a7b2a';
+      modalMsg.innerText = 'تمت العملية بنجاح! شكراً لاشتراكك.';
+      setTimeout(() => { closeModal(); modalMsg.style.color = '#c33'; }, 900);
+
+    } catch (err) {
+      console.error(err);
+      if(err.message === 'رصيد غير كافٍ.' || err.message.includes('not enough')) {
+        modalMsg.innerText = 'رصيدك غير كافٍ. املأ رصيدك ثم حاول مرة أخرى.';
+      } else {
+        modalMsg.innerText = 'حدث خطأ أثناء المعاملة: ' + (err.message || err);
+      }
+    } finally {
+      modalConfirm.disabled = false;
+      modalConfirm.innerText = 'ادفع واشترك';
     }
   });
+
+  // Learning enter click
+  learningEnterBtn.addEventListener('click', () => {
+    // if user not signed -> redirect to index (login)
+    if(!currentUser) {
+      window.location.href = 'index.html';
+      return;
+    }
+    // check localUserData subscription
+    const sub = localUserData.subscription;
+    const now = Date.now();
+    const expires = sub && sub.expiresAt ? sub.expiresAt.toMillis() : 0;
+    if(expires && expires > now) {
+      // allowed -> go to student page
+      window.location.href = 'student.html';
+      return;
+    } else {
+      // not subscribed -> open modal
+      showModal();
+      return;
+    }
+  });
+
+  // utility display function: update UI based on user doc
+  function updateUIFromUserData(data) {
+    // balance
+    const balance = Number(data.balance ?? 0);
+    balanceSpan.innerText = Math.max(0, balance);
+
+    // subscription
+    const sub = data.subscription;
+    const now = Date.now();
+    let active = false;
+    let remainingMs = 0;
+    if(sub && sub.expiresAt) {
+      const expiresAtMillis = sub.expiresAt.toMillis ? sub.expiresAt.toMillis() : (sub.expiresAt.seconds*1000);
+      remainingMs = expiresAtMillis - now;
+      active = remainingMs > 0;
+    }
+
+    localUserData = { ...data, subscription: sub };
+
+    if(active) {
+      // enable access
+      learningItem.classList.remove('locked');
+      learningOverlay.style.display = 'none';
+      // show remaining time
+      const days = Math.floor(remainingMs / (24*3600*1000));
+      const hours = Math.floor((remainingMs % (24*3600*1000)) / (3600*1000));
+      subStatus.innerText = `متبقي ${days} يوم ${hours} ساعة`;
+    } else {
+      // locked
+      learningItem.classList.add('locked');
+      learningOverlay.style.display = 'flex';
+      subStatus.innerText = `غير مشترك`;
+    }
+  }
+
+  // Listen for auth state
+  auth.onAuthStateChanged(user => {
+    currentUser = user;
+    if(!user) {
+      // not logged in -> redirect to index
+      window.location.href = 'index.html';
+      return;
+    }
+    // listen to user's doc realtime
+    const userRef = db.collection('users').doc(user.uid);
+    if(userDocUnsub) userDocUnsub(); // remove previous listener
+    userDocUnsub = userRef.onSnapshot(doc => {
+      if(!doc.exists) {
+        // create doc with default shape if needed
+        userRef.set({
+          balance: 0,
+          subscription: null,
+          createdAt: firebase.firestore.Timestamp.now()
+        }, { merge: true });
+        updateUIFromUserData({ balance: 0, subscription: null });
+        return;
+      }
+      const data = doc.data();
+      updateUIFromUserData(data);
+    }, err => {
+      console.error('snapshot error', err);
+    });
+  });
+
+  // Start button scroll
+  document.querySelector('.start-btn').addEventListener('click',()=>{
+    document.querySelector('.content').scrollIntoView({behavior:'smooth'});
+  });
+
+  // Theme toggle
+  const themeBtn = document.querySelector('.theme-toggle');
+  themeBtn.addEventListener('click',()=>{
+    document.body.classList.toggle('dark-theme');
+    if(document.body.classList.contains('dark-theme')){
+      localStorage.setItem('theme','dark');
+    }else{
+      localStorage.setItem('theme','light');
+    }
+  });
+  if(localStorage.getItem('theme')==='dark'){
+    document.body.classList.add('dark-theme');
+  }
+
+  // small: check subscription expiry periodically (every minute) to update UI countdown
+  setInterval(() => {
+    // If we have cached data, refresh only UI countdown text
+    if(localUserData && localUserData.subscription && localUserData.subscription.expiresAt) {
+      updateUIFromUserData(localUserData);
+    }
+  }, 60 * 1000);
+
+  // On load: hide modal (ensure)
+  modalBackdrop.style.display = 'none';
 </script>
-
-
 </body>
-</html> 
+</html>
