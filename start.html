@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -14,6 +14,7 @@
   --text-color: white;
 }
 
+/* ===== Body ===== */
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
@@ -38,6 +39,7 @@ header {
   box-shadow: 0 4px 8px rgba(0,0,0,0.4);
   border-bottom: 2px solid #ff6f61;
 }
+
 header nav a{
   text-decoration: none;
   color: rgba(255,255,255,0.8);
@@ -58,6 +60,7 @@ header nav a::after{
 }
 header nav a:hover::after{ width:100%; }
 
+/* ===== Theme Toggle Button ===== */
 .theme-toggle{
   background: #ff6f61;
   border: none;
@@ -74,7 +77,7 @@ header nav a:hover::after{ width:100%; }
 }
 .theme-toggle:hover { transform: scale(1.1); }
 
-/* ===== Hero ===== */
+/* ===== Hero Section ===== */
 .hero{
   display:flex;
   flex-direction:column;
@@ -123,9 +126,16 @@ header nav a:hover::after{ width:100%; }
   min-width:60px;
   text-align:center;
 }
-.section-item div{ flex:1; }
-.section-item h2{ margin-bottom:10px; }
-.section-item p{ font-size:16px; margin-bottom:10px; }
+.section-item div{
+  flex:1;
+}
+.section-item h2{
+  margin-bottom:10px;
+}
+.section-item p{
+  font-size:16px;
+  margin-bottom:10px;
+}
 .enter-btn{
   padding:10px 25px;
   border:none;
@@ -136,64 +146,9 @@ header nav a:hover::after{ width:100%; }
   cursor:pointer;
   transition: transform 0.2s, background 0.3s;
 }
-.enter-btn:hover{ transform:scale(1.05); background:#2575fc; }
-
-/* ===== Timer ===== */
-#expiryTimer {
-  margin-top: 10px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #ffd700;
-}
-
-/* ===== Modal ===== */
-#subscribeModal {
-  display:none;
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background:#000000b0;
-  justify-content:center;
-  align-items:center;
-  z-index:2000;
-}
-.modal-content {
-  background: linear-gradient(135deg, var(--color2), var(--color3));
-  color: #fff;
-  padding: 30px;
-  border-radius: 20px;
-  width: 320px;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  animation: popIn 0.4s ease;
-}
-.modal-content h3 {
-  margin-bottom: 20px;
-  font-size: 22px;
-}
-.modal-btn {
-  width: 100%;
-  margin: 8px 0;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 12px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  background: var(--color1);
-  color:#fff;
-  transition: transform 0.2s, background 0.3s;
-}
-.modal-btn:hover { transform:scale(1.05); background:#ff3b2e; }
-.close-btn {
-  margin-top: 10px;
-  background:#444;
-}
-.close-btn:hover { background:#222; }
-
-@keyframes popIn {
-  from { transform: scale(0.7); opacity:0; }
-  to { transform: scale(1); opacity:1; }
+.enter-btn:hover{
+  transform:scale(1.05);
+  background:#2575fc;
 }
 
 /* ===== Footer ===== */
@@ -204,9 +159,14 @@ footer{
   font-size:16px;
   border-top:2px solid #ff6f61;
 }
-footer a{ color:#ff6f61; text-decoration:none; font-weight:bold; }
+footer a{
+  color:#ff6f61;
+  text-decoration:none;
+  font-weight:bold;
+}
 footer a:hover{ text-decoration:underline; }
 
+/* ===== Dark Theme ===== */
 body.dark-theme{
   --color1:#000000;
   --color2:#252323;
@@ -218,6 +178,55 @@ body.dark-theme{
   50%{background-position:100% 50%;}
   100%{background-position:0% 50%;}
 }
+/* ===== Media Queries ===== */
+@media (max-width: 768px){
+  header{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 20px;
+  }
+  header nav{
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  header nav a{
+    font-size: 18px;
+  }
+  .hero{
+    height: 80vh;
+    padding: 0 20px;
+  }
+  .start-btn{
+    padding: 15px 40px;
+    font-size: 20px;
+  }
+  .content{
+    padding: 30px 15px;
+    gap: 30px;
+  }
+  .section-item{
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .section-item i{
+    font-size: 60px;
+    margin-bottom: 15px;
+  }
+  .section-item div{
+    width: 100%;
+  }
+  .enter-btn{
+    padding: 12px 30px;
+    font-size: 16px;
+  }
+  footer{
+    font-size: 14px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -233,7 +242,7 @@ body.dark-theme{
     <a href="feedback.html">FeedBack Box</a>
   </nav>
 
-  <div style="color:white; font-weight:600; margin-right:20px;">
+   <div style="color:white; font-weight:600; margin-right:20px;">
     الرصيد: <span id="balance">0</span> ج
   </div>
   <button class="theme-toggle"><i class="fas fa-sun"></i></button>
@@ -245,91 +254,71 @@ body.dark-theme{
 </section>
 
 <section class="content">
-  <!-- To Do List -->
   <div id="todo" class="section-item">
     <i class="fas fa-list-check"></i>
     <div>
       <h2>To Do List</h2>
       <p>Organize your daily tasks efficiently.</p>
       <a href="to-do.html"><button class="enter-btn">ENTER</button></a>
+
     </div>
   </div>
-
-  <!-- Quiz -->
   <div id="quiz" class="section-item">
     <i class="fas fa-question-circle"></i>
     <div>
       <h2>Quiz</h2>
       <p>Test your knowledge with quizzes.</p>
-      <a href="quiz1-start.html"><button class="enter-btn">ENTER</button></a>
+     <a href="quiz1-start.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
-
-  <!-- Learning Content -->
   <div id="learning" class="section-item">
     <i class="fas fa-book"></i>
     <div>
       <h2>Learning Content</h2>
       <p>Access lessons and tutorials.</p>
-      <div id="learning-locked">
-        <button id="subscribeBtn" class="enter-btn">اشترك</button>
-      </div>
-      <div id="learning-unlocked" style="display:none;">
-        <a href="student.html"><button class="enter-btn">ENTER</button></a>
-        <div id="expiryTimer"></div>
-      </div>
+     <a href="student.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
-
-  <!-- Study Timer -->
   <div id="timer" class="section-item">
     <i class="fas fa-stopwatch"></i>
     <div>
       <h2>Study Timer</h2>
       <p>Track your study sessions effectively.</p>
-      <a href="timer.html"><button class="enter-btn">ENTER</button></a>
+     <a href="timer.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
-
-  <!-- Community -->
   <div id="community" class="section-item">
     <i class="fas fa-users"></i>
     <div>
       <h2>Community</h2>
       <p>Join discussions and connect with others.</p>
-      <a href="community.html"><button class="enter-btn">ENTER</button></a>
+     <a href="community.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
-
-  <!-- Note -->
   <div id="note" class="section-item">
     <i class="fas fa-sticky-note"></i>
     <div>
       <h2>Note</h2>
       <p>Write and save your important notes.</p>
-      <a href="note.html"><button class="enter-btn">ENTER</button></a>
+     <a href="note.html"><button class="enter-btn">ENTER</button></a>
+    </div>
+  </div>
+  <div id="note" class="section-item">
+    <i class="fa-solid fa-trophy"></i>
+    <div>
+      <h2>TOP 3</h2>
+      <p>Be the best.</p>
+     <a href="dash.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
 </section>
 
 <footer>
-  Follow us on <a href="https://www.instagram.com/7oda__807" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+  Follow us on <a href="https://www.instagram.com/7oda__807?igsh=MTBoYzZzbXg3dWE0NQ==" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
 </footer>
 
-<!-- Modal -->
-<div id="subscribeModal">
-  <div class="modal-content">
-    <h3>اختر الباقة</h3>
-    <button class="modal-btn" onclick="subscribe(1,1)">1ج / يوم (تجربة)</button>
-    <button class="modal-btn" onclick="subscribe(10,7)">10ج / أسبوع</button>
-    <button class="modal-btn" onclick="subscribe(20,14)">20ج / أسبوعين</button>
-    <button class="modal-btn" onclick="subscribe(50,30)">50ج / شهر</button>
-    <button class="modal-btn close-btn" onclick="closeModal()">إلغاء</button>
-  </div>
-</div>
-
 <script>
-// START scroll
+// START button scroll
 document.querySelector('.start-btn').addEventListener('click',()=>{
   document.querySelector('.content').scrollIntoView({behavior:'smooth'});
 });
@@ -338,114 +327,53 @@ document.querySelector('.start-btn').addEventListener('click',()=>{
 const themeBtn = document.querySelector('.theme-toggle');
 themeBtn.addEventListener('click',()=>{
   document.body.classList.toggle('dark-theme');
-  localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
-});
-if(localStorage.getItem('theme')==='dark'){ document.body.classList.add('dark-theme'); }
-
-// Modal
-const subscribeBtn = document.getElementById("subscribeBtn");
-const subscribeModal = document.getElementById("subscribeModal");
-const lockedDiv = document.getElementById("learning-locked");
-const unlockedDiv = document.getElementById("learning-unlocked");
-const expiryTimer = document.getElementById("expiryTimer");
-
-function closeModal(){ subscribeModal.style.display = "none"; }
-subscribeBtn.addEventListener("click", ()=>{ subscribeModal.style.display = "flex"; });
-
-// Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
-  authDomain: "my-web-c23de.firebaseapp.com",
-  projectId: "my-web-c23de",
-  storageBucket: "my-web-c23de.appspot.com",
-  messagingSenderId: "846339445873",
-  appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
-  measurementId: "G-3SE0GBRS8C"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-function subscribe(price, days){
-  const user = auth.currentUser;
-  if(!user) return;
-  db.collection("users").doc(user.uid).get().then(doc=>{
-    if(doc.exists){
-      let balance = doc.data().balance ?? 0;
-      if(balance >= price){
-        let now = new Date();
-        let expiry = new Date();
-        expiry.setDate(now.getDate() + days); // ✅ تصحيح هنا
-        db.collection("users").doc(user.uid).update({
-          balance: balance - price,
-          learningAccess: {
-            start: firebase.firestore.Timestamp.fromDate(now),
-            expiry: firebase.firestore.Timestamp.fromDate(expiry)
-          }
-        }).then(()=>{
-          alert("تم الاشتراك بنجاح ✅");
-          closeModal();
-          checkLearningAccess();
-        });
-      } else { alert("رصيدك غير كافي ❌"); }
-    }
-  });
-}
-
-function updateTimer(expiryDate){
-  function tick(){
-    let now = new Date();
-    let diff = expiryDate - now;
-    if(diff <= 0){
-      expiryTimer.innerText = "انتهى الاشتراك ⛔";
-      lockedDiv.style.display = "block";
-      unlockedDiv.style.display = "none";
-      clearInterval(timerInterval);
-      return;
-    }
-    let days = Math.floor(diff / (1000*60*60*24));
-    let hours = Math.floor((diff % (1000*60*60*24))/(1000*60*60));
-    let minutes = Math.floor((diff % (1000*60*60))/(1000*60));
-    expiryTimer.innerText = `متبقي: ${days} يوم ${hours} س ${minutes} د`;
+  if(document.body.classList.contains('dark-theme')){
+    localStorage.setItem('theme','dark');
+  }else{
+    localStorage.setItem('theme','light');
   }
-  tick();
-  let timerInterval = setInterval(tick,60000); // يحدث كل دقيقة
-}
-
-function checkLearningAccess(){
-  const user = auth.currentUser;
-  if(!user) return;
-  db.collection("users").doc(user.uid).onSnapshot(doc=>{
-    if(doc.exists){
-      const data = doc.data();
-      document.getElementById("balance").innerText = data.balance ?? 0;
-      if(data.learningAccess){
-        const expiry = data.learningAccess.expiry.toDate();
-        if(new Date() < expiry){
-          lockedDiv.style.display = "none";
-          unlockedDiv.style.display = "block";
-          updateTimer(expiry);
-        } else {
-          lockedDiv.style.display = "block";
-          unlockedDiv.style.display = "none";
-        }
-      } else {
-        lockedDiv.style.display = "block";
-        unlockedDiv.style.display = "none";
-      }
-    }
-  });
-}
-
-auth.onAuthStateChanged((user)=>{
-  if(user){ checkLearningAccess(); }
-  else{ window.location.href = "index.html"; }
 });
+if(localStorage.getItem('theme')==='dark'){
+  document.body.classList.add('dark-theme');
+}
 </script>
 
-<!-- Firebase SDK -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+    authDomain: "my-web-c23de.firebaseapp.com",
+    projectId: "my-web-c23de",
+    storageBucket: "my-web-c23de.appspot.com",
+    messagingSenderId: "846339445873",
+    appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
+    measurementId: "G-3SE0GBRS8C"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      // متابعة أي تحديث في الرصيد
+      db.collection("users").doc(user.uid).onSnapshot((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById("balance").innerText = data.balance ?? 0;
+        }
+      });
+    } else {
+      // لو مش مسجل يرجعه لصفحة التسجيل
+      window.location.href = "index.html";
+    }
+  });
+</script>
+
+
 </body>
-</html>
+</html> 
