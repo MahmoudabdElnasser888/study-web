@@ -77,6 +77,26 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
+    // دالة التوجيه حسب النوع والمرحلة
+    function redirectUser(gender, stage) {
+      if (gender === "female" && stage === "3prep") {
+        window.location.href = "girl_3prep.html";
+      } else if (gender === "male" && stage === "3prep") {
+        window.location.href = "boy_3prep.html";
+      } else if (gender === "female" && stage === "1sec") {
+        window.location.href = "girl_1sec.html";
+      } else if (gender === "male" && stage === "1sec") {
+        window.location.href = "boy_1sec.html";
+      } else if (gender === "female" && stage === "2sec") {
+        window.location.href = "girl_2sec.html";
+      } else if (gender === "male" && stage === "2sec") {
+        window.location.href = "start.html";
+      } else {
+        alert("❌ لم يتم تحديد صفحة لهذه البيانات");
+      }
+    }
+
+    // إنشاء حساب جديد
     async function signUp() {
       const name = document.getElementById("name").value;
       const email = document.getElementById("email").value;
@@ -90,16 +110,11 @@
       }
 
       try {
-        // إنشاء الحساب
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
 
-        // تحديث الاسم في البروفايل
-        await user.updateProfile({
-          displayName: name
-        });
+        await user.updateProfile({ displayName: name });
 
-        // تخزين بيانات الطالب
         await db.collection("users").doc(user.uid).set({
           name: name,
           email: email,
@@ -109,30 +124,26 @@
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // تحديد الصفحة بناءً على النوع والمرحلة
-        let page = "start.html"; // افتراضي
-        if (gender === "female" && stage === "3prep") {
-          page = "girl_3prep.html";
-        } else if (gender === "male" && stage === "2sec") {
-          page = "boy_2sec.html";
-        } else if (gender === "male" && stage === "1sec") {
-          page = "boy_1sec.html";
-        } else if (gender === "female" && stage === "2sec") {
-          page = "girl_2sec.html";
-        }
-
         alert("تم التسجيل بنجاح ✅");
-        window.location.href = page;
+        redirectUser(gender, stage);
 
       } catch (error) {
         alert(error.message);
       }
     }
 
-    // متابعة حالة تسجيل الدخول (اختياري)
-    auth.onAuthStateChanged(user => {
+    // لو المستخدم مسجل دخول قبل كده → دخوله على طول
+    auth.onAuthStateChanged(async user => {
       if (user) {
-        console.log("المستخدم مسجل الدخول:", user.email);
+        try {
+          const doc = await db.collection("users").doc(user.uid).get();
+          if (doc.exists) {
+            const data = doc.data();
+            redirectUser(data.gender, data.stage);
+          }
+        } catch (err) {
+          console.error("Error fetching user data:", err);
+        }
       }
     });
   </script>
@@ -151,7 +162,7 @@
       <option value="female">Girl</option>
     </select>
 
-    <h3>Choose</h3>
+    <h3>Choose Stage</h3>
     <select id="stage">
       <option value="">Choose</option>
       <option value="3prep">3 اعدادي</option>
