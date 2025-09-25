@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -245,12 +245,23 @@ body.dark-theme{
 </section>
 
 <section class="content">
+  <!-- To Do List -->
   <div id="todo" class="section-item">
     <i class="fas fa-list-check"></i>
     <div>
       <h2>To Do List</h2>
       <p>Organize your daily tasks efficiently.</p>
       <a href="to-do.html"><button class="enter-btn">ENTER</button></a>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div id="quiz" class="section-item">
+    <i class="fas fa-question-circle"></i>
+    <div>
+      <h2>Quiz</h2>
+      <p>Test your knowledge with quizzes.</p>
+      <a href="quiz1-start.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
 
@@ -269,6 +280,36 @@ body.dark-theme{
       </div>
     </div>
   </div>
+
+  <!-- Study Timer -->
+  <div id="timer" class="section-item">
+    <i class="fas fa-stopwatch"></i>
+    <div>
+      <h2>Study Timer</h2>
+      <p>Track your study sessions effectively.</p>
+      <a href="timer.html"><button class="enter-btn">ENTER</button></a>
+    </div>
+  </div>
+
+  <!-- Community -->
+  <div id="community" class="section-item">
+    <i class="fas fa-users"></i>
+    <div>
+      <h2>Community</h2>
+      <p>Join discussions and connect with others.</p>
+      <a href="community.html"><button class="enter-btn">ENTER</button></a>
+    </div>
+  </div>
+
+  <!-- Note -->
+  <div id="note" class="section-item">
+    <i class="fas fa-sticky-note"></i>
+    <div>
+      <h2>Note</h2>
+      <p>Write and save your important notes.</p>
+      <a href="note.html"><button class="enter-btn">ENTER</button></a>
+    </div>
+  </div>
 </section>
 
 <footer>
@@ -279,7 +320,8 @@ body.dark-theme{
 <div id="subscribeModal">
   <div class="modal-content">
     <h3>اختر الباقة</h3>
-    <button class="modal-btn" onclick="subscribe(10,1)">10ج / أسبوع</button>
+    <button class="modal-btn" onclick="subscribe(1,1)">1ج / يوم (تجربة)</button>
+    <button class="modal-btn" onclick="subscribe(10,7)">10ج / أسبوع</button>
     <button class="modal-btn" onclick="subscribe(20,14)">20ج / أسبوعين</button>
     <button class="modal-btn" onclick="subscribe(50,30)">50ج / شهر</button>
     <button class="modal-btn close-btn" onclick="closeModal()">إلغاء</button>
@@ -333,7 +375,7 @@ function subscribe(price, days){
       if(balance >= price){
         let now = new Date();
         let expiry = new Date();
-        expiry.setDate(now.getMinutes() + days);
+        expiry.setDate(now.getDate() + days); // ✅ تصحيح هنا
         db.collection("users").doc(user.uid).update({
           balance: balance - price,
           learningAccess: {
