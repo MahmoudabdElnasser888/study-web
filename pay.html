@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Pay</title>
+    <style>
+        :root {
+        --color1:#000000;
+        --color2:#252323;
+        --color3:#3a3a3a;
+        --text-color:#eee;
+        }
+
+        body {
+            background: linear-gradient(270deg, var(--color1), var(--color2), var(--color3));
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-size: 600% 600%;
+            animation: gradientBG 4s ease infinite;
+            color: var(--text-color);
+            scroll-behavior: smooth;
+        }
+
+        @keyframes gradientBG {
+            0% {background-position:0% 50%;}
+            50% {background-position:100% 50%;}
+            100% {background-position:0% 50%;}
+        }
+
+        .pricing {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            width: 300px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .card h1 {
+            margin: 0 0 10px;
+            font-size: 26px;
+            color: #333;
+        }
+
+        .price {
+            font-size: 28px;
+            color: #c33;
+            margin: 15px 0;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: right;
+        }
+
+        ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+            color: #555;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: #c33;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: rgb(255, 30, 0);
+        }
+        .okay{
+            color: #c33;
+            font-size: 14px;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <div class="pricing">
+        <!-- الباقة الشهرية -->
+        <div class="card">
+            <h1>🔥 شهر 🔥</h1>
+            <div class="price">50 ج</div>
+            <ul>
+                <li>دخول لكل الكورسات الأساسية</li>
+                <li>دعم فني عبر البريد</li>
+            </ul>
+            <a href="https://wa.me/201116973865" class="btn">اشترك الآن</a>
+            <h2 class="okay">للأشتراك اضغط علي اشترك الآن و تواصل معنا</h2>
+        </div>
+
+        <!-- الباقة 3 شهور -->
+        <div class="card">
+            <h1>⚡ 3 شهور ⚡</h1>
+            <div class="price">120 ج</div>
+            <ul>
+                <li>كل مميزات الشهرية</li>
+                <li>خصم 20%</li>
+                <li>تحديثات مستمرة</li>
+            </ul>
+            <a href="https://wa.me/201116973865" class="btn">اشترك الآن</a>
+            <h2 class="okay">للأشتراك اضغط علي اشترك الآن و تواصل معنا</h2>
+        </div>
+
+        <!-- الباقة السنوية -->
+        <div class="card">
+            <h1>👑 سنوي 👑</h1>
+            <div class="price">400 ج</div>
+            <ul>
+                <li>كل المميزات السابقة</li>
+                <li>جلسات تدريب خاصة</li>
+                <li>شهادة معتمدة</li>
+            </ul>
+            <a href="https://wa.me/201116973865" class="btn">اشترك الآن</a>
+            <h2 class="okay">للأشتراك اضغط علي اشترك الآن و تواصل معنا</h2>
+        </div>
+    </div>
+</body>
+</html>
