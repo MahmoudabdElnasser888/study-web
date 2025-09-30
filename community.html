@@ -15,15 +15,12 @@
       height: 100vh;
     }
     header {
-      background-color: #000000;
+      background-color: #000;
       padding: 15px;
       text-align: center;
       font-size: 20px;
       font-weight: bold;
       color: #ff6f61;
-      display: flex;
-      justify-content: center;
-      position: relative;
     }
     .chat-container {
       flex: 1;
@@ -38,8 +35,8 @@
       padding: 10px;
       border-radius: 10px;
       word-wrap: break-word;
-      position: relative;
       animation: fadeIn 0.3s ease-in-out;
+      position: relative;
     }
     @keyframes fadeIn {
       from {opacity:0; transform: translateY(10px);}
@@ -47,27 +44,28 @@
     }
     .sent { background-color: #ff6f61; align-self: flex-end; }
     .received { background-color: #333; align-self: flex-start; }
-    .reply {
+    .msg-actions {
       font-size: 12px;
-      color: #ccc;
-      border-left: 3px solid #ff6f61;
-      padding-left: 5px;
-      margin-bottom: 5px;
-    }
-    .delete-btn, .reply-btn, .report-btn {
-      font-size: 10px;
-      margin: 3px;
-      color: #fff;
-      background: #555;
-      border: none;
-      border-radius: 5px;
+      position: absolute;
+      bottom: -18px;
+      right: 5px;
+      display: flex;
+      gap: 5px;
       cursor: pointer;
-      padding: 2px 5px;
+      color: #bbb;
+    }
+    .reply-preview {
+      background: #444;
+      padding: 5px 10px;
+      border-left: 3px solid #ff6f61;
+      font-size: 12px;
+      margin-bottom: 5px;
+      border-radius: 5px;
     }
     .input-area {
       display: flex;
       padding: 10px;
-      background-color: #000000;
+      background-color: #000;
       align-items: center;
     }
     .input-area input {
@@ -84,265 +82,78 @@
       background-color: #ff6f61;
       color: white;
       cursor: pointer;
-      margin-left: 5px;
     }
     .emoji-picker {
       position: absolute;
       bottom: 60px;
-      right: 20px;
-      background: #1e1e1e;
-      border: 1px solid #444;
-      padding: 10px;
+      background: #222;
+      padding: 5px;
       border-radius: 10px;
       display: none;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
     }
     .emoji-picker span {
       cursor: pointer;
       font-size: 20px;
-      margin: 5px;
     }
-    .reply-preview {
-      background: #333;
-      padding: 5px 10px;
-      border-left: 3px solid #ff6f61;
-      font-size: 12px;
-      margin-bottom: 5px;
-      border-radius: 5px;
-      display: none;
-    }
-    /* نافذة طلب الاسم */
-    #namePrompt {
-      position: fixed;
-      top:0; left:0; width:100%; height:100%;
-      background: #000c;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-    #namePrompt div {
-      background: #222;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-    }
-    #namePrompt input {
-      padding:10px;
-      border-radius:5px;
-      border:none;
-      width: 200px;
-    }
-    #namePrompt button {
-      margin-top:10px;
-      padding:10px 20px;
-      border:none;
-      border-radius:5px;
-      background:#ff6f61;
-      color:white;
-      cursor:pointer;
-    }
-    .quiz{
-      font-size: 20px;
-      color: #ffffff;
-      text-decoration: none;
-      transition: 0.3s;
-      position: absolute;
-      right: 20px;
-      top: 19px;
-    }
-    .quiz::after{
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -3px;
-      width: 0%;
-      height: 2px;
-      background: #ff6f61;
-      transition: width 0.2s ease;
-    }
-    .quiz:hover::after{ width: 100%; }
   </style>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 <body>
-  <header>💬 Community
-    <a href="last-quiz.html" class="quiz">Last quiz</a>
-  </header>
+  <header>💬 Community</header>
 
   <div class="chat-container" id="chat"></div>
-  <div class="reply-preview" id="replyPreview"></div>
 
   <div class="input-area">
-    <input id="messageInput" placeholder="Type a message...">
     <button id="emojiBtn">😊</button>
+    <div class="emoji-picker" id="emojiPicker"></div>
+    <input id="messageInput" placeholder="Type a message...">
     <button id="sendBtn">Send</button>
   </div>
 
-  <div class="emoji-picker" id="emojiPicker">
-    <span>😀</span><span>😂</span><span>😍</span><span>😎</span>
-    <span>😭</span><span>😡</span><span>👍</span><span>🔥</span>
-  </div>
-
-  <!-- نافذة طلب الاسم -->
-  <div id="namePrompt">
-    <div>
-      <h3>ادخل اسمك</h3>
-      <input id="nameInput" placeholder="اسمك">
-      <button id="saveNameBtn">حفظ</button>
-    </div>
-  </div>
-
-  <!-- نافذة اختيار المرحلة والجنس -->
-  <div id="groupPrompt" style="
-    position: fixed;top:0;left:0;width:100%;height:100%;
-    background:#000c;display:flex;justify-content:center;align-items:center;z-index:999;">
-    <div style="background:#222;padding:20px;border-radius:10px;text-align:center;">
-      <h3>اختر مرحلتك وجنسك</h3>
-      <select id="gradeSelect" style="padding:10px;border-radius:5px;">
-        <option value="">-- اختر المرحلة --</option>
-        <option value="1ثانوي">1 ثانوي</option>
-        <option value="2ثانوي">2 ثانوي</option>
-        <option value="3ثانوي">3 ثانوي</option>
-      </select>
-      <br><br>
-      <select id="genderSelect" style="padding:10px;border-radius:5px;">
-        <option value="">-- اختر الجنس --</option>
-        <option value="ولاد">ولاد</option>
-        <option value="بنات">بنات</option>
-      </select>
-      <br><br>
-      <button onclick="saveGroup()" style="
-        margin-top:10px;padding:10px 20px;border:none;
-        border-radius:5px;background:#ff6f61;color:white;cursor:pointer;">
-        دخول
-      </button>
-    </div>
-  </div>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-
   <script>
+    // إعدادات Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
       authDomain: "my-web-c23de.firebaseapp.com",
       projectId: "my-web-c23de",
       storageBucket: "my-web-c23de.appspot.com",
       messagingSenderId: "846339445873",
-      appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
-      measurementId: "G-3SE0GBRS8C"
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0"
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    const badWords = ["كسم","كسك","fuck","shit","كس","خول","عرص","شرموط","متناك","يكس","قحب","علق","زاني","زنا","يركبك","وسخ","حمار","فحل"];
-    function containsBadWords(text) {
-      return badWords.some(word => text.toLowerCase().includes(word));
-    }
-
-    let username = localStorage.getItem("username") || "";
-    const namePrompt = document.getElementById("namePrompt");
-    const nameInput = document.getElementById("nameInput");
-    const saveNameBtn = document.getElementById("saveNameBtn");
-
-    if(!username){ namePrompt.style.display = "flex"; }
-    else { namePrompt.style.display = "none"; }
-
-    saveNameBtn.onclick = () => {
-      const name = nameInput.value.trim();
-      if(name){
-        localStorage.setItem("username", name);
-        username = name;
-        namePrompt.style.display = "none";
-      } else { alert("الرجاء كتابة اسمك!"); }
-    }
-
+    let currentUserData = null;
+    let collectionName = "";
     let replyTo = null;
-    function setReply(msgText) {
-      replyTo = msgText;
-      const preview = document.getElementById("replyPreview");
-      preview.textContent = "↪ " + msgText;
-      preview.style.display = "block";
+
+    function getCollectionName(stage, gender) {
+      return `messages_${stage}_${gender}`;
     }
 
-    let currentGroup = localStorage.getItem("group") || "";
-    function saveGroup() {
-      const grade = document.getElementById("gradeSelect").value;
-      const gender = document.getElementById("genderSelect").value;
-      if(!grade || !gender) {
-        alert("⚠️ من فضلك اختر المرحلة والجنس");
-        return;
+    auth.onAuthStateChanged(async user => {
+      if (user) {
+        const doc = await db.collection("users").doc(user.uid).get();
+        if (doc.exists) {
+          currentUserData = doc.data();
+          collectionName = getCollectionName(currentUserData.stage, currentUserData.gender);
+          loadMessages();
+        }
+      } else {
+        alert("⚠️ لازم تسجل دخول الأول!");
+        window.location.href = "index.html";
       }
-      currentGroup = grade + "-" + gender; 
-      localStorage.setItem("group", currentGroup);
-      document.getElementById("groupPrompt").style.display = "none";
-      loadMessages();
-    }
-    if(currentGroup){ 
-      document.getElementById("groupPrompt").style.display = "none"; 
-    }
+    });
 
-    async function sendMessage() {
-      const input = document.getElementById("messageInput");
-      const text = input.value.trim();
-      if (!text) return;
-
-      if (containsBadWords(text)) {
-        alert("🚫 الرسالة فيها كلمة ممنوعة!");
-        input.value = "";
-        return;
-      }
-
-      const user = auth.currentUser;
-      if (!user) {
-        alert("لازم تسجل دخول الأول!");
-        return;
-      }
-
-      if(!username) {
-        alert("الرجاء إدخال اسمك أولاً!");
-        return;
-      }
-      if(!currentGroup) {
-        alert("⚠️ لازم تختار المرحلة والجنس");
-        return;
-      }
-
-      await db.collection("messages").add({
-        text: text,
-        uid: user.uid,
-        name: username,
-        reply: replyTo,
-        group: currentGroup,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      input.value = "";
-      replyTo = null;
-      document.getElementById("replyPreview").style.display = "none";
-    }
-
-    async function deleteMessage(id) { await db.collection("messages").doc(id).delete(); }
-    async function reportMessage(id, text, sender) {
-      const user = auth.currentUser;
-      await db.collection("reports").add({
-        messageId: id,
-        messageText: text,
-        senderName: sender,
-        reportedBy: user ? (user.email || user.uid) : "مجهول",
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      alert("✅ شكراً على بلاغك، تم إرساله للإدارة.");
-    }
-
-    function loadMessages(){
-      if(!currentGroup) return;
-      db.collection("messages")
-      .where("group", "==", currentGroup)
-      .orderBy("timestamp")
-      .onSnapshot(snapshot => {
+    function loadMessages() {
+      db.collection(collectionName).orderBy("timestamp").onSnapshot(snapshot => {
         const chat = document.getElementById("chat");
         chat.innerHTML = "";
         snapshot.forEach(doc => {
@@ -350,65 +161,72 @@
           const div = document.createElement("div");
           div.classList.add("message");
           div.classList.add(msg.uid === auth.currentUser?.uid ? "sent" : "received");
-
-          if (msg.reply) {
-            const replyDiv = document.createElement("div");
-            replyDiv.classList.add("reply");
-            replyDiv.textContent = "↪ " + msg.reply;
-            div.appendChild(replyDiv);
-          }
-
-          div.innerHTML += `<strong>${msg.name}</strong>: ${msg.text}`;
-
-          if (msg.uid === auth.currentUser?.uid) {
-            const delBtn = document.createElement("button");
-            delBtn.textContent = "Delete";
-            delBtn.classList.add("delete-btn");
-            delBtn.onclick = () => deleteMessage(doc.id);
-            div.appendChild(delBtn);
-          }
-
-          const replyBtn = document.createElement("button");
-          replyBtn.textContent = "Reply";
-          replyBtn.classList.add("reply-btn");
-          replyBtn.onclick = () => setReply(msg.text);
-          div.appendChild(replyBtn);
-
-          const reportBtn = document.createElement("button");
-          reportBtn.textContent = "🚩 Report";
-          reportBtn.classList.add("report-btn");
-          reportBtn.onclick = () => reportMessage(doc.id, msg.text, msg.name);
-          div.appendChild(reportBtn);
-
+          div.innerHTML = `
+            ${msg.replyTo ? `<div class="reply-preview"><strong>${msg.replyTo.name}:</strong> ${msg.replyTo.text}</div>` : ""}
+            <strong>${msg.name}</strong>: ${msg.text}
+            <div class="msg-actions">
+              <span onclick="replyMessage('${doc.id}', '${msg.name}', '${msg.text.replace(/'/g, "\\'")}')">↩️</span>
+              <span onclick="reportMessage('${doc.id}', '${msg.uid}', '${msg.name}', '${msg.text.replace(/'/g, "\\'")}')">🚨</span>
+            </div>
+          `;
           chat.appendChild(div);
         });
-
         chat.scrollTop = chat.scrollHeight;
       });
     }
 
-    document.getElementById("sendBtn").addEventListener("click", sendMessage);
-    document.getElementById("messageInput").addEventListener("keypress", e => {
-      if (e.key === "Enter") sendMessage();
+    document.getElementById("sendBtn").addEventListener("click", async () => {
+      const input = document.getElementById("messageInput");
+      const text = input.value.trim();
+      if (!text || !currentUserData) return;
+
+      await db.collection(collectionName).add({
+        text: text,
+        uid: auth.currentUser.uid,
+        name: currentUserData.name,
+        replyTo: replyTo,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      replyTo = null;
+      input.value = "";
     });
 
-    auth.signInAnonymously().catch(err => console.error(err));
+    // 🚨 إبلاغ
+    window.reportMessage = async function(id, uid, name, text) {
+      if (!currentUserData) return;
+      await db.collection("reports").add({
+        reporter: currentUserData.name,
+        reportedUser: name,
+        reportedUid: uid,
+        message: text,
+        chatCollection: collectionName,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      alert("✅ تم إرسال البلاغ!");
+    }
 
-    const emojiBtn = document.getElementById("emojiBtn");
+    // ↩️ رد
+    window.replyMessage = function(id, name, text) {
+      replyTo = { name, text };
+      document.getElementById("messageInput").placeholder = `Replying to ${name}: ${text}`;
+    }
+
+    // 😊 إيموجي
+    const emojis = ["😂","😍","😎","👍","🔥","🎉","❤️","😢","🤔","💯"];
     const emojiPicker = document.getElementById("emojiPicker");
-    emojiBtn.onclick = () => {
-      emojiPicker.style.display = emojiPicker.style.display === "block" ? "none" : "block";
-    };
-    emojiPicker.querySelectorAll("span").forEach(emoji => {
-      emoji.onclick = () => {
-        document.getElementById("messageInput").value += emoji.textContent;
-        emojiPicker.style.display = "none";
+    emojis.forEach(e => {
+      const span = document.createElement("span");
+      span.textContent = e;
+      span.onclick = () => {
+        document.getElementById("messageInput").value += e;
       };
+      emojiPicker.appendChild(span);
     });
 
-    if ("Notification" in window) { Notification.requestPermission(); }
-
-    if(currentGroup){ loadMessages(); }
+    document.getElementById("emojiBtn").addEventListener("click", () => {
+      emojiPicker.style.display = emojiPicker.style.display === "grid" ? "none" : "grid";
+    });
   </script>
 </body>
 </html>
