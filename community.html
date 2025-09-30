@@ -45,15 +45,21 @@
     .sent { background-color: #ff6f61; align-self: flex-end; }
     .received { background-color: #333; align-self: flex-start; }
     .msg-actions {
-      font-size: 12px;
+      font-size: 17px;
       position: absolute;
-      bottom: -18px;
+      bottom: -25px;
       right: 5px;
       display: flex;
-      gap: 5px;
+      gap: 19px;
       cursor: pointer;
       color: #bbb;
     }
+    .msg-actions span:hover {
+  color: #ff0000;       /* لون عند المرور */
+  transform: scale(1.2);
+  transition: 0.2s;
+}
+
     .reply-preview {
       background: #444;
       padding: 5px 10px;

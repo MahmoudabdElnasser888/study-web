@@ -112,24 +112,34 @@
 <div class="quiz-list" id="quizList"></div>
 
 <script>
+  // الكويزات كلها ومعاها المرحلة المطلوبة
   const quizzes = [
-    { name: "رياضه (بحته)", description: "الدرس الاول", page: "quizmee-startquiz.html" },
-     { name: "تاريخ", description: "الدرس الاول", page: "history.html" },
-     { name: "رياضه(بحته)", description: "الدرس الثاني", page: "gabr2.html" }
-
+    { name: "رياضة (بحته)", description: "الدرس الاول", page: "quizmee-startquiz.html", stage: "2th" },
+    { name: "تاريخ", description: "الدرس الاول", page: "history.html", stage: "3th" },
+    { name: "رياضة (بحته)", description: "الدرس الثاني", page: "gabr2.html", stage: "2th" }
   ];
 
   const quizList = document.getElementById('quizList');
 
-  quizzes.forEach(q => {
-    const card = document.createElement('div');
-    card.className = 'quiz-card';
-    card.innerHTML = `<h2>${q.name}</h2><p>${q.description}</p>`;
-    card.addEventListener('click', () => {
-      window.location.href = q.page;
+  // قراءة المرحلة من LocalStorage
+  const userStage = localStorage.getItem("stage"); 
+
+  // فلترة الكويزات للمرحلة فقط
+  const filteredQuizzes = quizzes.filter(q => q.stage === userStage);
+
+  if(filteredQuizzes.length > 0){
+    filteredQuizzes.forEach(q => {
+      const card = document.createElement('div');
+      card.className = 'quiz-card';
+      card.innerHTML = `<h2>${q.name}</h2><p>${q.description}</p>`;
+      card.addEventListener('click', () => {
+        window.location.href = q.page;
+      });
+      quizList.appendChild(card);
     });
-    quizList.appendChild(card);
-  });
+  } else {
+    quizList.innerHTML = "<p>لا يوجد كويزات متاحة لمرحلتك حالياً</p>";
+  }
 
   // تفعيل الوضع حسب Local Storage عند تحميل الصفحة
   window.onload = function() {
