@@ -1,177 +1,478 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Study With Me</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    h1 {
-      margin: 20px;
-    }
-    #timer {
-      font-size: 2rem;
-      margin: 10px;
-    }
-    #chat {
-      flex: 1;
-      width: 100%;
-      max-width: 600px;
-      background: rgba(0,0,0,0.5);
-      border-radius: 10px;
-      padding: 10px;
-      overflow-y: auto;
-    }
-    .message {
-      padding: 8px;
-      margin: 5px 0;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.1);
-    }
-    #chatControls {
-      display: flex;
-      margin-top: 10px;
-      max-width: 600px;
-      width: 100%;
-    }
-    #msgInput {
-      flex: 1;
-      padding: 10px;
-      border-radius: 6px;
-      border: none;
-      outline: none;
-    }
-    #sendBtn {
-      padding: 10px 15px;
-      margin-left: 5px;
-      border: none;
-      border-radius: 6px;
-      background: #ff6f61;
-      color: #fff;
-      cursor: pointer;
-    }
-    #sendBtn:hover {
-      background: #ff3b2e;
-    }
-    #adminControls {
-      margin-top: 15px;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Study With Me — الجلسة</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg1:#0f172a;--bg2:#0b1220;--accent:#ff6f61;--muted:#cbd5e1}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Poppins",sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#fff;min-height:100vh;display:flex;flex-direction:column}
+  header{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:space-between;gap:10px}
+  header h1{margin:0;font-size:18px}
+  .container{display:flex;flex:1;gap:18px;padding:18px;align-items:stretch}
+  .left{flex:2;display:flex;flex-direction:column;gap:12px}
+  .right{width:340px;max-width:40%;min-width:260px;background:rgba(255,255,255,0.03);padding:14px;border-radius:12px;display:flex;flex-direction:column;gap:12px}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:14px;border-radius:10px}
+  .timerBig{font-size:56px;font-weight:700;text-align:center;padding:8px}
+  .controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .btn{background:var(--accent);color:#fff;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+  .small{font-size:13px;color:var(--muted)}
+  /* participants list */
+  .participants{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto}
+  .part{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;background:rgba(0,0,0,0.25)}
+  .part .leftp{display:flex;gap:8px;align-items:center}
+  .badge{background:rgba(255,255,255,0.06);padding:4px 8px;border-radius:999px;font-weight:600;color:#fff}
+  .actions{display:flex;gap:6px}
+  .actions button{padding:6px 8px;border-radius:6px;border:none;cursor:pointer;background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.06)}
+  .actions button.danger{border-color:#ff6f61}
+  /* admin message panel */
+  #adminMsgBox{min-height:120px;max-height:220px;overflow:auto;padding:8px;background:rgba(255,255,255,0.02);border-radius:8px}
+  #adminInput{width:100%;padding:8px;border-radius:6px;border:none;margin-top:6px}
+  /* overlay login */
+  #loginOverlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,rgba(0,0,0,0.7),rgba(0,0,0,0.85));z-index:999}
+  #loginCard{background:#0b1220;padding:20px;border-radius:12px;width:380px;max-width:92%}
+  #loginCard h2{margin:0 0 8px}
+  input[type="text"], input[type="password"], select{width:100%;padding:10px;border-radius:8px;border:none;margin-top:8px;background:rgba(255,255,255,0.03);color:#fff}
+  .row{display:flex;gap:8px}
+  footer{padding:10px;text-align:center;color:var(--muted);font-size:13px}
+  @media(max-width:900px){.container{flex-direction:column}.right{width:100%;max-width:100%}}
+</style>
 </head>
 <body>
-  <h1>📚 Study With Me</h1>
-  <div id="timer">⏳ 20:00</div>
+<header>
+  <h1>Study With Me — جلسة مذاكرة جماعية</h1>
+  <div class="small" id="countBox">الموجودون: 0</div>
+</header>
 
-  <div id="chat"></div>
+<div class="container">
+  <div class="left">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div class="small">الحالة: <span id="sessionState">لم تبدأ</span></div>
+          <div class="small">المدة: <span id="sessionDuration">20 دقيقة</span></div>
+        </div>
+        <div>
+          <div style="font-size:14px;color:var(--muted)">دورك: <strong id="myRole">غير محدد</strong></div>
+        </div>
+      </div>
 
-  <div id="chatControls">
-    <input type="text" id="msgInput" placeholder="اكتب رسالتك...">
-    <button id="sendBtn">إرسال</button>
+      <div class="timerBig" id="timerDisplay">20:00</div>
+
+      <div class="controls" id="adminControls" style="display:none">
+        <input id="minutesInput" type="text" placeholder="مدة الدقائق (مثلاً: 20)" style="width:160px;padding:8px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:#fff">
+        <button class="btn" id="startBtn">ابدأ الجلسة</button>
+        <button class="btn ghost" id="stopBtn">ايقاف سابق</button>
+        <button class="btn ghost" id="allowAllBtn">السماح بكل الخروج</button>
+      </div>
+
+      <div style="margin-top:12px" class="small">
+        التعليمات: الطلاب لا يمكنهم الخروج إلا بعد الموافقة. المشرف فقط يستطيع بدء الجلسة وإرسال الرسائل.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 8px">رسائل المشرف (مرئية للجميع)</h3>
+      <div id="adminMsgBox">لا توجد رسائل بعد.</div>
+
+      <div id="adminInputArea" style="margin-top:8px;display:none">
+        <textarea id="adminInput" rows="3" placeholder="اكتب رسالة للمجموعة..."></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" id="sendAdminMsgBtn">إرسال رسالة</button>
+          <button class="btn ghost" id="clearMsgBtn">مسح الرسائل</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div id="adminControls" style="display:none;">
-    <button onclick="clearChat()">🗑️ مسح الشات</button>
+  <aside class="right card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div><strong>قائمة الحضور</strong></div>
+      <div class="small" id="onlineCount">0</div>
+    </div>
+
+    <div class="participants" id="participantsList">
+      <!-- participants here -->
+    </div>
+
+    <div style="margin-top:12px" class="small">طالب يطلب الخروج يظهر كـ <em>طلب خروج</em>, اضغط السماح للخروج أو طرده.</div>
+  </aside>
+</div>
+
+<!-- login overlay -->
+<div id="loginOverlay">
+  <div id="loginCard">
+    <h2>دخّل للجلسة</h2>
+    <div class="small">ادخل اسمك وكود الجلسة. كود الطالب = <strong>222</strong> ، كود المشرف = <strong>1212</strong></div>
+    <input id="nameInput" type="text" placeholder="اسمك الكامل">
+    <input id="codeInput" type="password" placeholder="كود الجلسة">
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn" id="joinBtn">ادخل الجلسة</button>
+      <button class="btn ghost" id="demoFill">تعبئة تجريبية</button>
+    </div>
+    <div style="margin-top:10px" class="small">ملاحظة: هذه النسخة تستخدم Firebase Realtime Database. تأكد من ضبط قواعد DB للتجربة.</div>
   </div>
+</div>
 
-  <!-- Firebase -->
-  <script type="module">
-    // Firebase SDKs
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+<footer>تم التطوير خصيصاً لتجربتك — أصلاً خفيف وقابل للتطوير</footer>
 
-    // Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
-      authDomain: "my-web-c23de.firebaseapp.com",
-      databaseURL: "https://my-web-c23de-default-rtdb.firebaseio.com",
-      projectId: "my-web-c23de",
-      storageBucket: "my-web-c23de.appspot.com",
-      messagingSenderId: "846339445873",
-      appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
-      measurementId: "G-3SE0GBRS8C"
-    };
+<!-- Firebase modules (v12) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getDatabase, ref, set, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 
-    // Init
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const auth = getAuth(app);
+  // ====== ضع هنا إعدادات Firebase project (أضفت مشروعك كمثال) ======
+  const firebaseConfig = {
+    apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+    authDomain: "my-web-c23de.firebaseapp.com",
+    databaseURL: "https://my-web-c23de-default-rtdb.firebaseio.com",
+    projectId: "my-web-c23de",
+    storageBucket: "my-web-c23de.appspot.com",
+    messagingSenderId: "846339445873",
+    appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
+    measurementId: "G-3SE0GBRS8C"
+  };
 
-    // تسجيل دخول مجهول
-    let userId = "";
-    signInAnonymously(auth).then((res)=>{
-      userId = res.user.uid;
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // refs
+  const participantsRef = ref(db, "session/participants");
+  const messagesRef = ref(db, "session/messages");
+  const sessionRef = ref(db, "session/meta");
+
+  // UI refs
+  const loginOverlay = document.getElementById("loginOverlay");
+  const joinBtn = document.getElementById("joinBtn");
+  const nameInput = document.getElementById("nameInput");
+  const codeInput = document.getElementById("codeInput");
+  const participantsList = document.getElementById("participantsList");
+  const onlineCount = document.getElementById("onlineCount");
+  const countBox = document.getElementById("countBox");
+  const myRoleSpan = document.getElementById("myRole");
+
+  const adminControls = document.getElementById("adminControls");
+  const adminInputArea = document.getElementById("adminInputArea");
+  const adminMsgBox = document.getElementById("adminMsgBox");
+  const sendAdminMsgBtn = document.getElementById("sendAdminMsgBtn");
+  const adminInput = document.getElementById("adminInput");
+  const clearMsgBtn = document.getElementById("clearMsgBtn");
+
+  const startBtn = document.getElementById("startBtn");
+  const stopBtn = document.getElementById("stopBtn");
+  const allowAllBtn = document.getElementById("allowAllBtn");
+  const minutesInput = document.getElementById("minutesInput");
+  const timerDisplay = document.getElementById("timerDisplay");
+  const sessionState = document.getElementById("sessionState");
+  const sessionDuration = document.getElementById("sessionDuration");
+
+  // local state
+  let my = { uid: null, name: null, role: null, allowedToLeave: false };
+  let timerInterval = null;
+
+  // helper: generate uid
+  function genUid(){ return 'id_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,8); }
+
+  // --- LOGIN FLOW ---
+  document.getElementById("demoFill").onclick = () => { nameInput.value = "طالب تجريبي"; codeInput.value = "222"; };
+  joinBtn.onclick = async () => {
+    const name = nameInput.value.trim();
+    const code = codeInput.value.trim();
+    if(!name || !code){ alert("اكتب اسمك والكود"); return; }
+
+    // decide role
+    let role = null;
+    if(code === "1212") role = "admin";
+    else if(code === "222") role = "student";
+    else { alert("كود غير صحيح"); return; }
+
+    // create local uid
+    const uid = genUid();
+    my.uid = uid; my.name = name; my.role = role;
+
+    // write participant entry
+    const pRef = ref(db, `session/participants/${uid}`);
+    await set(pRef, {
+      name: name,
+      role: role,
+      status: "active",          // active | request_exit | allowed_exit
+      joinedAt: Date.now()
     });
 
-    // المراجع
-    const messagesRef = ref(db, "messages");
+    // hide login
+    loginOverlay.style.display = "none";
+    myRoleSpan.innerText = (role === "admin" ? "مشرف" : "طالب");
+    setupUIForRole(role);
 
-    // إرسال رسالة
-    document.getElementById("sendBtn").onclick = () => {
-      const text = document.getElementById("msgInput").value.trim();
-      if(text === "") return;
-      push(messagesRef, {
-        text: text,
-        uid: userId,
-        time: Date.now()
-      });
-      document.getElementById("msgInput").value = "";
+    // setup beforeunload (prevent leaving if not allowed)
+    window.onbeforeunload = function () {
+      if(!my.allowedToLeave && my.role !== "admin") {
+        return "❗ لم تسمح الإدارة بخروجك بعد. هل تريد المغادرة؟";
+      }
     };
+  };
 
-    // عرض الرسائل
-    const chatBox = document.getElementById("chat");
-    onValue(messagesRef, (snapshot)=>{
-      chatBox.innerHTML = "";
-      snapshot.forEach((child)=>{
-        const msg = child.val();
-        const div = document.createElement("div");
-        div.className = "message";
-        div.innerText = msg.text;
-        chatBox.appendChild(div);
-      });
-      chatBox.scrollTop = chatBox.scrollHeight;
-    });
-
-    // مسح الشات (للمشرف فقط)
-    window.clearChat = function(){
-      remove(messagesRef);
-    };
-
-    // 👑 لو انت المشرف خليها true
-    const isAdmin = true; 
-    if(isAdmin){
-      document.getElementById("adminControls").style.display = "block";
+  // setup UI based on role
+  function setupUIForRole(role){
+    if(role === "admin"){
+      adminControls.style.display = "flex";
+      adminInputArea.style.display = "block";
+    } else {
+      adminControls.style.display = "none";
+      adminInputArea.style.display = "none";
     }
+  }
 
-    // المؤقت
-    let timeLeft = 20 * 60; // 20 دقيقة
-    const timerDiv = document.getElementById("timer");
-    const timerInterval = setInterval(()=>{
-      let mins = Math.floor(timeLeft/60);
-      let secs = timeLeft % 60;
-      timerDiv.innerText = `⏳ ${mins}:${secs<10?"0":""}${secs}`;
-      if(timeLeft <= 0){
+  // --- participants listener: show list and count ---
+  onValue(participantsRef, snapshot => {
+    const val = snapshot.val() || {};
+    participantsList.innerHTML = "";
+    const keys = Object.keys(val);
+    onlineCount.innerText = keys.length;
+    countBox.innerText = `الموجودون: ${keys.length}`;
+    // show participants
+    keys.forEach(k => {
+      const p = val[k];
+      const div = document.createElement("div");
+      div.className = "part";
+      const left = document.createElement("div");
+      left.className = "leftp";
+      left.innerHTML = `<div style="display:flex;flex-direction:column;text-align:right">
+                          <strong>${escapeHtml(p.name)}</strong>
+                          <span class="small">${p.role === 'admin' ? 'مشرف' : (p.status==='request_exit' ? 'طلب خروج' : 'متصل')}</span>
+                        </div>`;
+      const actions = document.createElement("div");
+      actions.className = "actions";
+
+      // if I'm admin, show controls for each participant (except myself maybe)
+      if(my.role === "admin"){
+        // Allow exit button (enabled if requested)
+        const allowBtn = document.createElement("button");
+        allowBtn.innerText = "سماح بالخروج";
+        allowBtn.onclick = () => allowParticipantExit(k);
+        actions.appendChild(allowBtn);
+
+        // Kick button
+        const kickBtn = document.createElement("button");
+        kickBtn.innerText = "طرد";
+        kickBtn.className = "danger";
+        kickBtn.onclick = () => kickParticipant(k);
+        actions.appendChild(kickBtn);
+      } else {
+        // If I'm the participant, show "طلب خروج" button or "حالة" label
+        if(my.uid === k){
+          if(p.status === "active"){
+            const reqBtn = document.createElement("button");
+            reqBtn.innerText = "طلب خروج";
+            reqBtn.onclick = () => requestExit();
+            actions.appendChild(reqBtn);
+          } else if(p.status === "request_exit"){
+            const span = document.createElement("span");
+            span.innerText = "تم طلب الخروج — بانتظار موافقة المشرف";
+            actions.appendChild(span);
+          } else if(p.status === "allowed_exit"){
+            const exitBtn = document.createElement("button");
+            exitBtn.innerText = "يمكنك الآن الخروج";
+            exitBtn.onclick = () => doLocalLeave();
+            actions.appendChild(exitBtn);
+          }
+        } else {
+          // others: no actions (students)
+        }
+      }
+
+      div.appendChild(left);
+      div.appendChild(actions);
+      participantsList.appendChild(div);
+    });
+  });
+
+  // escape HTML helper
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, (m)=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+
+  // participant actions (admin)
+  async function allowParticipantExit(uid){
+    // set status -> allowed_exit then remove after a grace
+    const pRef = ref(db, `session/participants/${uid}`);
+    await set(ref(db, `session/participants/${uid}/status`), "allowed_exit"); // This direct set won't work; instead update full object
+    // safer: read current and update
+    onValue(pRef, async snap => {
+      const cur = snap.val();
+      if(!cur) return;
+      await set(pRef, {...cur, status: "allowed_exit"});
+    }, {onlyOnce:true});
+  }
+
+  async function kickParticipant(uid){
+    if(!confirm("هل أنت متأكد أنك تريد طرد هذا الطالب؟")) return;
+    const pRef = ref(db, `session/participants/${uid}`);
+    await remove(pRef);
+  }
+
+  // student requests exit
+  async function requestExit(){
+    if(!my.uid) return;
+    const pRef = ref(db, `session/participants/${my.uid}`);
+    onValue(pRef, async snap => {
+      const cur = snap.val();
+      if(!cur) return;
+      await set(pRef, {...cur, status: "request_exit"});
+    }, {onlyOnce:true});
+    alert("تم إرسال طلب الخروج للمشرف. انتظر الموافقة.");
+  }
+
+  // when admin allows exit we should detect that change for the student and let them leave
+  onValue(ref(db, `session/participants`), snapshot => {
+    const val = snapshot.val() || {};
+    if(my.uid && val[my.uid]){
+      const status = val[my.uid].status;
+      if(status === "allowed_exit"){
+        my.allowedToLeave = true;
+        // change UI: show local exit button? we already show in list
+        // Remove beforeunload so user can leave
+        window.onbeforeunload = null;
+      } else {
+        if(my.role !== "admin") window.onbeforeunload = function(){ return "لم تسمح الإدارة بالخروج بعد."; };
+      }
+    }
+  });
+
+  // local leave (called from UI when allowed)
+  function doLocalLeave(){
+    if(!my.uid) return;
+    // remove participant entry and allow closing
+    remove(ref(db, `session/participants/${my.uid}`));
+    my.allowedToLeave = true;
+    window.onbeforeunload = null;
+    alert("تم الخروج. يمكنك إغلاق الصفحة.");
+  }
+
+  // --- admin messages (only admin can write) ---
+  // listen to messages
+  onValue(messagesRef, snap => {
+    const val = snap.val() || {};
+    const keys = Object.keys(val);
+    adminMsgBox.innerHTML = "";
+    if(!keys.length) adminMsgBox.innerText = "لا توجد رسائل بعد.";
+    keys.forEach(k => {
+      const m = val[k];
+      const el = document.createElement("div");
+      el.style.padding = "8px";
+      el.style.borderBottom = "1px solid rgba(255,255,255,0.03)";
+      el.innerHTML = `<div style="font-weight:600">${escapeHtml(m.from)}</div><div style="font-size:13px;color:var(--muted)">${escapeHtml(m.text)}</div>`;
+      adminMsgBox.appendChild(el);
+    });
+    adminMsgBox.scrollTop = adminMsgBox.scrollHeight;
+  });
+
+  // send admin message
+  sendAdminMsgBtn.onclick = async () => {
+    if(my.role !== "admin"){ alert("غير مصرح"); return; }
+    const text = adminInput.value.trim();
+    if(!text) return;
+    const key = Date.now().toString(36);
+    await set(ref(db, `session/messages/${key}`), { from: my.name, text: text, time: Date.now() });
+    adminInput.value = "";
+  };
+
+  clearMsgBtn.onclick = async () => {
+    if(my.role !== "admin") return;
+    if(!confirm("مسح جميع الرسائل نهائيًا؟")) return;
+    await remove(ref(db, `session/messages`));
+  };
+
+  // --- session meta: start/stop timer (admin only) ---
+  // read meta
+  onValue(sessionRef, snap => {
+    const meta = snap.val() || {};
+    if(meta.startTime && meta.duration){
+      const remaining = (meta.startTime + meta.duration) - Date.now();
+      sessionState.innerText = "قيد العمل";
+      sessionDuration.innerText = `${Math.ceil(meta.duration/60000)} دقيقة`;
+      startClientTimer(meta.startTime, meta.duration);
+    } else {
+      sessionState.innerText = "لم تبدأ";
+      sessionDuration.innerText = "—";
+      timerDisplay.innerText = "00:00";
+      clearInterval(timerInterval);
+    }
+  });
+
+  // admin start
+  startBtn.onclick = async () => {
+    if(my.role !== "admin"){ alert("غير مصرح"); return; }
+    const mins = parseInt(minutesInput.value) || 20;
+    const startTime = Date.now();
+    const duration = mins * 60 * 1000;
+    await set(ref(db, `session/meta`), { startTime: startTime, duration: duration });
+  };
+  stopBtn.onclick = async () => {
+    if(my.role !== "admin"){ alert("غير مصرح"); return; }
+    await set(ref(db, `session/meta`), {}); // clear
+    clearInterval(timerInterval);
+  };
+
+  allowAllBtn.onclick = async () => {
+    if(my.role !== "admin"){ alert("غير مصرح"); return; }
+    // set all participants status => allowed_exit
+    const snap = (await (await fetch(`${firebaseConfig.databaseURL}/session/participants.json`)).json());
+    // Note: above direct REST used only to get snapshot quickly without complex listeners
+    onValue(participantsRef, snapshot => {
+      const val = snapshot.val() || {};
+      Object.keys(val).forEach(async uid => {
+        const pRef = ref(db, `session/participants/${uid}`);
+        await set(pRef, {...val[uid], status: "allowed_exit"});
+      });
+    }, {onlyOnce:true});
+  };
+
+  // start client-side countdown using meta
+  function startClientTimer(startTime, duration){
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      const remaining = Math.max(0, (startTime + duration) - Date.now());
+      const mins = Math.floor(remaining/60000);
+      const secs = Math.floor((remaining%60000)/1000);
+      timerDisplay.innerText = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+      if(remaining <= 0){
         clearInterval(timerInterval);
-        timerDiv.innerText = "✅ انتهى الوقت!";
       }
-      timeLeft--;
-    }, 1000);
+    }, 500);
+  }
 
-    // منع الخروج قبل الوقت
-    window.onbeforeunload = function(){
-      if(timeLeft > 0){
-        return "⏳ لا يمكنك الخروج قبل انتهاء الوقت!";
+  // --- cleanup on page unload: remove participant entry if allowedToLeave true (or admin) ---
+  window.addEventListener("unload", async () => {
+    try{
+      if(my.uid){
+        // If allowedToLeave true OR admin -> remove
+        if(my.allowedToLeave || my.role === "admin"){
+          // remove entry (best-effort)
+          await remove(ref(db, `session/participants/${my.uid}`));
+        } else {
+          // mark as disconnected (leave record) => optional
+          // keep in DB so admin knows they left unexpectedly (we can set status "left")
+          await set(ref(db, `session/participants/${my.uid}`), { name: my.name, role: my.role, status: "left", joinedAt: Date.now() });
+        }
       }
-    };
-  </script>
+    }catch(e){ /* ignore */ }
+  });
+
+  // small: show current DB participant changes to update local my.allowed flag when admin allows
+  onValue(ref(db, `session/participants`), snap => {
+    const val = snap.val() || {};
+    if(my.uid && val[my.uid]){
+      if(val[my.uid].status === "allowed_exit"){
+        my.allowedToLeave = true;
+        window.onbeforeunload = null;
+      }
+    }
+  });
+
+  // note: initial UI state
+  timerDisplay.innerText = "00:00";
+</script>
 </body>
 </html>
