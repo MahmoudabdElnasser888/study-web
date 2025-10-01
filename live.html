@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study With Me</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      margin: 20px;
+    }
+    #timer {
+      font-size: 2rem;
+      margin: 10px;
+    }
+    #chat {
+      flex: 1;
+      width: 100%;
+      max-width: 600px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 10px;
+      padding: 10px;
+      overflow-y: auto;
+    }
+    .message {
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.1);
+    }
+    #chatControls {
+      display: flex;
+      margin-top: 10px;
+      max-width: 600px;
+      width: 100%;
+    }
+    #msgInput {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+    }
+    #sendBtn {
+      padding: 10px 15px;
+      margin-left: 5px;
+      border: none;
+      border-radius: 6px;
+      background: #ff6f61;
+      color: #fff;
+      cursor: pointer;
+    }
+    #sendBtn:hover {
+      background: #ff3b2e;
+    }
+    #adminControls {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📚 Study With Me</h1>
+  <div id="timer">⏳ 20:00</div>
+
+  <div id="chat"></div>
+
+  <div id="chatControls">
+    <input type="text" id="msgInput" placeholder="اكتب رسالتك...">
+    <button id="sendBtn">إرسال</button>
+  </div>
+
+  <div id="adminControls" style="display:none;">
+    <button onclick="clearChat()">🗑️ مسح الشات</button>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    // Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+    // Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+      authDomain: "my-web-c23de.firebaseapp.com",
+      databaseURL: "https://my-web-c23de-default-rtdb.firebaseio.com",
+      projectId: "my-web-c23de",
+      storageBucket: "my-web-c23de.appspot.com",
+      messagingSenderId: "846339445873",
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
+      measurementId: "G-3SE0GBRS8C"
+    };
+
+    // Init
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+
+    // تسجيل دخول مجهول
+    let userId = "";
+    signInAnonymously(auth).then((res)=>{
+      userId = res.user.uid;
+    });
+
+    // المراجع
+    const messagesRef = ref(db, "messages");
+
+    // إرسال رسالة
+    document.getElementById("sendBtn").onclick = () => {
+      const text = document.getElementById("msgInput").value.trim();
+      if(text === "") return;
+      push(messagesRef, {
+        text: text,
+        uid: userId,
+        time: Date.now()
+      });
+      document.getElementById("msgInput").value = "";
+    };
+
+    // عرض الرسائل
+    const chatBox = document.getElementById("chat");
+    onValue(messagesRef, (snapshot)=>{
+      chatBox.innerHTML = "";
+      snapshot.forEach((child)=>{
+        const msg = child.val();
+        const div = document.createElement("div");
+        div.className = "message";
+        div.innerText = msg.text;
+        chatBox.appendChild(div);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    // مسح الشات (للمشرف فقط)
+    window.clearChat = function(){
+      remove(messagesRef);
+    };
+
+    // 👑 لو انت المشرف خليها true
+    const isAdmin = true; 
+    if(isAdmin){
+      document.getElementById("adminControls").style.display = "block";
+    }
+
+    // المؤقت
+    let timeLeft = 20 * 60; // 20 دقيقة
+    const timerDiv = document.getElementById("timer");
+    const timerInterval = setInterval(()=>{
+      let mins = Math.floor(timeLeft/60);
+      let secs = timeLeft % 60;
+      timerDiv.innerText = `⏳ ${mins}:${secs<10?"0":""}${secs}`;
+      if(timeLeft <= 0){
+        clearInterval(timerInterval);
+        timerDiv.innerText = "✅ انتهى الوقت!";
+      }
+      timeLeft--;
+    }, 1000);
+
+    // منع الخروج قبل الوقت
+    window.onbeforeunload = function(){
+      if(timeLeft > 0){
+        return "⏳ لا يمكنك الخروج قبل انتهاء الوقت!";
+      }
+    };
+  </script>
+</body>
+</html>

@@ -2,61 +2,66 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>لوحة الأدمن</title>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <title>لوحة تحكم الأدمن</title>
   <style>
-    body { font-family: Arial; direction: rtl; padding:20px; }
-    .card { border:1px solid #ccc; padding:10px; margin:10px; }
-    button { margin:5px; }
+    body { font-family: Arial; direction: rtl; padding:20px; background:#f2f2f2; }
+    .card { border:1px solid #ccc; padding:15px; margin:10px 0; background:#fff; border-radius:5px; }
+    button { margin:5px; padding:8px 12px; border:none; border-radius:4px; cursor:pointer; }
+    .approve { background:#4CAF50; color:white; }
+    .reject { background:#f44336; color:white; }
   </style>
 </head>
 <body>
   <h2>📑 الملخصات في انتظار المراجعة</h2>
   <div id="pending"></div>
 
-  <script>
-    // Firebase config
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
     const firebaseConfig = {
-      apiKey: "AIza....",
-      authDomain: "your-app.firebaseapp.com",
-      projectId: "your-app",
-      storageBucket: "your-app.appspot.com",
-      messagingSenderId: "xxx",
-      appId: "xxx"
+      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+      authDomain: "my-web-c23de.firebaseapp.com",
+      projectId: "my-web-c23de",
+      storageBucket: "my-web-c23de.appspot.com",
+      messagingSenderId: "846339445873",
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
+      measurementId: "G-3SE0GBRS8C"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
     const pendingDiv = document.getElementById("pending");
 
     function renderSummaries() {
-      db.collection("summaries").where("status", "==", "pending")
-        .onSnapshot(snapshot => {
-          pendingDiv.innerHTML = "";
-          snapshot.forEach(doc => {
-            const data = doc.data();
-            const div = document.createElement("div");
-            div.className = "card";
-            div.innerHTML = `
-              <p><b>👤 الطالب:</b> ${data.student}</p>
-              <p><a href="${data.url}" target="_blank">📄 مشاهدة الملف</a></p>
-              <button onclick="approve('${doc.id}')">✅ موافقة</button>
-              <button onclick="reject('${doc.id}')">❌ رفض</button>
-            `;
-            pendingDiv.appendChild(div);
-          });
+      const q = query(collection(db, "summaries"), where("status", "==", "pending"));
+      onSnapshot(q, (snapshot) => {
+        pendingDiv.innerHTML = "";
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          const div = document.createElement("div");
+          div.className = "card";
+          div.innerHTML = `
+            <p><b>👤 الطالب:</b> ${data.student}</p>
+            <p><b>✍️ النص:</b><br>${data.text}</p>
+            <button class="approve" onclick="approve('${docSnap.id}')">✅ موافقة</button>
+            <button class="reject" onclick="reject('${docSnap.id}')">❌ رفض</button>
+          `;
+          pendingDiv.appendChild(div);
         });
+      });
     }
 
-    async function approve(id) {
-      await db.collection("summaries").doc(id).update({ status: "approved" });
+    // لازم نعرّف الدوال في الـ window علشان تشتغل في الـ onclick
+    window.approve = async function(id) {
+      const ref = doc(db, "summaries", id);
+      await updateDoc(ref, { status: "approved" });
       alert("✅ تمت الموافقة!");
     }
 
-    async function reject(id) {
-      await db.collection("summaries").doc(id).update({ status: "rejected" });
+    window.reject = async function(id) {
+      const ref = doc(db, "summaries", id);
+      await updateDoc(ref, { status: "rejected" });
       alert("❌ تم الرفض!");
     }
 
