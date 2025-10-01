@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>إرسال ملخص</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+  <style>
+    body { font-family: Arial; padding:20px; direction: rtl; text-align: right; }
+    #editor { border:1px solid #ccc; min-height:200px; }
+  </style>
+</head>
+<body>
+  <h2>✍️ اكتب الملخص هنا</h2>
+  <div id="editor"></div>
+  <button onclick="submitSummary()">إرسال</button>
+
+  <script>
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIza....",
+      authDomain: "your-app.firebaseapp.com",
+      projectId: "your-app",
+      storageBucket: "your-app.appspot.com",
+      messagingSenderId: "xxx",
+      appId: "xxx"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const storage = firebase.storage();
+    const db = firebase.firestore();
+
+    let editor;
+    ClassicEditor.create(document.querySelector('#editor'), {
+      toolbar: ['bold', 'italic', 'underline', 'bulletedList', 'numberedList', 'alignment', 'insertTable']
+    }).then(newEditor => {
+      editor = newEditor;
+    });
+
+    async function submitSummary() {
+      const content = editor.getData();
+      if (!content.trim()) {
+        alert("اكتب ملخص الأول!");
+        return;
+      }
+
+      // تحويل PDF
+      const element = document.createElement("div");
+      element.innerHTML = content;
+      const opt = { margin: 10, filename: "summary.pdf", html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" } };
+      const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+
+      // رفع Firebase Storage
+      const userName = "طالب تجريبي"; // هنا بدلها باسم الطالب اللي دخل
+      const fileRef = storage.ref().child(`summaries/${Date.now()}_${userName}.pdf`);
+      await fileRef.put(pdfBlob);
+      const downloadURL = await fileRef.getDownloadURL();
+
+      // حفظ كـ Pending في Firestore
+      await db.collection("summaries").add({
+        student: userName,
+        url: downloadURL,
+        status: "pending",
+        createdAt: new Date()
+      });
+
+      alert("✅ تم إرسال الملخص للمراجعة!");
+    }
+  </script>
+</body>
+</html>

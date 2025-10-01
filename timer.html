@@ -6,59 +6,67 @@
 <title>Timer & Pomodoro Dashboard</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif;}
-body{background:#000;color:#fff;}
+body{background:#000;color:#fff;transition:background 0.5s;}
 header{width:100%;background:#111;display:flex;justify-content:center;gap:20px;padding:10px 0;position:sticky;top:0;z-index:10;}
 header button{background:none;border:none;color:#fff;font-size:1em;cursor:pointer;padding:5px 10px;transition:0.3s;}
 header button:hover{background:#222;border-radius:5px;}
 section{min-height:80vh;display:flex;justify-content:center;align-items:center;flex-direction:column;padding:20px;}
-.bigDisplay{font-size:6em;margin-bottom:20px;text-align:center;}
+.bigDisplay{font-size:5em;margin-bottom:20px;text-align:center;}
 .card{background:#111;border-radius:12px;padding:20px;box-shadow:0 4px 15px rgba(255,255,255,0.2);text-align:center;margin-bottom:30px;width:90%;max-width:500px;}
 button,input[type="number"],input[type="file"]{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;margin:5px;background:#333;color:#fff;}
 button:hover{background:#555;}
+.progress{height:10px;width:100%;background:#333;border-radius:5px;overflow:hidden;margin-top:10px;}
+.progress-bar{height:100%;width:0%;background:#ff6f61;transition:width 0.5s;}
 @media(max-width:500px){.bigDisplay{font-size:3em;}}
 </style>
 </head>
 <body>
 
 <header>
-<button onclick="scrollToSection('clockSection')">Clock</button>
-<button onclick="scrollToSection('timerSection')">Timer</button>
-<button onclick="scrollToSection('pomodoroSection')">Pomodoro</button>
+  <button onclick="scrollToSection('clockSection')">Clock</button>
+  <button onclick="scrollToSection('timerSection')">Timer</button>
+  <button onclick="scrollToSection('pomodoroSection')">Pomodoro</button>
 </header>
 
 <!-- Clock -->
 <section id="clockSection">
-<div class="bigDisplay" id="bigClock">00:00:00</div>
+  <div class="bigDisplay" id="bigClock">00:00:00</div>
 </section>
 
 <!-- Timer -->
 <section id="timerSection">
-<div class="card">
-<h2>Timer</h2>
-<div class="bigDisplay" id="timerDisplay">00:00:00</div>
-<input type="number" id="timerMinutes" placeholder="Minutes" min="1"><br>
-<input type="file" id="timerSound" accept="audio/*"><br>
-<button id="startTimer">Start</button>
-<button id="stopTimer">Stop</button>
-<button id="resetTimer" style="display:none;">Reset</button>
-<button id="continueTimer" style="display:none;">Continue</button>
-</div>
+  <div class="card">
+    <h2>Timer</h2>
+    <div class="bigDisplay" id="timerDisplay">00:00:00</div>
+    <input type="number" id="timerMinutes" placeholder="Minutes" min="1"><br>
+    <input type="file" id="timerSound" accept="audio/*"><br>
+    <button id="startTimer">Start</button>
+    <button id="stopTimer">Stop</button>
+    <button id="resetTimer" style="display:none;">Reset</button>
+    <button id="continueTimer" style="display:none;">Continue</button>
+    <div class="progress"><div id="timerBar" class="progress-bar"></div></div>
+  </div>
 </section>
 
 <!-- Pomodoro -->
 <section id="pomodoroSection">
-<div class="card">
-<h2>Pomodoro</h2>
-<div class="bigDisplay" id="pomodoroDisplay">25:00</div>
-<input type="file" id="pomoSound" accept="audio/*"><br>
-<button id="startPomodoro">Start</button>
-<button id="stopPomodoro">Stop</button>
-<button id="resetPomodoro" style="display:none;">Reset</button>
-<button id="continuePomodoro" style="display:none;">Continue</button>
-</div>
+  <div class="card">
+    <h2>Pomodoro</h2>
+    <div class="bigDisplay" id="pomodoroDisplay">25:00</div>
+    <label>Work (min):</label>
+    <input type="number" id="workMinutes" value="25" min="1">
+    <label>Break (min):</label>
+    <input type="number" id="breakMinutes" value="5" min="1"><br>
+    <input type="file" id="pomoSound" accept="audio/*"><br>
+    <button id="startPomodoro">Start</button>
+    <button id="stopPomodoro">Stop</button>
+    <button id="resetPomodoro" style="display:none;">Reset</button>
+    <button id="continuePomodoro" style="display:none;">Continue</button>
+    <div class="progress"><div id="pomoBar" class="progress-bar"></div></div>
+  </div>
 </section>
 
-<audio id="alarmAudio" preload="auto"></audio>
+<audio id="alarmAudio" preload="auto" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"></audio>
 
 <script>
 // ===== Clock =====
@@ -80,47 +88,49 @@ function playSound(inputId){
     const fileURL=URL.createObjectURL(fileInput.files[0]);
     alarm.src=fileURL;
   }
-  alarm.cloneNode(true).play(); // نسخة جديدة عشان يشتغل فورًا
+  alarm.currentTime=0;
+  alarm.play();
 }
 
 // ===== Timer =====
-let timer={time:0,interval:null};
+let timer={time:0,total:0,interval:null};
 const timerDisplay=document.getElementById('timerDisplay');
-const timerResetBtn=document.getElementById('resetTimer');
-const timerContinueBtn=document.getElementById('continueTimer');
+const timerBar=document.getElementById('timerBar');
 
 document.getElementById('startTimer').addEventListener('click',()=>{
   clearInterval(timer.interval);
   let min=parseInt(document.getElementById('timerMinutes').value);
   if(isNaN(min)||min<=0)return alert('Enter valid minutes!');
-  timer.time=min*60; updateTimer(); startTimer(); timerResetBtn.style.display='none'; timerContinueBtn.style.display='none';
+  timer.time=min*60; timer.total=timer.time;
+  updateTimer(); startTimer();
 });
 
 document.getElementById('stopTimer').addEventListener('click',()=>{
   clearInterval(timer.interval);
-  timerResetBtn.style.display='inline-block';
-  timerContinueBtn.style.display='inline-block';
+  document.getElementById('resetTimer').style.display='inline-block';
+  document.getElementById('continueTimer').style.display='inline-block';
 });
 
-timerResetBtn.addEventListener('click',()=>{
+document.getElementById('resetTimer').addEventListener('click',()=>{
   timer.time=0; updateTimer();
-  timerResetBtn.style.display='none';
-  timerContinueBtn.style.display='none';
+  document.getElementById('resetTimer').style.display='none';
+  document.getElementById('continueTimer').style.display='none';
 });
 
-timerContinueBtn.addEventListener('click',()=>{
+document.getElementById('continueTimer').addEventListener('click',()=>{
   startTimer();
-  timerResetBtn.style.display='none';
-  timerContinueBtn.style.display='none';
+  document.getElementById('resetTimer').style.display='none';
+  document.getElementById('continueTimer').style.display='none';
 });
 
 function startTimer(){
+  updateTimer(); // يظهر أول قيمة صح
   timer.interval=setInterval(()=>{
     if(timer.time>0){timer.time--;updateTimer();}
     else{
       clearInterval(timer.interval);
       playSound("timerSound");
-      setTimeout(()=>alert('⏰ Timer Finished!'),100);
+      alert('⏰ Timer Finished!');
     }
   },1000);
 }
@@ -130,46 +140,70 @@ function updateTimer(){
   const m=String(Math.floor((timer.time%3600)/60)).padStart(2,'0');
   const s=String(timer.time%60).padStart(2,'0');
   timerDisplay.textContent=`${h}:${m}:${s}`;
+  if(timer.total>0){
+    let percent=(1 - timer.time/timer.total)*100;
+    timerBar.style.width=percent+"%";
+  }
 }
 
 // ===== Pomodoro =====
-let pomo={time:25*60,interval:null,isWork:true};
+let pomo={time:25*60,total:25*60,interval:null,isWork:true};
 const pomoDisplay=document.getElementById('pomodoroDisplay');
-const pomoResetBtn=document.getElementById('resetPomodoro');
-const pomoContinueBtn=document.getElementById('continuePomodoro');
+const pomoBar=document.getElementById('pomoBar');
+
+function initPomodoro(){
+  let work=+localStorage.getItem("workMinutes")||25;
+  let brk=+localStorage.getItem("breakMinutes")||5;
+  document.getElementById("workMinutes").value=work;
+  document.getElementById("breakMinutes").value=brk;
+}
+initPomodoro();
 
 document.getElementById('startPomodoro').addEventListener('click',()=>{
-  clearInterval(pomo.interval); pomo.time=25*60; pomo.isWork=true;
+  clearInterval(pomo.interval);
+  let work=parseInt(document.getElementById('workMinutes').value)||25;
+  let brk=parseInt(document.getElementById('breakMinutes').value)||5;
+  localStorage.setItem("workMinutes",work);
+  localStorage.setItem("breakMinutes",brk);
+  pomo.time=work*60; pomo.total=pomo.time; pomo.isWork=true;
   updatePomodoro(); startPomodoro();
-  pomoResetBtn.style.display='none'; pomoContinueBtn.style.display='none';
 });
 
 document.getElementById('stopPomodoro').addEventListener('click',()=>{
   clearInterval(pomo.interval);
-  pomoResetBtn.style.display='inline-block'; pomoContinueBtn.style.display='inline-block';
+  document.getElementById('resetPomodoro').style.display='inline-block';
+  document.getElementById('continuePomodoro').style.display='inline-block';
 });
 
-pomoResetBtn.addEventListener('click',()=>{
+document.getElementById('resetPomodoro').addEventListener('click',()=>{
   pomo.time=25*60; pomo.isWork=true; updatePomodoro();
-  pomoResetBtn.style.display='none'; pomoContinueBtn.style.display='none';
+  document.getElementById('resetPomodoro').style.display='none';
+  document.getElementById('continuePomodoro').style.display='none';
 });
 
-pomoContinueBtn.addEventListener('click',()=>{
-  startPomodoro(); pomoResetBtn.style.display='none'; pomoContinueBtn.style.display='none';
+document.getElementById('continuePomodoro').addEventListener('click',()=>{
+  startPomodoro();
+  document.getElementById('resetPomodoro').style.display='none';
+  document.getElementById('continuePomodoro').style.display='none';
 });
 
 function startPomodoro(){
+  updatePomodoro();
   pomo.interval=setInterval(()=>{
     if(pomo.time>0){pomo.time--;updatePomodoro();}
     else{
       clearInterval(pomo.interval);
       playSound("pomoSound");
+      let work=parseInt(document.getElementById('workMinutes').value)||25;
+      let brk=parseInt(document.getElementById('breakMinutes').value)||5;
       if(pomo.isWork){
-        setTimeout(()=>alert("✅ Work session finished! Take 5 min break."),100);
-        pomo.time=5*60; pomo.isWork=false; startPomodoro();
+        alert("✅ Work session finished! Take "+brk+" min break.");
+        pomo.time=brk*60; pomo.total=pomo.time; pomo.isWork=false; document.body.style.background="#063";
+        startPomodoro();
       }else{
-        setTimeout(()=>alert("☕ Break finished! Back to 25 min work."),100);
-        pomo.time=25*60; pomo.isWork=true; startPomodoro();
+        alert("☕ Break finished! Back to "+work+" min work.");
+        pomo.time=work*60; pomo.total=pomo.time; pomo.isWork=true; document.body.style.background="#600";
+        startPomodoro();
       }
     }
   },1000);
@@ -179,6 +213,11 @@ function updatePomodoro(){
   const m=String(Math.floor(pomo.time/60)).padStart(2,'0');
   const s=String(pomo.time%60).padStart(2,'0');
   pomoDisplay.textContent=`${m}:${s}`;
+  if(pomo.total>0){
+    let percent=(1 - pomo.time/pomo.total)*100;
+    pomoBar.style.width=percent+"%";
+  }
+  document.body.style.background = pomo.isWork ? "#600" : "#063";
 }
 </script>
 </body>

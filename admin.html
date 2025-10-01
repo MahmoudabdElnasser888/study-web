@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة تحكم الأدمن</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <style>
+    body { font-family: Arial; direction: rtl; padding:20px; }
+    .card { border:1px solid #ccc; padding:10px; margin:10px; }
+    button { margin:5px; }
+  </style>
+</head>
+<body>
+  <h2>📑 الملخصات في انتظار المراجعة</h2>
+  <div id="pending"></div>
+
+  <script>
+    // Firebase config نفس اللي فوق
+    const firebaseConfig = {
+      apiKey: "AIza....",
+      authDomain: "your-app.firebaseapp.com",
+      projectId: "your-app",
+      storageBucket: "your-app.appspot.com",
+      messagingSenderId: "xxx",
+      appId: "xxx"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const pendingDiv = document.getElementById("pending");
+
+    function renderSummaries() {
+      db.collection("summaries").where("status", "==", "pending")
+        .onSnapshot(snapshot => {
+          pendingDiv.innerHTML = "";
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            const div = document.createElement("div");
+            div.className = "card";
+            div.innerHTML = `
+              <p><b>👤 الطالب:</b> ${data.student}</p>
+              <p><a href="${data.url}" target="_blank">📄 مشاهدة الملف</a></p>
+              <button onclick="approve('${doc.id}')">✅ موافقة</button>
+              <button onclick="reject('${doc.id}')">❌ رفض</button>
+            `;
+            pendingDiv.appendChild(div);
+          });
+        });
+    }
+
+    async function approve(id) {
+      await db.collection("summaries").doc(id).update({ status: "approved" });
+      alert("✅ تمت الموافقة!");
+    }
+
+    async function reject(id) {
+      await db.collection("summaries").doc(id).update({ status: "rejected" });
+      alert("❌ تم الرفض!");
+    }
+
+    renderSummaries();
+  </script>
+</body>
+</html>

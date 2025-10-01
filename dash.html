@@ -13,7 +13,7 @@
     }
     .dashboard {
       max-width: 900px;
-      margin: auto;
+      margin: 30px auto;
       background: #fff;
       border-radius: 15px;
       padding: 20px;
@@ -38,17 +38,6 @@
       background: #f9f9f9;
       transform: translateY(-2px);
     }
-    .student img {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-left: 15px;
-      border: 2px solid #6e8efb;
-    }
-    .student-info {
-      flex: 1;
-    }
     .student-info h3 {
       margin: 0;
       font-size: 18px;
@@ -66,55 +55,103 @@
     }
     .badge {
       font-size: 20px;
-      margin-left: 10px;
+      margin-right: 8px;
+    }
+    .secdash h1 {
+      font-size: 32px;
+      font-weight: bold;
+      text-align: center;
+      color: #fff;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
 
-<div class="dashboard">
-  <h2>🏆 لوحة الترتيب</h2>
-
-  <!-- طالب 1 -->
-  <div class="student">
-    <div class="student-info">
-      <h3>Youssef wael<span class="badge">🥇</span></h3>
-      <p>عدد النقاط: <span class="points">0</span></p>
+<!-- الصف الأول -->
+<section class="sec1">
+  <div class="secdash">
+    <h1>📚 الصف الأول الثانوي</h1>
+    <div class="dashboard">
+      <div id="sec1List"></div>
     </div>
   </div>
+</section>
 
-  <!-- طالب 2 -->
-  <div class="student">
-    <div class="student-info">
-      <h3> Mostafa said <span class="badge">🥈</span></h3>
-      <p>عدد النقاط: <span class="points">0</span></p>
+<!-- الصف الثاني -->
+<section class="sec2">
+  <div class="secdash">
+    <h1>📘 الصف الثاني الثانوي</h1>
+    <div class="dashboard">
+      <div id="sec2List"></div>
     </div>
   </div>
+</section>
 
-  <!-- طالب 3 -->
-  <div class="student">
-    <div class="student-info">
-      <h3> Youssef yasser <span class="badge">🥉</span></h3>
-      <p>عدد النقاط: <span class="points">0</span></p>
+<!-- الصف الثالث -->
+<section class="perp3">
+  <div class="secdash">
+    <h1>📗  الصف الثالث الإعدادي</h1>
+    <div class="dashboard">
+      <div id="sec3List"></div>
     </div>
   </div>
+</section>
 
-  <!-- طالب 4 -->
-  <div class="student">
-    <div class="student-info">
-      <h3> Yehia Mostafa</h3>
-      <p>عدد النقاط: <span class="points">0</span></p>
-    </div>
-  </div>
+<script>
+  // بيانات الطلاب
+  const students = [
+    // صف أول ثانوي
+    { name: "Youssef Wael", points: 70, grade: "sec1" },
+    { name: "Mostafa Said", points: 80, grade: "sec1" },
+    { name: "Youssef Yasser", points: 75, grade: "sec1" },
+    { name: "Yehia Mostafa", points: 60, grade: "sec1" },
+    { name: "Youssef Ahmed", points: 50, grade: "sec1" },
 
-    <div class="student">
-    <div class="student-info">
-      <h3> Youssef Ahmed</h3>
-      <p>عدد النقاط: <span class="points">0</span></p>
-    </div>
-  </div>
+    // صف ثاني ثانوي
+    { name: "Omar Ali", points: 92, grade: "sec2" },
+    { name: "Mahmoud Tarek", points: 70, grade: "sec2" },
+    { name: "Ahmed Hossam", points: 85, grade: "sec2" },
+    { name: "Karim Mohamed", points: 60, grade: "sec2" },
 
-</div>
+    // صف ثالث ثانوي
+    { name: "Sara Adel", points: 100, grade: "perp3" },
+    { name: "Nada Mohamed", points: 88, grade: "perp3" },
+    { name: "Ola Yasser", points: 76, grade: "perp3" },
+    { name: "Eman Khaled", points: 66, grade: "perp3" }
+  ];
+
+  // الرموز الخاصة بالمراكز
+  const medals = ["🥇","🥈","🥉"];
+
+  function renderBoard(listId, filterGrade){
+    let container = document.getElementById(listId);
+    container.innerHTML = "";
+
+    // فلترة + ترتيب تنازلي
+    let filtered = students
+      .filter(s => s.grade===filterGrade)
+      .sort((a,b)=> b.points - a.points);
+
+    filtered.forEach((s,i)=>{
+      let badge = medals[i] || "";
+      let div = document.createElement("div");
+      div.className = "student";
+      div.innerHTML = `
+        <div class="student-info">
+          <h3>${s.name} <span class="badge">${badge}</span></h3>
+          <p>عدد النقاط: <span class="points">${s.points}</span></p>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // عرض لوحات الترتيب حسب الصف
+  renderBoard("sec1List","sec1");  
+  renderBoard("sec2List","sec2");  
+  renderBoard("sec3List","perp3");  
+</script>
 
 </body>
 </html>

@@ -122,16 +122,31 @@ body.light .theme-toggle{
 </div>
 
 <script>
+// PDFs مع تحديد المرحلة الخاصة بيها
 const pdfs = [
-    { name: "اهم الشخصيات (تاريخ)", url: "اهم الشخصيات.pdf" },
-    { name: "درس 1 - التاريخ", url: "تاريخ الدرس الاول.pdf" }
+    { name: "اهم الشخصيات (تاريخ)", url: "اهم الشخصيات.pdf", stage: "2sec" },
+    { name: "درس 1 - التاريخ", url: "تاريخ الدرس الاول.pdf", stage: "2sec" }
 ];
 
 const pdfList = document.getElementById("pdfList");
 
 function loadPDFs(){
     pdfList.innerHTML = '';
-    pdfs.forEach(pdf=>{
+    const userStage = localStorage.getItem("stage"); // المرحلة المخزنة
+
+    if(!userStage){
+        pdfList.innerHTML = `<p style="text-align:center">⚠️ لم يتم تحديد المرحلة. سجل دخولك أولاً.</p>`;
+        return;
+    }
+
+    const filtered = pdfs.filter(pdf => pdf.stage === userStage);
+
+    if(filtered.length === 0){
+        pdfList.innerHTML = `<p style="text-align:center">📂 لا يوجد ملفات لمرحلتك (${userStage}).</p>`;
+        return;
+    }
+
+    filtered.forEach(pdf=>{
         const div = document.createElement('div');
         div.className = 'pdf-item';
         div.innerHTML = `

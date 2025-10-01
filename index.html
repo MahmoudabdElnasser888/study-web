@@ -125,6 +125,12 @@
         });
 
         alert("تم التسجيل بنجاح ✅");
+        
+// خزن بيانات المستخدم في LocalStorage
+      localStorage.setItem("name", name);
+      localStorage.setItem("gender", gender);
+      localStorage.setItem("stage", stage);
+
         redirectUser(gender, stage);
 
       } catch (error) {
