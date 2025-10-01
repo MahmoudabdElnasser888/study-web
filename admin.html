@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>لوحة تحكم الأدمن</title>
+  <title>لوحة الأدمن</title>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
   <style>
@@ -16,7 +16,7 @@
   <div id="pending"></div>
 
   <script>
-    // Firebase config نفس اللي فوق
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIza....",
       authDomain: "your-app.firebaseapp.com",
@@ -25,6 +25,7 @@
       messagingSenderId: "xxx",
       appId: "xxx"
     };
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 

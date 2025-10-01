@@ -2,24 +2,25 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>إرسال ملخص</title>
+  <title>رفع ملخص</title>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-  <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
   <style>
-    body { font-family: Arial; padding:20px; direction: rtl; text-align: right; }
-    #editor { border:1px solid #ccc; min-height:200px; }
+    body { font-family: Arial; direction: rtl; padding:20px; }
+    input, button { margin:10px; padding:10px; }
   </style>
 </head>
 <body>
-  <h2>✍️ اكتب الملخص هنا</h2>
-  <div id="editor"></div>
-  <button onclick="submitSummary()">إرسال</button>
+  <h2>📑 رفع الملخص</h2>
+  <input type="text" id="student" placeholder="اسم الطالب">
+  <input type="file" id="file" accept="application/pdf">
+  <button onclick="upload()">رفع</button>
+
+  <p id="status"></p>
 
   <script>
-    // إعداد Firebase
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIza....",
       authDomain: "your-app.firebaseapp.com",
@@ -28,45 +29,38 @@
       messagingSenderId: "xxx",
       appId: "xxx"
     };
+
     firebase.initializeApp(firebaseConfig);
-    const storage = firebase.storage();
     const db = firebase.firestore();
+    const storage = firebase.storage();
 
-    let editor;
-    ClassicEditor.create(document.querySelector('#editor'), {
-      toolbar: ['bold', 'italic', 'underline', 'bulletedList', 'numberedList', 'alignment', 'insertTable']
-    }).then(newEditor => {
-      editor = newEditor;
-    });
+    async function upload() {
+      const student = document.getElementById("student").value;
+      const file = document.getElementById("file").files[0];
+      const status = document.getElementById("status");
 
-    async function submitSummary() {
-      const content = editor.getData();
-      if (!content.trim()) {
-        alert("اكتب ملخص الأول!");
+      if (!student || !file) {
+        alert("⚠️ من فضلك أدخل الاسم واختر ملف PDF");
         return;
       }
 
-      // تحويل PDF
-      const element = document.createElement("div");
-      element.innerHTML = content;
-      const opt = { margin: 10, filename: "summary.pdf", html2canvas: { scale: 2 }, jsPDF: { unit: "mm", format: "a4" } };
-      const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+      const ref = storage.ref("summaries/" + Date.now() + "_" + file.name);
+      status.innerText = "⏳ جاري الرفع...";
 
-      // رفع Firebase Storage
-      const userName = "طالب تجريبي"; // هنا بدلها باسم الطالب اللي دخل
-      const fileRef = storage.ref().child(`summaries/${Date.now()}_${userName}.pdf`);
-      await fileRef.put(pdfBlob);
-      const downloadURL = await fileRef.getDownloadURL();
-
-      // حفظ كـ Pending في Firestore
-      await db.collection("summaries").add({
-        student: userName,
-        url: downloadURL,
-        status: "pending",
-        createdAt: new Date()
-      });
-
-      alert("✅ تم إرسال الملخص للمراجعة!");
+      try {
+        await ref.put(file);
+        const url = await ref.getDownloadURL();
+        await db.collection("summaries").add({
+          student: student,
+          url: url,
+          status: "pending",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        status.innerText = "✅ تم رفع الملف بنجاح في انتظار المراجعة";
+      } catch (e) {
+        console.error(e);
+        status.innerText = "❌ حدث خطأ أثناء الرفع";
+      }
     }
   </script>
 </body>
