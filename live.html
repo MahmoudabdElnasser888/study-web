@@ -2,69 +2,66 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>بطولة الفرق</title>
+  <title>ماتش البطولة</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: Tahoma, sans-serif;
       background: #121212;
       color: white;
-      margin: 0;
       padding: 20px;
-      text-align: center;
     }
-    .login, .game, .scoreboard {
-      display: none;
-      margin-top: 30px;
+    .hidden { display: none; }
+    .team-info, .timer, .question, .scoreboard {
+      margin: 20px auto;
+      padding: 15px;
+      border-radius: 8px;
+      background: #1e1e1e;
+      max-width: 600px;
     }
-    input, button {
+    .question h3 { margin-bottom: 10px; }
+    .question button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
       padding: 10px;
-      margin: 5px;
-      border-radius: 5px;
-      border: none;
-    }
-    button {
       background: #ff5722;
+      border: none;
+      border-radius: 6px;
       color: white;
       cursor: pointer;
     }
-    .question {
-      background: #1e1e1e;
-      padding: 20px;
-      border-radius: 10px;
-      margin: 20px auto;
-      max-width: 400px;
-    }
-    .scoreboard {
-      margin-top: 30px;
-      background: #222;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+    .question button:hover { background: #e64a19; }
+    .disabled { background: gray !important; cursor: not-allowed; }
   </style>
 </head>
 <body>
-  <h1>🏆 بطولة الفرق</h1>
+  <h1>🏆 ماتش البطولة</h1>
 
   <!-- شاشة الدخول -->
-  <div class="login" id="loginDiv">
-    <p>ادخل الكود للانضمام للفريق:</p>
-    <input type="password" id="codeInput" placeholder="ادخل الكود">
+  <div id="loginDiv">
+    <p>ادخل ايميلك + الكود:</p>
+    <input type="email" id="emailInput" placeholder="ايميلك"><br>
+    <input type="password" id="codeInput" placeholder="الكود"><br>
     <button onclick="joinTeam()">دخول</button>
   </div>
 
-  <!-- شاشة اللعبة -->
-  <div class="game" id="gameDiv">
-    <h2 id="teamName">الفريق: Team A</h2>
-    <div id="questionBox" class="question"></div>
-  </div>
+  <!-- شاشة الماتش -->
+  <div id="matchDiv" class="hidden">
+    <div class="team-info">
+      <h2 id="teamName">الفريق: -</h2>
+      <p>الماتش رقم: <span id="matchNumber">1</span></p>
+      <p>الأعضاء: <span id="teamMembers"></span></p>
+    </div>
 
-  <!-- لوحة النتائج -->
-  <div class="scoreboard" id="scoreboardDiv">
-    <h2>📊 النتائج</h2>
-    <p>Team A: <span id="teamScore">0</span> نقطة</p>
+    <div class="timer">
+      ⏱️ الوقت المتبقي: <span id="timeLeft">--:--</span>
+    </div>
+
+    <div id="questionsContainer"></div>
+
+    <div class="scoreboard">
+      <h3>📊 النتيجة: <span id="teamScore">0</span></h3>
+    </div>
   </div>
 
   <script type="module">
@@ -85,96 +82,121 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // بيانات
-    const loginDiv = document.getElementById("loginDiv");
-    const gameDiv = document.getElementById("gameDiv");
-    const scoreboardDiv = document.getElementById("scoreboardDiv");
-    const questionBox = document.getElementById("questionBox");
-    const teamScoreSpan = document.getElementById("teamScore");
+    // إعداد فريق واحد (تعمل نسخة لكل فريق)
+    const team = {
+      name: "Team A",
+      matchNumber: 1,
+      leader: "leader@gmail.com", // القائد
+      members: ["a@gmail.com","b@gmail.com","c@gmail.com"], // باقي الفريق
+      score: 0
+    };
 
-    let isLeader = false;
-    let currentQuestion = 0;
-    let score = 0;
-
-    // أسئلة البطولة
+    // أسئلة
     const questions = [
       { q: "متى بدأت ثورة 1919؟", options: ["1917", "1919", "1921"], correct: 1 },
       { q: "من هو زعيم الثورة؟", options: ["سعد زغلول", "مصطفى كامل", "جمال عبدالناصر"], correct: 0 },
       { q: "أين وقعت معركة العلمين؟", options: ["مصر", "ليبيا", "السودان"], correct: 0 }
     ];
 
-    // تسجيل الدخول بالكود
+    let userEmail = "";
+    let isLeader = false;
+    let timeLimit = 5 * 60; // 5 دقائق
+    let timerInterval;
+
+    // داتا ريفرانس
+    const scoreRef = ref(db, "teams/" + team.name);
+
+    // دخول
     function joinTeam() {
+      userEmail = document.getElementById("emailInput").value.trim();
       const code = document.getElementById("codeInput").value.trim();
-      if (code === "222") {
-        isLeader = false;
-        startGame();
-      } else if (code === "1212") {
+
+      if (!userEmail) return alert("ادخل ايميلك");
+      if (code === "1212" && userEmail === team.leader) {
         isLeader = true;
-        startGame();
+      } else if (code === "222" && team.members.includes(userEmail)) {
+        isLeader = false;
       } else {
-        alert("❌ كود غير صحيح");
+        return alert("❌ الكود أو الايميل غير صحيح");
       }
+
+      startMatch();
     }
     window.joinTeam = joinTeam;
 
-    // بدء اللعبة
-    function startGame() {
-      loginDiv.style.display = "none";
-      gameDiv.style.display = "block";
-      scoreboardDiv.style.display = "block";
+    // بدء الماتش
+    function startMatch() {
+      document.getElementById("loginDiv").classList.add("hidden");
+      document.getElementById("matchDiv").classList.remove("hidden");
 
-      showQuestion();
+      document.getElementById("teamName").innerText = "الفريق: " + team.name;
+      document.getElementById("matchNumber").innerText = team.matchNumber;
+      document.getElementById("teamMembers").innerText = team.members.join(", ") + " + القائد";
+
+      renderQuestions();
       listenScore();
+      startTimer();
     }
 
-    // عرض السؤال
-    function showQuestion() {
-      if (currentQuestion >= questions.length) {
-        questionBox.innerHTML = "<h3>🏁 انتهت الأسئلة!</h3>";
-        return;
-      }
+    // عرض الأسئلة كلها
+    function renderQuestions() {
+      const container = document.getElementById("questionsContainer");
+      container.innerHTML = "";
 
-      const q = questions[currentQuestion];
-      let html = `<h3>${q.q}</h3>`;
-      q.options.forEach((opt, i) => {
-        if (isLeader) {
-          html += `<button onclick="answer(${i})">${opt}</button><br>`;
-        } else {
-          html += `<p>🔒 ${opt}</p>`;
-        }
+      questions.forEach((q, qi) => {
+        let div = document.createElement("div");
+        div.className = "question";
+        let html = `<h3>سؤال ${qi+1}: ${q.q}</h3>`;
+        q.options.forEach((opt, i) => {
+          if (isLeader) {
+            html += `<button onclick="answer(${qi},${i})">${opt}</button>`;
+          } else {
+            html += `<p>🔒 ${opt}</p>`;
+          }
+        });
+        div.innerHTML = html;
+        container.appendChild(div);
       });
-      questionBox.innerHTML = html;
     }
 
-    // القائد يجاوب
-    function answer(i) {
-      const q = questions[currentQuestion];
-      if (i === q.correct) {
-        score++;
-        update(ref(db, "teams/TeamA"), { score: score });
+    // الإجابة
+    function answer(qi, i) {
+      if (!isLeader) return;
+      if (i === questions[qi].correct) {
+        team.score++;
+        update(scoreRef, { score: team.score });
       }
-      currentQuestion++;
-      showQuestion();
     }
     window.answer = answer;
 
-    // متابعة النتائج مباشرة
+    // متابعة النتائج
     function listenScore() {
-      const scoreRef = ref(db, "teams/TeamA/score");
-      onValue(scoreRef, snapshot => {
-        const val = snapshot.val();
-        if (val !== null) {
-          teamScoreSpan.textContent = val;
+      onValue(scoreRef, snap => {
+        const data = snap.val();
+        if (data && data.score !== undefined) {
+          document.getElementById("teamScore").innerText = data.score;
         }
       });
     }
 
-    // عند أول مرة، نخزن الفريق في DB
-    set(ref(db, "teams/TeamA"), { score: 0 });
-    
-    // إظهار شاشة الدخول في البداية
-    loginDiv.style.display = "block";
+    // التايمر
+    function startTimer() {
+      let timeLeft = timeLimit;
+      timerInterval = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById("timeLeft").innerText =
+          `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          document.querySelectorAll(".question button").forEach(b => b.classList.add("disabled"));
+        }
+        timeLeft--;
+      }, 1000);
+    }
+
+    // تسجيل الفريق في DB (لو مش موجود)
+    set(scoreRef, { score: 0 });
   </script>
 </body>
 </html>
