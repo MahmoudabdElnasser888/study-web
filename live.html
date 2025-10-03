@@ -1,202 +1,221 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>ماتش البطولة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz</title>
   <style>
     body {
       font-family: Tahoma, sans-serif;
-      background: #121212;
-      color: white;
+      margin: 0;
+      background: linear-gradient(120deg, #6e8efb, #a777e3);
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
       padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    .hidden { display: none; }
-    .team-info, .timer, .question, .scoreboard {
-      margin: 20px auto;
+    .question {
+      margin-bottom: 25px;
       padding: 15px;
-      border-radius: 8px;
-      background: #1e1e1e;
-      max-width: 600px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fafafa;
     }
-    .question h3 { margin-bottom: 10px; }
-    .question button {
+    .question h3 { margin: 0 0 10px; }
+    .option {
       display: block;
-      width: 100%;
-      margin: 5px 0;
-      padding: 10px;
-      background: #ff5722;
-      border: none;
-      border-radius: 6px;
-      color: white;
+      margin: 8px 0;
+      padding: 8px;
+      border-radius: 8px;
       cursor: pointer;
+      border: 1px solid #ddd;
+      transition: 0.3s;
     }
-    .question button:hover { background: #e64a19; }
-    .disabled { background: gray !important; cursor: not-allowed; }
+    .option.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+    .option.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+    .buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+    button { padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+    #showAnswers { background: linear-gradient(120deg, #345ce0, #8848d6); color: white; }
+    #timer { font-weight: bold; text-align: center; margin-bottom: 20px; font-size: 18px; }
+    .result { text-align: center; margin-top: 20px; font-size: 18px; font-weight: bold; }
+    #loginBox { text-align: center; margin-bottom: 20px; }
   </style>
 </head>
 <body>
-  <h1>🏆 ماتش البطولة</h1>
 
-  <!-- شاشة الدخول -->
-  <div id="loginDiv">
-    <p>ادخل ايميلك + الكود:</p>
-    <input type="email" id="emailInput" placeholder="ايميلك"><br>
-    <input type="password" id="codeInput" placeholder="الكود"><br>
-    <button onclick="joinTeam()">دخول</button>
+<div class="container">
+  <div id="loginBox">
+    <h3>🎯 ادخل اسم فريقك</h3>
+    <input type="text" id="teamName" placeholder="اسم الفريق" />
+    <br><br>
+    <input type="password" id="teamCode" placeholder="الكود" />
+    <br><br>
+    <button onclick="startQuiz()">ابدأ</button>
   </div>
 
-  <!-- شاشة الماتش -->
-  <div id="matchDiv" class="hidden">
-    <div class="team-info">
-      <h2 id="teamName">الفريق: -</h2>
-      <p>الماتش رقم: <span id="matchNumber">1</span></p>
-      <p>الأعضاء: <span id="teamMembers"></span></p>
+  <div id="quizBox" style="display:none;">
+    <div id="timer">الوقت المتبقي: 00:00</div>
+
+    <!-- مثال سؤال -->
+    <div class="question" data-correct="4">
+      <h3>سؤال 1: 2 + 2 = ؟</h3>
+      <label class="option"><input type="radio" name="q1" value="1">1</label>
+      <label class="option"><input type="radio" name="q1" value="2">2</label>
+      <label class="option"><input type="radio" name="q1" value="3">3</label>
+      <label class="option"><input type="radio" name="q1" value="4">4</label>
     </div>
 
-    <div class="timer">
-      ⏱️ الوقت المتبقي: <span id="timeLeft">--:--</span>
+    <div class="question" data-correct="6">
+      <h3>سؤال 2: 3 × 2 = ؟</h3>
+      <label class="option"><input type="radio" name="q2" value="4">4</label>
+      <label class="option"><input type="radio" name="q2" value="5">5</label>
+      <label class="option"><input type="radio" name="q2" value="6">6</label>
+      <label class="option"><input type="radio" name="q2" value="7">7</label>
     </div>
 
-    <div id="questionsContainer"></div>
+    <div class="buttons">
+      <button id="showAnswers">إظهار النتيجة</button>
+    </div>
 
-    <div class="scoreboard">
-      <h3>📊 النتيجة: <span id="teamScore">0</span></h3>
+    <div class="result" id="result"></div>
+
+    <div id="resultBox" style="display:none; text-align:center; margin-top:20px;">
+      <p id="finalResult"></p>
+      <button id="sendBtn" style="padding:10px 20px; border:none; border-radius:20px; background:#28a745; color:white; cursor:pointer;">
+        إرسال الآن
+      </button>
     </div>
   </div>
+</div>
 
-  <script type="module">
-    // Firebase إعداد
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-    import { getDatabase, ref, set, get, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
-      authDomain: "my-web-c23de.firebaseapp.com",
-      projectId: "my-web-c23de",
-      storageBucket: "my-web-c23de.appspot.com",
-      messagingSenderId: "846339445873",
-      appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
-      databaseURL: "https://my-web-c23de-default-rtdb.firebaseio.com/"
-    };
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+    authDomain: "my-web-c23de.firebaseapp.com",
+    projectId: "my-web-c23de",
+    storageBucket: "my-web-c23de.firebasestorage.app",
+    messagingSenderId: "846339445873",
+    appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
+    measurementId: "G-3SE0GBRS8C"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    // إعداد فريق واحد (تعمل نسخة لكل فريق)
-    const team = {
-      name: "Team A",
-      matchNumber: 1,
-      leader: "modynasser164@gmail.com", // القائد
-      members: ["studyweb1919@gmail.com","b@gmail.com","c@gmail.com"], // باقي الفريق
-      score: 0
-    };
+  let isLeader = false;
+  let teamName = "";
+  let isResultSent = false;
 
-    // أسئلة
-    const questions = [
-      { q: "متى بدأت ثورة 1919؟", options: ["1917", "1919", "1921"], correct: 1 },
-      { q: "من هو زعيم الثورة؟", options: ["سعد زغلول", "مصطفى كامل", "جمال عبدالناصر"], correct: 0 },
-      { q: "أين وقعت معركة العلمين؟", options: ["مصر", "ليبيا", "السودان"], correct: 0 }
-    ];
+  // بدء الكويز بعد تسجيل الفريق
+  window.startQuiz = function() {
+    teamName = document.getElementById("teamName").value.trim();
+    const code = document.getElementById("teamCode").value.trim();
 
-    let userEmail = "";
-    let isLeader = false;
-    let timeLimit = 5 * 60; // 5 دقائق
-    let timerInterval;
+    if (!teamName || !code) {
+      alert("⚠️ لازم تدخل اسم الفريق والكود");
+      return;
+    }
 
-    // داتا ريفرانس
-    const scoreRef = ref(db, "teams/" + team.name);
+    if (code === "1212") {
+      isLeader = true;
+    } else if (code === "222") {
+      isLeader = false;
+    } else {
+      alert("⚠️ الكود غير صحيح");
+      return;
+    }
 
-    // دخول
-    function joinTeam() {
-      userEmail = document.getElementById("emailInput").value.trim();
-      const code = document.getElementById("codeInput").value.trim();
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("quizBox").style.display = "block";
 
-      if (!userEmail) return alert("ادخل ايميلك");
-      if (code === "1212" && userEmail === team.leader) {
-        isLeader = true;
-      } else if (code === "222" && team.members.includes(userEmail)) {
-        isLeader = false;
-      } else {
-        return alert("❌ الكود أو الايميل غير صحيح");
+    if (!isLeader) {
+      document.querySelectorAll("input[type=radio]").forEach(el => el.disabled = true);
+    }
+
+    startTimer();
+  };
+
+  // المؤقت
+  const QUIZ_MINUTES = 2;
+  let totalSeconds = QUIZ_MINUTES * 60;
+  const timerDiv = document.getElementById("timer");
+
+  function startTimer() {
+    const timerInterval = setInterval(() => {
+      let minutes = Math.floor(totalSeconds / 60).toString().padStart(2,'0');
+      let seconds = (totalSeconds % 60).toString().padStart(2,'0');
+      timerDiv.innerText = `الوقت المتبقي: ${minutes}:${seconds}`;
+      if (totalSeconds <= 0) {
+        clearInterval(timerInterval);
+        showResults();
+        timerDiv.innerText = "انتهى الوقت!";
       }
+      totalSeconds--;
+    }, 1000);
+  }
 
-      startMatch();
-    }
-    window.joinTeam = joinTeam;
+  // حساب النتيجة
+  function showResults() {
+    let questions = document.querySelectorAll(".question");
+    let correctCount = 0;
 
-    // بدء الماتش
-    function startMatch() {
-      document.getElementById("loginDiv").classList.add("hidden");
-      document.getElementById("matchDiv").classList.remove("hidden");
+    questions.forEach((q, index) => {
+      const correctAnswer = parseInt(q.dataset.correct);
+      const selected = document.querySelector(`input[name="q${index+1}"]:checked`);
 
-      document.getElementById("teamName").innerText = "الفريق: " + team.name;
-      document.getElementById("matchNumber").innerText = team.matchNumber;
-      document.getElementById("teamMembers").innerText = team.members.join(", ") + " + القائد";
-
-      renderQuestions();
-      listenScore();
-      startTimer();
-    }
-
-    // عرض الأسئلة كلها
-    function renderQuestions() {
-      const container = document.getElementById("questionsContainer");
-      container.innerHTML = "";
-
-      questions.forEach((q, qi) => {
-        let div = document.createElement("div");
-        div.className = "question";
-        let html = `<h3>سؤال ${qi+1}: ${q.q}</h3>`;
-        q.options.forEach((opt, i) => {
-          if (isLeader) {
-            html += `<button onclick="answer(${qi},${i})">${opt}</button>`;
-          } else {
-            html += `<p>🔒 ${opt}</p>`;
-          }
-        });
-        div.innerHTML = html;
-        container.appendChild(div);
+      q.querySelectorAll(".option").forEach(opt => {
+        const val = parseInt(opt.querySelector("input").value);
+        if (val === correctAnswer) opt.classList.add("correct");
+        if (selected && parseInt(selected.value) === val && val !== correctAnswer) opt.classList.add("wrong");
       });
-    }
 
-    // الإجابة
-    function answer(qi, i) {
-      if (!isLeader) return;
-      if (i === questions[qi].correct) {
-        team.score++;
-        update(scoreRef, { score: team.score });
-      }
-    }
-    window.answer = answer;
+      if (selected && parseInt(selected.value) === correctAnswer) correctCount++;
+    });
 
-    // متابعة النتائج
-    function listenScore() {
-      onValue(scoreRef, snap => {
-        const data = snap.val();
-        if (data && data.score !== undefined) {
-          document.getElementById("teamScore").innerText = data.score;
-        }
+    document.getElementById("result").innerText = `درجتك: ${correctCount} من ${questions.length}`;
+    document.getElementById("resultBox").style.display = "block";
+    document.getElementById("finalResult").innerText = `✅ فريق ${teamName} جاب ${correctCount} من ${questions.length}`;
+    window.quizScore = correctCount;
+    window.totalQuestions = questions.length;
+  }
+  document.getElementById("showAnswers").addEventListener("click", showResults);
+
+  // إرسال النتيجة
+  document.getElementById("sendBtn").addEventListener("click", async () => {
+    try {
+      await addDoc(collection(db, "results"), {
+        team: teamName,
+        leader: isLeader,
+        score: window.quizScore,
+        total: window.totalQuestions,
+        createdAt: serverTimestamp()
       });
+      alert("✅ تم إرسال نتيجتكم بنجاح");
+      isResultSent = true;
+    } catch (error) {
+      console.error("Error writing document: ", error);
+      alert("⚠ حصل خطأ أثناء الإرسال");
     }
+  });
 
-    // التايمر
-    function startTimer() {
-      let timeLeft = timeLimit;
-      timerInterval = setInterval(() => {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        document.getElementById("timeLeft").innerText =
-          `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          document.querySelectorAll(".question button").forEach(b => b.classList.add("disabled"));
-        }
-        timeLeft--;
-      }, 1000);
+  // منع الخروج قبل الإرسال
+  window.addEventListener("beforeunload", function (e) {
+    if (!isResultSent) {
+      e.preventDefault();
+      e.returnValue = "⚠ لا يمكنك مغادرة الصفحة قبل إرسال النتيجة!";
+      return "⚠ لا يمكنك مغادرة الصفحة قبل إرسال النتيجة!";
     }
+  });
+</script>
 
-    // تسجيل الفريق في DB (لو مش موجود)
-    set(scoreRef, { score: 0 });
-  </script>
 </body>
 </html>
