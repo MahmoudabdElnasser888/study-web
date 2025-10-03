@@ -2,184 +2,137 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>Study With Me</title>
+  <title>بطولة الفرق</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9f9f9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    #container {
-      width: 600px;
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h2 { text-align: center; color:#333; }
-    input, button {
-      width: 100%; padding: 10px; margin: 8px 0;
-      border-radius: 8px; border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    button {
-      background: #007bff; color: white; border: none; cursor: pointer;
-    }
-    button:hover { background: #0056b3; }
-    #session { display:none; }
-    #chat {
-      border:1px solid #ccc; border-radius:8px;
-      height:200px; overflow-y:auto; padding:10px; margin:15px 0;
-      background: #fefefe;
-    }
-    .msg { padding:5px; margin:2px 0; }
-    .admin { color:red; font-weight:bold; }
-    .studentRow { display:flex; justify-content:space-between; padding:5px 0; }
+    body { font-family: Arial, sans-serif; background: #222; color: #fff; text-align:center; }
+    #login, #game { margin-top: 30px; }
+    #scoreboard { margin-top: 20px; }
+    .team { display: inline-block; width: 40%; vertical-align: top; background:#333; padding:10px; border-radius:8px; }
+    .team h3 { margin-top:0; }
+    button { padding: 8px 16px; margin: 5px; cursor: pointer; }
   </style>
 </head>
 <body>
-<div id="container">
+  <h1>🏆 بطولة الفرق</h1>
 
-  <!-- تسجيل الدخول -->
+  <!-- شاشة تسجيل الدخول -->
   <div id="login">
-    <h2>📚 Study With Me</h2>
-    <input type="text" id="name" placeholder="اسمك">
-    <input type="password" id="code" placeholder="الكود (222 / 1212)">
-    <button id="joinBtn">دخول</button>
+    <input id="name" placeholder="اكتب اسمك"><br><br>
+    <select id="team">
+      <option value="A">فريق A</option>
+      <option value="B">فريق B</option>
+    </select><br><br>
+    <input id="code" placeholder="ادخل الكود"><br><br>
+    <button onclick="joinTournament()">انضم</button>
   </div>
 
-  <!-- الجلسة -->
-  <div id="session">
-    <p>👥 الطلاب: <span id="studentCount">0</span></p>
-
-    <div id="students"></div>
-    <div id="chat"></div>
-
-    <div id="adminTools" style="display:none;">
-      <input type="text" id="adminMsg" placeholder="رسالة للطلاب">
-      <button id="sendMsg">إرسال</button>
+  <!-- شاشة اللعب -->
+  <div id="game" style="display:none;">
+    <h2 id="welcome"></h2>
+    <div id="question">
+      <p>❓ من هي ملكة سبأ؟</p>
+      <button onclick="answer('كليوباترا')">كليوباترا</button>
+      <button onclick="answer('بلقيس')">بلقيس</button>
+      <button onclick="answer('حتشبسوت')">حتشبسوت</button>
     </div>
 
-    <button id="exitBtn" style="background:#dc3545; display:none;">خروج</button>
+    <div id="scoreboard">
+      <div class="team">
+        <h3>👥 فريق A</h3>
+        <ul id="teamA"></ul>
+      </div>
+      <div class="team">
+        <h3>👥 فريق B</h3>
+        <ul id="teamB"></ul>
+      </div>
+    </div>
   </div>
-</div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, deleteDoc } 
-    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, set, update, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
-    authDomain: "my-web-c23de.firebaseapp.com",
-    projectId: "my-web-c23de",
-    storageBucket: "my-web-c23de.appspot.com",
-    messagingSenderId: "846339445873",
-    appId: "1:846339445873:web:fc0427a7ad77eceda837d0"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+      authDomain: "my-web-c23de.firebaseapp.com",
+      databaseURL: "https://my-web-c23de-default-rtdb.firebaseio.com/",
+      projectId: "my-web-c23de",
+      storageBucket: "my-web-c23de.appspot.com",
+      messagingSenderId: "846339445873",
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-  let userName = "";
-  let userRole = "student";
-  let userDocId = "";
+    let playerName = "";
+    let playerTeam = "";
+    let tournamentCode = "";
 
-  document.getElementById("joinBtn").addEventListener("click", async () => {
-    userName = document.getElementById("name").value.trim();
-    const code = document.getElementById("code").value.trim();
+    // انضمام للبطولة
+    window.joinTournament = async function() {
+      playerName = document.getElementById("name").value.trim();
+      playerTeam = document.getElementById("team").value;
+      tournamentCode = document.getElementById("code").value.trim();
 
-    if (!userName || !code) { alert("ادخل اسمك والكود"); return; }
+      if (!playerName || !tournamentCode) {
+        alert("ادخل الاسم والكود!");
+        return;
+      }
 
-    if (code === "1212") { userRole = "admin"; }
-    else if (code === "222") { userRole = "student"; }
-    else { alert("الكود خطأ"); return; }
+      if (tournamentCode !== "222") {
+        alert("الكود غير صحيح!");
+        return;
+      }
 
-    document.getElementById("login").style.display = "none";
-    document.getElementById("session").style.display = "block";
-
-    const docRef = await addDoc(collection(db, "session", "room1", "users"), {
-      name: userName,
-      role: userRole
-    });
-    userDocId = docRef.id;
-
-    // متابعة عدد الطلاب
-    onSnapshot(collection(db, "session", "room1", "users"), (snapshot) => {
-      let count = 0;
-      const studentsDiv = document.getElementById("students");
-      studentsDiv.innerHTML = "";
-
-      snapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        if (data.role === "student") count++;
-
-        if (userRole === "admin") {
-          const row = document.createElement("div");
-          row.className = "studentRow";
-          row.innerHTML = `<span>${data.name}</span>
-          ${data.role === "student" ? `<button onclick="approveExit('${docSnap.id}')">خروج</button>` : ""}`;
-          studentsDiv.appendChild(row);
-        }
+      // تسجيل اللاعب في Firebase
+      await set(ref(db, `players/${tournamentCode}/${playerName}`), {
+        team: playerTeam,
+        score: 0
       });
 
-      document.getElementById("studentCount").innerText = count;
-    });
+      document.getElementById("login").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      document.getElementById("welcome").innerText = "مرحبا " + playerName;
 
-    // متابعة الشات
-    onSnapshot(collection(db, "session", "room1", "messages"), (snapshot) => {
-      const chatBox = document.getElementById("chat");
-      chatBox.innerHTML = "";
-      snapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        chatBox.innerHTML += `<div class="msg ${data.role === 'admin' ? 'admin' : ''}">
-          ${data.text}
-        </div>`;
-      });
-      chatBox.scrollTop = chatBox.scrollHeight;
-    });
-
-    if (userRole === "admin") {
-      document.getElementById("adminTools").style.display = "block";
-    } else {
-      document.getElementById("exitBtn").style.display = "block";
+      loadScoreboard();
     }
-  });
 
-  // إرسال رسالة المشرف
-  document.getElementById("sendMsg").addEventListener("click", async () => {
-    const msg = document.getElementById("adminMsg").value.trim();
-    if (!msg) return;
-    await addDoc(collection(db, "session", "room1", "messages"), {
-      text: msg,
-      role: userRole,
-      timestamp: Date.now()
-    });
-    document.getElementById("adminMsg").value = "";
-  });
+    // الاجابة
+    window.answer = async function(ans) {
+      const playerRef = ref(db, `players/${tournamentCode}/${playerName}`);
+      const snapshot = await get(playerRef);
+      const data = snapshot.val();
 
-  // خروج الطالب بنفسه
-  document.getElementById("exitBtn").addEventListener("click", async () => {
-    if (userDocId) {
-      await addDoc(collection(db, "session", "room1", "messages"), {
-        text: userName + " خرج من الجلسة 🚪",
-        role: "system",
-        timestamp: Date.now()
-      });
-      await deleteDoc(doc(db, "session", "room1", "users", userDocId));
-      window.location.reload();
+      if (ans === "بلقيس") {
+        await update(playerRef, { score: data.score + 1 });
+        alert("🎉 إجابة صحيحة! حصلت على نقطة");
+      } else {
+        alert("❌ خطأ");
+      }
     }
-  });
 
-  // خروج الطالب بواسطة المشرف
-  window.approveExit = async (id) => {
-    await deleteDoc(doc(db, "session", "room1", "users", id));
-  };
+    // تحميل لوحة النقاط
+    function loadScoreboard() {
+      const playersRef = ref(db, `players/${tournamentCode}`);
+      onValue(playersRef, (snapshot) => {
+        const data = snapshot.val() || {};
+        document.getElementById("teamA").innerHTML = "";
+        document.getElementById("teamB").innerHTML = "";
 
-</script>
+        Object.keys(data).forEach((p) => {
+          let li = document.createElement("li");
+          li.textContent = `${p} (${data[p].score})`;
+
+          if (data[p].team === "A") {
+            document.getElementById("teamA").appendChild(li);
+          } else {
+            document.getElementById("teamB").appendChild(li);
+          }
+        });
+      });
+    }
+  </script>
 </body>
 </html>
