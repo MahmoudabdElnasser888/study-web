@@ -4,135 +4,177 @@
   <meta charset="UTF-8">
   <title>بطولة الفرق</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #222; color: #fff; text-align:center; }
-    #login, #game { margin-top: 30px; }
-    #scoreboard { margin-top: 20px; }
-    .team { display: inline-block; width: 40%; vertical-align: top; background:#333; padding:10px; border-radius:8px; }
-    .team h3 { margin-top:0; }
-    button { padding: 8px 16px; margin: 5px; cursor: pointer; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: white;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    .login, .game, .scoreboard {
+      display: none;
+      margin-top: 30px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background: #ff5722;
+      color: white;
+      cursor: pointer;
+    }
+    .question {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px auto;
+      max-width: 400px;
+    }
+    .scoreboard {
+      margin-top: 30px;
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
 <body>
   <h1>🏆 بطولة الفرق</h1>
 
-  <!-- شاشة تسجيل الدخول -->
-  <div id="login">
-    <input id="name" placeholder="اكتب اسمك"><br><br>
-    <select id="team">
-      <option value="A">فريق A</option>
-      <option value="B">فريق B</option>
-    </select><br><br>
-    <input id="code" placeholder="ادخل الكود"><br><br>
-    <button onclick="joinTournament()">انضم</button>
+  <!-- شاشة الدخول -->
+  <div class="login" id="loginDiv">
+    <p>ادخل الكود للانضمام للفريق:</p>
+    <input type="password" id="codeInput" placeholder="ادخل الكود">
+    <button onclick="joinTeam()">دخول</button>
   </div>
 
-  <!-- شاشة اللعب -->
-  <div id="game" style="display:none;">
-    <h2 id="welcome"></h2>
-    <div id="question">
-      <p>❓ من هي ملكة سبأ؟</p>
-      <button onclick="answer('كليوباترا')">كليوباترا</button>
-      <button onclick="answer('بلقيس')">بلقيس</button>
-      <button onclick="answer('حتشبسوت')">حتشبسوت</button>
-    </div>
-
-    <div id="scoreboard">
-      <div class="team">
-        <h3>👥 فريق A</h3>
-        <ul id="teamA"></ul>
-      </div>
-      <div class="team">
-        <h3>👥 فريق B</h3>
-        <ul id="teamB"></ul>
-      </div>
-    </div>
+  <!-- شاشة اللعبة -->
+  <div class="game" id="gameDiv">
+    <h2 id="teamName">الفريق: Team A</h2>
+    <div id="questionBox" class="question"></div>
   </div>
 
-  <!-- Firebase -->
+  <!-- لوحة النتائج -->
+  <div class="scoreboard" id="scoreboardDiv">
+    <h2>📊 النتائج</h2>
+    <p>Team A: <span id="teamScore">0</span> نقطة</p>
+  </div>
+
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getDatabase, ref, set, update, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    // Firebase إعداد
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+    import { getDatabase, ref, set, get, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
       authDomain: "my-web-c23de.firebaseapp.com",
-      databaseURL: "https://my-web-c23de-default-rtdb.firebaseio.com/",
       projectId: "my-web-c23de",
       storageBucket: "my-web-c23de.appspot.com",
       messagingSenderId: "846339445873",
-      appId: "1:846339445873:web:fc0427a7ad77eceda837d0"
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
+      databaseURL: "https://my-web-c23de-default-rtdb.firebaseio.com/"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let playerName = "";
-    let playerTeam = "";
-    let tournamentCode = "";
+    // بيانات
+    const loginDiv = document.getElementById("loginDiv");
+    const gameDiv = document.getElementById("gameDiv");
+    const scoreboardDiv = document.getElementById("scoreboardDiv");
+    const questionBox = document.getElementById("questionBox");
+    const teamScoreSpan = document.getElementById("teamScore");
 
-    // انضمام للبطولة
-    window.joinTournament = async function() {
-      playerName = document.getElementById("name").value.trim();
-      playerTeam = document.getElementById("team").value;
-      tournamentCode = document.getElementById("code").value.trim();
+    let isLeader = false;
+    let currentQuestion = 0;
+    let score = 0;
 
-      if (!playerName || !tournamentCode) {
-        alert("ادخل الاسم والكود!");
-        return;
-      }
+    // أسئلة البطولة
+    const questions = [
+      { q: "متى بدأت ثورة 1919؟", options: ["1917", "1919", "1921"], correct: 1 },
+      { q: "من هو زعيم الثورة؟", options: ["سعد زغلول", "مصطفى كامل", "جمال عبدالناصر"], correct: 0 },
+      { q: "أين وقعت معركة العلمين؟", options: ["مصر", "ليبيا", "السودان"], correct: 0 }
+    ];
 
-      if (tournamentCode !== "222") {
-        alert("الكود غير صحيح!");
-        return;
-      }
-
-      // تسجيل اللاعب في Firebase
-      await set(ref(db, `players/${tournamentCode}/${playerName}`), {
-        team: playerTeam,
-        score: 0
-      });
-
-      document.getElementById("login").style.display = "none";
-      document.getElementById("game").style.display = "block";
-      document.getElementById("welcome").innerText = "مرحبا " + playerName;
-
-      loadScoreboard();
-    }
-
-    // الاجابة
-    window.answer = async function(ans) {
-      const playerRef = ref(db, `players/${tournamentCode}/${playerName}`);
-      const snapshot = await get(playerRef);
-      const data = snapshot.val();
-
-      if (ans === "بلقيس") {
-        await update(playerRef, { score: data.score + 1 });
-        alert("🎉 إجابة صحيحة! حصلت على نقطة");
+    // تسجيل الدخول بالكود
+    function joinTeam() {
+      const code = document.getElementById("codeInput").value.trim();
+      if (code === "222") {
+        isLeader = false;
+        startGame();
+      } else if (code === "1212") {
+        isLeader = true;
+        startGame();
       } else {
-        alert("❌ خطأ");
+        alert("❌ كود غير صحيح");
       }
     }
+    window.joinTeam = joinTeam;
 
-    // تحميل لوحة النقاط
-    function loadScoreboard() {
-      const playersRef = ref(db, `players/${tournamentCode}`);
-      onValue(playersRef, (snapshot) => {
-        const data = snapshot.val() || {};
-        document.getElementById("teamA").innerHTML = "";
-        document.getElementById("teamB").innerHTML = "";
+    // بدء اللعبة
+    function startGame() {
+      loginDiv.style.display = "none";
+      gameDiv.style.display = "block";
+      scoreboardDiv.style.display = "block";
 
-        Object.keys(data).forEach((p) => {
-          let li = document.createElement("li");
-          li.textContent = `${p} (${data[p].score})`;
+      showQuestion();
+      listenScore();
+    }
 
-          if (data[p].team === "A") {
-            document.getElementById("teamA").appendChild(li);
-          } else {
-            document.getElementById("teamB").appendChild(li);
-          }
-        });
+    // عرض السؤال
+    function showQuestion() {
+      if (currentQuestion >= questions.length) {
+        questionBox.innerHTML = "<h3>🏁 انتهت الأسئلة!</h3>";
+        return;
+      }
+
+      const q = questions[currentQuestion];
+      let html = `<h3>${q.q}</h3>`;
+      q.options.forEach((opt, i) => {
+        if (isLeader) {
+          html += `<button onclick="answer(${i})">${opt}</button><br>`;
+        } else {
+          html += `<p>🔒 ${opt}</p>`;
+        }
+      });
+      questionBox.innerHTML = html;
+    }
+
+    // القائد يجاوب
+    function answer(i) {
+      const q = questions[currentQuestion];
+      if (i === q.correct) {
+        score++;
+        update(ref(db, "teams/TeamA"), { score: score });
+      }
+      currentQuestion++;
+      showQuestion();
+    }
+    window.answer = answer;
+
+    // متابعة النتائج مباشرة
+    function listenScore() {
+      const scoreRef = ref(db, "teams/TeamA/score");
+      onValue(scoreRef, snapshot => {
+        const val = snapshot.val();
+        if (val !== null) {
+          teamScoreSpan.textContent = val;
+        }
       });
     }
+
+    // عند أول مرة، نخزن الفريق في DB
+    set(ref(db, "teams/TeamA"), { score: 0 });
+    
+    // إظهار شاشة الدخول في البداية
+    loginDiv.style.display = "block";
   </script>
 </body>
 </html>
