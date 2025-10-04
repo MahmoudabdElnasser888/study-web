@@ -13,7 +13,7 @@
     }
     h1 { margin-bottom: 25px; }
 
-    .login-box, .admin-panel {
+    .admin-panel {
       background: #fff;
       padding: 20px;
       border-radius: 10px;
@@ -22,13 +22,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
-    input {
-      width: 70%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-bottom: 15px;
-    }
     button {
       padding: 8px 16px;
       margin: 5px;
@@ -55,35 +48,13 @@
 <body>
   <h1>⚙️ لوحة تحكم البطولة</h1>
 
-  <!-- شاشة الدخول -->
-  <div class="login-box" id="loginBox">
-    <h3>🔒 تسجيل الدخول</h3>
-    <input type="password" id="adminCode" placeholder="ادخل الكود">
-    <br>
-    <button onclick="login()">دخول</button>
-  </div>
-
   <!-- لوحة التحكم -->
-  <div class="admin-panel" id="adminPanel" style="display:none;">
+  <div class="admin-panel" id="adminPanel">
     <h2>إدارة المباريات</h2>
     <div id="admin"></div>
   </div>
 
   <script>
-    // الكودين المسموحين
-    const allowedCodes = ["youssefah","mahmoudna"];
-
-    function login() {
-      let code = document.getElementById("adminCode").value.trim();
-      if (allowedCodes.includes(code)) {
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("adminPanel").style.display = "block";
-        renderAdmin();
-      } else {
-        alert("❌ كود غير صحيح");
-      }
-    }
-
     function renderAdmin() {
       let data = JSON.parse(localStorage.getItem("bracketData")) || {};
       let container = document.getElementById("admin");
@@ -116,7 +87,6 @@
       match[loserKey+"Status"] = "loser";
       match.winner = match[winnerKey];
 
-      // تجهيز الجولة التالية
       let nextRound = round/2;
       if(nextRound>=1){
         if(!data[nextRound]) data[nextRound]=[];
@@ -131,8 +101,11 @@
 
       localStorage.setItem("bracketData", JSON.stringify(data));
       renderAdmin();
-      window.dispatchEvent(new Event("storage")); // تحديث صفحة البطولة
+      window.dispatchEvent(new Event("storage")); 
     }
+
+    // تشغيل الأدمن مباشرة
+    renderAdmin();
   </script>
 </body>
 </html>

@@ -26,7 +26,19 @@ body {
 }
 
 /* ===== Header ===== */
-header { width: 96%; background-color: #000000c0; padding: 15px 30px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0,0,0,0.4); border-bottom: 2px solid #ff6f61; }
+header { 
+  width: 96%; 
+  background-color: #000000c0; 
+  padding: 15px 30px; 
+  position: sticky; 
+  top: 0; 
+  z-index: 1000; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4); 
+  border-bottom: 2px solid #ff6f61; 
+}
 
 /* الرصيد */
 .rased {
@@ -203,6 +215,7 @@ footer{
   padding:20px;
   font-size:16px;
   border-top:2px solid #ff6f61;
+  
 }
 footer a{
   color:#ff6f61;
@@ -210,6 +223,13 @@ footer a{
   font-weight:bold;
 }
 footer a:hover{ text-decoration:underline; }
+
+.hidden-link {
+  font-size: 10px;   /* صغير جدًا */
+  color: rgba(255, 255, 255, 0.37); /* شفاف */
+  padding-left: 16px;
+  
+}
 
 /* ===== Dark Theme ===== */
 body.dark-theme{
@@ -272,6 +292,7 @@ body.dark-theme{
     font-size: 14px;
   }
 }
+
 </style>
 </head>
 <body>
@@ -372,21 +393,33 @@ body.dark-theme{
     </div>
   </div>
 
-   <div id="feedback" class="section-item">
+  <!-- Championship -->
+  <div id="championship" class="section-item locked">
     <i class="fa-solid fa-trophy"></i>
     <div>
-      <h2>championship</h2>
+      <h2>Championship</h2>
+      <p>انضم للبطولة ونافس زملاءك</p>
       <a href="rules.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
 
-
+  <!-- Summarization -->
+  <div id="summarization" class="section-item">
+    <i class="fas fa-file-alt"></i>
+    <div>
+      <h2>Summarization</h2>
+      <p>Send and manage summaries.</p>
+      <a href="try.html"><button class="enter-btn">ENTER</button></a>
+    </div>
+  </div>
 
 </section>
 
 <footer>
   Follow us on <a href="https://www.instagram.com/7oda__807" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+  <a href="the-admin.com" target="_blank" class="hidden-link">ADMIN</a>
 </footer>
+ 
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -468,22 +501,33 @@ body.dark-theme{
     }
   }
 
-  auth.onAuthStateChanged(user=>{
-    currentUser=user;
-    if(!user){ window.location.href='index.html'; return; }
-    const userRef=db.collection('users').doc(user.uid);
-    userRef.onSnapshot(doc=>{
-      if(!doc.exists){
-        userRef.set({ balance:0, subscription:null });
-        updateUIFromUserData({ balance:0, subscription:null });
-        return;
+  auth.onAuthStateChanged(async (user)=>{
+    if(user){
+      currentUser=user;
+      const docRef=db.collection("users").doc(user.uid);
+      const docSnap=await docRef.get();
+      if(docSnap.exists){
+        updateUIFromUserData(docSnap.data());
+        docRef.onSnapshot(snap=>updateUIFromUserData(snap.data()));
+      } else {
+        await docRef.set({balance:0, subscription:null});
       }
-      updateUIFromUserData(doc.data());
-    });
+    } else {
+      window.location.href="signup.html";
+    }
   });
 
-  document.querySelector('.start-btn').addEventListener('click',()=>{
-    document.querySelector('.content').scrollIntoView({behavior:'smooth'});
+  // Dark mode toggle
+  document.querySelector('.theme-toggle').addEventListener('click', ()=>{
+    document.body.classList.toggle('dark-theme');
+    const icon=document.querySelector('.theme-toggle i');
+    if(document.body.classList.contains('dark-theme')){
+      icon.classList.remove('fa-sun');
+      icon.classList.add('fa-moon');
+    } else {
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+    }
   });
 </script>
 </body>
