@@ -69,7 +69,7 @@
   <div id="loginBox">
     <h2>تسجيل الدخول</h2>
     <input type="email" id="email" placeholder="اكتب الايميل"><br>
-    <input type="text" id="teamCode" placeholder="ادخل كود الفريق"><br>
+    <input type="text" id="teamCode" placeholder="ادخل الكود"><br>
     <button id="loginBtn">دخول</button>
   </div>
 
@@ -88,7 +88,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+  import { getFirestore, collection, query, where, getDocs, updateDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
   // Firebase Config
   const firebaseConfig = {
@@ -122,6 +122,7 @@
   let answers = {};
   let totalSeconds = 0;
   let timerInterval;
+  let userDocId = null;
 
   // الاسئلة (مثال)
   const questions = [
@@ -136,30 +137,34 @@
     const code = codeInput.value.trim();
     if(!email || !code) return alert("ادخل البيانات كاملة");
 
-    const teamRef = doc(db,"teams",email);
-    const teamSnap = await getDoc(teamRef);
+    // نبحث عن الايميل جوه الحقول مش كـ ID
+    const q = query(collection(db,"users"), where("email","==", email));
+    const snap = await getDocs(q);
 
-    if(!teamSnap.exists()){
-      alert("الايميل غير مسجل!");
+    if(snap.empty){
+      alert("❌ الايميل غير موجود!");
       return;
     }
 
-    const data = teamSnap.data();
-    if(data.code !== code){
-      alert("الكود غلط");
+    const docSnap = snap.docs[0];
+    userDocId = docSnap.id;
+    const data = docSnap.data();
+
+    if(data.inviteCode !== code){
+      alert("❌ الكود غلط");
       return;
     }
 
-    if(data.used){
-      alert("❌ الكود ده استُخدم قبل كده");
+    if(data.codeUsed){
+      alert("⚠️ الكود ده استُخدم قبل كده");
       return;
     }
 
-    // اول دخول → نحجز الكود
-    await updateDoc(teamRef,{used:true});
+    // نحجز الكود أول دخول
+    await updateDoc(doc(db,"users",userDocId), { codeUsed:true });
 
-    teamNameDiv.textContent = "فريق: " + (data.teamName || "بدون اسم");
-    isLeader = data.role === "leader";
+    teamNameDiv.textContent = "المستخدم: " + (data.name || email);
+    isLeader = true; // هنا ممكن تخصص مين القائد لو عايز
 
     loginBox.classList.add("hidden");
     examBox.classList.remove("hidden");
@@ -197,7 +202,7 @@
         inp.type="radio";
         inp.name="q"+q.id;
         inp.value=idx+1;
-        inp.disabled=!isLeader; // غير القائد ميقدرش يجاوب
+        inp.disabled=!isLeader; 
         inp.addEventListener("change",()=>answers[q.id]=parseInt(inp.value));
         lbl.appendChild(inp);
         lbl.append(" "+opt);
@@ -244,10 +249,8 @@
 
     resultDiv.textContent=`نتيجتك: ${score} من ${questions.length}`;
 
-    // حفظ في Firestore
-    const email=emailInput.value.trim();
-    const teamRef = doc(db,"teams",email);
-    await updateDoc(teamRef,{
+    // حفظ النتيجة في Firestore
+    await updateDoc(doc(db,"users",userDocId),{
       score:score,
       total:questions.length,
       submittedAt:serverTimestamp()

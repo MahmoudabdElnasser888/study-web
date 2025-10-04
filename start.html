@@ -24,6 +24,7 @@ body {
   color: var(--text-color);
   scroll-behavior: smooth;
 }
+
 /* ===== Header ===== */
 header { width: 96%; background-color: #000000c0; padding: 15px 30px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0,0,0,0.4); border-bottom: 2px solid #ff6f61; }
 
@@ -121,6 +122,7 @@ header { width: 96%; background-color: #000000c0; padding: 15px 30px; position: 
   padding:20px 30px;
   border-radius:15px;
   transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
 }
 .section-item:hover{
   transform: translateY(-10px);
@@ -161,7 +163,6 @@ header { width: 96%; background-color: #000000c0; padding: 15px 30px; position: 
 .section-item.locked {
   opacity: 0.85;
   filter: saturate(0.9);
-  position: relative;
 }
 .lock-overlay {
   position:absolute;
@@ -174,6 +175,25 @@ header { width: 96%; background-color: #000000c0; padding: 15px 30px; position: 
   gap:8px;
   align-items:center;
   font-weight:600;
+  color:#fff;
+}
+
+/* SOON tag */
+.soon-tag {
+  display: inline-block;
+  background: #ff6f61;
+  color: white;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-top: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
 }
 
 /* ===== Footer ===== */
@@ -203,47 +223,6 @@ body.dark-theme{
   50%{background-position:100% 50%;}
   100%{background-position:0% 50%;}
 }
-
-/* ===== Modal ===== */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-.modal {
-  width: 95%;
-  max-width: 520px;
-  background: linear-gradient(180deg,#fff,#f7f7f7);
-  color: #111;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-}
-.modal h3 { margin-top: 0; }
-.packages { display:flex; gap:12px; margin: 12px 0; flex-wrap:wrap; }
-.package {
-  flex: 1 1 140px;
-  background: #fff;
-  border-radius: 8px;
-  border: 2px solid #e6e6e6;
-  padding: 12px;
-  text-align:center;
-  cursor:pointer;
-  font-weight:700;
-  user-select:none;
-}
-.package.selected { border-color: #6a11cb; box-shadow: 0 8px 20px rgba(106,17,203,0.12); }
-.modal-footer { display:flex; justify-content:space-between; gap:12px; margin-top:16px; }
-.btn { padding:10px 14px; border-radius:8px; font-weight:700; cursor:pointer; border: none; }
-.btn.primary { background: #6a11cb; color:white; }
-.btn.ghost { background: transparent; border: 2px solid #ccc; }
-
-/* info line */
-.info-line { font-size:14px; margin-top:8px; color:#333; }
 
 /* ===== Media Queries ===== */
 @media (max-width: 768px){
@@ -298,18 +277,9 @@ body.dark-theme{
 <body>
 
 <header>
- 
-
   <div class="header-right">
-    <a href="pay.html" class="rased">
-  الرصيد: <span id="balance">0</span> ج
-</a>
-
-
-    <div id="subscription-status" style="color:#fff; font-weight:600; margin-right:10px;">
-      <!-- will be filled: "مش مشترك" or "متبقي X يوم" -->
-    </div>
-
+    <a href="pay.html" class="rased"> الرصيد: <span id="balance">0</span> ج </a>
+    <div id="subscription-status"></div>
     <button class="theme-toggle"><i class="fas fa-sun"></i></button>
   </div>
 </header>
@@ -320,6 +290,8 @@ body.dark-theme{
 </section>
 
 <section class="content">
+
+  <!-- To Do List -->
   <div id="todo" class="section-item">
     <i class="fas fa-list-check"></i>
     <div>
@@ -329,6 +301,7 @@ body.dark-theme{
     </div>
   </div>
 
+  <!-- Quiz -->
   <div id="quiz" class="section-item">
     <i class="fas fa-question-circle"></i>
     <div>
@@ -338,20 +311,18 @@ body.dark-theme{
     </div>
   </div>
 
-  <!-- LEARNING: now controlled -->
+  <!-- Learning -->
   <div id="learning" class="section-item locked">
     <i class="fas fa-book"></i>
     <div>
       <h2>Learning Content</h2>
       <p>Access lessons and tutorials.</p>
-      <!-- button changed to not be direct link -->
       <button id="learning-enter" class="enter-btn">ENTER</button>
     </div>
-    <div class="lock-overlay" id="learning-overlay">
-      <i class="fas fa-lock"></i> مُقفل — اشترك
-    </div>
+    <div class="lock-overlay" id="learning-overlay"><i class="fas fa-lock"></i> مُقفل — اشترك</div>
   </div>
 
+  <!-- Timer -->
   <div id="timer" class="section-item">
     <i class="fas fa-stopwatch"></i>
     <div>
@@ -361,6 +332,7 @@ body.dark-theme{
     </div>
   </div>
 
+  <!-- Community -->
   <div id="community" class="section-item">
     <i class="fas fa-users"></i>
     <div>
@@ -370,6 +342,7 @@ body.dark-theme{
     </div>
   </div>
 
+  <!-- Note -->
   <div id="note" class="section-item">
     <i class="fas fa-sticky-note"></i>
     <div>
@@ -379,6 +352,7 @@ body.dark-theme{
     </div>
   </div>
 
+  <!-- Top 3 -->
   <div id="top3" class="section-item">
     <i class="fa-solid fa-trophy"></i>
     <div>
@@ -388,64 +362,31 @@ body.dark-theme{
     </div>
   </div>
 
-  <div id="top3" class="section-item">
-    <i class="fa-solid fa-trophy"></i>
+  <!-- Feedback box -->
+  <div id="feedback" class="section-item">
+    <i class="fa-solid fa-box"></i>
     <div>
       <h2>Feedback box</h2>
-      <p>ffh</p>
+      <p>Send us your feedback</p>
       <a href="feedback.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
 
-  <div id="top3" class="section-item">
+   <div id="feedback" class="section-item">
     <i class="fa-solid fa-trophy"></i>
     <div>
-      <h2>TOP 3</h2>
-      <p>Be the best.</p>
-      <a href="admin.html"><button class="enter-btn">ENTER</button></a>
+      <h2>championship</h2>
+      <a href="rules.html"><button class="enter-btn">ENTER</button></a>
     </div>
   </div>
-<div id="top3" class="section-item">
-    <i class="fa-solid fa-trophy"></i>
-    <div>
-      <h2>TOP 3</h2>
-      <p>Be the best.</p>
-      <a href="live.html"><button class="enter-btn">ENTER</button></a>
-    </div>
-  </div>
+
+
 
 </section>
 
 <footer>
-  Follow us on <a href="https://www.instagram.com/7oda__807?igsh=MTBoYzZzbXg3dWE0NQ==" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+  Follow us on <a href="https://www.instagram.com/7oda__807" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
 </footer>
-
-<!-- ===== Modal for subscriptions ===== -->
-<div class="modal-backdrop" id="modal-backdrop">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <h3 id="modal-title">اختر باقة الاشتراك</h3>
-    <p class="info-line">اختر باقة وسيتم خصم المبلغ من رصيدك. مدة الباقة تظهر بعد الدفع.</p>
-
-    <div class="packages" id="packages">
-      <div class="package" data-amount="10" id="pkg10">
-        10 ج — أسبوع
-      </div>
-      <div class="package" data-amount="30" id="pkg30">
-        30 ج — أسبوعين
-      </div>
-      <div class="package" data-amount="50" id="pkg50">
-        50 ج — شهر
-      </div>
-    </div>
-
-    <div id="modal-msg" class="info-line" style="color:#c33;"></div>
-
-    <div class="modal-footer">
-      <button class="btn ghost" id="modal-cancel">إلغاء</button>
-      <button class="btn primary" id="modal-confirm">ادفع واشترك</button>
-    </div>
-  </div>
-</div>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -453,8 +394,8 @@ body.dark-theme{
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
 <script>
-  // Firebase config (as you provided)
-  const firebaseConfig = {
+  // Firebase config
+  const firebaseConfig = { 
     apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
     authDomain: "my-web-c23de.firebaseapp.com",
     projectId: "my-web-c23de",
@@ -467,150 +408,29 @@ body.dark-theme{
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // UI refs
+  // UI elements
   const balanceSpan = document.getElementById('balance');
   const subStatus = document.getElementById('subscription-status');
+
   const learningItem = document.getElementById('learning');
   const learningEnterBtn = document.getElementById('learning-enter');
   const learningOverlay = document.getElementById('learning-overlay');
 
-  const modalBackdrop = document.getElementById('modal-backdrop');
-  const packagesDiv = document.getElementById('packages');
-  const modalMsg = document.getElementById('modal-msg');
-  const modalConfirm = document.getElementById('modal-confirm');
-  const modalCancel = document.getElementById('modal-cancel');
+  const champItem = document.getElementById('championship');
+  const champOverlay = document.getElementById('championship-overlay');
+  const champBtn = document.getElementById('championship-enter');
+
+  const champQuizItem = document.getElementById('champquiz');
+  const champQuizOverlay = document.getElementById('champquiz-overlay');
+  const champQuizBtn = document.getElementById('champquiz-enter');
 
   let currentUser = null;
-  let selectedPackage = null; // number
-  let userDocUnsub = null; // snapshot listener unsubscribe
-  let localUserData = {}; // cache
+  let localUserData = {};
 
-  // mapping amounts to durations (ms)
-  const PACKAGE_MAP = {
-    10: 7 * 24 * 60 * 60 * 1000,    // 1 week
-    30: 14 * 24 * 60 * 60 * 1000,   // 2 weeks
-    50: 30 * 24 * 60 * 60 * 1000    // 30 days (approx month)
-  };
-
-  // helpers
-  function showModal() {
-    modalMsg.innerText = '';
-    selectedPackage = null;
-    document.querySelectorAll('.package').forEach(el => el.classList.remove('selected'));
-    modalBackdrop.style.display = 'flex';
-  }
-  function closeModal() { modalBackdrop.style.display = 'none'; }
-
-  // package select handler
-  packagesDiv.addEventListener('click', (e) => {
-    const pkg = e.target.closest('.package');
-    if(!pkg) return;
-    document.querySelectorAll('.package').forEach(el => el.classList.remove('selected'));
-    pkg.classList.add('selected');
-    selectedPackage = Number(pkg.dataset.amount);
-    modalMsg.innerText = `سوف يتم خصم ${selectedPackage} ج من رصيدك.`;
-  });
-
-  modalCancel.addEventListener('click', () => { closeModal(); });
-
-  // confirm purchase: run transaction to deduct balance and set/extend subscription
-  modalConfirm.addEventListener('click', async () => {
-    if(!currentUser) {
-      modalMsg.innerText = 'يرجى تسجيل الدخول أولاً.';
-      return;
-    }
-    if(!selectedPackage) {
-      modalMsg.innerText = 'اختر باقة أولاً.';
-      return;
-    }
-
-    modalConfirm.disabled = true;
-    modalConfirm.innerText = 'جاري المعالجة...';
-
-    const uid = currentUser.uid;
-    const userRef = db.collection('users').doc(uid);
-
-    try {
-      await db.runTransaction(async (tran) => {
-        const doc = await tran.get(userRef);
-        if(!doc.exists) throw new Error('مستخدم غير موجود.');
-        const data = doc.data();
-        const balance = Number(data.balance ?? 0);
-
-        if(balance < selectedPackage) {
-          throw new Error('رصيد غير كافٍ.');
-        }
-
-        // compute new expiry
-        const now = Date.now();
-        const currentExpiryMillis = data.subscription?.expiresAt ? data.subscription.expiresAt.toMillis() : 0;
-        const addMs = PACKAGE_MAP[selectedPackage] || 0;
-        let newExpiryMillis = 0;
-        if(currentExpiryMillis && currentExpiryMillis > now) {
-          newExpiryMillis = currentExpiryMillis + addMs; // extend from existing expiry
-        } else {
-          newExpiryMillis = now + addMs; // start from now
-        }
-
-        // update: deduct balance and set subscription
-        const newBalance = balance - selectedPackage;
-        tran.update(userRef, {
-          balance: newBalance,
-          subscription: {
-            packageAmount: selectedPackage,
-            expiresAt: firebase.firestore.Timestamp.fromMillis(newExpiryMillis),
-            updatedAt: firebase.firestore.Timestamp.now()
-          }
-        });
-      });
-
-      // success: UI will update via onSnapshot listener
-      modalMsg.style.color = '#0a7b2a';
-      modalMsg.innerText = 'تمت العملية بنجاح! شكراً لاشتراكك.';
-      setTimeout(() => { closeModal(); modalMsg.style.color = '#c33'; }, 900);
-
-    } catch (err) {
-      console.error(err);
-      if(err.message === 'رصيد غير كافٍ.' || err.message.includes('not enough')) {
-        modalMsg.innerText = 'رصيدك غير كافٍ. املأ رصيدك ثم حاول مرة أخرى.';
-      } else {
-        modalMsg.innerText = 'حدث خطأ أثناء المعاملة: ' + (err.message || err);
-      }
-    } finally {
-      modalConfirm.disabled = false;
-      modalConfirm.innerText = 'ادفع واشترك';
-    }
-  });
-
-  // Learning enter click
-  learningEnterBtn.addEventListener('click', () => {
-    // if user not signed -> redirect to index (login)
-    if(!currentUser) {
-      window.location.href = 'index.html';
-      return;
-    }
-    // check localUserData subscription
-    const sub = localUserData.subscription;
-    const now = Date.now();
-    const expires = sub && sub.expiresAt ? sub.expiresAt.toMillis() : 0;
-    if(expires && expires > now) {
-      // allowed -> go to student page
-      window.location.href = 'student.html';
-      return;
-    } else {
-      // not subscribed -> open modal
-      showModal();
-      return;
-    }
-  });
-
-  // utility display function: update UI based on user doc
   function updateUIFromUserData(data) {
-    // balance
     const balance = Number(data.balance ?? 0);
     balanceSpan.innerText = Math.max(0, balance);
 
-    // subscription
     const sub = data.subscription;
     const now = Date.now();
     let active = false;
@@ -620,83 +440,51 @@ body.dark-theme{
       remainingMs = expiresAtMillis - now;
       active = remainingMs > 0;
     }
-
     localUserData = { ...data, subscription: sub };
 
-    if(active) {
-      // enable access
+    if(active){
       learningItem.classList.remove('locked');
-      learningOverlay.style.display = 'none';
-      // show remaining time
+      learningOverlay.style.display='none';
+
+      champItem.classList.remove('locked');
+      champOverlay.style.display='none';
+      champBtn.outerHTML = `<div class="soon-tag">SOON</div><br><a href="https://wa.me/201116973865" target="_blank"><button class="enter-btn">اشترك في البطولة</button></a>`;
+
+      champQuizItem.classList.remove('locked');
+      champQuizOverlay.style.display='none';
+      champQuizBtn.outerHTML = `<div class="soon-tag">SOON</div><br><a href="https://wa.me/201116973865" target="_blank"><button class="enter-btn">اشترك في البطولة</button></a>`;
+
       const days = Math.floor(remainingMs / (24*3600*1000));
       const hours = Math.floor((remainingMs % (24*3600*1000)) / (3600*1000));
       subStatus.innerText = `متبقي ${days} يوم ${hours} ساعة`;
     } else {
-      // locked
       learningItem.classList.add('locked');
-      learningOverlay.style.display = 'flex';
+      learningOverlay.style.display='flex';
+      champItem.classList.add('locked');
+      champOverlay.style.display='flex';
+      champQuizItem.classList.add('locked');
+      champQuizOverlay.style.display='flex';
       subStatus.innerText = `غير مشترك`;
     }
   }
 
-  // Listen for auth state
-  auth.onAuthStateChanged(user => {
-    currentUser = user;
-    if(!user) {
-      // not logged in -> redirect to index
-      window.location.href = 'index.html';
-      return;
-    }
-    // listen to user's doc realtime
-    const userRef = db.collection('users').doc(user.uid);
-    if(userDocUnsub) userDocUnsub(); // remove previous listener
-    userDocUnsub = userRef.onSnapshot(doc => {
-      if(!doc.exists) {
-        // create doc with default shape if needed
-        userRef.set({
-          balance: 0,
-          subscription: null,
-          createdAt: firebase.firestore.Timestamp.now()
-        }, { merge: true });
-        updateUIFromUserData({ balance: 0, subscription: null });
+  auth.onAuthStateChanged(user=>{
+    currentUser=user;
+    if(!user){ window.location.href='index.html'; return; }
+    const userRef=db.collection('users').doc(user.uid);
+    userRef.onSnapshot(doc=>{
+      if(!doc.exists){
+        userRef.set({ balance:0, subscription:null });
+        updateUIFromUserData({ balance:0, subscription:null });
         return;
       }
-      const data = doc.data();
-      updateUIFromUserData(data);
-    }, err => {
-      console.error('snapshot error', err);
+      updateUIFromUserData(doc.data());
     });
   });
 
-  // Start button scroll
   document.querySelector('.start-btn').addEventListener('click',()=>{
     document.querySelector('.content').scrollIntoView({behavior:'smooth'});
   });
-
-  // Theme toggle
-  const themeBtn = document.querySelector('.theme-toggle');
-  themeBtn.addEventListener('click',()=>{
-    document.body.classList.toggle('dark-theme');
-    if(document.body.classList.contains('dark-theme')){
-      localStorage.setItem('theme','dark');
-    }else{
-      localStorage.setItem('theme','light');
-    }
-  });
-  if(localStorage.getItem('theme')==='dark'){
-    document.body.classList.add('dark-theme');
-  }
-
-  // small: check subscription expiry periodically (every minute) to update UI countdown
-  setInterval(() => {
-    // If we have cached data, refresh only UI countdown text
-    if(localUserData && localUserData.subscription && localUserData.subscription.expiresAt) {
-      updateUIFromUserData(localUserData);
-    }
-  }, 60 * 1000);
-
-  // On load: hide modal (ensure)
-  modalBackdrop.style.display = 'none';
 </script>
 </body>
 </html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>إعداد البطولة</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; }
+    .container { margin-top: 40px; }
+    input { margin: 8px; padding: 8px; width: 250px; }
+    button { padding: 10px 20px; margin-top: 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>إدخال أسماء الفرق</h2>
+    <p>أدخل 8 فرق لبدء البطولة</p>
+    <form id="teamsForm">
+      <div id="inputs"></div>
+      <button type="submit">بدء البطولة</button>
+    </form>
+  </div>
+
+  <script>
+    const numTeams = 8; // عدد الفرق
+    const inputsDiv = document.getElementById("inputs");
+
+    // توليد خانات إدخال الفرق
+    for (let i = 1; i <= numTeams; i++) {
+      inputsDiv.innerHTML += `<input type="text" placeholder="الفريق ${i}" name="team${i}" required><br>`;
+    }
+
+    document.getElementById("teamsForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      let teams = [];
+      for (let i = 1; i <= numTeams; i++) {
+        let val = e.target[`team${i}`].value.trim();
+        if (val) teams.push(val);
+      }
+
+      // تجهيز الجولة الأولى (ربع النهائي لو 8 فرق)
+      let matches = [];
+      for (let i = 0; i < teams.length; i += 2) {
+        matches.push({
+          team1: teams[i], team1Status: "",
+          team2: teams[i+1], team2Status: "",
+          winner: ""
+        });
+      }
+
+      // حفظ في localStorage
+      let bracketData = { [numTeams]: matches };
+      localStorage.setItem("bracketData", JSON.stringify(bracketData));
+
+      alert("تم بدء البطولة! افتح صفحة bracket.html لمشاهدة الشجرة.");
+      window.location.href = "bracket.html";
+    });
+  </script>
+</body>
+</html>

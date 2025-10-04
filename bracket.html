@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>🏆 شجرة البطولة</title>
+  <style>
+    body {
+      font-family: Tahoma, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+    }
+
+    .bracket {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 60px;
+    }
+
+    .round {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      min-height: 400px;
+      position: relative;
+    }
+
+    .match {
+      background: #1e293b;
+      border: 2px solid #444;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 20px 0;
+      width: 160px;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .match div {
+      margin: 6px 0;
+      padding: 6px;
+      border-radius: 4px;
+      transition: 0.3s;
+    }
+
+    .winner {
+      background: #16a34a;
+      font-weight: bold;
+    }
+
+    .loser {
+      background: #dc2626;
+      text-decoration: line-through;
+    }
+
+    .connector {
+      position: absolute;
+      right: -30px;
+      top: 50%;
+      width: 30px;
+      height: 2px;
+      background: #aaa;
+    }
+
+    .vertical-line {
+      position: absolute;
+      right: -30px;
+      width: 2px;
+      background: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏆 شجرة البطولة</h1>
+  <div class="bracket" id="bracket"></div>
+
+  <script>
+    function renderBracket() {
+      let data = JSON.parse(localStorage.getItem("bracketData")) || {};
+      let container = document.getElementById("bracket");
+      container.innerHTML = "";
+
+      let rounds = Object.keys(data).sort((a, b) => b - a);
+
+      rounds.forEach((round, rIndex) => {
+        let roundDiv = document.createElement("div");
+        roundDiv.className = "round";
+
+        data[round].forEach((match, i) => {
+          let matchDiv = document.createElement("div");
+          matchDiv.className = "match";
+
+          let team1Class = match.team1Status === "winner" ? "winner" : (match.team1Status === "loser" ? "loser" : "");
+          let team2Class = match.team2Status === "winner" ? "winner" : (match.team2Status === "loser" ? "loser" : "");
+
+          matchDiv.innerHTML = `
+            <div class="${team1Class}">${match.team1 || "??"}</div>
+            <div class="${team2Class}">${match.team2 || "??"}</div>
+          `;
+
+          // لو فيه جولة بعد دي، نرسم خط توصيل
+          if (rIndex < rounds.length - 1) {
+            let connector = document.createElement("div");
+            connector.className = "connector";
+            matchDiv.appendChild(connector);
+
+            let vertical = document.createElement("div");
+            vertical.className = "vertical-line";
+            vertical.style.height = "60px";
+            vertical.style.top = "-30px";
+            matchDiv.appendChild(vertical);
+          }
+
+          roundDiv.appendChild(matchDiv);
+        });
+
+        container.appendChild(roundDiv);
+      });
+    }
+
+    renderBracket();
+    window.addEventListener("storage", renderBracket);
+  </script>
+</body>
+</html>

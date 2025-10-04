@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>قوانين البطولة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Tahoma", sans-serif;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      color: #fff;
+    }
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 25px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    ul {
+      line-height: 1.8;
+      font-size: 16px;
+      padding-right: 20px;
+    }
+    .price-box {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+    button {
+      flex: 1;
+      margin: 5px;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .next {
+      background: #ff9800;
+      color: #fff;
+    }
+    .next:hover {
+      background: #e68900;
+    }
+    .whatsapp {
+      background: #25d366;
+      color: #fff;
+    }
+    .whatsapp:hover {
+      background: #1ebe57;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📜 قوانين البطولة</h1>
+    <ul>
+      <li>الأسئلة عشوائية على جميع المواد.</li>
+      <li>ممنوع مشاركة الأكواد أو الأسئلة بين الفرق.</li>
+      <li>ضرورة احترام المنافسين والمنظمين.</li>
+      <li>يتم تحديد الموعد مع الطلاب </li>
+      <li>الفائز له جائزه ماليه</li>
+    </ul>
+
+    <h2>💰 رسوم الاشتراك</h2>
+    <div class="price-box">
+      الاشتراك في البطولة: <span style="color:#ffd700;">15 ج.م فقط</span><br>
+      ⚡ التحويل على الرقم: <strong>01034823468</strong>
+    </div>
+
+    <h2>📝 طريقة التسجيل</h2>
+    <ul>
+      <li>قم بتحويل مبلغ الاشتراك على الرقم <strong>01034823468</strong>.</li>
+      <li>بعد التحويل اضغط على زر <strong>التسجيل الآن</strong>.</li>
+      <li>سيتم تحويلك لواتساب الرقم <strong>01121101238</strong>.</li>
+      <li>أرسل صورة التحويل + البريد الإلكتروني المسجل في الموقع.</li>
+    </ul>
+
+    <div class="buttons">
+      <button class="next" onclick="goNext()">التالي ➡️</button>
+      <button class="whatsapp" onclick="openWhatsApp()">📲 التسجيل الآن</button>
+    </div>
+  </div>
+
+  <script>
+    function goNext(){
+      // غير الرابط ده لصفحة تانية عندك
+      window.location.href = "trynew.html"; 
+    }
+    function openWhatsApp(){
+      // فتح الواتساب مع الرقم المخصص للتواصل
+      window.open("https://wa.me/201121101238?text=السلام عليكم، حولت مبلغ الاشتراك وده الإيميل المسجل في الموقع: ", "_blank");
+    }
+  </script>
+</body>
+</html>
