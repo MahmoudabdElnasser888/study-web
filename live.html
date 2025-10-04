@@ -3,122 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>اختبار الفريق</title>
+  <title>امتحان الفرق</title>
   <style>
     body {
-      font-family: "Tahoma", sans-serif;
       margin: 0;
-      background: linear-gradient(135deg, #667eea, #764ba2);
+      font-family: "Tahoma", sans-serif;
+      background: linear-gradient(135deg,#6e8efb,#a777e3);
       color: #333;
     }
     .container {
-      max-width: 850px;
-      margin: 40px auto;
-      padding: 25px;
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
       background: #fff;
       border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
-    h1 {
-      text-align: center;
-      color: #444;
-    }
-    .login-box {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    input {
+    h1,h2 { text-align: center; }
+    input,button {
       padding: 10px;
-      margin: 10px;
-      border-radius: 8px;
       border: 1px solid #ccc;
-      width: 250px;
+      border-radius: 8px;
+      margin: 5px 0;
+      font-size: 16px;
     }
     button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      background: linear-gradient(120deg, #4facfe, #00f2fe);
-      color: white;
       cursor: pointer;
+      background: linear-gradient(135deg,#345ce0,#8848d6);
+      color: white;
+      border: none;
       transition: 0.3s;
     }
-    button:hover { opacity: 0.9; }
+    button:hover { transform: scale(1.05); }
+    .hidden { display:none; }
     .question {
       margin: 20px 0;
       padding: 15px;
       border-radius: 10px;
-      background: #f9f9f9;
-      border: 1px solid #eee;
-    }
-    .option {
-      display: block;
-      margin: 8px 0;
-      padding: 8px;
-      border-radius: 8px;
+      background: #f8f8f8;
       border: 1px solid #ddd;
-      cursor: pointer;
     }
-    .option input { margin-left: 8px; }
-    #timer {
-      text-align: center;
-      font-weight: bold;
+    .option { display: block; margin: 8px 0; cursor:pointer; }
+    .navigator {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
       margin: 20px 0;
-      font-size: 18px;
-      color: #d9534f;
     }
-    .result {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 18px;
+    .navigator button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       font-weight: bold;
     }
+    #timer { text-align: center; font-size: 20px; font-weight: bold; margin: 10px 0; }
+    .result { text-align: center; font-size: 18px; font-weight: bold; margin-top: 20px; }
   </style>
 </head>
 <body>
-
 <div class="container">
-  <h1>🏆 اختبار الفريق</h1>
+  <h1>منصة الامتحان</h1>
 
-  <!-- تسجيل الدخول -->
-  <div class="login-box" id="loginBox">
-    <input type="email" id="emailInput" placeholder="أدخل بريدك الإلكتروني">
-    <input type="text" id="codeInput" placeholder="أدخل كود الفريق">
-    <button id="loginBtn">تسجيل الدخول</button>
+  <!-- شاشة تسجيل الدخول -->
+  <div id="loginBox">
+    <h2>تسجيل الدخول</h2>
+    <input type="email" id="email" placeholder="اكتب الايميل"><br>
+    <input type="text" id="teamCode" placeholder="ادخل كود الفريق"><br>
+    <button id="loginBtn">دخول</button>
   </div>
 
-  <!-- المؤقت -->
-  <div id="timer" style="display:none;">00:00</div>
-
-  <!-- الأسئلة -->
-  <div id="quizBox" style="display:none;">
-    <div class="question" data-correct="2">
-      <h3>السؤال 1: 2 + 2 = ؟</h3>
-      <label class="option"><input type="radio" name="q1" value="1">3</label>
-      <label class="option"><input type="radio" name="q1" value="2">4</label>
-      <label class="option"><input type="radio" name="q1" value="3">5</label>
+  <!-- شاشة الامتحان -->
+  <div id="examBox" class="hidden">
+    <h2 id="teamName"></h2>
+    <div id="timer"></div>
+    <div class="navigator" id="navButtons"></div>
+    <div id="questions"></div>
+    <div style="text-align:center; margin-top:20px;">
+      <button id="submitBtn" class="hidden">تسليم</button>
     </div>
-
-    <div class="question" data-correct="1">
-      <h3>السؤال 2: 5 - 3 = ؟</h3>
-      <label class="option"><input type="radio" name="q2" value="1">2</label>
-      <label class="option"><input type="radio" name="q2" value="2">3</label>
-      <label class="option"><input type="radio" name="q2" value="3">1</label>
-    </div>
-
-    <div style="text-align:center;margin-top:20px;">
-      <button id="submitBtn" style="display:none;">إرسال الإجابة</button>
-    </div>
-
     <div class="result" id="result"></div>
   </div>
 </div>
 
-<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
+  // Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
     authDomain: "my-web-c23de.firebaseapp.com",
@@ -134,103 +106,157 @@
 
   // عناصر
   const loginBox = document.getElementById("loginBox");
-  const quizBox = document.getElementById("quizBox");
-  const emailInput = document.getElementById("emailInput");
-  const codeInput = document.getElementById("codeInput");
+  const examBox = document.getElementById("examBox");
   const loginBtn = document.getElementById("loginBtn");
+  const emailInput = document.getElementById("email");
+  const codeInput = document.getElementById("teamCode");
+  const teamNameDiv = document.getElementById("teamName");
   const timerDiv = document.getElementById("timer");
+  const questionsDiv = document.getElementById("questions");
+  const navButtons = document.getElementById("navButtons");
   const submitBtn = document.getElementById("submitBtn");
   const resultDiv = document.getElementById("result");
 
   let isLeader = false;
-  let teamName = "";
-  let quizStarted = false;
-  let totalSeconds = 5 * 60; // 5 دقايق
-
-  // تحديث العداد
-  function updateTimer() {
-    let m = Math.floor(totalSeconds / 60).toString().padStart(2,'0');
-    let s = (totalSeconds % 60).toString().padStart(2,'0');
-    timerDiv.innerText = `⏳ الوقت: ${m}:${s}`;
-    if (totalSeconds <= 0) {
-      clearInterval(timerInterval);
-      if (isLeader) calculateResult();
-      timerDiv.innerText = "انتهى الوقت!";
-    }
-    totalSeconds--;
-  }
-
+  let currentQuestion = 0;
+  let answers = {};
+  let totalSeconds = 0;
   let timerInterval;
 
+  // الاسئلة (مثال)
+  const questions = [
+    {id:1,text:"كم حاصل 2 + 2 ؟",options:["1","2","3","4"],correct:4},
+    {id:2,text:"عاصمة مصر؟",options:["القاهرة","الرياض","دبي","بيروت"],correct:1},
+    {id:3,text:"5 × 5 = ؟",options:["10","20","25","30"],correct:3}
+  ];
+
   // تسجيل الدخول
-  loginBtn.onclick = async () => {
+  loginBtn.addEventListener("click", async ()=>{
     const email = emailInput.value.trim();
     const code = codeInput.value.trim();
+    if(!email || !code) return alert("ادخل البيانات كاملة");
 
-    if (!email || !code) return alert("⚠️ اكتب البريد والكود");
+    const teamRef = doc(db,"teams",email);
+    const teamSnap = await getDoc(teamRef);
 
-    const docRef = doc(db, "teams", code);
-    const docSnap = await getDoc(docRef);
-
-    if (!docSnap.exists()) {
-      alert("❌ الكود غير صحيح");
+    if(!teamSnap.exists()){
+      alert("الايميل غير مسجل!");
       return;
     }
 
-    const data = docSnap.data();
-    teamName = data.name;
-
-    if (data.leader === email) {
-      isLeader = true;
-      alert("✅ دخلت كقائد");
-    } else if (data.members && data.members.includes(email)) {
-      isLeader = false;
-      alert("✅ دخلت كعضو");
-    } else {
-      alert("❌ الإيميل مش موجود في الفريق");
+    const data = teamSnap.data();
+    if(data.code !== code){
+      alert("الكود غلط");
       return;
     }
 
-    loginBox.style.display = "none";
-    quizBox.style.display = "block";
-    timerDiv.style.display = "block";
-
-    if (isLeader) submitBtn.style.display = "inline-block";
-
-    if (!quizStarted) {
-      quizStarted = true;
-      timerInterval = setInterval(updateTimer, 1000);
-      updateTimer();
+    if(data.used){
+      alert("❌ الكود ده استُخدم قبل كده");
+      return;
     }
-  };
 
-  // حساب النتيجة
-  function calculateResult() {
-    let correctCount = 0;
-    let questions = document.querySelectorAll(".question");
+    // اول دخول → نحجز الكود
+    await updateDoc(teamRef,{used:true});
 
-    questions.forEach((q, i) => {
-      const correct = parseInt(q.dataset.correct);
-      const selected = document.querySelector(`input[name="q${i+1}"]:checked`);
-      if (selected && parseInt(selected.value) === correct) correctCount++;
+    teamNameDiv.textContent = "فريق: " + (data.teamName || "بدون اسم");
+    isLeader = data.role === "leader";
+
+    loginBox.classList.add("hidden");
+    examBox.classList.remove("hidden");
+
+    renderQuestions();
+    startTimer();
+    if(isLeader) submitBtn.classList.remove("hidden");
+  });
+
+  // عرض الاسئلة
+  function renderQuestions(){
+    navButtons.innerHTML = "";
+    questionsDiv.innerHTML = "";
+
+    questions.forEach((q,i)=>{
+      // أزرار التنقل
+      let navBtn = document.createElement("button");
+      navBtn.textContent = i+1;
+      navBtn.addEventListener("click",()=>showQuestion(i));
+      navButtons.appendChild(navBtn);
+
+      // الأسئلة
+      let div = document.createElement("div");
+      div.className="question hidden";
+      div.id="q"+i;
+
+      let h3 = document.createElement("h3");
+      h3.textContent = (i+1)+". "+q.text;
+      div.appendChild(h3);
+
+      q.options.forEach((opt,idx)=>{
+        let lbl = document.createElement("label");
+        lbl.className="option";
+        let inp = document.createElement("input");
+        inp.type="radio";
+        inp.name="q"+q.id;
+        inp.value=idx+1;
+        inp.disabled=!isLeader; // غير القائد ميقدرش يجاوب
+        inp.addEventListener("change",()=>answers[q.id]=parseInt(inp.value));
+        lbl.appendChild(inp);
+        lbl.append(" "+opt);
+        div.appendChild(lbl);
+      });
+
+      questionsDiv.appendChild(div);
     });
 
-    resultDiv.innerText = `نتيجة الفريق ${teamName}: ${correctCount} من ${questions.length}`;
-
-    // حفظ النتيجة
-    setDoc(doc(db, "results", teamName), {
-      team: teamName,
-      score: correctCount,
-      total: questions.length,
-      submittedAt: serverTimestamp()
-    });
-
-    submitBtn.disabled = true;
+    showQuestion(0);
   }
 
-  submitBtn.onclick = calculateResult;
-</script>
+  // عرض سؤال
+  function showQuestion(i){
+    document.querySelectorAll(".question").forEach(div=>div.classList.add("hidden"));
+    document.getElementById("q"+i).classList.remove("hidden");
+    currentQuestion=i;
+  }
 
+  // المؤقت
+  function startTimer(){
+    totalSeconds = 5*60; // 5 دقائق
+    timerInterval = setInterval(()=>{
+      let m = String(Math.floor(totalSeconds/60)).padStart(2,'0');
+      let s = String(totalSeconds%60).padStart(2,'0');
+      timerDiv.textContent=`الوقت المتبقي: ${m}:${s}`;
+      if(totalSeconds<=0){
+        clearInterval(timerInterval);
+        timerDiv.textContent="انتهى الوقت!";
+        if(isLeader) finishExam();
+      }
+      totalSeconds--;
+    },1000);
+  }
+
+  // التسليم
+  submitBtn.addEventListener("click",finishExam);
+
+  async function finishExam(){
+    let score=0;
+    questions.forEach(q=>{
+      if(answers[q.id]===q.correct) score++;
+    });
+
+    resultDiv.textContent=`نتيجتك: ${score} من ${questions.length}`;
+
+    // حفظ في Firestore
+    const email=emailInput.value.trim();
+    const teamRef = doc(db,"teams",email);
+    await updateDoc(teamRef,{
+      score:score,
+      total:questions.length,
+      submittedAt:serverTimestamp()
+    });
+
+    alert("✅ تم ارسال النتيجة");
+    submitBtn.disabled=true;
+  }
+
+</script>
 </body>
 </html>
-
