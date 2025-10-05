@@ -16,12 +16,12 @@
       height: 100vh;
     }
     .container {
-      background: #000000;
+      background: #000;
       padding: 25px;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0,0,0,0.4);
       width: 100%;
-      max-width: 350px;
+      max-width: 370px;
     }
     h2 {
       text-align: center;
@@ -35,14 +35,25 @@
       border: none;
       border-radius: 8px;
       font-size: 14px;
+      background: #1c1c1c;
+      color: white;
+    }
+    input::placeholder {
+      color: #aaa;
     }
     input:focus, select:focus {
       outline: 2px solid #ff6f61;
     }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ddd;
+    }
     button {
       width: 100%;
       padding: 12px;
-      margin-top: 10px;
+      margin-top: 15px;
       background: #ff6f61;
       border: none;
       border-radius: 8px;
@@ -62,7 +73,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
   <script>
-    // إعدادات Firebase
+    // إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
       authDomain: "my-web-c23de.firebaseapp.com",
@@ -77,35 +88,21 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // دالة التوجيه حسب النوع والمرحلة
     function redirectUser(gender, stage) {
-      if (gender === "female" && stage === "3prep") {
-        window.location.href = "start.html";
-      } else if (gender === "male" && stage === "3prep") {
-        window.location.href = "start.html";
-      } else if (gender === "female" && stage === "1sec") {
-        window.location.href = "start.html";
-      } else if (gender === "male" && stage === "1sec") {
-        window.location.href = "start.html";
-      } else if (gender === "female" && stage === "2sec") {
-        window.location.href = "start.html";
-      } else if (gender === "male" && stage === "2sec") {
-        window.location.href = "start.html";
-      } else {
-        alert("❌ لم يتم تحديد صفحة لهذه البيانات");
-      }
+      // التوجيه حسب النوع والمرحلة
+      window.location.href = "start.html";
     }
 
-    // إنشاء حساب جديد
     async function signUp() {
       const name = document.getElementById("name").value;
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
+      const phone = document.getElementById("phone").value;
       const gender = document.getElementById("gender").value;
       const stage = document.getElementById("stage").value;
 
-      if (!name || !email || !password || !gender || !stage) {
-        alert("من فضلك املأ كل الحقول");
+      if (!name || !email || !password || !phone || !gender || !stage) {
+        alert("⚠️ من فضلك املأ كل الحقول");
         return;
       }
 
@@ -118,27 +115,27 @@
         await db.collection("users").doc(user.uid).set({
           name: name,
           email: email,
+          phone: phone,
           gender: gender,
           stage: stage,
           balance: 0,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        alert("تم التسجيل بنجاح ✅");
-        
-// خزن بيانات المستخدم في LocalStorage
-      localStorage.setItem("name", name);
-      localStorage.setItem("gender", gender);
-      localStorage.setItem("stage", stage);
+        // حفظ البيانات في LocalStorage
+        localStorage.setItem("name", name);
+        localStorage.setItem("gender", gender);
+        localStorage.setItem("stage", stage);
+        localStorage.setItem("phone", phone);
 
+        alert("✅ تم التسجيل بنجاح");
         redirectUser(gender, stage);
 
       } catch (error) {
-        alert(error.message);
+        alert("❌ " + error.message);
       }
     }
 
-    // لو المستخدم مسجل دخول قبل كده → دخوله على طول
     auth.onAuthStateChanged(async user => {
       if (user) {
         try {
@@ -157,26 +154,28 @@
 <body>
   <div class="container">
     <h2>Sign Up</h2>
-    <input type="text" id="name" placeholder="Enter your name">
-    <input type="email" id="email" placeholder="Enter your email">
-    <input type="password" id="password" placeholder="Enter your password">
 
-    <h3>Choose The Gender</h3>
+    <input type="text" id="name" placeholder="الاسم الكامل">
+    <input type="email" id="email" placeholder="البريد الإلكتروني">
+    <input type="password" id="password" placeholder="كلمة المرور">
+    <input type="tel" id="phone" placeholder="رقم الهاتف">
+
+    <label for="gender">النوع</label>
     <select id="gender">
-      <option value="">Choose</option>
-      <option value="male">Boy</option>
-      <option value="female">Girl</option>
+      <option value="">اختر</option>
+      <option value="male">ولد</option>
+      <option value="female">بنت</option>
     </select>
 
-    <h3>Choose Stage</h3>
+    <label for="stage">المرحلة الدراسية</label>
     <select id="stage">
-      <option value="">Choose</option>
-      <option value="3prep">3 اعدادي</option>
+      <option value="">اختر</option>
+      <option value="3prep">3 إعدادي</option>
       <option value="1sec">1 ثانوي</option>
       <option value="2sec">2 ثانوي</option>
     </select>
 
-    <button onclick="signUp()">Sign Up</button>
+    <button onclick="signUp()">إنشاء حساب</button>
   </div>
 </body>
 </html>

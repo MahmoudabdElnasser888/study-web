@@ -32,7 +32,7 @@ body {
 
 /* ===== Header ===== */
 header { 
-  width: 96%; 
+  width: 100%; 
   background-color: #000000c0; 
   padding: 15px 30px; 
   position: sticky; 
@@ -126,6 +126,7 @@ header {
 }
 .start-btn:hover{ transform:scale(1.05); background:#ff3b2e; }
 
+/* ===== Content ===== */
 .content{
   display:flex;
   flex-direction:column;
@@ -152,16 +153,10 @@ header {
   min-width:60px;
   text-align:center;
 }
-.section-item div{
-  flex:1;
-}
-.section-item h2{
-  margin-bottom:10px;
-}
-.section-item p{
-  font-size:16px;
-  margin-bottom:10px;
-}
+.section-item div{ flex:1; }
+.section-item h2{ margin-bottom:10px; }
+.section-item p{ font-size:16px; margin-bottom:10px; }
+
 .enter-btn{
   padding:10px 25px;
   border:none;
@@ -221,6 +216,7 @@ footer{
   padding:20px;
   font-size:16px;
   border-top:2px solid #ff6f61;
+  width: 100%;
 }
 footer a{
   color:#ff6f61;
@@ -274,12 +270,55 @@ footer a:hover{ text-decoration:underline; }
 
 /* ===== Media Queries ===== */
 @media (max-width: 768px){
-  header{ padding: 10px 20px; }
-  .hero{ height: 80vh; }
-  .start-btn{ padding: 15px 40px; font-size: 20px; }
-  .content{ padding: 30px 15px; gap: 30px; }
+  .content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 10px;
+    gap: 20px;
+  }
+
+  .content > * {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .start-btn {
+    padding: 12px 30px;
+    font-size: 18px;
+  }
+
+  .hero {
+    height: auto;
+    min-height: 70vh;
+    padding: 20px 0;
+  }
+}
+
+.priv {
+  font-size: 17px;
+  text-decoration: none;
+  color: #ccc;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0px 3px 8px rgba(209, 17, 17, 0.6);
+  transition: all 0.6s ease;
+  backdrop-filter: blur(5px);
+}
+
+.priv:hover {
+  transform: translateY(-3px) scale(1.05);
+  color: #fff;
+  background: linear-gradient(135deg, #c33, #ff5555);
+  box-shadow: 0px 4px 12px rgba(195, 51, 51, 0.8);
 }
 </style>
+
 </head>
 <body>
 
@@ -287,7 +326,7 @@ footer a:hover{ text-decoration:underline; }
   <div class="header-right">
     <a href="pay.html" class="rased"> الرصيد: <span id="balance">0</span> ج </a>
     <div id="subscription-status"></div>
-    <button class="theme-toggle"><i class="fas fa-sun"></i></button>
+    <a href="privacy.html" class="priv"> privacy policy</a>
   </div>
 </header>
 
@@ -423,20 +462,20 @@ footer a:hover{ text-decoration:underline; }
         <div style="font-weight:800; color:#6a11cb;">10 ج</div>
       </div>
 
-      <div class="package" data-amount="20" data-days="14" id="pkg20">
+      <div class="package" data-amount="18" data-days="14" id="pkg20">
         <div>
           <strong>باقة أسبوعين</strong>
           <div style="font-size:13px;color:#666;margin-top:6px;">صلاحية: 14 يوم</div>
         </div>
-        <div style="font-weight:800; color:#6a11cb;">20 ج</div>
+        <div style="font-weight:800; color:#6a11cb;">18 ج</div>
       </div>
 
-      <div class="package" data-amount="50" data-days="30" id="pkg50">
+      <div class="package" data-amount="30" data-days="30" id="pkg50">
         <div>
           <strong>باقة شهر</strong>
           <div style="font-size:13px;color:#666;margin-top:6px;">صلاحية: 30 يوم</div>
         </div>
-        <div style="font-weight:800; color:#6a11cb;">50 ج</div>
+        <div style="font-weight:800; color:#6a11cb;">30 ج</div>
       </div>
     </div>
 
@@ -787,6 +826,7 @@ footer a:hover{ text-decoration:underline; }
     if(userDocUnsub) userDocUnsub();
     if(countdownInterval) clearInterval(countdownInterval);
   });
+
 
 </script>
 </body>

@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>قواعد الموقع · سياسة الخصوصية · عن الموقع</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724; /* very dark blue */
+      --card:#0b1220;
+      --accent:#f59e0b; /* amber */
+      --muted:#94a3b8;
+      --glass: rgba(255,255,255,0.04);
+      --radius:14px;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: 'Cairo', system-ui, sans-serif;
+      background: linear-gradient(180deg,var(--bg),#071026 140%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+      line-height:1.65;
+    }
+    .container{
+      max-width:980px;
+      margin:0 auto;
+    }
+    header{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:22px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:14px
+    }
+    .logo{
+      width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#ef4444);display:flex;align-items:center;justify-content:center;font-weight:700;color:#071026;font-size:18px;box-shadow:0 8px 30px rgba(5,10,20,0.6)
+    }
+    h1{font-size:20px;margin:0}
+    p.lead{color:var(--muted);margin:6px 0 0;font-size:14px}
+
+    .actions{display:flex;gap:10px}
+    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:10px 14px;border-radius:10px;color:var(--muted);cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#ef4444);color:#071026;border:none;font-weight:700}
+
+    main{display:grid;grid-template-columns:1fr 320px;gap:20px}
+
+    /* content */
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:var(--radius);padding:20px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .section-title{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .section-title h2{margin:0;font-size:16px}
+    .meta{color:var(--muted);font-size:13px}
+
+    /* accordion */
+    .accordion{margin-top:12px}
+    .acc-item{border-radius:12px;margin-bottom:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+    .acc-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer;background:linear-gradient(180deg,rgba(0,0,0,0.25),transparent)}
+    .acc-head h3{margin:0;font-size:15px}
+    .acc-body{padding:14px;border-top:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg,transparent,rgba(255,255,255,0.01));display:none}
+
+    /* aside */
+    aside .card{position:sticky;top:28px}
+    .rules-list{display:flex;flex-direction:column;gap:8px}
+    .rule{display:flex;gap:10px;align-items:flex-start}
+    .dot{width:10px;height:10px;border-radius:6px;background:var(--accent);margin-top:6px}
+
+    footer{margin-top:20px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* responsive */
+    @media (max-width:880px){main{grid-template-columns:1fr}aside{order:2}header{flex-direction:column;align-items:flex-start;gap:8px}aside .card{position:static;top:auto}}
+
+    /* small print */
+    .muted{color:var(--muted);font-size:13px}
+
+    /* print button style */
+    .print-note{font-size:13px;color:var(--muted);margin-top:10px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">GL</div>
+        <div>
+          <h1>قواعد وسياسة الخصوصية — موقعك</h1>
+          <p class="lead">صفحة توضح قواعد الاستخدام، سياسة الخصوصية، وشرح تفصيلي لخدمات الموقع للمستخدمين.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="document.getElementById('main-content').scrollIntoView({behavior:'smooth'})">اقرأ القواعد</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="main-content">
+        <article class="card">
+          <div class="section-title"><h2>📜 مقدمة</h2><div class="meta">اخر تحديث: 5 أكتوبر 2025</div></div>
+          <p class="muted">مرحبًا بك في الموقع. هدفنا تقديم تجربة تعليمية منظمة وبسيطة. هذه الصفحة تشرح ما يمكن للمستخدم فعله داخل الموقع، ما الذي نحتفظ به من بيانات، وكيف نستخدمها. برجاء قراءة البنود بعناية.</p>
+
+          <div class="accordion">
+            <div class="acc-item">
+              <div class="acc-head" data-acc>
+                <h3>قواعد استخدام الموقع</h3>
+                <div class="meta">انقر للعرض</div>
+              </div>
+              <div class="acc-body">
+                <ul>
+                  <li>الالتزام بالأدب والاحترام داخل الأقسام العامة.</li>
+                  <li>منع نشر مواد منافية للقانون أو حقوق الملكية.</li>
+                  <li>المحتوى التعليمي للاستخدام الشخصي فقط — لا نشر أو توزيع بدون إذن.</li>
+                  <li>لا تحاول التلاعب بالرصيد أو قواعد الدفع داخل المنصة.</li>
+                  <li>الإبلاغ عن أي سلوك مريب عبر صفحة التواصل.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="acc-item">
+              <div class="acc-head" data-acc>
+                <h3>سياسة الخصوصية (موجز)</h3>
+                <div class="meta">كيف نجمع البيانات ونستخدمها</div>
+              </div>
+              <div class="acc-body">
+                <p class="muted">نحن نجمع أدنى قدر من البيانات الضرورية لتشغيل الخدمة: حساب المستخدم (بريد/UID)، بيانات الرصيد، وسجلات الاشتراك. هذه البيانات تُخزن في Firebase Firestore وتُستخدم فقط لأغراض تشغيل الموقع وتحسين التجربة، مثل: تفعيل الاشتراكات، متابعة المدفوعات، ومنع الغش.</p>
+                <p class="muted">لا نشارك بياناتك مع أطراف خارجية تجارية. قد نشارك معلومات مجمعة ومجهولة المصدر (analytics) لتحسين الخدمة.</p>
+                <p class="muted"><strong>الحقوق:</strong> يحق للمستخدم طلب حذف حسابه أو تصحيح بياناته عن طريق التواصل مع الأدمن.</p>
+              </div>
+            </div>
+
+            <div class="acc-item">
+              <div class="acc-head" data-acc>
+                <h3>تفاصيل نظام الاشتراكات والدفع</h3>
+                <div class="meta">كيف تعمل الباقات والرصيد</div>
+              </div>
+              <div class="acc-body">
+                <p class="muted">الاشتراكات تُدفع من رصيد المستخدم داخل التطبيق. عند شراء باقة، نخصم المبلغ    في مستند المستخدم داخل Firebase. نُسجل أيضًا وقت الشراء ووقت الانتهاء (expiresAt) لضمان عدم الوصول بعد انتهاء الصلاحية.</p>
+                <p class="muted">نوصي دائماً بالتحقق من رصيدك قبل شراء الباقات، وإذا حدث أي خطأ تقني في الدفع — يرجى التواصل فورًا.</p>
+              </div>
+            </div>
+
+            <div class="acc-item">
+              <div class="acc-head" data-acc>
+                <h3>سلوكيات ممنوعة</h3>
+                <div class="meta">مخالفات تستدعي حظر</div>
+              </div>
+              <div class="acc-body">
+                <ol>
+                  <li>محاولات الاختراق أو التلاعب بقواعد البيانات أو واجهات التطبيق.</li>
+                  <li>التحايل على نظام الرصيد أو إنشاء حسابات وهمية لأغراض الاحتيال.</li>
+                  <li>نشر محتوى مسيء، عنصري، جنسي أو يشجع على العنف.</li>
+                  <li>المضايقة المنهجية للمستخدمين الآخرين أو مشاركة بياناتهم الشخصية بدون إذن.</li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="acc-item">
+              <div class="acc-head" data-acc>
+                <h3>سياسة الإلغاء والاسترداد</h3>
+                <div class="meta">حالات الاسترداد</div>
+              </div>
+              <div class="acc-body">
+                <p class="muted">لأن الدفع يتم داخلياً من رصيد المستخدم، فالاسترداد يتم حسب سياسة الأدمن. بشكل عام، لا نرد رسوم اشتراك منتهية المدة. في حالات خطأ تقني أو خصم غير مبرر، يرجى التواصل لتصحيح الوضع.</p>
+              </div>
+            </div>
+
+            <div class="acc-item">
+              <div class="acc-head" data-acc>
+                <h3>أسئلة متكررة (FAQ)</h3>
+                <div class="meta">نصائح سريعة</div>
+              </div>
+              <div class="acc-body">
+                <p class="muted"><strong>كيف أتحقق من رصيدي؟</strong> — الرصيد يظهر في الهيدر داخل الموقع. يمكنك التوجه لصفحة الدفع لإضافة رصيد.</p>
+                <p class="muted"><strong>هل يمكنني مشاركة حسابي؟</strong> — لا ننصح بالمشاركة لأسباب أمانية ولحماية بياناتك.</p>
+                <p class="muted"><strong>ماذا أفعل لو انتهى الاشتراك؟</strong> — يمكنك شراء باقة جديدة من صفحة الاشتراكات وستُفعَّل فوراً.</p>
+              </div>
+            </div>
+
+             <div class="acc-item">
+              <div class="acc-head" data-acc>
+                <h3>تفاصيل الموقع و المميزات</h3>
+                
+              </div>
+              <div class="acc-body">
+                <p class="muted"><strong>to do list</strong> — لترتيب المهام اليوميه (مجانيه)</p>
+                <p class="muted"><strong>Quiz</strong> — انشئ اختبارات لنفسك (مجانيه)</p>
+                <p class="muted"><strong>learning Content</strong> — صفحة مخصصه للملخصات و امتحانات في جميع المواد و يمكنك ان تشارك ملخصاتك عليها و المشاركه مع الأصدقاء للاستفاده الجماعيه (مدفوع)</p>
+                 <p class="muted"><strong>Community</strong> — يمكنك التناقش مع الجميع في اي سؤال في اي ماده مع اهميه احترام الجميع</p>
+                <p class="muted"><strong>Top 3</strong> —  من خلال درجاتك في الاختبارات  يكون لك ترتيب علي مستوي المنصه و المركز الاول يحصل علي جائزه ماليه كل اسبوعين⚡(اختبارات  learning Content)</p>
+                <p class="muted"><strong>Feedback Box </strong> — يمكنك ارسال شكوي او اقتراح الي الادمن  و المطور </p>
+                <p class="muted"><strong>Championship</strong> — مسابقه علي مستوي المنصه لكل المراحل و الفائز يحصل علي جائزه (باقي القواعد في صفحه Championship)</p>
+                <p class="muted"><strong> Summarization </strong> — اكتب الملخص من هنا و ارسله للادمن  و سوف يتم رفعه للجميع علي الموقع باسمك</p>
+                <p class="muted"><strong> توقف دقيقه </strong> — نحن نسعي ان يكون جميع الطلاب في مصر من المتفوقين نحن لا نريد استغلالك او الهدف هو المال بل كل ما نريد ان نجعل اسمك يحلق عالي و تتذكرنا  </p>
+                  <p class="muted"><strong>هديه مميزه ليك </strong> — 😉لو مش عارف تنظم الوقت و تعمل جدول منظهم احنا موجودين معاك ابعتلنا واتس انك محتاج جدول و هنعملك جدول منظم زي ما انت عايز و مش بس الجدول لو اي مشكله معاك احنا اخواتك و اسرارك  في بير</p>
+
+              </div>
+            </div>
+
+          </div>
+        </article>
+
+        <article class="card" style="margin-top:18px">
+          <div class="section-title"><h2>📣 شرح تفصيلي للموقع</h2></div>
+          <p class="muted">الموقع عبارة عن منصة صغيرة لمساعدة الطلاب على تنظيم دراستهم: قوائم مهام، اختبارات قصيرة، مؤقت للدراسة، ومساحات لمشاركة الملخصات. هناك نظام رصيد داخلي يمكن استخدامه لفتح محتوى مدفوع (مثل المحتوى التعليمي أو الاشتراك في البطولات).</p>
+          <h4 style="margin-top:12px">مكونات الموقع</h4>
+          <ul class="muted">
+            <li><strong>لوحة المستخدم:</strong> صفحة شخصية تعرض الرصيد والاشتراكات والنقاط.</li>
+            <li><strong>المحتوى التعليمي:</strong> دروس وملفات يتم فتحها باشتراك.</li>
+            <li><strong>البطولات:</strong> مسابقات بين الطلاب برسوم بسيطة ومكافآت رمزية.</li>
+            <li><strong>الأدوات:</strong> مؤقت وملاحظات واختبارات قصيرة لتحسين التركيز.</li>
+          </ul>
+          <p class="muted">نهدف أن تكون التجربة سهلة، شفافة، وقابلة للتطوير. لو لديك اقتراحات محتوى أو أفكار جديدة — تواصل معنا.</p>
+        </article>
+
+      </section>
+
+      <aside>
+        <div class="card">
+          <div class="section-title"><h2>قواعد سريعة</h2></div>
+          <div class="rules-list">
+            <div class="rule"><div class="dot"></div><div>التزم بالأدب واحترم الآخرين.</div></div>
+            <div class="rule"><div class="dot"></div><div>احفظ بياناتك ولا تشاركها.</div></div>
+            <div class="rule"><div class="dot"></div><div>تأكد من رصيدك قبل الشراء.</div></div>
+            <div class="rule"><div class="dot"></div><div>لا تتلاعب بالنظام المالي داخل الموقع.</div></div>
+          </div>
+
+          <div class="section-title" style="margin-top:14px"><h2>تواصل</h2></div>
+          <p class="muted">لو احتجت مساعدة ، راسل الأدمن على: <br><strong>01121101238</strong></p>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      &copy; 2025 — كل الحقوق محفوظة · يرجى الالتزام بالقواعد.
+    </footer>
+  </div>
+
+  <script>
+    // بسيط: أكورديون
+    document.querySelectorAll('[data-acc]').forEach(head => {
+      head.addEventListener('click', () => {
+        const item = head.parentElement;
+        const body = item.querySelector('.acc-body');
+        const open = body.style.display === 'block';
+        // close all
+        document.querySelectorAll('.acc-body').forEach(b => b.style.display = 'none');
+        if(!open) body.style.display = 'block';
+        else body.style.display = 'none';
+      });
+    });
+
+    // detect print and show note
+    window.addEventListener('beforeprint', () => {
+      document.body.style.background = '#fff';
+      document.body.style.color = '#111';
+    });
+    window.addEventListener('afterprint', () => {
+      document.body.style.background = '';
+      document.body.style.color = '';
+    });
+  </script>
+</body>
+</html>
