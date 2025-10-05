@@ -22,6 +22,8 @@
       box-shadow: 0 0 15px rgba(0,0,0,0.4);
       width: 100%;
       max-width: 370px;
+      position: relative;
+      z-index: 1;
     }
     h2 {
       text-align: center;
@@ -65,6 +67,66 @@
     button:hover {
       background: #e65b50;
     }
+
+    /* شاشة التحميل المميزة */
+    .loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 9999;
+      display: none;
+    }
+    .ring {
+      width: 90px;
+      height: 90px;
+      border: 5px solid transparent;
+      border-top: 5px solid #ff6f61;
+      border-right: 5px solid #ff6f61;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: relative;
+    }
+    .ring::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 45px;
+      height: 45px;
+      background: url('https://cdn-icons-png.flaticon.com/512/992/992700.png') no-repeat center;
+      background-size: contain;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #ff6f61;
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .loading-text {
+      margin-top: 15px;
+      font-size: 18px;
+      color: #ff6f61;
+      letter-spacing: 2px;
+      animation: blink 1.2s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
   </style>
 
   <!-- Firebase -->
@@ -88,8 +150,11 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
+    function showLoader(show) {
+      document.getElementById("loaderOverlay").style.display = show ? "flex" : "none";
+    }
+
     function redirectUser(gender, stage) {
-      // التوجيه حسب النوع والمرحلة
       window.location.href = "start.html";
     }
 
@@ -105,6 +170,8 @@
         alert("⚠️ من فضلك املأ كل الحقول");
         return;
       }
+
+      showLoader(true); // ⬅️ إظهار التحميل
 
       try {
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
@@ -122,7 +189,6 @@
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // حفظ البيانات في LocalStorage
         localStorage.setItem("name", name);
         localStorage.setItem("gender", gender);
         localStorage.setItem("stage", stage);
@@ -133,6 +199,8 @@
 
       } catch (error) {
         alert("❌ " + error.message);
+      } finally {
+        showLoader(false); // ⬅️ إخفاء التحميل
       }
     }
 
@@ -176,6 +244,12 @@
     </select>
 
     <button onclick="signUp()">إنشاء حساب</button>
+  </div>
+
+  <!-- شاشة التحميل المميزة -->
+  <div class="loader-overlay" id="loaderOverlay">
+    <div class="ring"></div>
+    <div class="loading-text">جاري إنشاء الحساب...</div>
   </div>
 </body>
 </html>
