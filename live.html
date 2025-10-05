@@ -53,7 +53,7 @@
 </head>
 <body>
 <div class="container">
-  <h1>البث المباشر</h1>
+  <h1>🎥 البث المباشر</h1>
 
   <!-- تسجيل الدخول -->
   <div id="loginBox">
@@ -66,8 +66,7 @@
   <!-- البث -->
   <div id="liveBox" class="hidden">
     <h2 id="userName"></h2>
-    <div class="info">مرحباً بك في البث المباشر</div>
-    <!-- هنا تقدر تحط Zoom أو YouTube Live -->
+    <div class="info">✅ تم تسجيل الدخول بنجاح، استمتع بالبث</div>
     <iframe 
       id="liveFrame" 
       src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID" 
@@ -81,7 +80,6 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
   import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-  // Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
     authDomain: "my-web-c23de.firebaseapp.com",
@@ -102,41 +100,46 @@
   const codeInput = document.getElementById("teamCode");
   const userName = document.getElementById("userName");
 
-  loginBtn.addEventListener("click", async ()=>{
+  loginBtn.addEventListener("click", async () => {
     const email = emailInput.value.trim();
     const code = codeInput.value.trim();
-    if(!email || !code) return alert("ادخل البيانات كاملة");
 
-    // البحث عن المستخدم بالايميل
-    const q = query(collection(db,"users"), where("email","==", email));
-    const snap = await getDocs(q);
-
-    if(snap.empty){
-      alert("❌ الايميل غير موجود!");
+    if (!email || !code) {
+      alert("⚠️ ادخل البيانات كاملة");
       return;
     }
 
-    const docSnap = snap.docs[0];
-    const data = docSnap.data();
+    try {
+      const q = query(collection(db, "users"), where("email", "==", email));
+      const snap = await getDocs(q);
 
-    if(data.inviteCode !== code){
-      alert("❌ الكود غلط");
-      return;
+      if (snap.empty) {
+        alert("❌ الايميل غير موجود");
+        return;
+      }
+
+      const userDoc = snap.docs[0];
+      const data = userDoc.data();
+
+      if (data.inviteCode !== code) {
+        alert("❌ الكود غير صحيح");
+        return;
+      }
+
+      if (data.codeUsed && !data.liveAccess) {
+        alert("⚠️ هذا الكود تم استخدامه ولا توجد صلاحية للبث");
+        return;
+      }
+
+      await updateDoc(doc(db, "users", userDoc.id), { liveAccess: true });
+
+      userName.textContent = "👋 أهلاً، " + (data.name || email);
+      loginBox.classList.add("hidden");
+      liveBox.classList.remove("hidden");
+    } catch (err) {
+      console.error(err);
+      alert("حدث خطأ أثناء تسجيل الدخول");
     }
-
-    if(data.codeUsed && !data.liveAccess){
-      alert("⚠️ الكود تم استخدامه ولا يوجد صلاحية للبث");
-      return;
-    }
-
-    // تحديث أو تسجيل صلاحية الدخول للبث
-    await updateDoc(doc(db,"users",docSnap.id), {
-      liveAccess: true
-    });
-
-    userName.textContent = "👋 أهلاً، " + (data.name || email);
-    loginBox.classList.add("hidden");
-    liveBox.classList.remove("hidden");
   });
 </script>
 </body>
