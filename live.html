@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>امتحان الفرق</title>
+  <title>البث المباشر</title>
   <style>
     body {
       margin: 0;
@@ -36,36 +36,26 @@
     }
     button:hover { transform: scale(1.05); }
     .hidden { display:none; }
-    .question {
-      margin: 20px 0;
-      padding: 15px;
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
       border-radius: 10px;
-      background: #f8f8f8;
-      border: 1px solid #ddd;
+      margin-top: 15px;
     }
-    .option { display: block; margin: 8px 0; cursor:pointer; }
-    .navigator {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin: 20px 0;
-    }
-    .navigator button {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
+    .info {
+      text-align: center;
+      margin-top: 15px;
       font-weight: bold;
+      font-size: 18px;
     }
-    #timer { text-align: center; font-size: 20px; font-weight: bold; margin: 10px 0; }
-    .result { text-align: center; font-size: 18px; font-weight: bold; margin-top: 20px; }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>منصة الامتحان</h1>
+  <h1>البث المباشر</h1>
 
-  <!-- شاشة تسجيل الدخول -->
+  <!-- تسجيل الدخول -->
   <div id="loginBox">
     <h2>تسجيل الدخول</h2>
     <input type="email" id="email" placeholder="اكتب الايميل"><br>
@@ -73,22 +63,23 @@
     <button id="loginBtn">دخول</button>
   </div>
 
-  <!-- شاشة الامتحان -->
-  <div id="examBox" class="hidden">
-    <h2 id="teamName"></h2>
-    <div id="timer"></div>
-    <div class="navigator" id="navButtons"></div>
-    <div id="questions"></div>
-    <div style="text-align:center; margin-top:20px;">
-      <button id="submitBtn" class="hidden">تسليم</button>
-    </div>
-    <div class="result" id="result"></div>
+  <!-- البث -->
+  <div id="liveBox" class="hidden">
+    <h2 id="userName"></h2>
+    <div class="info">مرحباً بك في البث المباشر</div>
+    <!-- هنا تقدر تحط Zoom أو YouTube Live -->
+    <iframe 
+      id="liveFrame" 
+      src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID" 
+      allow="autoplay; encrypted-media" 
+      allowfullscreen>
+    </iframe>
   </div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getFirestore, collection, query, where, getDocs, updateDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+  import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
   // Firebase Config
   const firebaseConfig = {
@@ -104,40 +95,19 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // عناصر
   const loginBox = document.getElementById("loginBox");
-  const examBox = document.getElementById("examBox");
+  const liveBox = document.getElementById("liveBox");
   const loginBtn = document.getElementById("loginBtn");
   const emailInput = document.getElementById("email");
   const codeInput = document.getElementById("teamCode");
-  const teamNameDiv = document.getElementById("teamName");
-  const timerDiv = document.getElementById("timer");
-  const questionsDiv = document.getElementById("questions");
-  const navButtons = document.getElementById("navButtons");
-  const submitBtn = document.getElementById("submitBtn");
-  const resultDiv = document.getElementById("result");
+  const userName = document.getElementById("userName");
 
-  let isLeader = false;
-  let currentQuestion = 0;
-  let answers = {};
-  let totalSeconds = 0;
-  let timerInterval;
-  let userDocId = null;
-
-  // الاسئلة (مثال)
-  const questions = [
-    {id:1,text:"كم حاصل 2 + 2 ؟",options:["1","2","3","4"],correct:4},
-    {id:2,text:"عاصمة مصر؟",options:["القاهرة","الرياض","دبي","بيروت"],correct:1},
-    {id:3,text:"5 × 5 = ؟",options:["10","20","25","30"],correct:3}
-  ];
-
-  // تسجيل الدخول
   loginBtn.addEventListener("click", async ()=>{
     const email = emailInput.value.trim();
     const code = codeInput.value.trim();
     if(!email || !code) return alert("ادخل البيانات كاملة");
 
-    // نبحث عن الايميل جوه الحقول مش كـ ID
+    // البحث عن المستخدم بالايميل
     const q = query(collection(db,"users"), where("email","==", email));
     const snap = await getDocs(q);
 
@@ -147,7 +117,6 @@
     }
 
     const docSnap = snap.docs[0];
-    userDocId = docSnap.id;
     const data = docSnap.data();
 
     if(data.inviteCode !== code){
@@ -155,111 +124,20 @@
       return;
     }
 
-    if(data.codeUsed){
-      alert("⚠️ الكود ده استُخدم قبل كده");
+    if(data.codeUsed && !data.liveAccess){
+      alert("⚠️ الكود تم استخدامه ولا يوجد صلاحية للبث");
       return;
     }
 
-    // نحجز الكود أول دخول
-    await updateDoc(doc(db,"users",userDocId), { codeUsed:true });
+    // تحديث أو تسجيل صلاحية الدخول للبث
+    await updateDoc(doc(db,"users",docSnap.id), {
+      liveAccess: true
+    });
 
-    teamNameDiv.textContent = "المستخدم: " + (data.name || email);
-    isLeader = true; // هنا ممكن تخصص مين القائد لو عايز
-
+    userName.textContent = "👋 أهلاً، " + (data.name || email);
     loginBox.classList.add("hidden");
-    examBox.classList.remove("hidden");
-
-    renderQuestions();
-    startTimer();
-    if(isLeader) submitBtn.classList.remove("hidden");
+    liveBox.classList.remove("hidden");
   });
-
-  // عرض الاسئلة
-  function renderQuestions(){
-    navButtons.innerHTML = "";
-    questionsDiv.innerHTML = "";
-
-    questions.forEach((q,i)=>{
-      // أزرار التنقل
-      let navBtn = document.createElement("button");
-      navBtn.textContent = i+1;
-      navBtn.addEventListener("click",()=>showQuestion(i));
-      navButtons.appendChild(navBtn);
-
-      // الأسئلة
-      let div = document.createElement("div");
-      div.className="question hidden";
-      div.id="q"+i;
-
-      let h3 = document.createElement("h3");
-      h3.textContent = (i+1)+". "+q.text;
-      div.appendChild(h3);
-
-      q.options.forEach((opt,idx)=>{
-        let lbl = document.createElement("label");
-        lbl.className="option";
-        let inp = document.createElement("input");
-        inp.type="radio";
-        inp.name="q"+q.id;
-        inp.value=idx+1;
-        inp.disabled=!isLeader; 
-        inp.addEventListener("change",()=>answers[q.id]=parseInt(inp.value));
-        lbl.appendChild(inp);
-        lbl.append(" "+opt);
-        div.appendChild(lbl);
-      });
-
-      questionsDiv.appendChild(div);
-    });
-
-    showQuestion(0);
-  }
-
-  // عرض سؤال
-  function showQuestion(i){
-    document.querySelectorAll(".question").forEach(div=>div.classList.add("hidden"));
-    document.getElementById("q"+i).classList.remove("hidden");
-    currentQuestion=i;
-  }
-
-  // المؤقت
-  function startTimer(){
-    totalSeconds = 5*60; // 5 دقائق
-    timerInterval = setInterval(()=>{
-      let m = String(Math.floor(totalSeconds/60)).padStart(2,'0');
-      let s = String(totalSeconds%60).padStart(2,'0');
-      timerDiv.textContent=`الوقت المتبقي: ${m}:${s}`;
-      if(totalSeconds<=0){
-        clearInterval(timerInterval);
-        timerDiv.textContent="انتهى الوقت!";
-        if(isLeader) finishExam();
-      }
-      totalSeconds--;
-    },1000);
-  }
-
-  // التسليم
-  submitBtn.addEventListener("click",finishExam);
-
-  async function finishExam(){
-    let score=0;
-    questions.forEach(q=>{
-      if(answers[q.id]===q.correct) score++;
-    });
-
-    resultDiv.textContent=`نتيجتك: ${score} من ${questions.length}`;
-
-    // حفظ النتيجة في Firestore
-    await updateDoc(doc(db,"users",userDocId),{
-      score:score,
-      total:questions.length,
-      submittedAt:serverTimestamp()
-    });
-
-    alert("✅ تم ارسال النتيجة");
-    submitBtn.disabled=true;
-  }
-
 </script>
 </body>
 </html>
