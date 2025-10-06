@@ -151,6 +151,34 @@
   renderBoard("sec1List","sec1");  
   renderBoard("sec2List","sec2");  
   renderBoard("sec3List","perp3");  
+  function renderBoard(listId, filterGrade){
+  let container = document.getElementById(listId);
+  container.innerHTML = "";
+
+  // فلترة + ترتيب تنازلي
+  let filtered = students
+    .filter(s => s.grade===filterGrade)
+    .sort((a,b)=> b.points - a.points);
+
+  if(filtered.length === 0 || filtered.every(s => s.points === 0 && s.name === "")) {
+    container.innerHTML = "<p style='text-align:center; color:gray; font-size:18px;'>SOON</p>";
+    return;
+  }
+
+  filtered.forEach((s,i)=>{
+    let badge = medals[i] || "";
+    let div = document.createElement("div");
+    div.className = "student";
+    div.innerHTML = `
+      <div class="student-info">
+        <h3>${s.name} <span class="badge">${badge}</span></h3>
+        <p>عدد النقاط: <span class="points">${s.points}</span></p>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
 </script>
 
 </body>
