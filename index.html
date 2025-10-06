@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>Sign Up</title>
+  <title>إنشاء حساب</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -68,7 +68,7 @@
       background: #e65b50;
     }
 
-    /* شاشة التحميل المميزة */
+    /* شاشة التحميل */
     .loader-overlay {
       position: fixed;
       top: 0;
@@ -128,100 +128,10 @@
       50% { opacity: 0.5; }
     }
   </style>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
-  <script>
-    // إعداد Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
-      authDomain: "my-web-c23de.firebaseapp.com",
-      projectId: "my-web-c23de",
-      storageBucket: "my-web-c23de.appspot.com",
-      messagingSenderId: "846339445873",
-      appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
-      measurementId: "G-3SE0GBRS8C"
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-
-    function showLoader(show) {
-      document.getElementById("loaderOverlay").style.display = show ? "flex" : "none";
-    }
-
-    function redirectUser(gender, stage) {
-      window.location.href = "start.html";
-    }
-
-    async function signUp() {
-      const name = document.getElementById("name").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const phone = document.getElementById("phone").value;
-      const gender = document.getElementById("gender").value;
-      const stage = document.getElementById("stage").value;
-
-      if (!name || !email || !password || !phone || !gender || !stage) {
-        alert("⚠️ من فضلك املأ كل الحقول");
-        return;
-      }
-
-      showLoader(true); // ⬅️ إظهار التحميل
-
-      try {
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        const user = userCredential.user;
-
-        await user.updateProfile({ displayName: name });
-
-        await db.collection("users").doc(user.uid).set({
-          name: name,
-          email: email,
-          phone: phone,
-          gender: gender,
-          stage: stage,
-          balance: 0,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        localStorage.setItem("name", name);
-        localStorage.setItem("gender", gender);
-        localStorage.setItem("stage", stage);
-        localStorage.setItem("phone", phone);
-
-        alert("✅ تم التسجيل بنجاح");
-        redirectUser(gender, stage);
-
-      } catch (error) {
-        alert("❌ " + error.message);
-      } finally {
-        showLoader(false); // ⬅️ إخفاء التحميل
-      }
-    }
-
-    auth.onAuthStateChanged(async user => {
-      if (user) {
-        try {
-          const doc = await db.collection("users").doc(user.uid).get();
-          if (doc.exists) {
-            const data = doc.data();
-            redirectUser(data.gender, data.stage);
-          }
-        } catch (err) {
-          console.error("Error fetching user data:", err);
-        }
-      }
-    });
-  </script>
 </head>
 <body>
   <div class="container">
-    <h2>Sign Up</h2>
+    <h2>إنشاء حساب جديد</h2>
 
     <input type="text" id="name" placeholder="الاسم الكامل">
     <input type="email" id="email" placeholder="البريد الإلكتروني">
@@ -243,13 +153,97 @@
       <option value="2sec">2 ثانوي</option>
     </select>
 
-    <button onclick="signUp()">إنشاء حساب</button>
+    <button id="signupBtn">إنشاء الحساب</button>
   </div>
 
-  <!-- شاشة التحميل المميزة -->
+  <!-- شاشة التحميل -->
   <div class="loader-overlay" id="loaderOverlay">
     <div class="ring"></div>
     <div class="loading-text">جاري إنشاء الحساب...</div>
   </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+    import { getFirestore, setDoc, doc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+      authDomain: "my-web-c23de.firebaseapp.com",
+      projectId: "my-web-c23de",
+      storageBucket: "my-web-c23de.appspot.com",
+      messagingSenderId: "846339445873",
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
+      measurementId: "G-3SE0GBRS8C"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const loader = document.getElementById("loaderOverlay");
+    const btn = document.getElementById("signupBtn");
+
+    function emailToId(email) {
+      return email.replace(/\./g, "_").replace(/@/g, "_at_");
+    }
+
+    btn.addEventListener("click", async () => {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const gender = document.getElementById("gender").value;
+      const stage = document.getElementById("stage").value;
+
+      if (!name || !email || !password || !phone || !gender || !stage) {
+        alert("⚠️ من فضلك املأ كل الحقول");
+        return;
+      }
+
+      loader.style.display = "flex";
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await updateProfile(user, { displayName: name });
+
+        const emailId = emailToId(email);
+
+        await setDoc(doc(db, "users", emailId), {
+          uid: user.uid,
+          name,
+          email,
+          phone,
+          gender,
+          stage,
+          balance: 0,
+          createdAt: serverTimestamp()
+        });
+
+        localStorage.setItem("emailId", emailId);
+        alert("✅ تم إنشاء الحساب بنجاح!");
+        window.location.href = "start.html";
+
+      } catch (error) {
+        alert("❌ " + error.message);
+      } finally {
+        loader.style.display = "none";
+      }
+    });
+
+    // لو المستخدم سجل قبل كده
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const emailId = emailToId(user.email);
+        const docSnap = await getDoc(doc(db, "users", emailId));
+        if (docSnap.exists()) {
+          window.location.href = "start.html";
+        }
+      }
+    });
+  </script>
 </body>
 </html>
