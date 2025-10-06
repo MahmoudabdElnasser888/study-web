@@ -200,20 +200,6 @@
       input.value = "";
     });
 
-    // 🚨 إبلاغ
-    window.reportMessage = async function(id, uid, name, text) {
-      if (!currentUserData) return;
-      await db.collection("reports").add({
-        reporter: currentUserData.name,
-        reportedUser: name,
-        reportedUid: uid,
-        message: text,
-        chatCollection: collectionName,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      alert("✅ تم إرسال البلاغ!");
-    }
-
     // ↩️ رد
     window.replyMessage = function(id, name, text) {
       replyTo = { name, text };
