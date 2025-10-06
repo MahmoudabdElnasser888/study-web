@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الأسئلة المباشرة</title>
+  <title>بطولة الأسئلة</title>
   <style>
     body {
       margin: 0;
@@ -45,11 +45,6 @@
     .question-box {
       text-align: center;
     }
-    .question-box img {
-      max-width: 100%;
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
     .answers button {
       display: block;
       width: 100%;
@@ -64,7 +59,7 @@
 
   <!-- تسجيل الدخول -->
   <div id="loginBox">
-    <h2>تسجيل الدخول</h2>
+    <h2>تسجيل الدخول للبطولة</h2>
     <input type="email" id="email" placeholder="اكتب الايميل">
     <input type="text" id="code" placeholder="ادخل الكود">
     <button id="loginBtn">دخول</button>
@@ -73,15 +68,9 @@
   <!-- الأسئلة -->
   <div id="questionBox" class="hidden">
     <h2 id="welcomeText"></h2>
-    <div class="question-box">
-      <img src="question.jpg" alt="السؤال">
-      <div class="answers">
-        <button class="answer-btn">الاختيار 1</button>
-        <button class="answer-btn">الاختيار 2</button>
-        <button class="answer-btn">الاختيار 3</button>
-        <button class="answer-btn">الاختيار 4</button>
-      </div>
-    </div>
+    <div id="quizArea"></div>
+    <button id="finishBtn" class="hidden">إنهاء الاختبار</button>
+    <div id="resultBox" class="hidden"></div>
   </div>
 
 </div>
@@ -90,15 +79,15 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
   import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-  // 🧠 Firebase Config
+  // 🔥 Firebase Config
   const firebaseConfig = {
-    apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
-    authDomain: "my-web-c23de.firebaseapp.com",
-    projectId: "my-web-c23de",
-    storageBucket: "my-web-c23de.firebasestorage.app",
-    messagingSenderId: "846339445873",
-    appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
-    measurementId: "G-3SE0GBRS8C"
+    apiKey: "AIzaSyCYjZ1JN-AFwJjxgEtINzQ0oKRTjUvT6JI",
+    authDomain: "championship-36d6a.firebaseapp.com",
+    projectId: "championship-36d6a",
+    storageBucket: "championship-36d6a.firebasestorage.app",
+    messagingSenderId: "775595993225",
+    appId: "1:775595993225:web:d9cc76b2027e366a277e58",
+    measurementId: "G-1NPG0BYM94"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -110,19 +99,44 @@
   const codeInput = document.getElementById("code");
   const loginBtn = document.getElementById("loginBtn");
   const welcomeText = document.getElementById("welcomeText");
+  const quizArea = document.getElementById("quizArea");
+  const finishBtn = document.getElementById("finishBtn");
+  const resultBox = document.getElementById("resultBox");
 
+  let currentUserDoc = null;
+  let score = 0;
+
+  // مثال لأسئلة
+  const questions = [
+    {
+      question: "ما هو عدد عضلات جسم الإنسان؟",
+      options: ["206", "640", "350", "420"],
+      correct: 1
+    },
+    {
+      question: "ما هو أكبر عضلة في الجسم؟",
+      options: ["العضلة البطنية", "العضلة الفخذية", "العضلة الصدرية", "العضلة الدالية"],
+      correct: 1
+    },
+    {
+      question: "ما هي وظيفة البروتين الأساسية؟",
+      options: ["توفير الطاقة", "بناء العضلات", "تخزين الدهون", "تنظيم الهرمونات"],
+      correct: 1
+    }
+  ];
+
+  // تسجيل الدخول
   loginBtn.addEventListener("click", async () => {
     const email = emailInput.value.trim();
     const code = codeInput.value.trim();
 
     if (!email || !code) {
-      alert("⚠️ ادخل البيانات كاملة");
+      alert("⚠️ ادخل الايميل والكود");
       return;
     }
 
     try {
-      // 🔎 نبحث عن المستخدم الذي يملك inviteCode مطابق للكود المدخل
-      const q = query(collection(db, "users"), where("inviteCode", "==", code));
+      const q = query(collection(db, "invites"), where("code", "==", code));
       const snap = await getDocs(q);
 
       if (snap.empty) {
@@ -130,27 +144,69 @@
         return;
       }
 
-      const userDoc = snap.docs[0];
-      const data = userDoc.data();
+      const inviteDoc = snap.docs[0];
+      const data = inviteDoc.data();
 
-      if (data.used === true) {
-        alert("⚠️ هذا الكود تم استخدامه من قبل");
+      if (data.email !== email) {
+        alert("⚠️ هذا الكود لا يخص هذا الإيميل");
         return;
       }
 
-      // 📝 نحدّث المستخدم إلى used = true
-      await updateDoc(doc(db, "users", userDoc.id), {
-        used: true,
-        email: email
-      });
+      if (data.used === true) {
+        alert("⚠️ هذا الكود تم استخدامه بالفعل");
+        return;
+      }
+
+      currentUserDoc = inviteDoc;
+      await updateDoc(doc(db, "invites", inviteDoc.id), { used: true });
 
       welcomeText.textContent = `👋 أهلاً ${email}`;
       loginBox.classList.add("hidden");
       questionBox.classList.remove("hidden");
 
+      startQuiz();
+
     } catch (err) {
       console.error(err);
       alert("حدث خطأ أثناء تسجيل الدخول");
+    }
+  });
+
+  // تشغيل الكويز
+  function startQuiz() {
+    quizArea.innerHTML = "";
+    questions.forEach((q, i) => {
+      const box = document.createElement("div");
+      box.classList.add("question-box");
+      box.innerHTML = `<h3>${i + 1}. ${q.question}</h3>`;
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.addEventListener("click", () => {
+          if (idx === q.correct) score++;
+          btn.style.background = "#4CAF50";
+          setTimeout(() => {
+            btn.disabled = true;
+            if (i === questions.length - 1) finishBtn.classList.remove("hidden");
+          }, 300);
+        });
+        box.appendChild(btn);
+      });
+      quizArea.appendChild(box);
+    });
+  }
+
+  // إنهاء الاختبار
+  finishBtn.addEventListener("click", async () => {
+    resultBox.classList.remove("hidden");
+    resultBox.innerHTML = `<h3>درجتك: ${score} / ${questions.length}</h3>`;
+
+    try {
+      if (currentUserDoc) {
+        await updateDoc(doc(db, "invites", currentUserDoc.id), { score: score });
+      }
+    } catch (err) {
+      console.error("خطأ أثناء حفظ النتيجة:", err);
     }
   });
 </script>
