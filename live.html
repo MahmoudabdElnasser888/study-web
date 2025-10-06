@@ -1,203 +1,189 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>امتحان مباشر</title>
-  <script type="module">
-    // ✅ Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBsKneiM3AcbpWUzJtdZ-yDtp__8JbCN7Y",
-      authDomain: "codeaccessproject-82614.firebaseapp.com",
-      projectId: "codeaccessproject-82614",
-      storageBucket: "codeaccessproject-82614.firebasestorage.app",
-      messagingSenderId: "522691348426",
-      appId: "1:522691348426:web:76f17fb8ec91b3ca47f133",
-      measurementId: "G-W46X7GM6CS"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const loginBox = document.getElementById("login-box");
-      const examBox = document.getElementById("exam-box");
-      const codeInput = document.getElementById("code-input");
-      const emailInput = document.getElementById("email-input");
-      const loginBtn = document.getElementById("login-btn");
-      const submitBtn = document.getElementById("submit-btn");
-      const studentInfo = document.getElementById("student-info");
-      const questionsContainer = document.getElementById("questions-container");
-
-      // 📝 الأسئلة (صورة + اختيارات)
-      const questions = [
-        {
-          img: "q1.jpg",
-          options: ["الإجابة 1", "الإجابة 2", "الإجابة 3", "الإجابة 4"]
-        },
-        {
-          img: "q2.jpg",
-          options: ["A", "B", "C", "D"]
-        }
-      ];
-
-      loginBtn.addEventListener("click", async () => {
-        const code = codeInput.value.trim();
-        const email = emailInput.value.trim();
-        if (!code || !email) {
-          alert("⚠️ أدخل الكود والبريد الإلكتروني");
-          return;
-        }
-
-        const userRef = doc(db, "users", code);
-        const userSnap = await getDoc(userRef);
-
-        if (!userSnap.exists()) {
-          alert("❌ الكود غير صحيح");
-          return;
-        }
-
-        const data = userSnap.data();
-        if (data.used === true) {
-          alert("⚠️ الكود تم استخدامه من قبل");
-          return;
-        }
-
-        // ✅ لو الكود صحيح ومش مستخدم → يحدث used ويدخل الامتحان
-        await updateDoc(userRef, { used: true, email: email });
-
-        studentInfo.textContent = `الكود: ${code} | ${email}`;
-        loginBox.classList.add("hidden");
-        examBox.classList.remove("hidden");
-
-        renderQuestions();
-      });
-
-      // عرض كل الأسئلة
-      function renderQuestions() {
-        questionsContainer.innerHTML = "";
-        questions.forEach((q, index) => {
-          const qDiv = document.createElement("div");
-          qDiv.className = "question";
-
-          const img = document.createElement("img");
-          img.src = q.img;
-          img.alt = `سؤال ${index + 1}`;
-
-          const optionsDiv = document.createElement("div");
-          optionsDiv.className = "answers";
-
-          q.options.forEach((opt, optIndex) => {
-            const id = `q${index}-opt${optIndex}`;
-            const label = document.createElement("label");
-            label.innerHTML = `<input type="radio" name="q${index}" value="${opt}"> ${opt}`;
-            optionsDiv.appendChild(label);
-          });
-
-          qDiv.appendChild(img);
-          qDiv.appendChild(optionsDiv);
-          questionsContainer.appendChild(qDiv);
-        });
-      }
-
-      // إرسال الإجابات
-      submitBtn.addEventListener("click", () => {
-        const answers = [];
-        let allAnswered = true;
-
-        questions.forEach((_, index) => {
-          const selected = document.querySelector(`input[name="q${index}"]:checked`);
-          if (selected) {
-            answers.push(selected.value);
-          } else {
-            allAnswered = false;
-          }
-        });
-
-        if (!allAnswered) {
-          alert("⚠️ جاوب على كل الأسئلة قبل الإرسال");
-          return;
-        }
-
-        console.log("الإجابات:", answers);
-        alert("✅ تم إرسال إجابتك بنجاح");
-        // هنا تقدر تبعت الإجابات لـ Firestore لو عايز
-      });
-    });
-  </script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الامتحان المباشر</title>
   <style>
     body {
-      font-family: 'Cairo', sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
+      margin: 0;
+      font-family: "Tahoma", sans-serif;
+      background: linear-gradient(135deg,#6e8efb,#a777e3);
+      color: #333;
     }
-    #login-box, #exam-box {
-      background: white;
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      max-width: 450px;
-      width: 100%;
-      text-align: center;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
-    .hidden { display: none; }
-    img {
-      width: 100%;
+    h1,h2 { text-align: center; }
+    input,button {
+      padding: 10px;
+      border: 1px solid #ccc;
       border-radius: 8px;
-      margin-bottom: 10px;
-    }
-    .answers {
-      text-align: right;
-      margin-bottom: 15px;
-    }
-    .answers label {
-      display: block;
       margin: 5px 0;
-      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      box-sizing: border-box;
     }
     button {
-      padding: 10px 15px;
-      background: black;
+      cursor: pointer;
+      background: linear-gradient(135deg,#345ce0,#8848d6);
       color: white;
       border: none;
-      border-radius: 6px;
+      transition: 0.3s;
+    }
+    button:hover { transform: scale(1.05); }
+    .hidden { display:none; }
+    .question img {
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+    .answers {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .answers label {
+      background: #f5f5f5;
+      padding: 8px 10px;
+      border-radius: 8px;
       cursor: pointer;
+      transition: 0.2s;
     }
-    button:hover {
-      background: #333;
+    .answers label:hover {
+      background: #e0e0e0;
     }
-    .question {
-      margin-bottom: 25px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 15px;
+    .info {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
+<div class="container">
+  <h1>📝 الامتحان المباشر</h1>
 
   <!-- تسجيل الدخول -->
-  <div id="login-box">
-    <h2>دخول الامتحان</h2>
-    <input type="text" id="code-input" placeholder="أدخل الكود"><br><br>
-    <input type="email" id="email-input" placeholder="أدخل بريدك الإلكتروني"><br><br>
-    <button id="login-btn">دخول</button>
+  <div id="loginBox">
+    <h2>تسجيل الدخول</h2>
+    <input type="email" id="email" placeholder="اكتب الايميل"><br>
+    <input type="text" id="teamCode" placeholder="ادخل الكود"><br>
+    <button id="loginBtn">دخول</button>
   </div>
 
   <!-- الامتحان -->
-  <div id="exam-box" class="hidden">
-    <div id="student-info" style="margin-bottom:10px;font-weight:bold;"></div>
+  <div id="liveBox" class="hidden">
+    <h2 id="userName"></h2>
+    <div class="info">اختر الإجابة الصحيحة</div>
 
-    <div id="questions-container"></div>
-
-    <button id="submit-btn">إرسال الإجابات</button>
+    <!-- السؤال -->
+    <div class="question">
+      <img src="q1.jpg" alt="صورة السؤال">
+      <div class="answers">
+        <label><input type="radio" name="answer" value="أ"> أ</label>
+        <label><input type="radio" name="answer" value="ب"> ب</label>
+        <label><input type="radio" name="answer" value="ج"> ج</label>
+        <label><input type="radio" name="answer" value="د"> د</label>
+      </div>
+      <button id="submitAnswer">إرسال الإجابة</button>
+    </div>
   </div>
+</div>
 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+    authDomain: "my-web-c23de.firebaseapp.com",
+    projectId: "my-web-c23de",
+    storageBucket: "my-web-c23de.firebasestorage.app",
+    messagingSenderId: "846339445873",
+    appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
+    measurementId: "G-3SE0GBRS8C"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const loginBox = document.getElementById("loginBox");
+  const liveBox = document.getElementById("liveBox");
+  const loginBtn = document.getElementById("loginBtn");
+  const emailInput = document.getElementById("email");
+  const codeInput = document.getElementById("teamCode");
+  const userName = document.getElementById("userName");
+  const submitAnswer = document.getElementById("submitAnswer");
+
+  let currentUserId = null;
+
+  loginBtn.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    const code = codeInput.value.trim();
+
+    if (!email || !code) {
+      alert("⚠️ ادخل البيانات كاملة");
+      return;
+    }
+
+    try {
+      // في قاعدة البيانات: الـ code هو اسم الـ document
+      const userRef = doc(db, "users", code);
+      const snap = await getDoc(userRef);
+
+      if (!snap.exists()) {
+        alert("❌ الكود غير صحيح");
+        return;
+      }
+
+      const data = snap.data();
+      if (data.used === true) {
+        alert("⚠️ هذا الكود تم استخدامه من قبل");
+        return;
+      }
+
+      // تحديث بيانات المستخدم
+      await updateDoc(userRef, { used: true, email: email });
+
+      currentUserId = code;
+      userName.textContent = "👋 أهلاً، " + email;
+      loginBox.classList.add("hidden");
+      liveBox.classList.remove("hidden");
+
+    } catch (err) {
+      console.error(err);
+      alert("حدث خطأ أثناء تسجيل الدخول");
+    }
+  });
+
+  submitAnswer.addEventListener("click", async () => {
+    if (!currentUserId) return;
+    const selected = document.querySelector('input[name="answer"]:checked');
+    if (!selected) {
+      alert("⚠️ اختر إجابة أولاً");
+      return;
+    }
+
+    const answer = selected.value;
+
+    try {
+      const userRef = doc(db, "users", currentUserId);
+      await updateDoc(userRef, { answer: answer });
+      alert("✅ تم إرسال الإجابة بنجاح");
+      submitAnswer.disabled = true;
+    } catch (err) {
+      console.error(err);
+      alert("حدث خطأ أثناء إرسال الإجابة");
+    }
+  });
+</script>
 </body>
 </html>
