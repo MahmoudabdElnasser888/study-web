@@ -173,7 +173,6 @@
             <strong>${safeName}</strong>: ${safeText}
             <div class="msg-actions">
               <span onclick="replyMessage('${doc.id}', '${safeName}', '${safeText.replace(/'/g, "\\'")}')">↩️</span>
-              <span onclick="reportMessage('${doc.id}', '${msg.uid}', '${safeName}', '${safeText.replace(/'/g, "\\'")}')">🚨</span>
               ${msg.uid === auth.currentUser?.uid ? `<span onclick="deleteMessage('${doc.id}')">🗑️</span>` : ""}
             </div>
           `;
