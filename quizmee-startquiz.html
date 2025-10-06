@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz</title>
+  <title>اختبار الرياضيات</title>
   <style>
     body {
       font-family: Tahoma, sans-serif;
@@ -18,6 +18,18 @@
       background: white;
       border-radius: 15px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .login-box {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .login-box input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 5px 0;
+      width: 80%;
+      max-width: 300px;
     }
     .question {
       margin-bottom: 25px;
@@ -49,95 +61,57 @@
 <body>
 
 <div class="container">
-  <div id="timer">الوقت المتبقي: 00:00</div>
 
-  <!-- مثال سؤال -->
-  <!-- السؤال الأول -->
-<div class="question" data-correct="4">
-  <h3><img src="math1.jpg" alt="سؤال 1"></h3>
-  <label class="option"><input type="radio" name="q1" value="1">أ</label>
-  <label class="option"><input type="radio" name="q1" value="2">ب</label>
-  <label class="option"><input type="radio" name="q1" value="3">ج</label>
-  <label class="option"><input type="radio" name="q1" value="4">د</label>
-</div>
-
-<!-- السؤال الثاني -->
-<div class="question" data-correct="8">
-  <h3><img src="math2.jpg" alt="سؤال 2"></h3>
-  <label class="option"><input type="radio" name="q2" value="5">أ</label>
-  <label class="option"><input type="radio" name="q2" value="6">ب</label>
-  <label class="option"><input type="radio" name="q2" value="7">ج</label>
-  <label class="option"><input type="radio" name="q2" value="8">د</label>
-</div>
-
-<!-- السؤال الثالث -->
-<div class="question" data-correct="10">
-  <h3><img src="math3.jpg" alt="سؤال 3"></h3>
-  <label class="option"><input type="radio" name="q3" value="9">أ</label>
-  <label class="option"><input type="radio" name="q3" value="10">ب</label>
-  <label class="option"><input type="radio" name="q3" value="11">ج</label>
-  <label class="option"><input type="radio" name="q3" value="12">د</label>
-</div>
-
-<!-- السؤال الرابع -->
-<div class="question" data-correct="15">
-  <h3><img src="math4.jpg" alt="سؤال 4"></h3>
-  <label class="option"><input type="radio" name="q4" value="13">أ</label>
-  <label class="option"><input type="radio" name="q4" value="14">ب</label>
-  <label class="option"><input type="radio" name="q4" value="15">ج</label>
-  <label class="option"><input type="radio" name="q4" value="16">د</label>
-</div>
-
-<!-- السؤال الخامس -->
-<div class="question" data-correct="19">
-  <h3><img src="math5.jpg" alt="سؤال 5"></h3>
-  <label class="option"><input type="radio" name="q5" value="17">أ</label>
-  <label class="option"><input type="radio" name="q5" value="18">ب</label>
-  <label class="option"><input type="radio" name="q5" value="19">ج</label>
-  <label class="option"><input type="radio" name="q5" value="20">د</label>
-</div>
-
-<!-- السؤال السادس -->
-<div class="question" data-correct="21">
-  <h3><img src="math6.jpg" alt="سؤال 6"></h3>
-  <label class="option"><input type="radio" name="q6" value="21">أ</label>
-  <label class="option"><input type="radio" name="q6" value="22">ب</label>
-  <label class="option"><input type="radio" name="q6" value="23">ج</label>
-  <label class="option"><input type="radio" name="q6" value="24">د</label>
-</div>
-
-<!-- السؤال السابع -->
-<div class="question" data-correct="27">
-  <h3><img src="math7.jpg" alt="سؤال 7"></h3>
-  <label class="option"><input type="radio" name="q7" value="25">أ</label>
-  <label class="option"><input type="radio" name="q7" value="26">ب</label>
-  <label class="option"><input type="radio" name="q7" value="27">ج</label>
-  <label class="option"><input type="radio" name="q7" value="28">د</label>
-</div>
-
-  <!-- زر إظهار النتيجة -->
-  <div class="buttons">
-    <button id="showAnswers">إظهار الإجابات</button>
+  <!-- تسجيل الإيميل -->
+  <div class="login-box" id="loginBox">
+    <h3>أدخل الإيميل لبدء الاختبار</h3>
+    <input type="email" id="emailInput" placeholder="example@mail.com">
+    <button id="startBtn">ابدأ الاختبار</button>
   </div>
 
-  <div class="result" id="result"></div>
+  <!-- المؤقت -->
+  <div id="timer" style="display:none;">الوقت المتبقي: 00:00</div>
 
-  <!-- صندوق إرسال النتيجة -->
-  <div id="resultBox" style="display:none; text-align:center; margin-top:20px;">
-    <p id="finalResult"></p>
-    <button id="sendBtn" style="padding:10px 20px; border:none; border-radius:20px; background:#28a745; color:white; cursor:pointer;">
-      إرسال الآن
-    </button>
+  <!-- الأسئلة -->
+  <div id="quizContent" style="display:none;">
+
+    <div class="question" data-correct="4">
+      <h3><img src="math1.jpg" alt="سؤال 1"></h3>
+      <label class="option"><input type="radio" name="q1" value="1">أ</label>
+      <label class="option"><input type="radio" name="q1" value="2">ب</label>
+      <label class="option"><input type="radio" name="q1" value="3">ج</label>
+      <label class="option"><input type="radio" name="q1" value="4">د</label>
+    </div>
+
+    <div class="question" data-correct="8">
+      <h3><img src="math2.jpg" alt="سؤال 2"></h3>
+      <label class="option"><input type="radio" name="q2" value="5">أ</label>
+      <label class="option"><input type="radio" name="q2" value="6">ب</label>
+      <label class="option"><input type="radio" name="q2" value="7">ج</label>
+      <label class="option"><input type="radio" name="q2" value="8">د</label>
+    </div>
+
+    <!-- أضف باقي الأسئلة بنفس الشكل -->
+
+    <div class="buttons">
+      <button id="showAnswers">إظهار الإجابات</button>
+    </div>
+
+    <div class="result" id="result"></div>
+
+    <div id="resultBox" style="display:none; text-align:center; margin-top:20px;">
+      <p id="finalResult"></p>
+      <button id="sendBtn" style="padding:10px 20px; border:none; border-radius:20px; background:#28a745; color:white; cursor:pointer;">
+        إرسال النتيجة
+      </button>
+    </div>
   </div>
 </div>
 
 <script type="module">
-  // ---------------- Firebase Imports ----------------
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getAuth } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
   import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-  // ---------------- Firebase Config ----------------
   const firebaseConfig = {
     apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
     authDomain: "my-web-c23de.firebaseapp.com",
@@ -149,36 +123,46 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // ----------- بيانات المادة -----------
   const SUBJECT_NAME = "الرياضيات";
-
-  // ----------- متغير للتحكم في منع الخروج -----------
-  let isResultSent = false;
-
-  // ----------------- المؤقت -----------------
   const QUIZ_MINUTES = 10;
   let totalSeconds = QUIZ_MINUTES * 60;
+  let timerInterval;
+  let emailValue = "";
+  let isResultSent = false;
+
+  const loginBox = document.getElementById("loginBox");
+  const quizContent = document.getElementById("quizContent");
   const timerDiv = document.getElementById("timer");
-  const resultDiv = document.getElementById("result");
 
-  function updateTimer() {
-    let minutes = Math.floor(totalSeconds / 60).toString().padStart(2,'0');
-    let seconds = (totalSeconds % 60).toString().padStart(2,'0');
-    timerDiv.innerText =`الوقت المتبقي: ${minutes}:${seconds}`;
-    if (totalSeconds <= 0) {
-      clearInterval(timerInterval);
-      showResults();
-      timerDiv.innerText = "انتهى الوقت!";
+  document.getElementById("startBtn").addEventListener("click", () => {
+    const email = document.getElementById("emailInput").value.trim();
+    if (!email) {
+      alert("⚠️ أدخل الإيميل أولًا");
+      return;
     }
-    totalSeconds--;
-  }
-  const timerInterval = setInterval(updateTimer, 1000);
-  updateTimer();
+    emailValue = email;
+    loginBox.style.display = "none";
+    quizContent.style.display = "block";
+    timerDiv.style.display = "block";
+    startTimer();
+  });
 
-  // ----------------- حساب النتيجة -----------------
+  function startTimer() {
+    timerInterval = setInterval(() => {
+      let minutes = Math.floor(totalSeconds / 60).toString().padStart(2,'0');
+      let seconds = (totalSeconds % 60).toString().padStart(2,'0');
+      timerDiv.innerText = `الوقت المتبقي: ${minutes}:${seconds}`;
+      if (totalSeconds <= 0) {
+        clearInterval(timerInterval);
+        showResults();
+        timerDiv.innerText = "انتهى الوقت!";
+      }
+      totalSeconds--;
+    }, 1000);
+  }
+
   function showResults() {
     let questions = document.querySelectorAll(".question");
     let correctCount = 0;
@@ -196,41 +180,32 @@
       if (selected && parseInt(selected.value) === correctAnswer) correctCount++;
     });
 
-    resultDiv.innerHTML =`درجتك: ${correctCount} من ${questions.length}`;
+    document.getElementById("result").innerHTML = `درجتك: ${correctCount} من ${questions.length}`;
     document.getElementById("resultBox").style.display = "block";
     document.getElementById("finalResult").innerText = `انت جبت ${correctCount} من ${questions.length}`;
-
-    // حفظ النتيجة مؤقتاً
     window.quizScore = correctCount;
     window.totalQuestions = questions.length;
   }
+
   document.getElementById("showAnswers").addEventListener("click", showResults);
 
-  // ----------------- إرسال النتيجة -----------------
   document.getElementById("sendBtn").addEventListener("click", async () => {
-    const user = auth.currentUser;
-    if (user) {
-      try {
-        await addDoc(collection(db, "results"), {
-          email: user.email,
-          uid: user.uid,
-          subject: SUBJECT_NAME,
-          score: window.quizScore,
-          total: window.totalQuestions,
-          createdAt: serverTimestamp()
-        });
-        alert("✅ تم إرسال نتيجتك بنجاح");
-        isResultSent = true; // ✅ خلاص اتبعتت النتيجة
-      } catch (error) {
-        console.error("Error writing document: ", error);
-        alert("⚠ حصل خطأ أثناء الإرسال");
-      }
-    } else {
-      alert("⚠ لازم تسجل دخول الأول");
+    try {
+      await addDoc(collection(db, "results"), {
+        email: emailValue,
+        subject: SUBJECT_NAME,
+        score: window.quizScore,
+        total: window.totalQuestions,
+        createdAt: serverTimestamp()
+      });
+      alert("✅ تم إرسال نتيجتك بنجاح");
+      isResultSent = true;
+    } catch (error) {
+      console.error("Error writing document: ", error);
+      alert("⚠ حصل خطأ أثناء الإرسال");
     }
   });
 
-  // ----------------- منع الخروج قبل الإرسال -----------------
   window.addEventListener("beforeunload", function (e) {
     if (!isResultSent) {
       e.preventDefault();
@@ -239,7 +214,6 @@
     }
   });
 </script>
-
 
 </body>
 </html>
