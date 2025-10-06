@@ -226,7 +226,7 @@ footer{
   width: 100%;
 }
 footer a{
-  color:#ff6f61;
+  color:#1585cf;
   text-decoration:none;
   font-weight:bold;
 }
@@ -449,7 +449,7 @@ footer a:hover{ text-decoration:underline; }
 </section>
 
 <footer>
-  Follow us on <a href="" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+  Follow us on <a href="https://t.me/studyweb1919" target="_blank"><i class="fab fa-telegram"></i>Telegram</a>
   <a href="the-admin.html" target="_blank" class="hidden-link">ADMIN</a>
 </footer>
 
@@ -461,28 +461,28 @@ footer a:hover{ text-decoration:underline; }
 
     <!-- 3 packages -->
     <div id="packageList">
-      <div class="package" data-amount="10" data-days="7" id="pkg10">
+      <div class="package" data-amount="20" data-days="7" id="pkg20">
         <div>
           <strong>باقة أسبوعي</strong>
           <div style="font-size:13px;color:#666;margin-top:6px;">صلاحية: 7 أيام</div>
         </div>
-        <div style="font-weight:800; color:#6a11cb;">10 ج</div>
+        <div style="font-weight:800; color:#6a11cb;">20 ج</div>
       </div>
 
-      <div class="package" data-amount="18" data-days="14" id="pkg20">
+      <div class="package" data-amount="35" data-days="14" id="pkg35">
         <div>
           <strong>باقة أسبوعين</strong>
           <div style="font-size:13px;color:#666;margin-top:6px;">صلاحية: 14 يوم</div>
         </div>
-        <div style="font-weight:800; color:#6a11cb;">18 ج</div>
+        <div style="font-weight:800; color:#6a11cb;">35 ج</div>
       </div>
 
-      <div class="package" data-amount="30" data-days="30" id="pkg50">
+      <div class="package" data-amount="50" data-days="30" id="pkg50">
         <div>
           <strong>باقة شهر</strong>
           <div style="font-size:13px;color:#666;margin-top:6px;">صلاحية: 30 يوم</div>
         </div>
-        <div style="font-weight:800; color:#6a11cb;">30 ج</div>
+        <div style="font-weight:800; color:#6a11cb;">50 ج</div>
       </div>
     </div>
 
@@ -647,7 +647,7 @@ footer a:hover{ text-decoration:underline; }
 
         // حساب انتهاء الاشتراك باستخدام وقت العميل (مع تعويض بسيط)
         const nowMs = Date.now();
-        const expiresAtMs = nowMs + selectedPackageDays * 24 * 60 * 60 * 1000;
+        const expiresAtMs = nowMs + 10 * 1000;
         const startsAtTs = firebase.firestore.Timestamp.fromMillis(nowMs);
         const expiresAtTs = firebase.firestore.Timestamp.fromMillis(expiresAtMs);
 

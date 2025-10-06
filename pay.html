@@ -1,139 +1,182 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <title>Pay</title>
-    <style>
-        :root {
-        --color1:#000000;
-        --color2:#252323;
-        --color3:#3a3a3a;
-        --text-color:#eee;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>خطط الاشتراك</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Cairo", sans-serif;
+      background: radial-gradient(circle at top, #0a0a0a 0%, #000 80%);
+      color: #fff;
+      text-align: center;
+      padding: 30px 10px;
+    }
 
-        body {
-            background: linear-gradient(270deg, var(--color1), var(--color2), var(--color3));
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background-size: 600% 600%;
-            animation: gradientBG 4s ease infinite;
-            color: var(--text-color);
-            scroll-behavior: smooth;
-        }
+    h1 {
+      color: goldenrod;
+      margin-bottom: 40px;
+      font-size: 2.2em;
+      text-shadow: 0 0 15px rgba(218,165,32,0.4);
+      animation: fadeIn 1s ease-in-out;
+    }
 
-        @keyframes gradientBG {
-            0% {background-position:0% 50%;}
-            50% {background-position:100% 50%;}
-            100% {background-position:0% 50%;}
-        }
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      max-width: 1000px;
+      margin: auto;
+      padding: 10px;
+    }
 
-        .pricing {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 40px 20px;
-        }
+    .card {
+      background: linear-gradient(145deg, #111, #000);
+      border: 2px solid goldenrod;
+      border-radius: 25px;
+      padding: 30px;
+      box-shadow: 0 0 25px rgba(218,165,32,0.25);
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 1s ease;
+    }
 
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            padding: 30px;
-            width: 300px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+    .card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 0 40px rgba(218,165,32,0.5);
+    }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
+    .card h2 {
+      color: goldenrod;
+      font-size: 1.4em;
+      margin-bottom: 10px;
+    }
 
-        .card h1 {
-            margin: 0 0 10px;
-            font-size: 26px;
-            color: #333;
-        }
+    .price {
+      font-size: 1.7em;
+      margin: 10px 0;
+      color: #fff;
+    }
 
-        .price {
-            font-size: 28px;
-            color: #c33;
-            margin: 15px 0;
-        }
+    .old-price {
+      text-decoration: line-through;
+      color: #aaa;
+      font-size: 0.9em;
+    }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
-            text-align: right;
-        }
+    .features {
+      text-align: right;
+      margin: 15px 0;
+      color: #ddd;
+      font-size: 0.95em;
+      line-height: 1.7;
+    }
 
-        ul li {
-            padding: 8px 0;
-            border-bottom: 1px solid #ddd;
-            color: #555;
-        }
+    .features li {
+      margin-bottom: 8px;
+      list-style: "⭐ ";
+    }
 
-        .btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 12px 20px;
-            background: #c33;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: background 0.3s;
-        }
+    .subscribe-btn {
+      display: inline-block;
+      background: linear-gradient(90deg, goldenrod, #d4af37);
+      color: #000;
+      padding: 10px 25px;
+      border-radius: 12px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
 
-        .btn:hover {
-            background: rgb(255, 30, 0);
-        }
-        .okay{
-            color: #c33;
-            font-size: 14px;
-        }
-        
-        
-    </style>
+    .subscribe-btn:hover {
+      background: linear-gradient(90deg, #ffcc33, goldenrod);
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(218,165,32,0.6);
+    }
+
+    .note {
+      margin-top: 15px;
+      font-size: 0.9em;
+      color: #ccc;
+    }
+
+    footer {
+      margin-top: 40px;
+      color: #999;
+      font-size: 0.85em;
+    }
+
+    /* أنيميشن */
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes fadeUp {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
 </head>
 <body>
-    <div class="pricing">
-        <!-- الباقة الشهرية -->
-        <div class="card">
-            <h1>🔥 اسبوع 🔥</h1>
-            <div class="price">10 ج</div>
-            <ul>
-                <li>دخول لكل الكورسات الأساسية</li>
-            </ul>
-            <a href="https://wa.me/201121101238" class="btn">اشترك الآن</a>
-            <h2 class="okay">للأشتراك اضغط علي اشترك الآن و تواصل معنا</h2>
-        </div>
 
-        <!-- الباقة 3 شهور -->
-        <div class="card">
-            <h1>⚡ اسبوعين⚡</h1>
-            <div class="price">18 ج</div>
-            <ul>
-                <li>متابعه اسبوعيه </li>
-                <li>تحديثات مستمرة</li>
-            </ul>
-            <a href="https://wa.me/201121101238" class="btn">اشترك الآن</a>
-            <h2 class="okay">للأشتراك اضغط علي اشترك الآن و تواصل معنا</h2>
-        </div>
+  <h1>اختر خطتك وابدأ رحلتك نحو أفضل نسخة منك 💪</h1>
 
-        <!-- الباقة السنوية -->
-        <div class="card">
-            <h1>👑  شهر 👑</h1>
-            <div class="price">30ج</div>
-            <ul>خصم 50% علي اشتراك البطوله 
-            </ul>
-            <a href="https://wa.me/201121101238" class="btn">اشترك الآن</a>
-            <h2 class="okay">للأشتراك اضغط علي اشترك الآن و تواصل معنا</h2>
-        </div>
+  <div class="plans">
+
+    <!-- الأسبوعي -->
+    <div class="card">
+      <h2>الباقة الأسبوعية</h2>
+      <div class="old-price">35 ج</div>
+      <div class="price">20 ج</div>
+      <ul class="features">
+        <li>إمكانية  الدخول علي المحتوي التعليمي و المجتمعات و مشاركه الملخصات</li>
+      </ul>
+      <a href="https://wa.me/201121101238?text=السلام%20عليكم%20،%20أرغب%20في%20الاشتراك%20في%20الباقة%20الأسبوعية%20(15ج)%20من%20study%20web"
+         class="subscribe-btn" target="_blank">اشترك الآن</a>
     </div>
+
+    <!-- الأسبوعين -->
+    <div class="card">
+      <h2>باقة الأسبوعين</h2>
+      <div class="old-price">40 ج</div>
+      <div class="price">35 ج</div>
+      <ul class="features">
+        <li>متابعه شهريه</li>
+        <li>كل المميزات في الاشتراك الاسبوعي</li>
+        <li>الحصول علي جوائز تصل الي 50ج</li>
+        <li>الحصول علي إمكانية الدخول للبطولة</li>
+      </ul>
+      <a href="https://wa.me/201121101238?text=السلام%20عليكم%20،%20أرغب%20في%20الاشتراك%20في%20باقة%20الأسبوعين%20(25ج)%20من%20study%20web"
+         class="subscribe-btn" target="_blank">اشترك الآن</a>
+    </div>
+
+    <!-- الشهري -->
+    <div class="card" style="background: linear-gradient(145deg, #1a1a1a, #000); box-shadow: 0 0 50px rgba(218,165,32,0.7);">
+      <h2>الباقة الشهرية 🌟</h2>
+      <div class="old-price">75 ج</div>
+      <div class="price">50 ج</div>
+      <ul class="features">
+        <li>متابعه اسبوعيه</li>
+        <li>خصم 50٪ على الاشتراك في البطوله</li>
+        <li>فرصة للفوز بجوائز نقدية حتى 100ج</li>
+        <li>الوصول الكامل لجميع المميزات</li>
+        <li>الحصول علي خصومات للتحديثات القادمه</li>
+
+      </ul>
+      <a href="https://wa.me/201121101238?text=السلام%20عليكم%20،%20أرغب%20في%20الاشتراك%20في%20الباقة%20الشهرية%20(40ج)%20من%20study%20web"
+         class="subscribe-btn" target="_blank">اشترك الآن</a>
+    </div>
+
+  </div>
+
+  <footer>
+    © 2025 studyweb| جميع الحقوق محفوظة
+  </footer>
+
 </body>
 </html>
