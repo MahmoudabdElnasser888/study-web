@@ -3,25 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بطولة الأسئلة</title>
+  <title>بطولة الأسئلة - صور</title>
   <style>
     body {
       margin: 0;
       font-family: "Tahoma", sans-serif;
-      background: linear-gradient(135deg,#6e8efb,#a777e3);
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
       color: #333;
     }
     .container {
       max-width: 800px;
       margin: 30px auto;
       padding: 20px;
-      background: #fff;
+      background: #000000;
       border-radius: 15px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
-    h1, h2 { text-align: center; }
-
-    input,button {
+    h2, h3 { text-align: center; }
+    input, button {
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -30,7 +29,6 @@
       width: 100%;
       box-sizing: border-box;
     }
-
     button {
       cursor: pointer;
       background: linear-gradient(135deg,#345ce0,#8848d6);
@@ -39,176 +37,158 @@
       transition: 0.3s;
     }
     button:hover { transform: scale(1.05); }
-
     .hidden { display: none; }
 
-    .question-box {
-      text-align: center;
-    }
-    .answers button {
-      display: block;
+    .question img {
       width: 100%;
+      max-width: 400px;
+      display: block;
+      margin: 0 auto 10px;
+      border-radius: 10px;
+    }
+
+    .option {
+      display: block;
       margin: 8px 0;
-      padding: 12px;
-      font-size: 16px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      color: #ffffff;
+    }
+    .option:hover {
+      background: #eee;
+    }
+    .option input {
+      margin-left: 10px;
     }
   </style>
 </head>
 <body>
-<div class="container">
+  <div class="container">
+    <!-- تسجيل الدخول -->
+    <div id="loginBox">
+      <h2>تسجيل الدخول للبطولة</h2>
+      <input type="email" id="email" placeholder="اكتب الايميل">
+      <input type="text" id="code" placeholder="ادخل الكود">
+      <button id="loginBtn">دخول</button>
+    </div>
 
-  <!-- تسجيل الدخول -->
-  <div id="loginBox">
-    <h2>تسجيل الدخول للبطولة</h2>
-    <input type="email" id="email" placeholder="اكتب الايميل">
-    <input type="text" id="code" placeholder="ادخل الكود">
-    <button id="loginBtn">دخول</button>
+    <!-- الأسئلة -->
+    <div id="questionBox" class="hidden">
+      <h2 id="welcomeText"></h2>
+      <form id="quizForm"></form>
+      <button id="finishBtn">إنهاء الاختبار</button>
+      <div id="resultBox" class="hidden"></div>
+    </div>
   </div>
 
-  <!-- الأسئلة -->
-  <div id="questionBox" class="hidden">
-    <h2 id="welcomeText"></h2>
-    <div id="quizArea"></div>
-    <button id="finishBtn" class="hidden">إنهاء الاختبار</button>
-    <div id="resultBox" class="hidden"></div>
-  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-</div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYjZ1JN-AFwJjxgEtINzQ0oKRTjUvT6JI",
+      authDomain: "championship-36d6a.firebaseapp.com",
+      projectId: "championship-36d6a",
+      storageBucket: "championship-36d6a.firebasestorage.app",
+      messagingSenderId: "775595993225",
+      appId: "1:775595993225:web:d9cc76b2027e366a277e58"
+    };
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  // 🔥 Firebase Config
-  const firebaseConfig = {
-    apiKey: "AIzaSyCYjZ1JN-AFwJjxgEtINzQ0oKRTjUvT6JI",
-    authDomain: "championship-36d6a.firebaseapp.com",
-    projectId: "championship-36d6a",
-    storageBucket: "championship-36d6a.firebasestorage.app",
-    messagingSenderId: "775595993225",
-    appId: "1:775595993225:web:d9cc76b2027e366a277e58",
-    measurementId: "G-1NPG0BYM94"
-  };
+    const loginBox = document.getElementById("loginBox");
+    const questionBox = document.getElementById("questionBox");
+    const emailInput = document.getElementById("email");
+    const codeInput = document.getElementById("code");
+    const loginBtn = document.getElementById("loginBtn");
+    const welcomeText = document.getElementById("welcomeText");
+    const quizForm = document.getElementById("quizForm");
+    const finishBtn = document.getElementById("finishBtn");
+    const resultBox = document.getElementById("resultBox");
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    let currentUserDoc = null;
 
-  const loginBox = document.getElementById("loginBox");
-  const questionBox = document.getElementById("questionBox");
-  const emailInput = document.getElementById("email");
-  const codeInput = document.getElementById("code");
-  const loginBtn = document.getElementById("loginBtn");
-  const welcomeText = document.getElementById("welcomeText");
-  const quizArea = document.getElementById("quizArea");
-  const finishBtn = document.getElementById("finishBtn");
-  const resultBox = document.getElementById("resultBox");
+    // 🧠 الأسئلة المصورة
+    const questions = [
+      { img: "gabr2math2.png", correct: "7", options: ["5", "6", "7", "8"] },
+      { img: "gabr2math3.png", correct: "12", options: ["9", "10", "11", "12"] },
+      { img: "gabr2math4.png", correct: "15", options: ["13", "14", "15", "16"] },
+      { img: "gabr2math5.png", correct: "18", options: ["17", "18", "19", "20"] },
+      { img: "gabr2math6.png", correct: "22", options: ["21", "22", "23", "24"] },
+      { img: "gabr2math7.png", correct: "27", options: ["25", "26", "27", "28"] },
+      { img: "gabr2math8.png", correct: "32", options: ["29", "30", "31", "32"] },
+      { img: "gabr2math9.png", correct: "33", options: ["33", "34", "35", "36"] }
+    ];
 
-  let currentUserDoc = null;
-  let score = 0;
+    // تسجيل الدخول
+    loginBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const code = codeInput.value.trim();
+      if (!email || !code) return alert("⚠️ ادخل الايميل والكود");
 
-  // مثال لأسئلة
-  const questions = [
-    {
-      question: "ما هو عدد عضلات جسم الإنسان؟",
-      options: ["206", "640", "350", "420"],
-      correct: 1
-    },
-    {
-      question: "ما هو أكبر عضلة في الجسم؟",
-      options: ["العضلة البطنية", "العضلة الفخذية", "العضلة الصدرية", "العضلة الدالية"],
-      correct: 1
-    },
-    {
-      question: "ما هي وظيفة البروتين الأساسية؟",
-      options: ["توفير الطاقة", "بناء العضلات", "تخزين الدهون", "تنظيم الهرمونات"],
-      correct: 1
-    }
-  ];
-
-  // تسجيل الدخول
-  loginBtn.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const code = codeInput.value.trim();
-
-    if (!email || !code) {
-      alert("⚠️ ادخل الايميل والكود");
-      return;
-    }
-
-    try {
       const q = query(collection(db, "invites"), where("code", "==", code));
       const snap = await getDocs(q);
-
-      if (snap.empty) {
-        alert("❌ الكود غير صحيح");
-        return;
-      }
+      if (snap.empty) return alert("❌ الكود غير صحيح");
 
       const inviteDoc = snap.docs[0];
       const data = inviteDoc.data();
 
-      if (data.email !== email) {
-        alert("⚠️ هذا الكود لا يخص هذا الإيميل");
-        return;
-      }
-
-      if (data.used === true) {
-        alert("⚠️ هذا الكود تم استخدامه بالفعل");
-        return;
-      }
+      if (data.email !== email) return alert("⚠️ هذا الكود لا يخص هذا الإيميل");
+      if (data.used === true) return alert("⚠️ الكود تم استخدامه بالفعل");
 
       currentUserDoc = inviteDoc;
       await updateDoc(doc(db, "invites", inviteDoc.id), { used: true });
 
-      welcomeText.textContent = `👋 أهلاً ${email}`;
       loginBox.classList.add("hidden");
       questionBox.classList.remove("hidden");
-
-      startQuiz();
-
-    } catch (err) {
-      console.error(err);
-      alert("حدث خطأ أثناء تسجيل الدخول");
-    }
-  });
-
-  // تشغيل الكويز
-  function startQuiz() {
-    quizArea.innerHTML = "";
-    questions.forEach((q, i) => {
-      const box = document.createElement("div");
-      box.classList.add("question-box");
-      box.innerHTML = `<h3>${i + 1}. ${q.question}</h3>`;
-      q.options.forEach((opt, idx) => {
-        const btn = document.createElement("button");
-        btn.textContent = opt;
-        btn.addEventListener("click", () => {
-          if (idx === q.correct) score++;
-          btn.style.background = "#4CAF50";
-          setTimeout(() => {
-            btn.disabled = true;
-            if (i === questions.length - 1) finishBtn.classList.remove("hidden");
-          }, 300);
-        });
-        box.appendChild(btn);
-      });
-      quizArea.appendChild(box);
+      welcomeText.textContent = `👋 أهلاً ${email}`;
+      loadQuestions();
     });
-  }
 
-  // إنهاء الاختبار
-  finishBtn.addEventListener("click", async () => {
-    resultBox.classList.remove("hidden");
-    resultBox.innerHTML = `<h3>درجتك: ${score} / ${questions.length}</h3>`;
-
-    try {
-      if (currentUserDoc) {
-        await updateDoc(doc(db, "invites", currentUserDoc.id), { score: score });
-      }
-    } catch (err) {
-      console.error("خطأ أثناء حفظ النتيجة:", err);
+    // تحميل الأسئلة
+    function loadQuestions() {
+      quizForm.innerHTML = "";
+      questions.forEach((q, index) => {
+        const div = document.createElement("div");
+        div.classList.add("question");
+        div.dataset.correct = q.correct;
+        div.innerHTML = `
+          <h3><img src="${q.img}" alt="سؤال ${index + 1}"></h3>
+          ${q.options.map((opt, i) => `
+            <label class="option">
+              <input type="radio" name="q${index}" value="${opt}"> ${String.fromCharCode(0x0623 + i)} <!-- أ ب ج د -->
+            </label>
+          `).join("")}
+        `;
+        quizForm.appendChild(div);
+      });
     }
-  });
-</script>
+
+    // إنهاء الاختبار
+    finishBtn.addEventListener("click", async () => {
+      let score = 0;
+      const questionsDOM = document.querySelectorAll(".question");
+      questionsDOM.forEach(q => {
+        const correct = q.dataset.correct;
+        const selected = q.querySelector("input:checked");
+        if (selected && selected.value === correct) score++;
+      });
+
+      resultBox.classList.remove("hidden");
+      resultBox.innerHTML = `<h3>درجتك: ${score} / ${questions.length}</h3>`;
+
+      try {
+        if (currentUserDoc) {
+          await updateDoc(doc(db, "invites", currentUserDoc.id), { score: score });
+        }
+      } catch (err) {
+        console.error("خطأ أثناء حفظ النتيجة:", err);
+      }
+    });
+  </script>
 </body>
 </html>
