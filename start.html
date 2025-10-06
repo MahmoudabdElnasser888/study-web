@@ -647,7 +647,7 @@ footer a:hover{ text-decoration:underline; }
 
         // حساب انتهاء الاشتراك باستخدام وقت العميل (مع تعويض بسيط)
         const nowMs = Date.now();
-        const expiresAtMs = nowMs + 10 * 1000;
+        const expiresAtMs = nowMs + selectedPackageDays * 24 * 60 * 60 * 1000;
         const startsAtTs = firebase.firestore.Timestamp.fromMillis(nowMs);
         const expiresAtTs = firebase.firestore.Timestamp.fromMillis(expiresAtMs);
 
