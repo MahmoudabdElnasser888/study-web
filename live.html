@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الامتحان المباشر</title>
+  <title>الأسئلة المباشرة</title>
   <style>
     body {
       margin: 0;
@@ -12,14 +12,15 @@
       color: #333;
     }
     .container {
-      max-width: 900px;
+      max-width: 800px;
       margin: 30px auto;
       padding: 20px;
       background: #fff;
       border-radius: 15px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
-    h1,h2 { text-align: center; }
+    h1, h2 { text-align: center; }
+
     input,button {
       padding: 10px;
       border: 1px solid #ccc;
@@ -29,6 +30,7 @@
       width: 100%;
       box-sizing: border-box;
     }
+
     button {
       cursor: pointer;
       background: linear-gradient(135deg,#345ce0,#8848d6);
@@ -37,71 +39,58 @@
       transition: 0.3s;
     }
     button:hover { transform: scale(1.05); }
-    .hidden { display:none; }
-    .question img {
-      width: 100%;
-      border-radius: 10px;
-      margin-top: 15px;
-    }
-    .answers {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .answers label {
-      background: #f5f5f5;
-      padding: 8px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .answers label:hover {
-      background: #e0e0e0;
-    }
-    .info {
+
+    .hidden { display: none; }
+
+    .question-box {
       text-align: center;
-      margin-top: 15px;
-      font-weight: bold;
-      font-size: 18px;
+    }
+    .question-box img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .answers button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>📝 الامتحان المباشر</h1>
 
   <!-- تسجيل الدخول -->
   <div id="loginBox">
     <h2>تسجيل الدخول</h2>
-    <input type="email" id="email" placeholder="اكتب الايميل"><br>
-    <input type="text" id="teamCode" placeholder="ادخل الكود"><br>
+    <input type="email" id="email" placeholder="اكتب الايميل">
+    <input type="text" id="code" placeholder="ادخل الكود">
     <button id="loginBtn">دخول</button>
   </div>
 
-  <!-- الامتحان -->
-  <div id="liveBox" class="hidden">
-    <h2 id="userName"></h2>
-    <div class="info">اختر الإجابة الصحيحة</div>
-
-    <!-- السؤال -->
-    <div class="question">
-      <img src="q1.jpg" alt="صورة السؤال">
+  <!-- الأسئلة -->
+  <div id="questionBox" class="hidden">
+    <h2 id="welcomeText"></h2>
+    <div class="question-box">
+      <img src="question.jpg" alt="السؤال">
       <div class="answers">
-        <label><input type="radio" name="answer" value="أ"> أ</label>
-        <label><input type="radio" name="answer" value="ب"> ب</label>
-        <label><input type="radio" name="answer" value="ج"> ج</label>
-        <label><input type="radio" name="answer" value="د"> د</label>
+        <button class="answer-btn">الاختيار 1</button>
+        <button class="answer-btn">الاختيار 2</button>
+        <button class="answer-btn">الاختيار 3</button>
+        <button class="answer-btn">الاختيار 4</button>
       </div>
-      <button id="submitAnswer">إرسال الإجابة</button>
     </div>
   </div>
+
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+  import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
+  // 🧠 Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
     authDomain: "my-web-c23de.firebaseapp.com",
@@ -116,14 +105,11 @@
   const db = getFirestore(app);
 
   const loginBox = document.getElementById("loginBox");
-  const liveBox = document.getElementById("liveBox");
-  const loginBtn = document.getElementById("loginBtn");
+  const questionBox = document.getElementById("questionBox");
   const emailInput = document.getElementById("email");
-  const codeInput = document.getElementById("teamCode");
-  const userName = document.getElementById("userName");
-  const submitAnswer = document.getElementById("submitAnswer");
-
-  let currentUserId = null;
+  const codeInput = document.getElementById("code");
+  const loginBtn = document.getElementById("loginBtn");
+  const welcomeText = document.getElementById("welcomeText");
 
   loginBtn.addEventListener("click", async () => {
     const email = emailInput.value.trim();
@@ -135,53 +121,36 @@
     }
 
     try {
-      // في قاعدة البيانات: الـ code هو اسم الـ document
-      const userRef = doc(db, "users", code);
-      const snap = await getDoc(userRef);
+      // 🔎 نبحث عن المستخدم الذي يملك inviteCode مطابق للكود المدخل
+      const q = query(collection(db, "users"), where("inviteCode", "==", code));
+      const snap = await getDocs(q);
 
-      if (!snap.exists()) {
+      if (snap.empty) {
         alert("❌ الكود غير صحيح");
         return;
       }
 
-      const data = snap.data();
+      const userDoc = snap.docs[0];
+      const data = userDoc.data();
+
       if (data.used === true) {
         alert("⚠️ هذا الكود تم استخدامه من قبل");
         return;
       }
 
-      // تحديث بيانات المستخدم
-      await updateDoc(userRef, { used: true, email: email });
+      // 📝 نحدّث المستخدم إلى used = true
+      await updateDoc(doc(db, "users", userDoc.id), {
+        used: true,
+        email: email
+      });
 
-      currentUserId = code;
-      userName.textContent = "👋 أهلاً، " + email;
+      welcomeText.textContent = `👋 أهلاً ${email}`;
       loginBox.classList.add("hidden");
-      liveBox.classList.remove("hidden");
+      questionBox.classList.remove("hidden");
 
     } catch (err) {
       console.error(err);
       alert("حدث خطأ أثناء تسجيل الدخول");
-    }
-  });
-
-  submitAnswer.addEventListener("click", async () => {
-    if (!currentUserId) return;
-    const selected = document.querySelector('input[name="answer"]:checked');
-    if (!selected) {
-      alert("⚠️ اختر إجابة أولاً");
-      return;
-    }
-
-    const answer = selected.value;
-
-    try {
-      const userRef = doc(db, "users", currentUserId);
-      await updateDoc(userRef, { answer: answer });
-      alert("✅ تم إرسال الإجابة بنجاح");
-      submitAnswer.disabled = true;
-    } catch (err) {
-      console.error(err);
-      alert("حدث خطأ أثناء إرسال الإجابة");
     }
   });
 </script>
