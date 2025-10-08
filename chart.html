@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>لوحة التحكم المالية — يدوي</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      --bg: #0f1724;
+      --card: #0b1220;
+      --accent: #ffb020;
+      --muted: #9aa4b2;
+      --glass: rgba(255,255,255,0.04);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: "Tahoma", Arial, sans-serif;
+      background: linear-gradient(180deg,#071022 0%, #0f1724 100%);
+      color: #e6eef6;
+      padding: 28px;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: 1fr 380px;
+      gap:20px;
+      align-items:start;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px;
+      padding:18px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    /* Header */
+    header {
+      grid-column: 1/ -1;
+      display:flex;
+      gap:18px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:6px;
+    }
+    h1 { margin:0; font-size:20px; color:var(--accent); }
+    .subtitle { color:var(--muted); font-size:13px; margin-top:6px; }
+
+    /* Left column */
+    .chart-area { display:flex; flex-direction:column; gap:16px; }
+    .top-stats {
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .stat {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      padding:12px 14px;
+      min-width:150px;
+      border:1px solid rgba(255,255,255,0.02);
+    }
+    .stat h3 { margin:0; font-size:18px; color:var(--accent); }
+    .stat p { margin:6px 0 0 0; color:var(--muted); font-size:13px; }
+
+    canvas { background: transparent; border-radius:10px; }
+
+    /* Right column */
+    .controls { display:flex; flex-direction:column; gap:12px; }
+    .balance {
+      display:flex; flex-direction:column; align-items:flex-start; gap:8px;
+    }
+    .balance .big {
+      font-size:32px; font-weight:700; color:#fff;
+    }
+    .btn-row { display:flex; gap:10px; width:100%; }
+    .btn {
+      flex:1;
+      padding:10px 12px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+      background:linear-gradient(90deg,var(--accent), #ff8a3d);
+      color:#071022;
+    }
+    .btn.negative { background: linear-gradient(90deg,#ef4444,#be123c); color:#fff; }
+
+    /* Log table */
+    .log {
+      margin-top:12px;
+      max-height:420px;
+      overflow:auto;
+      border-radius:10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));
+      padding:8px;
+    }
+    table { width:100%; border-collapse:collapse; font-size:13px; color:#e6eef6; }
+    th, td { padding:8px; text-align:right; border-bottom:1px dashed rgba(255,255,255,0.03); }
+    th { color:var(--muted); font-size:12px; }
+    td.amount { font-weight:700; }
+
+    /* Modal */
+    .modal-backdrop {
+      position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:999;
+    }
+    .modal { width:420px; background:var(--card); border-radius:12px; padding:18px; }
+    .modal h3 { margin:0 0 8px 0; color:var(--accent); }
+    .field { margin-top:10px; }
+    input, textarea {
+      width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:#fff;
+    }
+    .modal .actions { display:flex; gap:8px; margin-top:12px; justify-content:flex-end; }
+    .link { color:var(--muted); font-size:13px; text-decoration:underline; cursor:pointer; }
+
+    @media (max-width:980px){
+      .wrap{ grid-template-columns: 1fr; padding-bottom:40px; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="card">
+      <div>
+        <h1>لوحة الأرباح — إدخال يدوي</h1>
+        <div class="subtitle">تحكّم، سجل، ورؤية تطور الأرباح — دون اتصال بخوادم</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:12px;color:var(--muted)">آخر تحديث</div>
+        <div id="lastUpdate" style="font-weight:700">—</div>
+      </div>
+    </header>
+
+    <!-- LEFT: Chart + stats -->
+    <div class="card chart-area">
+      <div class="top-stats">
+        <div class="stat">
+          <h3 id="totalEarningsDisplay">0 ج.م</h3>
+          <p>الإجمالي المكتسب</p>
+        </div>
+        <div class="stat">
+          <h3 id="avgDaily">0 ج.م</h3>
+          <p>متوسط يومي (آخر 7 أيام)</p>
+        </div>
+        <div class="stat">
+          <h3 id="entriesCount">0</h3>
+          <p>عدد السجلات</p>
+        </div>
+      </div>
+
+      <div style="margin-top:6px;">
+        <canvas id="earningsChart" height="160"></canvas>
+      </div>
+    </div>
+
+    <!-- RIGHT: Controls + log -->
+    <aside class="card controls">
+      <div class="balance">
+        <div style="color:var(--muted); font-size:13px;">الرصيد الحالي (مالي)</div>
+        <div class="big" id="bigBalance">0 ج.م</div>
+        <div style="color:var(--muted); font-size:13px;">تحكّم سريع</div>
+        <div class="btn-row">
+          <button class="btn" id="addBtn">➕ إضافة</button>
+          <button class="btn negative" id="subBtn">➖ خصم</button>
+        </div>
+      </div>
+
+      <div style="margin-top:8px; color:var(--muted); font-size:13px;">سجل العمليات</div>
+      <div class="log">
+        <table>
+          <thead>
+            <tr><th>الوقت</th><th>ملاحظة</th><th>المبلغ</th></tr>
+          </thead>
+          <tbody id="logBody"></tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:10px; display:flex; gap:8px; align-items:center;">
+        <div class="link" id="exportBtn">⬇️ تصدير CSV</div>
+        <div class="link" id="clearBtn">🗑 مسح الكل</div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modal">
+    <div class="modal">
+      <h3 id="modalTitle">إضافة رصيد</h3>
+      <div class="field">
+        <label>المبلغ (بالجنيه)</label>
+        <input type="number" id="amountInput" step="0.01" min="0">
+      </div>
+      <div class="field">
+        <label>ملاحظة / وصف</label>
+        <input id="noteInput" placeholder="مثال: بيع اشتراك VIP">
+      </div>
+      <div class="actions">
+        <button id="cancelModal" style="background:#374151;color:#fff;padding:8px 12px;border-radius:8px;border:none;">إلغاء</button>
+        <button id="confirmModal" style="background:var(--accent);padding:8px 12px;border-radius:8px;border:none;font-weight:700;">تأكيد</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========= DATA MODEL =========
+    const STORAGE_KEY = 'manual_fin_dashboard_v1';
+
+    // نموذج السجل: array of {id, timestamp, amount (positive/negative), note}
+    let db = {
+      entries: [],
+      total: 0
+    };
+
+    // ======== Helpers ========
+    const $ = id => document.getElementById(id);
+
+    function saveToStorage() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+    }
+
+    function loadFromStorage() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try {
+          db = JSON.parse(raw);
+          // validation
+          if (!Array.isArray(db.entries)) db.entries = [];
+          db.total = Number(db.total || 0);
+        } catch (e) {
+          console.error('Invalid storage, reset.', e);
+          db = { entries: [], total: 0 };
+        }
+      } else {
+        db = { entries: [], total: 0 };
+      }
+    }
+
+    function formatCurrency(v) {
+      // you can change locale/currency string if needed
+      return Number(v).toLocaleString('ar-EG', { maximumFractionDigits: 2 }) + ' ج.م';
+    }
+
+    function nowIso() { return new Date().toISOString(); }
+    function humanDate(iso) {
+      const d = new Date(iso);
+      return d.toLocaleString('ar-EG', { dateStyle:'short', timeStyle:'short' });
+    }
+
+    function uid() { return Math.random().toString(36).slice(2,9); }
+
+    // ========= UI Binding & Logic =========
+    const chartCtx = $('earningsChart').getContext('2d');
+    let earningsChart;
+
+    function computeStats() {
+      const total = db.entries.reduce((s,e) => s + Number(e.amount), 0);
+      const count = db.entries.length;
+      // average daily over last 7 days
+      const now = Date.now();
+      const sevenDaysAgo = now - (7*24*60*60*1000);
+      const perDay = {};
+      db.entries.forEach(e => {
+        const d = new Date(e.timestamp);
+        const key = d.toISOString().slice(0,10);
+        perDay[key] = (perDay[key] || 0) + Number(e.amount);
+      });
+      const days = Object.keys(perDay).filter(k => new Date(k).getTime() >= sevenDaysAgo);
+      const avgDaily = days.length ? (days.reduce((s,k)=> s+perDay[k],0)/ Math.max(1, days.length)) : 0;
+      return { total, count, avgDaily };
+    }
+
+    function rebuildUI() {
+      const stats = computeStats();
+      db.total = stats.total;
+      $('totalEarningsDisplay').innerText = formatCurrency(stats.total);
+      $('bigBalance').innerText = formatCurrency(stats.total);
+      $('entriesCount').innerText = stats.count;
+      $('avgDaily').innerText = formatCurrency(stats.avgDaily);
+
+      // last update
+      $('lastUpdate').innerText = db.entries.length ? humanDate(db.entries[db.entries.length-1].timestamp) : '—';
+
+      // rebuild table
+      const tbody = $('logBody');
+      tbody.innerHTML = '';
+      db.entries.slice().reverse().forEach(e => {
+        const tr = document.createElement('tr');
+        const tdTime = document.createElement('td');
+        tdTime.textContent = humanDate(e.timestamp);
+        const tdNote = document.createElement('td');
+        tdNote.textContent = e.note || '';
+        const tdAmount = document.createElement('td');
+        tdAmount.className = 'amount';
+        tdAmount.textContent = (e.amount >= 0 ? '+' : '') + formatCurrency(e.amount);
+        tdAmount.style.color = e.amount >= 0 ? '#10b981' : '#ef4444';
+        tr.appendChild(tdTime);
+        tr.appendChild(tdNote);
+        tr.appendChild(tdAmount);
+        tbody.appendChild(tr);
+      });
+
+      // chart data: group by date (YYYY-MM-DD) and prefix cumulative sum
+      const grouped = {};
+      db.entries.forEach(e=>{
+        const date = e.timestamp.slice(0,10);
+        grouped[date] = (grouped[date] || 0) + Number(e.amount);
+      });
+      // sort dates ascending
+      const dates = Object.keys(grouped).sort();
+      let cum = 0;
+      const labels = [];
+      const data = [];
+      dates.forEach(d => {
+        cum += grouped[d];
+        labels.push(d);
+        data.push(+cum.toFixed(2));
+      });
+
+      // if no data - show a sample range (last 7 days)
+      if (labels.length === 0) {
+        const tmpLabels = [];
+        const tmpData = [];
+        for (let i=6;i>=0;i--) {
+          const dd = new Date();
+          dd.setDate(dd.getDate()-i);
+          const key = dd.toISOString().slice(0,10);
+          tmpLabels.push(key);
+          tmpData.push(0);
+        }
+        updateChart(tmpLabels, tmpData);
+      } else {
+        updateChart(labels, data);
+      }
+
+      saveToStorage();
+    }
+
+    function updateChart(labels, data) {
+      if (!earningsChart) {
+        earningsChart = new Chart(chartCtx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'الرصيد التراكمي',
+              data: data,
+              borderColor: 'rgba(255,176,32,0.95)',
+              backgroundColor: 'rgba(255,176,32,0.12)',
+              tension: 0.3,
+              pointRadius: 4,
+              pointBackgroundColor: 'rgba(255,176,32,1)',
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: {
+                ticks: { color: '#cbd5e1' },
+                grid: { color: 'rgba(255,255,255,0.03)' }
+              },
+              y: {
+                beginAtZero: true,
+                ticks: { color: '#cbd5e1' },
+                grid: { color: 'rgba(255,255,255,0.03)' }
+              }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: ctx => formatCurrency(ctx.parsed.y)
+                }
+              }
+            }
+          }
+        });
+      } else {
+        earningsChart.data.labels = labels;
+        earningsChart.data.datasets[0].data = data;
+        earningsChart.update();
+      }
+    }
+
+    // ========= Modal logic =========
+    let currentMode = 'add'; // or 'sub'
+    function openModal(mode) {
+      currentMode = mode;
+      $('modal').style.display = 'flex';
+      $('modalTitle').innerText = mode === 'add' ? 'إضافة رصيد' : 'خصم رصيد';
+      $('amountInput').value = '';
+      $('noteInput').value = '';
+      setTimeout(()=>$('amountInput').focus(),120);
+    }
+    function closeModal() { $('modal').style.display = 'none'; }
+
+    // handle confirm
+    $('confirmModal').addEventListener('click', ()=> {
+      const raw = parseFloat($('amountInput').value);
+      const note = $('noteInput').value.trim();
+      if (isNaN(raw) || raw <= 0) {
+        alert('أدخل مبلغ صالح أكبر من صفر');
+        return;
+      }
+      const amt = currentMode === 'add' ? +raw : -Math.abs(raw);
+      const entry = { id: uid(), timestamp: nowIso(), amount: +amt.toFixed(2), note };
+      db.entries.push(entry);
+      rebuildUI();
+      closeModal();
+    });
+
+    $('cancelModal').addEventListener('click', closeModal);
+
+    // bind buttons
+    $('addBtn').addEventListener('click', ()=> openModal('add'));
+    $('subBtn').addEventListener('click', ()=> openModal('sub'));
+
+    // export CSV
+    $('exportBtn').addEventListener('click', ()=> {
+      if (!db.entries.length) { alert('لا توجد بيانات للتصدير'); return; }
+      const rows = [['timestamp','note','amount']];
+      db.entries.forEach(e => rows.push([e.timestamp, (e.note||''), e.amount]));
+      const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `earnings_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // clear all
+    $('clearBtn').addEventListener('click', ()=> {
+      if (!confirm('هل أنت متأكد من مسح كل البيانات؟ لا يمكن التراجع')) return;
+      db = { entries: [], total: 0 };
+      rebuildUI();
+    });
+
+    // keyboard: Enter in amount triggers confirm
+    $('amountInput').addEventListener('keydown', (e)=>{
+      if (e.key === 'Enter') $('confirmModal').click();
+    });
+
+    // ===== Init =====
+    loadFromStorage();
+    rebuildUI();
+
+    // small UX: click outside modal closes
+    document.getElementById('modal').addEventListener('click', (ev)=>{
+      if (ev.target.id === 'modal') closeModal();
+    });
+
+  </script>
+</body>
+</html>
