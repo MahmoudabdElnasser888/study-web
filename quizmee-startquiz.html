@@ -3,201 +3,222 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الاختبار الذكي</title>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js"></script>
-
+  <title>اختبار الرياضيات</title>
   <style>
     body {
-      font-family: "Tajawal", sans-serif;
-      background: linear-gradient(135deg, #2c3e50, #4ca1af);
-      color: white;
+      font-family: 'Tajawal', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #333;
+      min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      margin: 0;
     }
-
-    .quiz-container {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 30px;
+    .container {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      max-width: 850px;
       width: 90%;
-      max-width: 500px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      animation: fadeIn 1s ease;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    h2 {
       text-align: center;
-      backdrop-filter: blur(8px);
+      margin-bottom: 15px;
+      color: #4b3cc4;
     }
-
-    .progress-bar {
-      width: 100%;
-      height: 8px;
-      background: rgba(255,255,255,0.2);
+    .question {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
       border-radius: 10px;
-      margin: 15px 0;
-      overflow: hidden;
+      background: #fafafa;
     }
-
-    .progress {
-      height: 8px;
-      background: #00e0ff;
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    button {
-      background: #00e0ff;
-      border: none;
-      padding: 10px 25px;
-      color: #222;
-      font-size: 1.1em;
-      border-radius: 10px;
+    .option {
+      display: block;
+      margin: 6px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
       cursor: pointer;
-      margin-top: 15px;
       transition: 0.3s;
     }
-
-    button:hover {
-      background: #fff;
-      color: #0077aa;
+    .option:hover { background: #eef; }
+    .option.correct { background: #c8f7c5; border-color: #28a745; }
+    .option.wrong { background: #f7c5c5; border-color: #dc3545; }
+    #timer {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #555;
+      margin-bottom: 15px;
     }
-
-    .timer {
-      font-size: 1.3em;
+    .result {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    img {
+      width: 100%;
+      border-radius: 8px;
       margin-bottom: 10px;
-      color: #ffe;
     }
+    .button {
+      display: block;
+      margin: 10px auto;
+      background: linear-gradient(120deg, #5a67d8, #805ad5);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .button:hover { opacity: 0.9; }
   </style>
 </head>
-
 <body>
-  <div class="quiz-container" id="quizBox">
-    <h2 id="status">جاري البحث عن الحساب...</h2>
+<div class="container" id="container">
+  <h2 id="welcome">جاري البحث عن حسابك...</h2>
+  <div id="quizBox" style="display:none;">
+    <div id="timer">الوقت المتبقي: 10:00</div>
+
+    <div class="question" data-correct="2">
+      <img src="q1.jpg" alt="سؤال 1">
+      <label class="option"><input type="radio" name="q1" value="1"> أ</label>
+      <label class="option"><input type="radio" name="q1" value="2"> ب</label>
+      <label class="option"><input type="radio" name="q1" value="3"> ج</label>
+      <label class="option"><input type="radio" name="q1" value="4"> د</label>
+    </div>
+
+    <div class="question" data-correct="3">
+      <img src="q2.jpg" alt="سؤال 2">
+      <label class="option"><input type="radio" name="q2" value="1"> أ</label>
+      <label class="option"><input type="radio" name="q2" value="2"> ب</label>
+      <label class="option"><input type="radio" name="q2" value="3"> ج</label>
+      <label class="option"><input type="radio" name="q2" value="4"> د</label>
+    </div>
+
+    <button class="button" id="showAnswers">إنهاء وإرسال النتيجة</button>
+    <div class="result" id="result"></div>
   </div>
+</div>
 
-  <script type="module">
-    // --- Firebase Config ---
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "SENDER_ID",
-      appId: "APP_ID"
-    };
+<!-- Firebase v8 -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+<script>
+  // إعداد Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+    authDomain: "my-web-c23de.firebaseapp.com",
+    projectId: "my-web-c23de",
+    storageBucket: "my-web-c23de.firebasestorage.app",
+    messagingSenderId: "846339445873",
+    appId: "1:846339445873:web:fc0427a7ad77eceda837d0",
+    measurementId: "G-3SE0GBRS8C"
+  };
 
-    const quizBox = document.getElementById("quizBox");
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
 
-    // --- Fake questions (replace with your real ones) ---
-    const questions = [
-      { q: "كم عدد ألوان قوس قزح؟", a: ["5", "6", "7", "8"], correct: 2 },
-      { q: "ما عاصمة مصر؟", a: ["القاهرة", "الإسكندرية", "طنطا", "أسوان"], correct: 0 },
-      { q: "من الذي كتب رواية البؤساء؟", a: ["تولستوي", "فيكتور هوغو", "نجيب محفوظ", "دوستويفسكي"], correct: 1 }
-    ];
+  const SUBJECT_NAME = "اختبار الرياضيات";
+  const QUIZ_TIME = 10 * 60; // 10 دقائق
+  let timer;
+  let totalSeconds = QUIZ_TIME;
+  let userEmail = "";
+  let userId = "";
 
-    // --- UI Loading ---
-    auth.onAuthStateChanged(async user => {
-      if (!user) {
-        quizBox.innerHTML = `<h2>من فضلك سجّل الدخول أولاً</h2>`;
-        return;
-      }
+  const welcome = document.getElementById("welcome");
+  const quizBox = document.getElementById("quizBox");
+  const resultDiv = document.getElementById("result");
+  const timerDiv = document.getElementById("timer");
 
-      const userRef = db.collection("users").doc(user.uid);
-      const userSnap = await userRef.get();
-      const userData = userSnap.data() || {};
-
-      quizBox.innerHTML = `
-        <h2>مرحباً ${userData.name || "بك"} 👋</h2>
-        <p>عندك اختبار مكون من ${questions.length} أسئلة</p>
-        <button id="startBtn">ابدأ الآن</button>
-      `;
-
-      document.getElementById("startBtn").onclick = startQuiz;
-
-      // --- Start Quiz Function ---
-      function startQuiz() {
-        let index = 0;
-        let score = 0;
-        let timeLeft = 60; // seconds
-
-        renderQuestion();
+  // تسجيل الدخول تلقائيًا (بالحساب الحالي)
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      userEmail = user.email;
+      userId = user.uid;
+      welcome.innerText = `مرحبًا ${user.displayName || ""}!`;
+      setTimeout(() => {
+        welcome.style.display = "none";
+        quizBox.style.display = "block";
         startTimer();
+      }, 1500);
+    } else {
+      welcome.innerText = "الرجاء تسجيل الدخول أولاً 🔒";
+    }
+  });
 
-        function renderQuestion() {
-          if (index >= questions.length) {
-            finishAndSend();
-            return;
-          }
-
-          const q = questions[index];
-          quizBox.innerHTML = `
-            <div class="timer">⏱️ الوقت المتبقي: <span id="time">${timeLeft}</span> ثانية</div>
-            <div class="progress-bar"><div class="progress" id="progress"></div></div>
-            <h3>${q.q}</h3>
-            ${q.a.map((opt, i) => `
-              <button onclick="window.selectAnswer(${i})">${opt}</button>
-            `).join("")}
-          `;
-
-          document.getElementById("progress").style.width = ((index) / questions.length) * 100 + "%";
-          window.selectAnswer = (i) => {
-            if (i === q.correct) score++;
-            index++;
-            renderQuestion();
-          };
-        }
-
-        function startTimer() {
-          const interval = setInterval(() => {
-            timeLeft--;
-            const t = document.getElementById("time");
-            if (t) t.textContent = timeLeft;
-            if (timeLeft <= 0) {
-              clearInterval(interval);
-              finishAndSend();
-            }
-          }, 1000);
-        }
-
-        async function finishAndSend() {
-          quizBox.innerHTML = `<h2>📤 جاري إرسال النتيجة...</h2>`;
-          try {
-            const total = questions.length;
-            const subject = "عام";
-
-            // أضف النتيجة في كوليكشن results
-            await db.collection("results").add({
-              uid: user.uid,
-              score: score,
-              total: total,
-              subject: subject,
-              createdAt: firebase.firestore.Timestamp.now()
-            });
-
-            // جِب المجموع القديم وزوّده
-            const oldScore = userData.score || 0;
-            await userRef.update({ score: oldScore + score });
-
-            quizBox.innerHTML = `
-              <h2>🎉 تمت الإرسال بنجاح!</h2>
-              <p>درجتك: ${score} / ${total}</p>
-              <p>مجموعك الكلي الآن: ${oldScore + score}</p>
-            `;
-          } catch (err) {
-            quizBox.innerHTML = `<h2 style="color:red;">فشل أثناء الإرسال: ${err.message}</h2>`;
-          }
-        }
+  function startTimer() {
+    timer = setInterval(() => {
+      let min = Math.floor(totalSeconds / 60);
+      let sec = totalSeconds % 60;
+      timerDiv.textContent = `الوقت المتبقي: ${min}:${sec.toString().padStart(2, '0')}`;
+      if (totalSeconds <= 0) {
+        clearInterval(timer);
+        showResults();
       }
+      totalSeconds--;
+    }, 1000);
+  }
+
+  async function showResults() {
+    clearInterval(timer);
+    let correctCount = 0;
+    const questions = document.querySelectorAll(".question");
+
+    questions.forEach((q, index) => {
+      const correct = parseInt(q.dataset.correct);
+      const selected = q.querySelector(`input[name="q${index + 1}"]:checked`);
+      q.querySelectorAll(".option").forEach(opt => {
+        const val = parseInt(opt.querySelector("input").value);
+        if (val === correct) opt.classList.add("correct");
+        if (selected && parseInt(selected.value) === val && val !== correct) opt.classList.add("wrong");
+      });
+      if (selected && parseInt(selected.value) === correct) correctCount++;
     });
-  </script>
+
+    resultDiv.innerText = `درجتك: ${correctCount} من ${questions.length}`;
+
+    // حفظ النتيجة في Firestore
+    try {
+      const resultRef = db.collection("results");
+      await resultRef.add({
+        uid: userId,
+        email: userEmail,
+        subject: SUBJECT_NAME,
+        score: correctCount,
+        total: questions.length,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      // تحديث مجموع المستخدم
+      const userRef = db.collection("users").doc(userId);
+      await db.runTransaction(async (t) => {
+        const userDoc = await t.get(userRef);
+        const currentScore = userDoc.exists && userDoc.data().score ? userDoc.data().score : 0;
+        t.update(userRef, { score: currentScore + correctCount });
+      });
+
+      alert("✅ تم إرسال النتيجة وتحديث مجموعك!");
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ فشل أثناء الإرسال: " + err.message);
+    }
+  }
+
+  document.getElementById("showAnswers").addEventListener("click", showResults);
+</script>
 </body>
 </html>
