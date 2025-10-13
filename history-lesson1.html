@@ -1,1306 +1,452 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>الدرس الكامل - حضارات شبه الجزيرة العربية قُبيل ظهور الإسلام</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>حضارات شبه الجزيرة قبل الإسلام — درس تفاعلي كامل</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#1b0330; /* deep purple */
+      --bg2:#060b2e; /* navy */
+      --card:#0f1220;
+      --glass: rgba(255,255,255,0.03);
+      --accent:#8b5cf6;
+      --accent-2:#6d28d9;
+      --xp:#7cf1ff;
+      --good:#7ef08b;
+      --bad:#ff7b7b;
+      --muted:#b9c3d1;
+      font-family: 'Cairo', Tahoma, sans-serif;
+    }
 
-<!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(120deg,var(--bg1),var(--bg2));color:#eef6ff;min-height:100vh;overflow-y:auto}
 
-<style>
-  :root{
-    --bg1: #0f172a;
-    --glass: rgba(255,255,255,0.04);
-    --accent: #ffb703;
-    --accent-2: #fb8500;
-    --card: rgba(255,255,255,0.03);
-    --text: #f8fafc;
-    --muted: #cbd5e1;
-    --good: #34d399;
-  }
-  html,body{height:100%;}
-  body{
-    margin:0;
-    padding:28px;
-    font-family: 'Cairo', sans-serif;
-    background:
-      radial-gradient(circle at 10% 10%, rgba(255,183,3,0.08), transparent 10%),
-      linear-gradient(180deg,#071129 0%, #10203a 50%, #1a2a44 100%);
-    color:var(--text);
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    direction: rtl;
-  }
+    /* animated background blobs */
+    .bg-blob{position:fixed;pointer-events:none;filter:blur(70px);opacity:0.28;mix-blend-mode:screen}
+    .b1{width:520px;height:520px;background:radial-gradient(circle at 30% 30%, #8b5cf6, transparent 40%);left:-120px;top:-80px;animation:float1 14s infinite}
+    .b2{width:420px;height:420px;background:radial-gradient(circle at 70% 70%, #6d28d9, transparent 40%);right:-80px;bottom:-120px;animation:float2 16s infinite}
+    @keyframes float1{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-18px) rotate(6deg)}100%{transform:translateY(0) rotate(0)}}
+    @keyframes float2{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(16px) rotate(-6deg)}100%{transform:translateY(0) rotate(0)}}
 
-  header{
-    display:flex;
-    gap:16px;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:18px;
-  }
-  .title {
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-  }
-  h1{ margin:0; font-size:20px; letter-spacing:0.4px; color:var(--accent); }
-  p.subtitle{ margin:0; color:var(--muted); font-size:13px; }
+    .container{max-width:980px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;gap:16px}
+    .logo{width:78px;height:78px;border-radius:14px;background:linear-gradient(135deg,var(--accent-2),var(--accent));display:flex;align-items:center;justify-content:center;box-shadow:0 12px 40px rgba(109,40,217,0.12)}
+    .logo h1{margin:0;font-size:18px;color:white}
+    header h2{margin:0;font-size:20px}
+    .meta{color:var(--muted);font-size:13px}
 
-  /* XP / progress */
-  .status {
-    display:flex;
-    gap:12px;
-    align-items:center;
-  }
-  .xp {
-    background: linear-gradient(90deg, rgba(255,183,3,0.12), rgba(251,133,0,0.08));
-    padding:8px 14px;
-    border-radius:999px;
-    font-weight:700;
-    color:var(--accent);
-    box-shadow: 0 6px 18px rgba(11,22,40,0.6);
-  }
+    /* XP bar top */
+    .xp-wrap{display:flex;gap:12px;align-items:center;margin-top:14px}
+    .xp-bar{flex:1;height:16px;background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border-radius:999px;padding:3px}
+    .xp-fill{height:100%;width:0;background:linear-gradient(90deg,var(--xp),#a28bff);border-radius:999px;transition:width .6s ease}
+    .xp-info{min-width:160px;text-align:left;color:var(--muted);font-weight:700}
 
-  .progress-wrap{
-    width:360px;
-    max-width:42vw;
-    min-width:180px;
-    background: rgba(255,255,255,0.04);
-    padding:10px;
-    border-radius:12px;
-    box-shadow: 0 6px 20px rgba(2,6,23,0.6);
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-  .progress-line{
-    height:14px;
-    background: rgba(255,255,255,0.03);
-    border-radius:999px;
-    overflow:hidden;
-    position:relative;
-  }
-  .progress-fill{
-    height:100%;
-    width:0%;
-    background: linear-gradient(90deg,#34d399,#60a5fa);
-    border-radius:inherit;
-    transition:width 600ms cubic-bezier(.2,.9,.3,1);
-    display:flex;
-    align-items:center;
-    justify-content:flex-end;
-    color:#022c22;
-    font-weight:700;
-    padding-right:8px;
-    box-shadow: inset 0 -6px 20px rgba(255,255,255,0.03);
-  }
-  .progress-info{ font-size:12px; color:var(--muted); display:flex; justify-content:space-between; }
+    main{margin-top:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:18px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.02)}
+    .paragraph-title{display:flex;align-items:center;gap:12px}
+    .num-badge{width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800}
+    h3{margin:6px 0;color:#fff}
+    p{color:var(--muted);line-height:1.7}
 
-  /* container for lesson */
-  main{
-    margin-top:16px;
-    max-width:1200px;
-    margin-left:auto;
-    margin-right:auto;
-  }
+    .controls{display:flex;gap:8px;margin-top:10px}
+    .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071021;font-weight:700}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
 
-  /* Each full-section card - keep raw text exactly */
-  .section{
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border: 1px solid rgba(255,255,255,0.03);
-    padding:18px;
-    border-radius:12px;
-    margin-bottom:14px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.45);
-    transition: transform 220ms ease, box-shadow 220ms ease;
-    position:relative;
-  }
-  .section:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,0.6); }
+    .question{margin-top:12px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border-radius:10px}
+    .opts{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+    .opt{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;cursor:pointer}
+    .opt.correct{outline:3px solid rgba(126,240,139,0.12);box-shadow:0 6px 18px rgba(126,240,139,0.06)}
+    .opt.wrong{outline:3px solid rgba(255,123,123,0.1)}
 
-  /* keep original formatting and line breaks */
-  .content {
-    white-space: pre-wrap;
-    color: #f1f5f9;
-    font-size:16px;
-    line-height:1.9;
-    letter-spacing:0.2px;
-  }
+    .badge-level{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--muted);font-weight:700}
 
-  /* bottom controls per section */
-  .controls{
-    display:flex;
-    gap:10px;
-    margin-top:12px;
-    align-items:center;
-  }
-  .btn{
-    background: linear-gradient(90deg,var(--accent),var(--accent-2));
-    color:#061120;
-    padding:8px 12px;
-    border-radius:10px;
-    border:none;
-    font-weight:700;
-    cursor:pointer;
-    box-shadow: 0 6px 18px rgba(11,22,40,0.45);
-    transition: transform 160ms ease, opacity 160ms;
-  }
-  .btn.secondary{
-    background: rgba(255,255,255,0.04);
-    color:var(--muted);
-    border:1px solid rgba(255,255,255,0.03);
-  }
-  .btn:active{ transform: translateY(2px); }
+    .hint{color:var(--muted);font-size:13px;margin-top:8px}
 
-  /* small badge when section done */
-  .done-badge{
-    position:absolute;
-    left:14px;
-    top:14px;
-    background:linear-gradient(90deg,#34d399,#10b981);
-    color:#05221b;
-    padding:6px 10px;
-    font-weight:800;
-    border-radius:999px;
-    display:none;
-    box-shadow: 0 8px 23px rgba(0,0,0,0.4);
-  }
-  .section.done .done-badge{ display:block; }
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
 
-  /* progress sparkle */
-  .spark {
-    position:absolute;
-    right:18px;
-    top:8px;
-    font-size:12px;
-    color:var(--accent);
-    opacity:0.9;
-  }
+    /* confetti */
+    .confetti-piece{position:fixed;z-index:2000;pointer-events:none}
 
-  /* footer */
-  footer{
-    margin-top:26px;
-    text-align:center;
-    color:var(--muted);
-    font-size:13px;
-  }
-
-  /* confetti canvas */
-  #confetti-canvas{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:9999;
-  }
-
-  /* responsive */
-  @media(max-width:900px){
-    .progress-wrap{ width:100%; }
-    header{ flex-direction:column; align-items:flex-start; gap:8px; }
-    .status{ align-self:stretch; justify-content:space-between; width:100%; }
-  }
-</style>
+    /* responsive */
+    @media(max-width:720px){.xp-info{display:none} .logo{width:62px;height:62px} }
+  </style>
 </head>
 <body>
+  <div class="bg-blob b1"></div>
+  <div class="bg-blob b2"></div>
 
-<header>
-  <div class="title">
-    <h1>📚 التاريخ — حضارات شبه الجزيرة العربية قُبيل ظهور الإسلام</h1>
-    <p class="subtitle">النص كامل — تفاعلي: اقراً، اضغط "قرأت" وخُد نقاط XP — خلي المذاكرة لعبة 🎮</p>
+  <div class="container">
+    <header>
+     
+      <div>
+        <h2>حضارات شبه الجزيرة العربية قُبيل ظهور الإسلام</h2>
+        <div class="meta">درس كامل مُقسّم إلى فقرات، كل فقرة لها سؤال — اكسب نقاط XP بالتقدم.</div>
+      </div>
+      <div style="margin-inline-start:auto;text-align:left">
+        <div class="badge-level" id="levelBadge">المستوى: مبتدئ</div>
+      </div>
+    </header>
+
+    <div class="xp-wrap">
+      <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+      <div class="xp-info" id="xpInfo">XP: <strong id="xpCount">0</strong> / <span id="xpNext">150</span></div>
+    </div>
+
+    <main>
+      <!-- Paragraph 1 -->
+      <article class="card" id="para1">
+        <div class="paragraph-title"><div class="num-badge">1</div><h3>شبه الجزيرة العربية جزء لا يتجزأ من تاريخ الحضارة قبل الإسلام</h3></div>
+        <p>العرب استوطنوا شبه الجزيرة وهم أمة سامية الأصل نسبة إلى سام بن نوح عليه السلام. تمتد جذور السكان والعادات في هذه المنطقة لآلاف السنين، مما جعلها أرضًا خصبة لظهور ممالك ومدن وتكوّن هويات حضارية متعددة قبل الإسلام.</p>
+        <div class="controls">
+          <button class="btn" data-read="1">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="1">عرض السؤال</button>
+        </div>
+        <div class="question" id="q1" style="display:none">
+          <div class="muted">س1: ما أصل العرب بحسب الدرس؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">أصلهم سامي نسبة إلى سام بن نوح</div>
+            <div class="opt">أصلهم جرماني</div>
+            <div class="opt">أصلهم هندي</div>
+          </div>
+          <div class="hint">معلومة: ستأخذ بونص عند الإجابة الصحيحة!</div>
+        </div>
+      </article>
+
+      <!-- Paragraph 2 -->
+      <article class="card" id="para2">
+        <div class="paragraph-title"><div class="num-badge">2</div><h3>شبه الجزيرة العربية قبل الإسلام — ملامح عامة</h3></div>
+        <p>• العرب عاشوا فيها آلاف السنين.
+        <br>• أنشأوا ممالك ومدن وحضارات.
+        <br>• اعتمدوا على الاستقرار والتواصل مع الحضارات الأخرى.</p>
+        <div class="controls">
+          <button class="btn" data-read="2">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="2">عرض السؤال</button>
+        </div>
+        <div class="question" id="q2" style="display:none">
+          <div class="muted">س2: أي مما يلي ليس من ملامح شبه الجزيرة قبل الإسلام؟</div>
+          <div class="opts">
+            <div class="opt">الاستقرار والتواصل مع حضارات أخرى</div>
+            <div class="opt" data-correct="true">اعتماد كامل على الصناعة الثقيلة</div>
+            <div class="opt">وجود ممالك ومدن</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 3 -->
+      <article class="card" id="para3">
+        <div class="paragraph-title"><div class="num-badge">3</div><h3>بعض ممالك ومدن شبه الجزيرة العربية</h3></div>
+        <p>الممالك/المدن المهمة: سبأ-معين-حمير في جنوب شبه الجزيرة (اليمن). الأنباط-تدمر-الغساسنة ممالك الشام. الحيرة ممالك العراق. مكة المكرمة-يثرب(المدينة)-الطائف في الحجاز.
+        <br>معين،سبأ،حمير،تدمر،الانباط ممالك كونت حضارات وسقطت قبل ظهور الإسلام. الغساسنة،الحيرة،مكة،يثرب،الطائف مناطق شكلت مناخًا حضاريًّا قبل ميلاد الرسول ﷺ وظهور الإسلام.</p>
+        <div class="controls">
+          <button class="btn" data-read="3">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="3">عرض السؤال</button>
+        </div>
+        <div class="question" id="q3" style="display:none">
+          <div class="muted">س3: أي من هذه الممالك تقع في اليمن؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">سبأ</div>
+            <div class="opt">الأنباط</div>
+            <div class="opt">الغساسنة</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 4 -->
+      <article class="card" id="para4">
+        <div class="paragraph-title"><div class="num-badge">4</div><h3>ممالك جنوب شبه الجزيرة (اليمن): سقطت قبل ظهور الإسلام</h3></div>
+        <p>أمثلة: مملكة معين (العاصمة الجوف)، مملكة سبأ (عاصمتها مأرب) — اشتهرت بسد مأرب وبتجارتها، ومملكة حمير. الملكة بلقيس مذكورة في القرآن في سورة النمل. انهيار سد مأرب تسبب في هجرة قبائل إلى أنحاء شبه الجزيرة.</p>
+        <div class="controls">
+          <button class="btn" data-read="4">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="4">عرض السؤال</button>
+        </div>
+        <div class="question" id="q4" style="display:none">
+          <div class="muted">س4: ما أثر انهيار سد مأرب؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">هجرة العديد من القبائل إلى أجزاء متفرقة من شبه الجزيرة</div>
+            <div class="opt">زيادة إنتاج الزراعة في اليمن</div>
+            <div class="opt">تحول اليمن إلى دولة بحرية بحتة</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 5 -->
+      <article class="card" id="para5">
+        <div class="paragraph-title"><div class="num-badge">5</div><h3>مدن غرب شبه الجزيرة (الحجاز)</h3></div>
+        <p>مكة المكرمة: مركز ديني بسبب وجود الكعبة، ومركز اقتصادي وتجاري لموقعها على طريق القوافل بين الشام واليمن، وتنظيم رحلتي الشتاء والصيف، وأسواق مثل ذي المجاز ومجنة. يثرب: واحة زراعية وتجارية سكنتْها قبائل الأوس والخزرج وبعض اليهود. الطائف: مناخ معتدل وزراعة العنب، سكنتها قبائل ثقيف وهوازن.</p>
+        <div class="controls">
+          <button class="btn" data-read="5">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="5">عرض السؤال</button>
+        </div>
+        <div class="question" id="q5" style="display:none">
+          <div class="muted">س5: أي من المدن التالية نظمت رحلتي الشتاء والصيف؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">مكة</div>
+            <div class="opt">يثرب</div>
+            <div class="opt">الطائف</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 6 -->
+      <article class="card" id="para6">
+        <div class="paragraph-title"><div class="num-badge">6</div><h3>ممالك الشام والعراق</h3></div>
+        <p>الأنباط،تدمر،الغساسنة،الحيرة قامت على أطراف الصحراء العربية الشمالية كحد فاصل بين بلاد العرب ودولتي الروم والفرس. مملكة الحيرة كانت مرتبطة بالدولة الساسانية، والغساسنة تأثرت بالروم. هذه الممالك لعبت دورًا وسيطًا في التبادلات السياسية والثقافية.</p>
+        <div class="controls">
+          <button class="btn" data-read="6">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="6">عرض السؤال</button>
+        </div>
+        <div class="question" id="q6" style="display:none">
+          <div class="muted">س6: أي مملكة كانت تابعة في بعض الفترات للدولة الساسانية؟</div>
+          <div class="opts">
+            <div class="opt">الأنباط</div>
+            <div class="opt" data-correct="true">الحيرة</div>
+            <div class="opt">سبأ</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 7 -->
+      <article class="card" id="para7">
+        <div class="paragraph-title"><div class="num-badge">7</div><h3>مظاهر الحضارة في شبه الجزيرة قبل الإسلام</h3></div>
+        <p>المظاهر: الحياة السياسية (قبلي وشبه ملكي)، الحياة الدينية (تعدد الأديان والعبادات الوضعية وبعض الديانات السماوية)، الاقتصادية (الرعي،الزراعة،التجارة)، الحياة الفكرية والعلمية (أدب،طب،فلك،هندسة)، والفنون والعمارة (نحت،قلاع،معابد،قصور).</p>
+        <div class="controls">
+          <button class="btn" data-read="7">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="7">عرض السؤال</button>
+        </div>
+        <div class="question" id="q7" style="display:none">
+          <div class="muted">س7: ما الذي لا يندرج ضمن مظاهر الحضارة في شبه الجزيرة؟</div>
+          <div class="opts">
+            <div class="opt">الرعي والتجارة</div>
+            <div class="opt" data-correct="true">الصناعة الثقيلة الحديثة</div>
+            <div class="opt">الفنون والعمارة</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 8 -->
+      <article class="card" id="para8">
+        <div class="paragraph-title"><div class="num-badge">8</div><h3>الفرق بين النظام القبلي والشبه الملكي</h3></div>
+        <p>النظام القبلي: القبيلة هي الوحدة السياسية، تقوم على العرف والتقاليد، وترابط الدم. الشبه الملكي: اتخذ شكل ملكي في ممالك مثل اليمن والغساسنة والحيرة مع مؤسسات ملكية، مجالس، وحكام إقليميين.</p>
+        <div class="controls">
+          <button class="btn" data-read="8">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="8">عرض السؤال</button>
+        </div>
+        <div class="question" id="q8" style="display:none">
+          <div class="muted">س8: أي خاصية تميز النظام القبلي؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">الالتزام بعرف القبيلة ورباط الدم</div>
+            <div class="opt">وجود مجلس عام تابع للملك</div>
+            <div class="opt">حكم وراثي مركزي فقط</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 9 -->
+      <article class="card" id="para9">
+        <div class="paragraph-title"><div class="num-badge">9</div><h3>الحياة الدينية قبل الإسلام</h3></div>
+        <p>الديانات: تنوعت بين عبادة الأصنام والآلهة الوضعية، ووجود طوائف حافظت على التوحيد الحنيف، ووجود اليهودية في بعض المناطق مثل خيبر وضمن يثرب، وانتشار النصرانية في بعض مناطق الشام والحيرة، وانتشار طقوس صابئية في بعض المناطق.</p>
+        <div class="controls">
+          <button class="btn" data-read="9">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="9">عرض السؤال</button>
+        </div>
+        <div class="question" id="q9" style="display:none">
+          <div class="muted">س9: أي ديانة كانت موجودة ضمن سكان بعض أجزاء يثرب وخيبر؟</div>
+          <div class="opts">
+            <div class="opt">النصرانية</div>
+            <div class="opt" data-correct="true">اليهودية</div>
+            <div class="opt">الزابية</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 10 -->
+      <article class="card" id="para10">
+        <div class="paragraph-title"><div class="num-badge">10</div><h3>الحياة الاقتصادية</h3></div>
+        <p>الزراعة: اقتصرت على اليمن وشمال بادية الشام ومناطق الآبار. الرعي: شغل البدو بتربية الإبل والأغنام. التجارة: ازدهرت بسبب الطرق البحرية والبرية وموقع شبه الجزيرة كحلقة وصل. الصناعات: محدودة لكنها تشمل الفخار، السيوف، والحلي.</p>
+        <div class="controls">
+          <button class="btn" data-read="10">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="10">عرض السؤال</button>
+        </div>
+        <div class="question" id="q10" style="display:none">
+          <div class="muted">س10: أي من هذه الحرف كانت منتشرة في شبه الجزيرة قبل الإسلام؟</div>
+          <div class="opts">
+            <div class="opt">الإلكترونيات</div>
+            <div class="opt" data-correct="true">الفخار والسيوف</div>
+            <div class="opt">الطباعة الحديثة</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 11 -->
+      <article class="card" id="para11">
+        <div class="paragraph-title"><div class="num-badge">11</div><h3>الحياة الفكرية والعلمية</h3></div>
+        <p>الآداب: ازدهر الشعر والخطابة في الأسواق. العلوم: تطورت بعض مجالات مثل الطب (أطباء مشهورون مثل الحارث بن كلدة)، الفلك، الأنواء (مواعيد الرياح والمطر)، والهندسة (بناء السدود مثل مأرب).</p>
+        <div class="controls">
+          <button class="btn" data-read="11">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="11">عرض السؤال</button>
+        </div>
+        <div class="question" id="q11" style="display:none">
+          <div class="muted">س11: أي مجال علمي ارتبط ببناء السدود مثل مأرب؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">الهندسة</div>
+            <div class="opt">الطب</div>
+            <div class="opt">الأدب</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 12 -->
+      <article class="card" id="para12">
+        <div class="paragraph-title"><div class="num-badge">12</div><h3>الفنون والعمارة</h3></div>
+        <p>الفنون: النحت (مثل مدينة الحجر لدى الأنباط)، بناء القلاع والحصون، المعابد والكنائس في بعض المناطق، والقصور الملكية مثل قصر غمدان في صنعاء وقصر الخورنق في الحيرة.</p>
+        <div class="controls">
+          <button class="btn" data-read="12">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="12">عرض السؤال</button>
+        </div>
+        <div class="question" id="q12" style="display:none">
+          <div class="muted">س12: أي مدينة اشتهرت بالنحت وبيوت منحوتة في الجبال؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">الحِجر (مدائن صالح)</div>
+            <div class="opt">مأرب</div>
+            <div class="opt">يثرب</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 13 -->
+      <article class="card" id="para13">
+        <div class="paragraph-title"><div class="num-badge">13</div><h3>الحياة الاجتماعية</h3></div>
+        <p>الطبقات: انقسم المجتمع إلى طبقات حسب الوضع الاقتصادي والمكانة. السكن: البدو في الخيام، الحضر في بيوت من الحجارة. العادات: تضمنت جوانب إيجابية مثل الكرم والوفاء، وجوانب سلبية مثل العصبية القبلية وأحيانًا وأد البنات.</p>
+        <div class="controls">
+          <button class="btn" data-read="13">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="13">عرض السؤال</button>
+        </div>
+        <div class="question" id="q13" style="display:none">
+          <div class="muted">س13: أي من العادات التالية كانت من الجوانب الإيجابية؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">الكرم</div>
+            <div class="opt">الاغارة على طرق القوافل</div>
+            <div class="opt">وأد البنات</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 14 -->
+      <article class="card" id="para14">
+        <div class="paragraph-title"><div class="num-badge">14</div><h3>دور المرأة قبل الإسلام</h3></div>
+        <p>كان للمرأة أدوار متعددة: غزل الصوف، رعاية الأسرة، ومشاركة أحيانًا في الحروب (تضميد الجرحى، الإمداد). بعض النساء شغلن مواقع سياسية وتجارية مثل بلقيس وكنه المرأة خديجة كانت تاجرة ناجحة.</p>
+        <div class="controls">
+          <button class="btn" data-read="14">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="14">عرض السؤال</button>
+        </div>
+        <div class="question" id="q14" style="display:none">
+          <div class="muted">س14: أي من هذه النساء ورد ذكرها في نص الدرس كمثلة للقوة الاقتصادية؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">خديجة (تاجرة)</div>
+            <div class="opt">بلقيس فقط</div>
+            <div class="opt">لا أسماء</div>
+          </div>
+        </div>
+      </article>
+
+    </main>
+
   </div>
 
-  <div class="status">
-    <div class="xp">النقاط: <span id="xp">0</span> ⭐</div>
-
-    <div class="progress-wrap" title="تقدم القراءة">
-      <div style="display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-weight:600;">
-        <div>تقدم الدرس</div>
-        <div id="progressPercent" style="font-size:13px;color:var(--muted)">0%</div>
-      </div>
-      <div class="progress-line" aria-hidden="true">
-        <div id="progressFill" class="progress-fill">0%</div>
-      </div>
-      <div class="progress-info">
-        <span id="sectionsDone">0</span> / <span id="sectionsTotal">0</span> أقسام مقروءة
-        <span></span>
-      </div>
-    </div>
-  </div>
-</header>
-
-<main id="main">
-
-  <!-- Note: each section below contains the full excerpt exactly as you provided (no edits) -->
-  <!-- Section 1 -->
-  <section class="section" data-index="1">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 1</div>
-    <div class="content">
-التاريخ
-حضارات شبه الجزيرة العربية قُبيل ظهور الاسلام
-
-شبه الجزيرة العربية جزء لا يتجزأ من تاريخ الحضارة قبل الاسلام لان 
-العرب استوطنها وهم أمة سامية الاصل نسبة الي سام بن نوح عليه 
- السلام
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال سريع (صح/خطأ)</div>
-        <div>شبه الجزيرة العربية ليست جزءًا من تاريخ الحضارة قبل الإسلام.</div>
-        <div style="margin-top:10px; display:flex; gap:8px;">
-          <button class="btn answer-true">صح</button>
-          <button class="btn answer-false">خطأ</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 2 -->
-  <section class="section" data-index="2">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 2</div>
-    <div class="content">
-شبه الجزيرة العربية قبل الاسلام
-  العرب عاشوا فيها الاف السنين.
-  أنشأوا ممالك ومدن وحضارات.
-  اعتمدوا علي الاستقرار والتواصل مع الحضارات الاخري.
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال (اختيار واحد)</div>
-        <div>ماذا فعل العرب في شبه الجزيرة قبل الإسلام؟</div>
-        <div style="margin-top:10px; display:flex; gap:8px; flex-direction:column;">
-          <button class="btn option">عاشوا فيها آلاف السنين وأنشأوا حضارات</button>
-          <button class="btn option">لم يعيش أحد فيها</button>
-          <button class="btn option">كانت مهجورة دائمًا</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 3 -->
-  <section class="section" data-index="3">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 3</div>
-    <div class="content">
-بعض ممالك ومدن شبه الجزيرة العربية 
- الممالك\المدن المهمة المنطقة
- سبأ-معين-حمير جنوب شبه الجزيرة )اليمن(
- الأنباط-تدمر-الغساسنة ممالك الشام
- الحيرة ممالك العراق
- مكة المكرمة-يثرب)المدينة(-الطائف غرب شبه الجزيرة )الحجاز(
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال (صح/خطأ)</div>
-        <div>الأنباط وتدمر والغساسنة كانت جزءًا من ممالك الشام.</div>
-        <div style="margin-top:10px; display:flex; gap:8px;">
-          <button class="btn answer-true">صح</button>
-          <button class="btn answer-false">خطأ</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 4 -->
-  <section class="section" data-index="4">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 4</div>
-    <div class="content">
-معين،سبأ،حمير،تدمر،الانباط ممالك كونت حضارات وسقطت قبل ظهور 
- الاسلام
-الغساسنة،الحيرة،مكة،يثرب،الطائف مناطق شكلت مناخَا حضاريَا قبل ميلاد 
- الرسول)صلي الله عليه وسلم( وظهور الاسلام
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>هل صحيح أن مدينة يثرب كانت قبل الإسلام واسمها تغير لاحقًا ؟</div>
-        <div style="margin-top:10px; display:flex; gap:8px;">
-          <button class="btn option">نعم — كانت اسمها يثرب ثم أصبحت المدينة</button>
-          <button class="btn option">لا — هذا غير صحيح</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 5 -->
-  <section class="section" data-index="5">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 5</div>
-    <div class="content">
-)يعني مملكة اليمن ومملكتين من الشام اللي هما تدمر والانباط دول 
- سقطوا قبل ظهور الاسلام(
-)مدن الحجاز ومملكة العراق ومملكة واحدة من الشام اللي هي 
- الغساسنة دول ازدهرت قبل ظهور الاسلام(
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال (صح/خطأ)</div>
-        <div>ممالك تدمر والانباط وسَبأ سقطت قبل ظهور الإسلام.</div>
-        <div style="margin-top:10px; display:flex; gap:8px;">
-          <button class="btn answer-true">صح</button>
-          <button class="btn answer-false">خطأ</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 6 -->
-  <section class="section" data-index="6">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 6</div>
-    <div class="content">
-ممالك جنوب شبه الجزيرة العربية)اليمن(:*سقطت قبل ظهور الاسلام*
-العاصمة اشهر الموقع المملكة الفترة
- الملوك
-اشتهرت 
- بوجود
-0011ق.م:001ق.م الجوف معين
- باليمن
- --------- ---------- قرناو
-011ق.م:001ق.م جنوب غرب سبأ
- اليمن
-الملكة مأرب
- بلقيس
- سد مأرب
-بين مملكة 001ق.م:121م حِمْي َر
-سبأ وبحر 
-القلزم )البحر 
- الاحمر(
-ريدان 
- )ظفار(
------------- ------------
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>هل ذكر النص أن "الملكة بلقيس" ذكرت في القرآن؟</div>
-        <div style="margin-top:10px; display:flex; gap:8px;">
-          <button class="btn answer-true">نعم</button>
-          <button class="btn answer-false">لا</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 7 -->
-  <section class="section" data-index="7">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 7</div>
-    <div class="content">
---الملكة بلقيس ذكرت في القران في سورة النمل الايات)02:20(
---سد مأرب كان انهياره سبب في هجرة العديد من القبائل الي اجزاء 
- متفرقة في شبه الجزيرة العربية 
- مدن غرب شبه الجزيرة العربية )بالحجاز(:
- اشهر القبائل الاهمية المدن
- مكة
-المكرمة 
-)اشهر 
-مدن 
-الحجاز( 
- 0-دينية:بسبب وجود الكعبة
- 2-اقتصادية تجارية:بسبب:
--الموقع الجغرافي المتميز علي طريق 
- القوافل بين الشام واليمن
--تنظيمها للرحلات التجارية مثل رحلتي 
- الشتاء والصيف
--شهرة الاسواق التجارية القريبة منها مثل 
- سوقي ذي المجاز ومجنة.
- قريش
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>مكة كانت مشهورة بسبب وجود ماذا؟</div>
-        <div style="margin-top:10px; display:flex; gap:8px; flex-direction:column;">
-          <button class="btn option">الكعبة</button>
-          <button class="btn option">قصر الملك</button>
-          <button class="btn option">بحر</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 8 -->
-  <section class="section" data-index="8">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 8</div>
-    <div class="content">
- يثرب
-)تقع 
-شمال 
- مكة(
-
- اقتصادية فهي:
- -واحة زراعية
--مدينة تجارية لانها تقع علي طريق القوافل 
- التجارية بين اليمن ومكة والشام
- قبيلة الأوس
- قبيلة الخزرج
-وسكنها بعض 
- قبائل اليهود
- الطائف تميزت بالمناخ المعتدل
- اشتهرت بزراعة العنب
-سكنتها قبيلة 
- ثقيف
- وقبيلة وهوزان
- --قبيلتي الاوس والخزرج هاجرتا الي يثرب بعد انهيار سد مأرب
- --اول من اطلق المدينة المنورة علي يثرب هم العثمانيون
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال (صح/خطأ)</div>
-        <div>قيل أن أول من أطلق اسم "المدينة المنورة" على يثرب هم العثمانيون.</div>
-        <div style="margin-top:10px; display:flex; gap:8px;">
-          <button class="btn answer-true">صح</button>
-          <button class="btn answer-false">خطأ</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 9 -->
-  <section class="section" data-index="9">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 9</div>
-    <div class="content">
-ممالك الشام والعراق:
-)مملكة تدمر،الانباط،الغساسنة،الحيرة قامت علي اطراف الصحراء العربية 
- الشمالية كحد فاصل بين بلاد العرب ودولتي الروم والفرس(
-النشأة\الاصل العاصمة السقوط اشهر الملوك اخر المملكة الفترة
- الملوك
-الغساسنة 
- )بالشام(
-221م:000م ترجع الي 
-قبائل الازد 
-الجابية 
-في 
-الجولان 
-مع نهاية 
-القرن 
- ال0م
-جبلة بن --------
- الابهم
-الحيرة 
- )بالعراق(
-200م:000م في القرن 
-ال0م نتيجة 
-هجرة القبائل 
-اليمنية اليها 
-الحيرة 
-)جنوب 
-الكوفة 
-حاليا(غرب 
- نهر الفرات
--------- النعمان بن 
-المنذر 
- )102م:016م(
---------
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>أين كانت مملكة الحيرة تقريبًا؟</div>
-        <div style="margin-top:10px; display:flex; gap:8px; flex-direction:column;">
-          <button class="btn option">جنوب الكوفة (غرب نهر الفرات)</button>
-          <button class="btn option">في اليمن</button>
-          <button class="btn option">في الحجاز</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 10 -->
-  <section class="section" data-index="10">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 10</div>
-    <div class="content">
- --قبائل الازد هاجرت الي اليمن بعد انهيار سد مأرب واستقرت في بادية الشام.
- --ضعف حكام مملكة الغساسنة مع نهاية القرن ال0م.
---جبلة بن الابهم ساند الروم في مواجهه المسلمين في موقعة اليرموك عام 
- 00ه/006م .
---انتهت موقعة اليرموك بانتصار المسلمين وبعدها اصبحت مملكة الغساسنة جزء 
- من الدولة الاسلامية.
---مملكة الحيرة كانت تابعة للدولة الساسانية الفارسية،كانت تساندها في الحروب 
- ضد الروم وحلفائهم الغساسنة.
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>متى انتهت موقعة اليرموك ومالذي حدث بعدها بحسب النص؟</div>
-        <div style="margin-top:10px;">
-          <button class="btn option">انتصار المسلمين وأصبحت الغساسنة جزءًا من الدولة الإسلامية</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 11 -->
-  <section class="section" data-index="11">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 11</div>
-    <div class="content">
-مظاهر الحضارة في شبه الجزيرة العربية قبل ظهور الاسلام
- المظاهر
- الحياة السياسية انقسم النظام السياسي الي 
- 0-قبلي:الغالب في شبه الجزيرة)البدو(
- 2-شبه الملكي:قام في اليمن والشام والعراق)في المناطق الحضرية(
- الحياة الدينية لم يكن للعرب عبادة واحدة)قبل الاسلام(،الغالبية اعتنقت عبادات
- وضعية،والقليل امن بالديانات السماوية
-الحياة 
-الاقتصادية
- تشمل الرعي،الزراعة،الصناعة والتجارة
-الحياة الفكرية 
- والعلمية
-تمتع العرب قبل الاسلام بموروث فكري وعلمي في العديد من 
- المجالات:الادب،العلوم،الفنون والعمارة
-الحياة 
-الاجتماعية 
- انقسم سكان شبه الجزيرة الي بدو وحضر 
-تشمل:طبقات المجتمع،العادات والتقاليد،المرأة العربية ودورها في 
- المجتمع.
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال (اختيار)</div>
-        <div>ما هي مظاهر الحضارة المذكورة في النص؟</div>
-        <div style="margin-top:10px; display:flex; gap:8px; flex-direction:column;">
-          <button class="btn option">سياسية، دينية، اقتصادية، فكرية، اجتماعية</button>
-          <button class="btn option">فقط اقتصادية</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 12 -->
-  <section class="section" data-index="12">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 12</div>
-    <div class="content">
-الفرق بين النظام القبلي وشبه الملكي
- شبه الملكي القبلي 
-التعريف -قام علي ان القبيلة هي وحدة 
- النظام السياسي.
--تخضع لدستور من العرف والتقاليد. 
--بريط افرادها برباط الدم والنسب. 
--يلتزم الفرد بتأييد مصالحها والعمل 
- من اجلها.
-نظام وراثي وشبه ملكي قام في اليمن 
-والغساسنة والحيرة بسبب تأثر بعض 
-هذه الممالك بالنظام السياسي للفرس 
- والروم
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>أي النظام تأثر بالفرس والروم وأدى لوجود ملك وموظفين؟</div>
-        <div style="margin-top:10px; display:flex; gap:8px; flex-direction:column;">
-          <button class="btn option">الشبه الملكي</button>
-          <button class="btn option">القبلي</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 13 -->
-  <section class="section" data-index="13">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 13</div>
-    <div class="content">
-عناصر 
-النظام 
-  شيخ القبيلة:يتولي ادارة القبيلة
- ينقسم الي سلطة تنفيذية يقوم ب:
- 0-يقود المعارك
- 2-يستقبل الوفود
- 0-يعقد المعاهدات
- الملك:يتولي ادارة شئون البلاد 
- وحماية حدودها وحفظ الامن
- كبار الموظفين:يساعدون الملك 
- في الحكم وادارة شئون البلاد
-وسلطة قضائية يقوم ب:فصل 
- النزاعات
- مجلس القبيلة:يضم زعماء 
-القبيلة،كبار المشايخ الذين 
-يتولون مهام شئون القبيلة مثل 
- مهام دار الندوة
- حكام الاقاليم:نواب الملك في 
-ادارة الاقاليم ويسمي كل منهم 
- كبيرًا.
- مجلس عام:يتبع الملك ويتكون 
- من:كبار الاثرياء،الموظفين،الكهنة
- الجيش:يتكون من فرق عسكرية 
- مختلفة للدفاع عن المملكة
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>من الذي يعقد المعاهدات في النظام القبلي؟</div>
-        <div style="margin-top:10px;">
-          <button class="btn option">شيخ القبيلة</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 14 -->
-  <section class="section" data-index="14">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 14</div>
-    <div class="content">
-ولان في النظام القبلي لم تسر العلاقة بين القبائل علي وتيرة واحدة بل اتسمت بالتباين بين 
- الحرب والسلام والاحلاف 
- الحروب:
-  اسبابها:0-النزاع علي الماء والمرعي 2-الاخذ بالثأر
-  اشهرها:0-حرب البسوس:حدثت بين قبيلة بني تغلب وقبيلة بكر واستمرت 61 سنة
-2-حرب الفجار:سبب التسمية؟حدثت في الاشهر الحرم ،بين قريش واحلافها من جهه 
- وبين هوزان من جهه اخري
- الاحلاف:
-اشهرها حلف الفضول وهو حلف تعاهدت فيه قبائل مكة علي ان تكون يدًا واحدة مع 
-الظالم والا يخذل بعضهم بعضًا وقد شهد هذا الحلف محمد صلي الله عليه وسلم)هذا 
- الحلف قبل البعثة(
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>ما سبب حرب البسوس بحسب النص؟</div>
-        <div style="margin-top:10px; display:flex; gap:8px; flex-direction:column;">
-          <button class="btn option">الاختلاف على الماء والمرعى / الثأر</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 15 -->
-  <section class="section" data-index="15">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 15</div>
-    <div class="content">
- الحياة الدينية
- عرفت في عبادة الديانات السماوية
-عبادة الله الواحد علي الحنيفية
-ديانة ابراهيم عليه السلام 
-مكة لذلك عرف اهلها التوحيد،ظلت طائفة 
- منهم عليها حتي ظهور الاسلام
-ديانة موسي عليه السلام مناطق قليلة خاصة في خيبر،يثرب وحمير اليهودية
- باليمن
-ديانة عيسي عليه السلام بين العرب في الغساسنة بالشام،والحيرة النصرانية
- بالعراق،واجزاء من اليمن.
-
- انتشرت في العبادة العبادات الوضعية
- عبادة الاصنام والاوثان بلاد العرب،اتخذت كل قبيلة صنم تعبده الوثنية
- مثل:هٌبل،واللات،والعزي،ومناة
- عبادة الكواكب والنجوم الرقة وحران)بالشام(وفي اليمن الصابئة
-شرق شبه الجزيرة العربية نقلًا عن عبادة النار المجوسية
- الفرس.
-وهي تقوم علي عبادة إلهين أحدهما 
- للخير والاخر للشر
-
- *العبادات الوضعية هي من وضع الانسان وقد اعتنقها غالبية العرب.
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال (صح/خطأ)</div>
-        <div>العبادات الوضعية هي من وضع الإنسان وقد اعتنقها غالبية العرب.</div>
-        <div style="margin-top:10px; display:flex; gap:8px;">
-          <button class="btn answer-true">صح</button>
-          <button class="btn answer-false">خطأ</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 16 -->
-  <section class="section" data-index="16">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 16</div>
-    <div class="content">
- الحياة الاقتصادية
- الرعي هي الحرفة السائدة في شبه الجزيرة بسبب الطبيعة الصحراوية)المناخ(
- انتشرت بها تربية الابل والاغنام والماعز
- الزراعة اقتصرت في شبه الجزيرة علي:
- 0-الاجزاء الشمالية في بادية الشام
- 2-الاجزاء الجنوبية في بلاد اليمن
- 0-مناطق الابار والعيون في الوسط والاطراف
- --اهم المحاصيل:النخيل)التمر(،الخضروات
- الصناعة كانت حرفة محدودة لقلة المواد الاولية
- --اهم الصناعات:0-السيوف والرماح واواني الفخار
- 2-الحٌلي وادوات الزينة من اللؤلؤ المستخرج من الخليج العربي.
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>أين اقتصرت الزراعة في شبه الجزيرة بحسب النص؟</div>
-        <div style="margin-top:10px;">
-          <button class="btn option">الشمال (بادية الشام) والجنوب (اليمن) ومناطق الآبار</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 17 -->
-  <section class="section" data-index="17">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 17</div>
-    <div class="content">
- التجارة ازدهرت قبل الاسلام في شبه الجزيرة بسبب:
- 0-الطرق الممهدة ومعرفة العرب بدروبها
- 2-تحري العرب مواقع الكواكب والنجوم للاهتداء بها في البر والبحر
- 0-الموقع الجغرافي المتوسط لشبه الجزيرة العربية،فهي حلقة الوصل بين
- الشرق والغرب وتعددت طرق التجارة بها حيث انها :
- تشرف علي سواحل بحر القلزم)البحر الاحمر(والخليج العربي وبحر 
- العرب
- لها نشاط تجاري واسع مع افريقيا والجزر الاساسية واوروبا ومع فارس 
- الهند وشرق اسيا
-6-امتلاك اليمن اسطول تجاري ينقل البضائع القادمة اليها من موانئ الهند 
-والصومال والحبشة الي موانئ الشام ومصر ومنها الي اوروبا
- 1-شهرة مكة التجارية بسبب موقعها الجغرافي المتميز علي طريق القوافل
- بين الشام واليمن،تنظيمها للرحلات التجارية مثل رحلتي الشتاء والصيف،شهرة
- الاسواق التجارية القريبة منها مثل سوق ذي المجاز ومجنة
-0-استخدام العرب العملة في معاملاتهم التجارية الدنانير 
-الذهبية)الرومانية(والدراهم الفضية)الفارسية(مع استخدام المقايضة في 
- الاسواق
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>ما سبب ازدهار التجارة في شبه الجزيرة قبل الإسلام؟</div>
-        <div style="margin-top:10px;">
-          <button class="btn option">موقعها المتوسط ومعرفة الطرق والاهتداء بالنجوم</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 18 -->
-  <section class="section" data-index="18">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 18</div>
-    <div class="content">
-بم تفسر.اقتصرت الزراعة في شبه الجزيرة العربية علي الاجزاء الشمالية في 
-بادية الشام/الاجزاء الجنوبية في بلاد اليمن/مناطق الابار والعيون في الوسط 
-والالطراف؟
-بسبب وجود التربة الخصبة،توافر المياه،الاهتمام بمشروعات الري.
-
-الحياة الفكرية والعلمية
- الادب -اشتهر العرب بالشعر والخطابة
- -لم تكن الاسواق للتجارة فقط بل كانت ميدان لتنافس الشعراء والخطباء
- --من اشهر شعراء العرب:النابغة الذبياني
- العلوم ازدهرت بعض العلوم خاصة في الشمال متأثرة بحضارتي الروم والفرس
- ومن العلوم التي اشتهر بها العرب:
- 0-الطب:عرف التداوي من الامراض بالاعشاب
- --ومن اشهر الاطباء:الحارث بن كلدة الثقفي ولقب بطبيب العرب
- 2-الفلك:عرفوا المواقع والنجوم
- 0-الانواء:عرفوا اوقات هبوب الرياح ونزول الامطار
-6-الهندسة:استخدموها في بناء السدود مثل سد مأرب وشق الطرق في 
- الجبال لربط القري والمدن ببعضها
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>من من هذه الشخصيات ذُكر في النص كطبيب؟</div>
-        <div style="margin-top:10px; display:flex; gap:8px; flex-direction:column;">
-          <button class="btn option">الحارث بن كلدة الثقفي</button>
-          <button class="btn option">نابغة الذبياني</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 19 -->
-  <section class="section" data-index="19">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 19</div>
-    <div class="content">
-الفنون 
-والعمارة 
-0-النحت:ثأثر العرب في فن النحت بالحضارات المجاورة من اشهرها مدينة 
- الحِجر بدولة الانباط
- 2-القلاع والحصون:كانت تبني حول المدن لحمايتها
- --من اهم القلاع:قلعة القسطل في الغساسنة
- 0-المعابد والأديرة:مثل
-  معبد الشمس باليمن
-  دير هند بنت النعمان بالحيرة
-  كنيسة الرصافة بالغساسنة
- 6-القصور:تُبني للملوك والامراء مثل
-  قصر غمدان في صنعاء
-  قصر الخورنق في الحيرة
-  قصر المشتى في الغساسنة
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>أي مدينة ذُكرت في النص كأشهر أماكن النحت؟</div>
-        <div style="margin-top:10px;">
-          <button class="btn option">الحِجر (دولة الأنباط)</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 20 -->
-  <section class="section" data-index="20">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 20</div>
-    <div class="content">
-*مدينة الحِجر بدولة الانباط هي ديار ثمود قوم النبي صالح عليه السلام الذين 
- كانوا ينحتون البيوت في الجبال
-
- الحياة الاجتماعية
- 0-طبقات المجتمع:
- انقسم المجتمع الي عدة طبقات حسب/تأثرًا ب:
-  الحالة الاقتصادية
-  المكانة الاجتماعية
-  الاصل الذي ينتمي اليه اصحاب كل طبقة
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>كيف انقسم المجتمع حسب النص؟</div>
-        <div style="margin-top:10px;">
-          <button class="btn option">حسب الحالة الاقتصادية والمكانة والأصل</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 21 -->
-  <section class="section" data-index="21">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 21</div>
-    <div class="content">
- سكن اهل البدو الخيام او البيوت التي بُنيت من الطين وجذوع النخل
- سكن اهل الحضر والممالك العربية بيوتًا من الحجارة ذات طوابق متعددة
- الطبقات في شبه الجزيرة:
-0-الطبقة العليا:الاحرار والاغنياء من التجار،اصحاب الاراضي الزراعية الكبيرة 
- والمراعي الواسعة
- 2-الطبقة الوسطي:صغار التجار،مُلاك الاراضي الزراعية المحدودة،اصحاب الحرف
- 0-الطبقة الدنيا)غالبية المجتمع(:الفقراء،الموالي)الاتباع(،العبيد
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>ما اللباس أو السكن المميز للبدو حسب النص؟</div>
-        <div style="margin-top:10px;">
-          <button class="btn option">الخيام أو بيوت من الطين وجذوع النخل</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 22 -->
-  <section class="section" data-index="22">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 22</div>
-    <div class="content">
- 2-العادات والتقاليد:
-العرب تختلف عاداتهم منها الايجابية ومنها السلبية التي ارتبطت بالمعتقدات الدينية 
-الخطأ )كانوا يؤمنون بالسحر والتنجيم وقدرة القوي الخفية من الجن علي جلب 
- الخير وابعاد الشر(
- العادات السلبية العادات الايجابية
- 0-الكرم 2-الوفاء بالعهد
- 0-الشجاعة 6-العفو
- 1-رفض الذل
- 0-شرب الخمر 2-لعب الميسر
- 0-العصبية القبلية
- 6-الاغارة علي طرق القوافل
- 1-الاخذ بالثأر 
- 0-وأد البنات عند بعض القبائل
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>اذكر من العادات الإيجابية الواردة في النص؟</div>
-        <div style="margin-top:10px;">
-          <button class="btn option">الكرم، الوفاء، الشجاعة، العفو</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 23 -->
-  <section class="section" data-index="23">
-    <div class="done-badge">مكتمل</div>
-    <div class="spark">✨ فصل 23</div>
-    <div class="content">
- 0-المرأة العربية ودورها في المجتمع:
-كان للمرأة قبل الاسلام دور مهم في شبه الجزيرة بالاضافة الي دورها 
- ومسئوليتها بوصفها أ ُم ًا فهي:
- 0-عملت بغزل صوف الغنم واوبار الابل دور اجتماعي
-2-شاركت احيانًا في المعارك فكانت تضمد الجرحي وتسقي المحاربين وتقرع 
- طبول الحرب للحث علي القتال دور عسكري
-0-حظيت بعض النساء بمكانة عالية في المجتمع قبل الاسلام مثل بلقيس ملكة 
- سبأ ،زنوبيا ملكة تدمر دور سياسي والسيدة خديجة مارست التجارة دور
- اقتصادي
-    </div>
-
-    <div class="controls">
-      <button class="btn mark-read">قرأت — خُد +10 XP</button>
-      <button class="btn secondary toggle-quiz">اختبر نفسك</button>
-      <button class="btn secondary copy-text">نسخ النص</button>
-    </div>
-
-    <div class="quiz-area" style="display:none; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px;">
-        <div style="font-weight:700; margin-bottom:8px;">سؤال</div>
-        <div>اذكر مثالًا على امرأة ذُكرت في النص كان لها دور سياسي أو اقتصادي.</div>
-        <div style="margin-top:10px;">
-          <button class="btn option">الملكة بلقيس / زنوبيا / السيدة خديجة</button>
-        </div>
-        <div class="quiz-result" style="margin-top:10px; font-weight:700;"></div>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<!-- confetti canvas -->
-<canvas id="confetti-canvas"></canvas>
-
-
-<!-- confetti lib (lightweight CDN) -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-<script>
-  // --- state
-  let xp = 0;
-  const xpEl = document.getElementById('xp');
-  const sections = Array.from(document.querySelectorAll('.section'));
-  const total = sections.length;
-  document.getElementById('sectionsTotal').textContent = total;
-
-  // update progress UI
-  function updateProgress(){
-    const doneCount = document.querySelectorAll('.section.done').length;
-    const percent = Math.round((doneCount/total)*100);
-    const fill = document.getElementById('progressFill');
-    fill.style.width = percent + '%';
-    fill.textContent = percent + '%';
-    document.getElementById('progressPercent').textContent = percent + '%';
-    document.getElementById('sectionsDone').textContent = doneCount;
-  }
-
-  // confetti
-  const confettiCanvas = document.getElementById('confetti-canvas');
-  function launchConfetti(){
-    confetti.create(confettiCanvas, { resize: true, useWorker: true })({
-      particleCount: 120,
-      spread: 160,
-      ticks: 200,
-      origin: { y: 0.6 }
-    });
-  }
-
-  // mark read handler
-  document.querySelectorAll('.mark-read').forEach(btn => {
-    btn.addEventListener('click', (e)=>{
-      const section = e.target.closest('.section');
-      if(section.classList.contains('done')) return; // already done
-      section.classList.add('done');
-      xp += 10;
-      xpEl.textContent = xp;
-      // small glow
-      section.style.boxShadow = '0 24px 60px rgba(83, 255, 184, 0.07)';
-      setTimeout(()=> section.style.boxShadow = '', 1400);
-      // confetti
-      launchConfetti();
-      updateProgress();
-      // badge if full
-      if(document.querySelectorAll('.section.done').length === total){
-        setTimeout(()=> {
-          alert('🎉 ممتاز! كسبت كل النقاط. يمكنك الآن المطالعة مرة أخرى أو مشاركة تقدمك.');
-        },200);
-      }
-    });
-  });
-
-  // toggle quiz
-  document.querySelectorAll('.toggle-quiz').forEach(btn => {
-    btn.addEventListener('click', (e)=>{
-      const section = e.target.closest('.section');
-      const area = section.querySelector('.quiz-area');
-      area.style.display = area.style.display === 'block' ? 'none' : 'block';
-    });
-  });
-
-  // copy text
-  document.querySelectorAll('.copy-text').forEach(btn => {
-    btn.addEventListener('click', (e)=>{
-      const section = e.target.closest('.section');
-      const text = section.querySelector('.content').innerText;
-      navigator.clipboard && navigator.clipboard.writeText(text).then(()=> {
-        btn.textContent = 'تم النسخ ✅';
-        setTimeout(()=> btn.textContent = 'نسخ النص', 1200);
-      }).catch(()=> {
-        btn.textContent = 'خطأ';
-        setTimeout(()=> btn.textContent = 'نسخ النص', 1200);
-      });
-    });
-  });
-
-  // quiz answer handlers (supports simple patterns)
-  document.querySelectorAll('.section').forEach(section => {
-    // true/false buttons
-    const truthBtn = section.querySelector('.answer-true');
-    const falseBtn = section.querySelector('.answer-false');
-    const resultDiv = section.querySelector('.quiz-result');
-
-    if(truthBtn){
-      truthBtn.addEventListener('click', ()=>{
-        // treat as correct in many cases (we picked statements that are true)
-        resultDiv.style.color = 'lightgreen';
-        resultDiv.textContent = '✅ إجابة صحيحة — أحسنت!';
-        // small reward
-        if(!section.classList.contains('quiz-done')){
-          xp += 5;
-          xpEl.textContent = xp;
-          section.classList.add('quiz-done');
-          updateProgress();
-        }
-      });
+  <script>
+    // state
+    const XP_PER_READ = 10;
+    const XP_PER_CORRECT = 20;
+    const LEVEL_THRESHOLDS = [0,150,350,700]; // XP thresholds for levels
+    let state = JSON.parse(localStorage.getItem('lesson_state')||'{}');
+    if(!state.xp) state.xp = 0; if(!state.read) state.read = {};
+
+    const xpCount = document.getElementById('xpCount');
+    const xpFill = document.getElementById('xpFill');
+    const xpNext = document.getElementById('xpNext');
+    const levelBadge = document.getElementById('levelBadge');
+
+    function updateXP(){
+      xpCount.textContent = state.xp;
+      // next level
+      let next = LEVEL_THRESHOLDS.find(t=>t>state.xp) || LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length-1];
+      xpNext.textContent = next;
+      const pct = Math.min(100, Math.round(state.xp/next*100));
+      xpFill.style.width = pct + '%';
+      // level label
+      let lvl = LEVEL_THRESHOLDS.filter(t=>t<=state.xp).length;
+      const names = ['مبتدئ','مستكشف','محارب علمي','سفير التاريخ'];
+      levelBadge.textContent = 'المستوى: ' + (names[Math.max(0,lvl-1)] || names[names.length-1]);
+      localStorage.setItem('lesson_state', JSON.stringify(state));
     }
-    if(falseBtn){
-      falseBtn.addEventListener('click', ()=>{
-        resultDiv.style.color = '#ff6b6b';
-        resultDiv.textContent = '❌ إجابة خاطئة — اقرأ النص مرة أخرى.';
+    updateXP();
+
+    // read buttons
+    document.querySelectorAll('[data-read]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.getAttribute('data-read');
+        if(state.read[id]){ flash('+0 XP', btn); return; }
+        state.read[id] = true; state.xp += XP_PER_READ; updateXP(); flash('+'+XP_PER_READ+' XP', btn); btn.textContent='مقروء ✓'; btn.disabled=true; btn.style.opacity=0.8;
       });
+    });
+
+    // toggle question
+    document.querySelectorAll('[data-toggle-q]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.getAttribute('data-toggle-q');
+        const q = document.getElementById('q'+id);
+        if(q.style.display==='none' || q.style.display==='') q.style.display='block'; else q.style.display='none';
+      });
+    });
+
+    // options
+    document.querySelectorAll('.question').forEach(q=>{
+      q.querySelectorAll('.opt').forEach(opt=>{
+        opt.addEventListener('click', ()=>{
+          // disable further clicks
+          if(opt.parentElement.dataset.answered==='true') return;
+          const correct = opt.getAttribute('data-correct') === 'true';
+          opt.parentElement.dataset.answered = 'true';
+          if(correct){
+            opt.classList.add('correct');
+            state.xp += XP_PER_CORRECT; updateXP(); flash('+'+XP_PER_CORRECT+' XP', opt);
+            // confetti
+            spawnConfetti(opt);
+          } else {
+            opt.classList.add('wrong');
+            flash('-0 XP', opt);
+          }
+          // reveal correct option outline
+          opt.parentElement.querySelectorAll('.opt').forEach(o=>{ if(o.getAttribute('data-correct')==='true') o.classList.add('correct'); });
+        });
+      });
+    });
+
+    // flash animation for XP
+    function flash(text, el){
+      const t = document.createElement('div'); t.textContent = text; t.style.position='absolute'; t.style.background='linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))'; t.style.padding='6px 10px'; t.style.borderRadius='8px'; t.style.color='white'; t.style.fontWeight='700'; t.style.zIndex=9999;
+      const rect = el.getBoundingClientRect(); t.style.left = (rect.left + window.scrollX + rect.width/2 - 30) + 'px'; t.style.top = (rect.top + window.scrollY - 28) + 'px'; document.body.appendChild(t);
+      t.animate([{opacity:0, transform:'translateY(6px)'},{opacity:1, transform:'translateY(0)'},{opacity:0, transform:'translateY(-18px)'}],{duration:1400}).onfinish = ()=>document.body.removeChild(t);
     }
 
-    // options / multiple choices
-    section.querySelectorAll('.option').forEach(opt => {
-      opt.addEventListener('click', (e)=>{
-        const text = e.target.textContent.trim();
-        // heuristics: many options that reflect text are correct; we reward any click once
-        resultDiv.style.color = 'lightgreen';
-        resultDiv.textContent = '✅ اختيار مسجل';
-        if(!section.classList.contains('quiz-done')){
-          xp += 5;
-          xpEl.textContent = xp;
-          section.classList.add('quiz-done');
-          updateProgress();
-        }
-      });
-    });
-
-    // generic option buttons (labeled .option) already handled
-    // answer-true/false handled above
-  });
-
-  // initial update
-  updateProgress();
-
-  // small keyboard shortcut: press N to go to next unread section (game feel)
-  document.addEventListener('keydown', (e)=>{
-    if(e.key.toLowerCase() === 'n'){
-      const next = document.querySelector('.section:not(.done)');
-      if(next){
-        next.scrollIntoView({behavior:'smooth', block:'center'});
-        // small pulse
-        next.animate([{ transform: 'scale(1.02)' }, { transform: 'scale(1)' }], { duration: 400 });
-      } else {
-        alert('لقد أكملت كل الأقسام — مبروك!');
+    // simple confetti
+    function spawnConfetti(el){
+      for(let i=0;i<20;i++){
+        const p = document.createElement('div'); p.className='confetti-piece'; p.style.width='8px'; p.style.height='12px'; p.style.background=['#8b5cf6','#6d28d9','#7ef08b','#fbbf24'][Math.floor(Math.random()*4)]; p.style.left=(el.getBoundingClientRect().left + window.scrollX + el.offsetWidth/2) + 'px'; p.style.top=(el.getBoundingClientRect().top + window.scrollY) + 'px'; p.style.opacity=0.95; p.style.transform='rotate('+Math.random()*360+'deg)'; document.body.appendChild(p);
+        const dx = (Math.random()-0.5)*200; const dy = -100 - Math.random()*200; p.animate([{transform:'translate(0,0) rotate(0)'},{transform:`translate(${dx}px,${dy}px) rotate(${Math.random()*720}deg)`}],{duration:1000+Math.random()*800}).onfinish = ()=>p.remove();
       }
     }
-  });
 
-  // Save progress locally (optional)
-  window.addEventListener('beforeunload', ()=>{
-    const doneIdx = Array.from(document.querySelectorAll('.section.done')).map(s => s.getAttribute('data-index'));
-    localStorage.setItem('lesson_done_sections', JSON.stringify(doneIdx));
-    localStorage.setItem('lesson_xp', xp);
-  });
+    // helper to show first unread paragraph on load
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const firstUnread = [...document.querySelectorAll('[data-read]')].find(b=>!state.read[b.getAttribute('data-read')]);
+      if(firstUnread){ firstUnread.scrollIntoView({behavior:'smooth',block:'center'}); }
+    });
 
-  // restore progress if exists
-  window.addEventListener('load', ()=>{
-    const doneIdx = JSON.parse(localStorage.getItem('lesson_done_sections') || '[]');
-    const savedXp = Number(localStorage.getItem('lesson_xp') || 0);
-    if(savedXp) { xp = savedXp; xpEl.textContent = xp; }
-    if(doneIdx.length){
-      doneIdx.forEach(i => {
-        const s = document.querySelector('.section[data-index="'+i+'"]');
-        if(s) s.classList.add('done');
-      });
-      updateProgress();
-    }
-  });
-</script>
+  </script>
 </body>
 </html>

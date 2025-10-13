@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>تمهيد كيمياء — درس تفاعلي كامل</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#1b0330; /* deep purple */
+      --bg2:#060b2e; /* navy */
+      --card:#0f1220;
+      --glass: rgba(255,255,255,0.03);
+      --accent:#8b5cf6;
+      --accent-2:#6d28d9;
+      --xp:#7cf1ff;
+      --good:#7ef08b;
+      --bad:#ff7b7b;
+      --muted:#b9c3d1;
+      font-family: 'Cairo', Tahoma, sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(120deg,var(--bg1),var(--bg2));color:#eef6ff;min-height:100vh;overflow-y:auto}
+
+    /* animated background blobs */
+    .bg-blob{position:fixed;pointer-events:none;filter:blur(70px);opacity:0.28;mix-blend-mode:screen}
+    .b1{width:520px;height:520px;background:radial-gradient(circle at 30% 30%, #8b5cf6, transparent 40%);left:-120px;top:-80px;animation:float1 14s infinite}
+    .b2{width:420px;height:420px;background:radial-gradient(circle at 70% 70%, #6d28d9, transparent 40%);right:-80px;bottom:-120px;animation:float2 16s infinite}
+    @keyframes float1{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-18px) rotate(6deg)}100%{transform:translateY(0) rotate(0)}}
+    @keyframes float2{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(16px) rotate(-6deg)}100%{transform:translateY(0) rotate(0)}}
+
+    .container{max-width:980px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;gap:16px}
+    .logo{width:78px;height:78px;border-radius:14px;background:linear-gradient(135deg,var(--accent-2),var(--accent));display:flex;align-items:center;justify-content:center;box-shadow:0 12px 40px rgba(109,40,217,0.12)}
+    .logo h1{margin:0;font-size:18px;color:white}
+    header h2{margin:0;font-size:20px}
+    .meta{color:var(--muted);font-size:13px}
+
+    /* XP bar top */
+    .xp-wrap{display:flex;gap:12px;align-items:center;margin-top:14px}
+    .xp-bar{flex:1;height:16px;background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border-radius:999px;padding:3px}
+    .xp-fill{height:100%;width:0;background:linear-gradient(90deg,var(--xp),#a28bff);border-radius:999px;transition:width .6s ease}
+    .xp-info{min-width:160px;text-align:left;color:var(--muted);font-weight:700}
+
+    main{margin-top:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:18px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.02)}
+    .paragraph-title{display:flex;align-items:center;gap:12px}
+    .num-badge{width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800}
+    h3{margin:6px 0;color:#fff}
+    p{color:var(--muted);line-height:1.7;white-space:pre-line}
+
+    .controls{display:flex;gap:8px;margin-top:10px}
+    .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071021;font-weight:700}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+    .question{margin-top:12px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border-radius:10px;display:none}
+    .opts{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+    .opt{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;cursor:pointer;text-align:left}
+    .opt.correct{outline:3px solid rgba(126,240,139,0.12);box-shadow:0 6px 18px rgba(126,240,139,0.06)}
+    .opt.wrong{outline:3px solid rgba(255,123,123,0.1)}
+
+    .badge-level{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--muted);font-weight:700}
+
+    .hint{color:var(--muted);font-size:13px;margin-top:8px}
+
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+
+    /* confetti */
+    .confetti-piece{position:fixed;z-index:2000;pointer-events:none}
+
+    /* responsive */
+    @media(max-width:720px){.xp-info{display:none} .logo{width:62px;height:62px} }
+  </style>
+</head>
+<body>
+  <div class="bg-blob b1"></div>
+  <div class="bg-blob b2"></div>
+
+  <div class="container">
+    <header>
+      <div>
+        <h2>تمهيد كيمياء</h2>
+        <div class="meta">درس تفاعلي — مقسّم فقرات، كل فقرة سؤال خاص بها، وكسب نقاط XP محفوظة محليًا للدرس الكيمياء فقط.</div>
+      </div>
+      <div style="margin-inline-start:auto;text-align:left">
+        <div class="badge-level" id="levelBadge">المستوى: مبتدئ</div>
+      </div>
+    </header>
+
+    <div class="xp-wrap">
+      <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+      <div class="xp-info" id="xpInfo">XP: <strong id="xpCount">0</strong> / <span id="xpNext">120</span></div>
+    </div>
+
+    <main>
+      <!-- Paragraph 1: نقاط هامة (الذرة) -->
+      <article class="card" id="para1">
+        <div class="paragraph-title"><div class="num-badge">1</div><h3>نقاط هامة — الذرة كوحدة</h3></div>
+        <p>نقاط هامة 
+-الذرة هي الوحدة الاساسية للجزئ</p>
+        <div class="controls">
+          <button class="btn" data-read="p1">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p1">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p1">
+          <div class="muted">س1: ما هي الوحدة الأساسية للجزئ؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">الذرة</div>
+            <div class="opt">الجزيء</div>
+            <div class="opt">المادة</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 2: جزيئات ثنائية الذرة -->
+      <article class="card" id="para2">
+        <div class="paragraph-title"><div class="num-badge">2</div><h3>الجزيئات ثنائية الذرة</h3></div>
+        <p>-الجزيئات ثنائية الذرة اذا كان الذرتين متماثلين (من نفس العنصر) يُسمي الجزئ متجانس النواة اذا كان الذرتين من عنصرين مختلفين يُسمي غير متجانس النواة</p>
+        <div class="controls">
+          <button class="btn" data-read="p2">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p2">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p2">
+          <div class="muted">س2: أي مثال على جزيء متجانس النواة؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">H<sub>2</sub></div>
+            <div class="opt">CO</div>
+            <div class="opt">NaCl</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 3: أيون الأكسيد -->
+      <article class="card" id="para3">
+        <div class="paragraph-title"><div class="num-badge">3</div><h3>أيون الأكسيد (O⁻²)</h3></div>
+        <p>:الاكسجين في الحالة الطبيعية عدده الذري 8 O-2-ايون الاكسيد 
+عشان تكون مستقرة بتحتاج الكترونين بتاخدهم من ذرات فلزية بتميل انها تفقد الكترونات</p>
+        <div class="controls">
+          <button class="btn" data-read="p3">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p3">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p3">
+          <div class="muted">س3: كم عدد الإلكترونات التي يكتسبها أكسجين ليصبح O⁻²؟</div>
+          <div class="opts">
+            <div class="opt">1</div>
+            <div class="opt" data-correct="true">2</div>
+            <div class="opt">3</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Paragraph 4: تعادل المركب - NaCl -->
+      <article class="card" id="para4">
+        <div class="paragraph-title"><div class="num-badge">4</div><h3>تعادل المركب — مثال NaCl</h3></div>
+        <p>--لازم المركب يكون متعادل كهربائيًا(يعني معندوش شحنة) مثل:
+ الصوديوم كاتيون بيفقد الكترون والكلوريد انيون بيكتسب الكترون NaCl 
+اذن مجموع شحنات المركب (+1)+(-1)=صفر</p>
+        <div class="controls">
+          <button class="btn" data-read="p4">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p4">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p4">
+          <div class="muted">س4: ما الشحنة الكلية لمركب NaCl؟</div>
+          <div class="opts">
+            <div class="opt">+1</div>
+            <div class="opt">-1</div>
+            <div class="opt" data-correct="true">0</div>
+          </div>
+        </div>
+      </article>
+
+    </main>
+
+  </div>
+
+  <script>
+    // CONFIG — lesson-specific key so it doesn't mix with other lessons
+    const STORAGE_KEY = 'lesson_chem_state_v1';
+
+    // XP config
+    const XP_PER_READ = 100;
+    const XP_PER_CORRECT = 100;
+    // set first threshold to 120 because this lesson total = 120 (4 reads *10 + 4 correct *20 = 120)
+    const LEVEL_THRESHOLDS = [0,120,350,600];
+
+    // load state
+    let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    if (!state.xp) state.xp = 0;
+    if (!state.read) state.read = {};
+
+    const xpCount = document.getElementById('xpCount');
+    const xpFill = document.getElementById('xpFill');
+    const xpNext = document.getElementById('xpNext');
+    const levelBadge = document.getElementById('levelBadge');
+
+    function updateXP(){
+      xpCount.textContent = state.xp;
+      let next = LEVEL_THRESHOLDS.find(t=>t>state.xp) || LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length-1];
+      xpNext.textContent = next;
+      const pct = Math.min(100, Math.round(state.xp/next*100));
+      xpFill.style.width = pct + '%';
+      let lvl = LEVEL_THRESHOLDS.filter(t=>t<=state.xp).length;
+      const names = ['مبتدئ','مستكشف','محارب علمي','سفير العلم'];
+      levelBadge.textContent = 'المستوى: ' + (names[Math.max(0,lvl-1)] || names[names.length-1]);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+    updateXP();
+
+    // read buttons
+    document.querySelectorAll('[data-read]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.getAttribute('data-read');
+        if (state.read[id]) { flash('+0 XP', btn); return; }
+        state.read[id] = true;
+        state.xp += XP_PER_READ;
+        updateXP();
+        flash('+'+XP_PER_READ+' XP', btn);
+        btn.textContent='مقروء ✓';
+        btn.disabled = true;
+        btn.style.opacity = 0.8;
+      });
+      // initial UI if already read
+      const id0 = btn.getAttribute('data-read');
+      if (state.read[id0]) { btn.textContent='مقروء ✓'; btn.disabled=true; btn.style.opacity=0.8; }
+    });
+
+    // toggle question display
+    document.querySelectorAll('[data-toggle-q]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const article = btn.closest('.card');
+        const q = article.querySelector('.question');
+        if(!q) return;
+        q.style.display = (q.style.display==='block') ? 'none' : 'block';
+        if(q.style.display==='block'){ q.scrollIntoView({behavior:'smooth', block:'center'}); }
+      });
+    });
+
+    // question options
+    document.querySelectorAll('.question').forEach(q=>{
+      q.querySelectorAll('.opt').forEach(opt=>{
+        opt.addEventListener('click', ()=>{
+          if (q.dataset.answered === 'true') return;
+          q.dataset.answered = 'true';
+          const correct = opt.getAttribute('data-correct') === 'true';
+          if (correct) {
+            opt.classList.add('correct');
+            state.xp += XP_PER_CORRECT;
+            updateXP();
+            flash('+'+XP_PER_CORRECT+' XP', opt);
+            spawnConfetti(opt);
+          } else {
+            opt.classList.add('wrong');
+            flash('-0 XP', opt);
+          }
+          q.querySelectorAll('.opt').forEach(o=>{ if (o.getAttribute('data-correct')==='true') o.classList.add('correct'); });
+        });
+      });
+    });
+
+    // flash animation
+    function flash(text, el){
+      const t = document.createElement('div');
+      t.textContent = text;
+      t.style.position='absolute';
+      t.style.background='linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))';
+      t.style.padding='6px 10px';
+      t.style.borderRadius='8px';
+      t.style.color='white';
+      t.style.fontWeight='700';
+      t.style.zIndex=9999;
+      document.body.appendChild(t);
+      const rect = el.getBoundingClientRect();
+      t.style.left = (rect.left + window.scrollX + rect.width/2 - 30) + 'px';
+      t.style.top = (rect.top + window.scrollY - 28) + 'px';
+      t.animate([
+        {opacity:0, transform:'translateY(6px)'},
+        {opacity:1, transform:'translateY(0)'},
+        {opacity:0, transform:'translateY(-18px)'}
+      ],{duration:1400}).onfinish = ()=> t.remove();
+    }
+
+    // confetti
+    function spawnConfetti(el){
+      for(let i=0;i<20;i++){
+        const p = document.createElement('div');
+        p.className='confetti-piece';
+        p.style.width='8px';
+        p.style.height='12px';
+        p.style.position='fixed';
+        p.style.background=['#8b5cf6','#6d28d9','#7ef08b','#fbbf24'][Math.floor(Math.random()*4)];
+        const rect = el.getBoundingClientRect();
+        p.style.left = (rect.left + window.scrollX + rect.width/2) + 'px';
+        p.style.top = (rect.top + window.scrollY) + 'px';
+        p.style.opacity = 0.95;
+        p.style.transform = 'rotate('+Math.random()*360+'deg)';
+        document.body.appendChild(p);
+        const dx = (Math.random()-0.5)*200;
+        const dy = -100 - Math.random()*200;
+        p.animate([{transform:'translate(0,0) rotate(0)'},{transform:`translate(${dx}px,${dy}px) rotate(${Math.random()*720}deg)`}],{duration:1000+Math.random()*800}).onfinish = ()=>p.remove();
+      }
+    }
+
+    // scroll to first unread
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const firstUnread = [...document.querySelectorAll('[data-read]')].find(b=>!state.read[b.getAttribute('data-read')]);
+      if(firstUnread){ firstUnread.scrollIntoView({behavior:'smooth',block:'center'}); }
+    });
+
+  </script>
+</body>
+</html>

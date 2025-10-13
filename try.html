@@ -5,14 +5,115 @@
   <title>إرسال الملخص</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial, sans-serif; direction: rtl; padding: 20px; background: #f5f5f5; }
-    h1 { color: #333; }
-    input, textarea { width: 100%; padding: 10px; margin: 10px 0; font-size: 16px; border-radius: 6px; border: 1px solid #ccc; }
-    textarea { height: 200px; }
-    button { padding: 10px 20px; font-size: 16px; background: #4caf50; color: white; border: none; cursor: pointer; border-radius: 5px; transition: 0.3s; }
-    button:hover { background: #45a049; }
-    button:disabled { background: #999; cursor: not-allowed; }
-    #msg { margin-top: 12px; font-weight: bold; text-align: center; }
+    :root {
+      --accent1: #00f5ff;
+      --accent2: #8a2be2;
+      --btn-shadow: 0 0 20px rgba(0,245,255,0.6);
+      --bg-dark1: #000010;
+      --bg-dark2: #000;
+    }
+
+    body {
+      font-family: "Tajawal", Arial, sans-serif;
+      direction: rtl;
+      padding: 20px;
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--bg-dark1), var(--bg-dark2));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* خلفية متحركة */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 20% 20%, var(--accent1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, var(--accent2) 0%, transparent 50%);
+      animation: bgMove 12s linear infinite;
+      opacity: 0.15;
+      z-index: 0;
+    }
+    @keyframes bgMove {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.1); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    h1 {
+      color: var(--accent1);
+      text-shadow: 0 0 10px var(--accent1);
+      margin-bottom: 20px;
+      z-index: 1;
+    }
+
+    input, textarea {
+      width: 100%;
+      max-width: 500px;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: rgba(255,255,255,0.08);
+      color: white;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 5px rgba(255,255,255,0.1);
+      transition: 0.3s;
+      z-index: 1;
+    }
+
+    input:focus, textarea:focus {
+      box-shadow: 0 0 15px var(--accent1);
+    }
+
+    textarea {
+      height: 200px;
+      resize: vertical;
+    }
+
+    button {
+      padding: 12px 30px;
+      font-size: 18px;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 30px;
+      box-shadow: var(--btn-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-top: 10px;
+      z-index: 1;
+    }
+
+    button:hover:not(:disabled) {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(0,245,255,0.8);
+    }
+
+    button:disabled {
+      background: #444;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    #msg {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 16px;
+      color: var(--accent1);
+      text-shadow: 0 0 10px var(--accent1);
+      z-index: 1;
+    }
   </style>
 </head>
 <body>
@@ -29,7 +130,6 @@
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
     import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
-    // 🔧 إعدادات Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
       authDomain: "my-web-c23de.firebaseapp.com",
@@ -49,21 +149,18 @@
     const textarea = document.getElementById("summaryText");
     const nameInput = document.getElementById("studentName");
 
-    // استرجاع الاسم لو متخزن قبل كده
     nameInput.value = localStorage.getItem("name") || "";
 
-    // 🔑 تسجيل دخول مجهول تلقائي
     signInAnonymously(auth).catch((error) => {
       console.error("Auth Error:", error);
       msgBox.innerText = "⚠️ فشل تسجيل الدخول";
       msgBox.style.color = "red";
     });
 
-    // متابعة حالة تسجيل الدخول
     onAuthStateChanged(auth, (user) => {
       if (user) {
         msgBox.innerText = "✅ جاهز لإرسال الملخص";
-        msgBox.style.color = "green";
+        msgBox.style.color = "var(--accent1)";
         btn.disabled = false;
 
         btn.addEventListener("click", async () => {
@@ -82,7 +179,6 @@
             return;
           }
 
-          // حفظ الاسم محليًا عشان مايتكتبش كل مرة
           localStorage.setItem("name", studentName);
 
           btn.disabled = true;
@@ -94,12 +190,12 @@
               text: text,
               name: studentName,
               status: "pending",
-              userId: user.uid,   // 👈 مهم عشان القواعد
+              userId: user.uid,
               createdAt: serverTimestamp()
             });
 
             msgBox.innerText = "✅ تم إرسال الملخص بنجاح";
-            msgBox.style.color = "green";
+            msgBox.style.color = "var(--accent1)";
             textarea.value = "";
           } catch (error) {
             console.error(error);
@@ -109,7 +205,6 @@
             btn.disabled = false;
           }
         });
-
       } else {
         msgBox.innerText = "⚠️ غير مسجل دخول";
         msgBox.style.color = "red";

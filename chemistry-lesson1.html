@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>تمهيد — المول (درس تفاعلي)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#1b0330;
+      --bg2:#060b2e;
+      --card:#0f1220;
+      --glass: rgba(255,255,255,0.03);
+      --accent:#8b5cf6;
+      --accent-2:#6d28d9;
+      --xp:#7cf1ff;
+      --good:#7ef08b;
+      --bad:#ff7b7b;
+      --muted:#b9c3d1;
+      font-family: 'Cairo', Tahoma, sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(120deg,var(--bg1),var(--bg2));color:#eef6ff;min-height:100vh;overflow-y:auto}
+    .bg-blob{position:fixed;pointer-events:none;filter:blur(70px);opacity:0.28;mix-blend-mode:screen}
+    .b1{width:520px;height:520px;background:radial-gradient(circle at 30% 30%, #8b5cf6, transparent 40%);left:-120px;top:-80px;animation:float1 14s infinite}
+    .b2{width:420px;height:420px;background:radial-gradient(circle at 70% 70%, #6d28d9, transparent 40%);right:-80px;bottom:-120px;animation:float2 16s infinite}
+    @keyframes float1{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-18px) rotate(6deg)}100%{transform:translateY(0) rotate(0)}}
+    @keyframes float2{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(16px) rotate(-6deg)}100%{transform:translateY(0) rotate(0)}}
+
+    .container{max-width:980px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;gap:16px}
+    .logo{width:78px;height:78px;border-radius:14px;background:linear-gradient(135deg,var(--accent-2),var(--accent));display:flex;align-items:center;justify-content:center;box-shadow:0 12px 40px rgba(109,40,217,0.12)}
+    .logo h1{margin:0;font-size:18px;color:white}
+    header h2{margin:0;font-size:20px}
+    .meta{color:var(--muted);font-size:13px}
+
+    .xp-wrap{display:flex;gap:12px;align-items:center;margin-top:14px}
+    .xp-bar{flex:1;height:16px;background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border-radius:999px;padding:3px}
+    .xp-fill{height:100%;width:0;background:linear-gradient(90deg,var(--xp),#a28bff);border-radius:999px;transition:width .6s ease}
+    .xp-info{min-width:160px;text-align:left;color:var(--muted);font-weight:700}
+
+    main{margin-top:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:18px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.02)}
+    .paragraph-title{display:flex;align-items:center;gap:12px}
+    .num-badge{width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800}
+    h3{margin:6px 0;color:#fff}
+    p{color:var(--muted);line-height:1.7;white-space:pre-line}
+
+    .controls{display:flex;gap:8px;margin-top:10px}
+    .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071021;font-weight:700}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+    .question{margin-top:12px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border-radius:10px;display:none}
+    .opts{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+    .opt{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;cursor:pointer;text-align:left}
+    .opt.correct{outline:3px solid rgba(126,240,139,0.12);box-shadow:0 6px 18px rgba(126,240,139,0.06)}
+    .opt.wrong{outline:3px solid rgba(255,123,123,0.1)}
+
+    .badge-level{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--muted);font-weight:700}
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+    .confetti-piece{position:fixed;z-index:2000;pointer-events:none}
+    @media(max-width:720px){.xp-info{display:none} .logo{width:62px;height:62px} }
+  </style>
+</head>
+<body>
+  <div class="bg-blob b1"></div>
+  <div class="bg-blob b2"></div>
+
+  <div class="container">
+    <header>
+      <div>
+        <h2>تمهيد — المول (درس تفاعلي)</h2>
+        <div class="meta">الدرس الأول: المول وعدد أفوجادرو والكتلة المولية وحجوم الغازات — كل فقرة لها سؤال، وكسب نقاط XP بالتقدم.</div>
+      </div>
+      <div style="margin-inline-start:auto;text-align:left">
+        <div class="badge-level" id="levelBadge">المستوى: مبتدئ</div>
+      </div>
+    </header>
+
+    <div class="xp-wrap">
+      <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+      <div class="xp-info" id="xpInfo">XP: <strong id="xpCount">0</strong> / <span id="xpNext">300</span></div>
+    </div>
+
+    <main>
+
+      <!-- Card 1: التمهيد / المول -->
+      <article class="card" id="para1">
+        <div class="paragraph-title"><div class="num-badge">1</div><h3>تمهيد — المول وعدد أفوجادرو</h3></div>
+        <p>يُعبر عن كمية المادة بالمول     (SIفي النظام الدولي(
+المول الواحد من أي مادة يحتوي على عدد ثابت من الجسيمات. العدد يُعرف بعدد أفوجادرو ويساوي تقريبًا 6.02×10<sup>23</sup> جُسيمات.
+<br><strong>ملاحظة:</strong> الكتابة 10<sup>23</sup> تُقرأ "10 أس 23".</p>
+        <div class="controls">
+          <button class="btn" data-read="p1">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p1">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p1">
+          <div class="muted">س1: ماذا يعبر عن كمية المادة في النظام الدولي؟</div>
+          <div class="opts">
+            <div class="opt" data-correct="true">المول</div>
+            <div class="opt">الجرام</div>
+            <div class="opt">اللتر</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2: تعريفات -->
+      <article class="card" id="para2">
+        <div class="paragraph-title"><div class="num-badge">2</div><h3>تعريفات أساسية</h3></div>
+        <p>--تعريفات:
+1-المول:كمية المادة التي تحتوي علي عدد افوجادرو من الجسيمات
+2-عدد افوجادرو:عدد الجزيئات او الذرات او الايونات الموجودة في مول واحد من المادة 
+Molecule (الجزيئات): 6.02×10<sup>23</sup>
+Atom (الذرات): 6.02×10<sup>23</sup>
+Ion (الأيونات): 6.02×10<sup>23</sup>
+<br><strong>تذكير:</strong> 6.02×10<sup>23</sup> تُقرأ "ستة فاصلة صفر اثنين في عشرة أس ثلاثة وعشرين".</p>
+        <div class="controls">
+          <button class="btn" data-read="p2">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p2">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p2">
+          <div class="muted">س2: عدد أفوجادرو يمثل عددًا من أيٍّ مما يلي في مول واحد؟</div>
+          <div class="opts">
+            <div class="opt">الجزيئات أو الذرات أو الأيونات (صح)</div>
+            <div class="opt" data-correct="true">الجزيئات أو الذرات أو الأيونات</div>
+            <div class="opt">الذرات فقط</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3: حساب عدد الجسيمات -->
+      <article class="card" id="para3">
+        <div class="paragraph-title"><div class="num-badge">3</div><h3>حساب عدد الجسيمات من عدد المولات</h3></div>
+        <p>لحساب عدد الجسيمات (جزيئات/ذرات/الايونات) الموجودة في كمية معينة من المادة (عدد المولات) بدلالة عدد افوجادرو 
+--عدد (الذرات/الجزيئات/الايونات)=عدد مولات(الذرات/الجزيئات/الايونات) *عدد افوجادرو</p>
+        <div class="controls">
+          <button class="btn" data-read="p3">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p3">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p3">
+          <div class="muted">س3: عدد الجسيمات يساوي ماذا؟</div>
+          <div class="opts">
+            <div class="opt">عدد المولات + عدد أفوجادرو</div>
+            <div class="opt" data-correct="true">عدد المولات × عدد أفوجادرو</div>
+            <div class="opt">عدد أفوجادرو ÷ عدد المولات</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4: مثال CH4 -->
+      <article class="card" id="para4">
+        <div class="paragraph-title"><div class="num-badge">4</div><h3>مثال — CH4 (عدد ذرات الهيدروجين)</h3></div>
+        <p>CH4-مثال:احسب عدد ذرات الهيدروجين في 2 مول من الميثان 
+المول الواحد من الميثان فيه 4 ذرات هيدروجين 
+ال2 مول من الميثان فيها كام ذرة هيدروجين؟؟ 
+هنضرب 2 في 4 علي الواحد هيساوي 8</p>
+        <div class="controls">
+          <button class="btn" data-read="p4">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p4">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p4">
+          <div class="muted">س4: كم ذرة هيدروجين في 2 مول من CH4؟</div>
+          <div class="opts">
+            <div class="opt">4</div>
+            <div class="opt" data-correct="true">8</div>
+            <div class="opt">2</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 5: الكتلة المولية -->
+      <article class="card" id="para5">
+        <div class="paragraph-title"><div class="num-badge">5</div><h3>الكتلة المولية والكتلة الجزيئية الغرامية</h3></div>
+        <p>--عشان نقدر كتلة ذرة او الجزئ بوحدة جرام يٌطلق عليها الكتلة المولية وهي تٌعبر عن الكتلة الذرية النسبية الجرامية للعناصر 
+نسبية عشان ملهاش وحدة وارقام الكتلة المولية دي بنجيبها من الجدول الدوري
+
+لو عندنا جزئ بنقول الكتلة الجزيئية الجزيئية الجرامية وهي بتكون مجموع الكتل الذرية النسبية الجرامية للعناصر المكونة للجزئ مقدرة بوحدة 
+(g/mol)</p>
+        <div class="controls">
+          <button class="btn" data-read="p5">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p5">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p5">
+          <div class="muted">س5: ما الوحدة المتّبعة للكتلة المولية؟</div>
+          <div class="opts">
+            <div class="opt">g</div>
+            <div class="opt" data-correct="true">g/mol</div>
+            <div class="opt">mol/g</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 6: مثال CuSO4·5H2O -->
+      <article class="card" id="para6">
+        <div class="paragraph-title"><div class="num-badge">6</div><h3>مثال — كتلة بلورات كبريتات النحاس المائية</h3></div>
+        <p>CuSO4.5H2Oمثال2:احسب الكتلة المولية 1مول من بللورات كبريتات النحاس المائية  
+(Cu=63.5,S=32,O=16,H=1)
+159.5=63.5+32+(16*4)=CuSO4
+90=(5*2)+(5*16)=5H2O
+249.5g/mol=المجموع</p>
+        <div class="controls">
+          <button class="btn" data-read="p6">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p6">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p6">
+          <div class="muted">س6: ما الكتلة المولية لواحد مول من CuSO4·5H2O حسب المثال؟</div>
+          <div class="opts">
+            <div class="opt">159.5 g/mol</div>
+            <div class="opt">90 g/mol</div>
+            <div class="opt" data-correct="true">249.5 g/mol</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 7: علاقة المولات والكتلة -->
+      <article class="card" id="para7">
+        <div class="paragraph-title"><div class="num-badge">7</div><h3>حساب عدد المولات من الكتلة والعكس</h3></div>
+        <p>لحساب عدد مولات المادة من كتلة المادة والكتلة المولية
+عدد المولات=كتلة المادة/الكتلة المولية
+كتلة المادة=عدد المولات*الكتلة المولية</p>
+        <div class="controls">
+          <button class="btn" data-read="p7">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p7">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p7">
+          <div class="muted">س7: كيف نحسب عدد المولات من الكتلة؟</div>
+          <div class="opts">
+            <div class="opt">عدد المولات × الكتلة المولية</div>
+            <div class="opt" data-correct="true">كتلة المادة ÷ الكتلة المولية</div>
+            <div class="opt">كتلة المادة × عدد أفوجادرو</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 8: مثال NaOH -->
+      <article class="card" id="para8">
+        <div class="paragraph-title"><div class="num-badge">8</div><h3>مثال — عدد مولات NaOH في 120 جرام</h3></div>
+        <p>مثال3:احسب عدد مولات هيدروكسيد الصوديوم الموجودة في عينة منه كتلتها 120 جرام 
+(Na=23,O=16,H=1)
+عشان نحسب عدد مولات المادة لازم يكون معانا كتلة المادة والكتلة المولية 
+معانا كتلة المادة وهي 120 جرام 
+نجيب الكتلة المولية لمركب هيدروكسيد الصوديوم 
+=23+16+1=40جرام/مولNaOH
+عدد مولات المادة=120/40=3مول</p>
+        <div class="controls">
+          <button class="btn" data-read="p8">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p8">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p8">
+          <div class="muted">س8: كم مول في 120 جرام من NaOH حسب المثال؟</div>
+          <div class="opts">
+            <div class="opt">1</div>
+            <div class="opt" data-correct="true">3</div>
+            <div class="opt">4</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 9: مثال Na2SO4 — كتلة الأكسجين -->
+      <article class="card" id="para9">
+        <div class="paragraph-title"><div class="num-badge">9</div><h3>مثال — كتلة الأكسجين في عينة من Na2SO4</h3></div>
+        <p>Na2SO4مثال4:ما كتلة الاكسجين في عينة كتلتها 32.2جرام من كبريتات الصوديوم 
+(Na=23,S=32,O=16)
+معانا عينة من كبريتات الصوديوم كتلتها كلها 32.2جرام وعاوزين كتلة الاكسجين لوحده في العينة دي
+الواحد مول من كبريتات الصوديوم يحتوي علي 4 مول من الاكسجين 
+واحنا نقدر نجيب الكتلة المولية لكبريتات الصوديوم وللاكسجين
+الكتلة المولية لكبريتات الصوديوم=142جرام
+الكتلة المولية للاكسجين=4*16=64جرام
+ومعانا كتلة كبريتات الصوديوم=32.2جرام 
+نضرب 32.2*64/142=14.5جرام وهي كتلة الاكسجين</p>
+        <div class="controls">
+          <button class="btn" data-read="p9">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p9">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p9">
+          <div class="muted">س9: بحسب المثال، ما كتلة الأكسجين في العينة؟</div>
+          <div class="opts">
+            <div class="opt">32.2 جرام</div>
+            <div class="opt" data-correct="true">14.5 جرام</div>
+            <div class="opt">64 جرام</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 10: المول وحجم الغاز -->
+      <article class="card" id="para10">
+        <div class="paragraph-title"><div class="num-badge">10</div><h3>المول وحجم الغاز (STP وRTP)</h3></div>
+        <p>المول وحجم الغاز:
+توصل العالم افوجادرو ان المول من اي غاز يشغل نفس الحجم في نفس الظروف من درجة الحرارة والضغط 
+-المول من اي غاز يشغل حجمًا قدره:
+STP22.4لتر في الظروف القياسية
+درجة الحرارة=273كلفن او صفر سلزيس 
+1atm=760 mm Hgالضغط الجوي المعتاد:
+Rtp24لتر في ظروف الغرفة 
+درجة حرارة الغرفة 298كلفن او 25 سلزيس
+1atm=760 mm Hgالضغط الجوي المعتاد 
+
+المول الغازي: كمية المادة التي تشغل حجمًا قدره 22.4 لتر من الغاز في الظروف القياسية او 24 لتر من الغاز في ظروف الغرفة
+
+فرض افوجادرو:الحجوم المتساوية من الغازات المختلفة-في نفس الظروف من الضغط ودرجة الحرارة-تحتوي علي نفس العدد من الجزيئات
+
+--ما الذي يترتب علي تضاعف عدد مولات الغاز في الظروف القياسية؟
+يتضاعف حجم الغاز وبالتالي عدد جزيئاته
+
+**العلاقة بين عدد مولات الغاز وحجمه في الظروف القياسية:
+حجم الغاز=عدد مولات الغاز(مول)*22.4 (لتر/مول)
+
+**العلاقة بين عدد مولات الغاز وحجمه في ظروف الغرفة:
+حجم الغاز:عدد مولات الغاز(مول)*24 (لتر/مول)</p>
+        <div class="controls">
+          <button class="btn" data-read="p10">قرأتها — +10 XP</button>
+          <button class="btn ghost" data-toggle-q="p10">عرض السؤال</button>
+        </div>
+        <div class="question" id="q-p10">
+          <div class="muted">س10: كم لتر يشغل مول واحد من الغاز عند STP حسب الدرس؟</div>
+          <div class="opts">
+            <div class="opt">24 لتر</div>
+            <div class="opt" data-correct="true">22.4 لتر</div>
+            <div class="opt">20 لتر</div>
+          </div>
+        </div>
+      </article>
+
+    </main>
+
+    <footer>حفظ التقدم محليًا في هذا المتصفح فقط — لا يشارك مع دروس أخرى.</footer>
+  </div>
+
+  <script>
+    // lesson-specific storage key
+    const STORAGE_KEY = 'lesson_mole_state_v1';
+
+    // config
+    const XP_PER_READ = 10;
+    const XP_PER_CORRECT = 20;
+    // number of cards:
+    const NUM_CARDS = 10;
+    const TOTAL_XP = NUM_CARDS * (XP_PER_READ + XP_PER_CORRECT); // 10*(10+20)=300
+    const LEVEL_THRESHOLDS = [0, TOTAL_XP, TOTAL_XP+400, TOTAL_XP+900];
+
+    // load state
+    let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    if (!state.xp) state.xp = 0;
+    if (!state.read) state.read = {};
+
+    const xpCount = document.getElementById('xpCount');
+    const xpFill = document.getElementById('xpFill');
+    const xpNext = document.getElementById('xpNext');
+    const levelBadge = document.getElementById('levelBadge');
+
+    function updateXP(){
+      xpCount.textContent = state.xp;
+      let next = LEVEL_THRESHOLDS.find(t=>t>state.xp) || LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length-1];
+      xpNext.textContent = next;
+      const pct = Math.min(100, Math.round(state.xp/next*100));
+      xpFill.style.width = pct + '%';
+      let lvl = LEVEL_THRESHOLDS.filter(t=>t<=state.xp).length;
+      const names = ['مبتدئ','مستكشف','محارب علمي','سفير العلم'];
+      levelBadge.textContent = 'المستوى: ' + (names[Math.max(0,lvl-1)] || names[names.length-1]);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+    updateXP();
+
+    // read buttons
+    document.querySelectorAll('[data-read]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.getAttribute('data-read');
+        if (state.read[id]) { flash('+0 XP', btn); return; }
+        state.read[id] = true;
+        state.xp += XP_PER_READ;
+        updateXP();
+        flash('+'+XP_PER_READ+' XP', btn);
+        btn.textContent='مقروء ✓';
+        btn.disabled = true;
+        btn.style.opacity = 0.8;
+      });
+      // initial UI
+      const id0 = btn.getAttribute('data-read');
+      if (state.read[id0]) { btn.textContent='مقروء ✓'; btn.disabled=true; btn.style.opacity=0.8; }
+    });
+
+    // toggle question
+    document.querySelectorAll('[data-toggle-q]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const article = btn.closest('.card');
+        const q = article.querySelector('.question');
+        if(!q) return;
+        q.style.display = (q.style.display==='block') ? 'none' : 'block';
+        if(q.style.display==='block') q.scrollIntoView({behavior:'smooth', block:'center'});
+      });
+    });
+
+    // options handling
+    document.querySelectorAll('.question').forEach(q=>{
+      q.querySelectorAll('.opt').forEach(opt=>{
+        opt.addEventListener('click', ()=>{
+          if (q.dataset.answered === 'true') return;
+          q.dataset.answered = 'true';
+          const correct = opt.getAttribute('data-correct') === 'true';
+          if (correct) {
+            opt.classList.add('correct');
+            state.xp += XP_PER_CORRECT;
+            updateXP();
+            flash('+'+XP_PER_CORRECT+' XP', opt);
+            spawnConfetti(opt);
+          } else {
+            opt.classList.add('wrong');
+            flash('-0 XP', opt);
+          }
+          q.querySelectorAll('.opt').forEach(o=>{ if (o.getAttribute('data-correct')==='true') o.classList.add('correct'); });
+        });
+      });
+    });
+
+    // flash animation
+    function flash(text, el){
+      const t = document.createElement('div');
+      t.textContent = text;
+      t.style.position='absolute';
+      t.style.background='linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))';
+      t.style.padding='6px 10px';
+      t.style.borderRadius='8px';
+      t.style.color='white';
+      t.style.fontWeight='700';
+      t.style.zIndex=9999;
+      document.body.appendChild(t);
+      const rect = el.getBoundingClientRect();
+      t.style.left = (rect.left + window.scrollX + rect.width/2 - 30) + 'px';
+      t.style.top = (rect.top + window.scrollY - 28) + 'px';
+      t.animate([
+        {opacity:0, transform:'translateY(6px)'},
+        {opacity:1, transform:'translateY(0)'},
+        {opacity:0, transform:'translateY(-18px)'}
+      ],{duration:1400}).onfinish = ()=> t.remove();
+    }
+
+    // simple confetti
+    function spawnConfetti(el){
+      for(let i=0;i<20;i++){
+        const p = document.createElement('div');
+        p.className='confetti-piece';
+        p.style.width='8px';
+        p.style.height='12px';
+        p.style.position='fixed';
+        p.style.background=['#8b5cf6','#6d28d9','#7ef08b','#fbbf24'][Math.floor(Math.random()*4)];
+        const rect = el.getBoundingClientRect();
+        p.style.left = (rect.left + window.scrollX + rect.width/2) + 'px';
+        p.style.top = (rect.top + window.scrollY) + 'px';
+        p.style.opacity = 0.95;
+        p.style.transform = 'rotate('+Math.random()*360+'deg)';
+        document.body.appendChild(p);
+        const dx = (Math.random()-0.5)*200;
+        const dy = -100 - Math.random()*200;
+        p.animate([{transform:'translate(0,0) rotate(0)'},{transform:`translate(${dx}px,${dy}px) rotate(${Math.random()*720}deg)`}],{duration:1000+Math.random()*800}).onfinish = ()=>p.remove();
+      }
+    }
+
+    // scroll to first unread read-button on load
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const firstUnread = [...document.querySelectorAll('[data-read]')].find(b=>!state.read[b.getAttribute('data-read')]);
+      if(firstUnread){ firstUnread.scrollIntoView({behavior:'smooth',block:'center'}); }
+    });
+
+  </script>
+</body>
+</html>
