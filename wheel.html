@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>عجلة الحظ — محسّنة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#030017;
+    --neon-blue:#00e6ff;
+    --neon-purple:#9b4dff;
+    --glass: rgba(255,255,255,0.04);
+    --card: rgba(255,255,255,0.02);
+    --tile-radius:14px;
+  }
+  *{box-sizing:border-box;font-family:'Tajawal',system-ui,-apple-system}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#030017,#000012);color:#fff;display:flex;align-items:center;justify-content:center;padding:20px}
+  .wrap{width:100%;max-width:1100px;padding:18px}
+  .bg-glow{position:fixed;inset:-20%;z-index:0;pointer-events:none;background:conic-gradient(from 0deg,var(--neon-blue),var(--neon-purple),#ff00f0,var(--neon-blue));filter:blur(120px) opacity(0.16) saturate(120%);transform:translateZ(0)}
+  .panel{position:relative;z-index:1;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:18px;padding:18px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 30px 90px rgba(0,0,0,0.7)}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));display:flex;align-items:center;justify-content:center;color:#001;font-weight:900}
+  .title{font-weight:900;color:var(--neon-blue);font-size:1.15rem}
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+  @media(max-width:980px){ .grid{grid-template-columns:1fr} }
+
+  /* board */
+  .board-card{background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  .board{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:12px}
+  .tile{
+    border-radius:var(--tile-radius);padding:12px;min-height:96px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:800;
+    color:#071018;font-size:14px;position:relative;overflow:hidden;border:2px solid rgba(255,255,255,0.03);
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+    transition:transform .16s cubic-bezier(.2,.8,.2,1), box-shadow .16s, opacity .14s;
+    cursor:default;
+  }
+  .tile .tile-box{display:flex;flex-direction:column;gap:8px;align-items:center;width:100%}
+  .val-badge{padding:6px 10px;border-radius:10px;font-weight:900;font-size:0.9rem;color:#001;background:linear-gradient(90deg,var(--neon-blue),var(--neon-purple));box-shadow:0 8px 30px rgba(155,77,255,0.06)}
+  .tile-label{font-size:0.95rem;font-weight:900;color:#fff;direction:rtl}
+  .tile.money .val-badge{background:linear-gradient(90deg,#ffd166,#ff7ab6);color:#071018}
+  .tile.coupon .val-badge{background:linear-gradient(90deg,#00e6ff,#7c3aed);color:#001}
+  .tile.other .val-badge{background:linear-gradient(90deg,#8ee2a5,#00d4ff);color:#001}
+  .tile.active{transform:translateY(-12px) scale(1.06);box-shadow:0 40px 90px rgba(0,0,0,0.6);z-index:9}
+  .tile.active::after{content:'';position:absolute;inset:0;border-radius:var(--tile-radius);box-shadow:0 0 48px rgba(0,230,255,0.08);pointer-events:none;animation:glowPulse .7s}
+  @keyframes glowPulse{0%{opacity:.7;transform:scale(.99)}60%{opacity:1;transform:scale(1.02)}100%{opacity:.98;transform:scale(1)}}
+
+  /* controls */
+  .controls{display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px}
+  input.email{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:inherit}
+  .btn-row{display:flex;gap:8px;width:100%}
+  .btn{padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:900}
+  .btn-check{background:linear-gradient(90deg,var(--neon-blue),var(--neon-purple));color:#001}
+  .btn-spin{background:linear-gradient(90deg,#ffd166,#ff5da2);color:#001;min-width:160px}
+  .status{color:rgba(255,255,255,0.75);font-size:14px;margin-top:8px;text-align:center}
+
+  /* right card */
+  .side-card{background:var(--card);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  table{width:100%;border-collapse:collapse;color:rgba(255,255,255,0.95)}
+  th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:center;font-size:13px}
+  th{font-weight:800;color:#fff}
+  .muted{color:rgba(255,255,255,0.65);font-size:13px}
+
+  /* popup / modal details */
+  .popup{position:fixed;left:50%;top:12%;transform:translateX(-50%);min-width:320px;background:linear-gradient(180deg,#fff,#f3f3f3);padding:18px;border-radius:12px;box-shadow:0 40px 140px rgba(0,0,0,0.75);display:none;z-index:999;color:#071018}
+  .popup .title{font-size:18px;font-weight:900}
+  .popup .desc{color:#0b1420;margin-top:8px}
+  .popup .code{margin-top:10px;background:rgba(0,0,0,0.04);padding:10px;border-radius:8px;text-align:center;font-weight:900}
+  .details-list{max-height:60vh;overflow:auto;padding-right:6px}
+
+  /* confetti */
+  .confetti{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:1500}
+
+  /* small screens */
+  @media(max-width:640px){
+    .board{grid-template-columns:repeat(2,1fr)}
+    .tile{min-height:86px;font-size:13px}
+  }
+</style>
+</head>
+<body>
+  <div class="bg-glow" aria-hidden></div>
+
+  <div class="wrap">
+    <div class="panel">
+      <div class="top">
+        <div class="brand">
+          <div class="logo">MSW</div>
+          <div>
+            <div class="title">عجلة الحظ — StudyWeb</div>
+            <div class="muted">دور، اكسب، واحصل على كود فوري</div>
+          </div>
+        </div>
+        <div class="muted">مزامنة مع Firebase</div>
+      </div>
+
+      <div class="grid">
+        <div class="board-card">
+          <div style="display:flex;justify-content:center;margin-bottom:8px"><div style="font-weight:900;color:#FFD166">دور واربح — نسخة محسنة</div></div>
+
+          <div id="tilesBoard" class="board" aria-live="polite" ></div>
+
+          <div class="controls">
+            <div style="width:100%;display:flex;gap:8px;align-items:center">
+              <input id="emailInput" class="email" placeholder="you@example.com" type="email" />
+              <button id="checkBtn" class="btn btn-check">تحقق</button>
+            </div>
+
+            <div class="btn-row">
+              <button id="spinBtn" class="btn btn-spin" disabled>لفّ العجلة</button>
+              <button id="detailsBtn" class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.04)">تفاصيل الجوائز</button>
+            </div>
+
+            <div id="status" class="status">اكتب الإيميل واضغط تحقق</div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <div style="margin-bottom:10px">
+            <label class="muted">النشاط الأخير</label>
+            <div style="max-height:320px;overflow:auto;border-radius:8px;padding:6px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.006))">
+              <table id="logTable"><thead><tr><th>الإيميل</th><th>جائزة</th><th>كود</th><th>التاريخ</th></tr></thead>
+                <tbody id="logBody"><tr><td colspan="4" style="padding:12px;color:var(--muted)">No records</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="muted">
+            <div>ملاحظة: بعض الجوائز مُوجهة بشكل أفضل للمشتركين طويل الأمد، وبعضها يروق للمتابع الأسبوعي — التفاصيل تظهر عند الضغط.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- popup: win -->
+  <div id="popup" class="popup" role="dialog" aria-modal="true">
+    <div id="popupTitle" class="title">مبروك!</div>
+    <div id="popupDesc" class="desc"></div>
+    <div id="popupCode" class="code"></div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+      <button id="copyBtn" class="btn btn-check">نسخ الكود</button>
+      <a id="waBtn" class="btn btn-check" target="_blank" rel="noopener">شارك على واتساب</a>
+    </div>
+    <div style="margin-top:8px;color:#0b1420;font-size:13px;text-align:center">خُد سكرين‌شوت واحتفظ بالكود.</div>
+  </div>
+
+  <!-- popup: details (re-used element shown differently) -->
+  <div id="detailsPopup" class="popup" role="dialog" aria-modal="true" style="display:none;min-width:420px">
+    <div class="title">تفاصيل الجوائز</div>
+    <div class="desc" style="margin-top:8px">هنا تفاصيل كل جائزة — ملاحظة ذكية حول تفضيل باقات الشهرية مقابل الأسبوعية مذكورة بشكل غير صريح.</div>
+    <div class="details-list" id="detailsList" style="margin-top:12px"></div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+      <button id="closeDetailsBtn" class="btn btn-check">اغلاق</button>
+    </div>
+  </div>
+
+  <div id="confetti" class="confetti"></div>
+
+  <!-- sounds (optional) -->
+  <audio id="tickSnd" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6f1a72dc4c.mp3?filename=wheel-tick-1.mp3"></audio>
+  <audio id="winSnd" preload="auto" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_9ba3d4d9b1.mp3?filename=short-win-02.mp3"></audio>
+
+<script type="module">
+/* =========================
+   CONFIG: ضع هنا معلوماتك
+   ========================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, doc, getDoc, setDoc, updateDoc,
+  getDocs, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+/* ضع هنا إعدادات Firebase الحقيقية */
+const firebaseConfig = {
+  apiKey: "AIzaSyCYjZ1JN-AFwJjxgEtINzQ0oKRTjUvT6JI",
+  authDomain: "championship-36d6a.firebaseapp.com",
+  projectId: "championship-36d6a",
+  storageBucket: "championship-36d6a.firebasestorage.app",
+  messagingSenderId: "775595993225",
+  appId: "1:775595993225:web:d9cc76b2027e366a277e58",
+  measurementId: "G-1NPG0BYM94"
+};
+/* رقم واتساب بدون + */
+const WHATSAPP_NUMBER = "201121101238";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* =========================
+   OFFERS (محدّثة كما طلبت)
+   - ملاحظة: قمت بتكرار 25 ج ثلاث مرات في الخطة الشهرية (3 مربعات بنفس القيمة)
+   - وعدلت الأسبوعي ليكون أبسط وأقل عددًا
+*/
+const OFFERS = [
+  // ======= Monthly (مع تكرار 25 ثلاث مرات) =======
+  { offerId:'m_cash_50', plan:'monthly', type:'money', label:'50 ج', title:'50 جنيه', codePrefix:'C50', weight:10, accessHint:'monthly' },
+  { offerId:'m_cash_25_1', plan:'monthly', type:'money', label:'25 ج', title:'25 جنيه', codePrefix:'C25', weight:8, accessHint:'monthly' },
+  { offerId:'m_cash_25_2', plan:'monthly', type:'money', label:'25 ج', title:'25 جنيه', codePrefix:'C25', weight:8, accessHint:'monthly' },
+  { offerId:'m_cash_25_3', plan:'monthly', type:'money', label:'25 ج', title:'25 جنيه', codePrefix:'C25', weight:8, accessHint:'monthly' },
+  { offerId:'m_brand_20', plan:'monthly', type:'coupon', label:'20% على البراند', title:'خصم 20% على البراند', codePrefix:'BR20', weight:7, accessHint:'monthly' },
+  { offerId:'m_next_10', plan:'monthly', type:'coupon', label:'10% على اشتراك الشهر القادم', title:'10% خصم على الاشتراك القادم', codePrefix:'NX10', weight:9, accessHint:'monthly' },
+  { offerId:'m_brand_15', plan:'monthly', type:'coupon', label:'15% على البراند', title:'خصم 15% على البراند', codePrefix:'BR15', weight:6, accessHint:'monthly' },
+  { offerId:'m_next_5', plan:'monthly', type:'coupon', label:'5% على اشتراك الشهر القادم', title:'5% خصم على الاشتراك القادم', codePrefix:'NX5', weight:4, accessHint:'monthly' },
+  { offerId:'m_free_tourn', plan:'monthly', type:'other', label:'دخول مجاني للبطولة', title:'تذكرة دخول البطولة القادمة', codePrefix:'FT', weight:5, accessHint:'monthly' },
+  { offerId:'m_brand_5', plan:'monthly', type:'coupon', label:'5% على البراند', title:'خصم 5% على البراند', codePrefix:'BR5', weight:4, accessHint:'monthly' },
+
+  // ======= Weekly (مخفف كما طلبت) =======
+  { offerId:'w_cash_50', plan:'weekly', type:'money', label:'50 ج', title:'50 جنيه', codePrefix:'C50', weight:9, accessHint:'weekly' },
+  { offerId:'w_cash_25', plan:'weekly', type:'money', label:'25 ج', title:'25 جنيه', codePrefix:'C25', weight:10, accessHint:'weekly' },
+  { offerId:'w_next_5', plan:'weekly', type:'coupon', label:'5% على اشتراك الشهر القادم', title:'5% خصم على الاشتراك القادم', codePrefix:'NX5', weight:4, accessHint:'weekly' },
+  { offerId:'w_brand_10', plan:'weekly', type:'coupon', label:'10% على البراند', title:'خصم 10% على البراند', codePrefix:'BR10', weight:8, accessHint:'weekly' },
+  { offerId:'w_brand_5', plan:'weekly', type:'coupon', label:'5% على البراند', title:'خصم 5% على البراند', codePrefix:'BR5', weight:5, accessHint:'weekly' }
+];
+
+/* CONFIG (عدد المربعات أقل كما طلبت) */
+const CONFIG = { totalTiles: 9, animationCyclesMin:2, animationCyclesMax:4, minDelay:28, maxDelay:300 };
+
+/* DOM */
+const tilesBoard = document.getElementById('tilesBoard');
+const checkBtn = document.getElementById('checkBtn');
+const spinBtn = document.getElementById('spinBtn');
+const detailsBtn = document.getElementById('detailsBtn');
+const emailInput = document.getElementById('emailInput');
+const status = document.getElementById('status');
+const logBody = document.getElementById('logBody');
+const popup = document.getElementById('popup');
+const popupTitle = document.getElementById('popupTitle');
+const popupDesc = document.getElementById('popupDesc');
+const popupCode = document.getElementById('popupCode');
+const copyBtn = document.getElementById('copyBtn');
+const waBtn = document.getElementById('waBtn');
+const detailsPopup = document.getElementById('detailsPopup');
+const detailsList = document.getElementById('detailsList');
+const closeDetailsBtn = document.getElementById('closeDetailsBtn');
+const confettiHolder = document.getElementById('confetti');
+const tickSnd = document.getElementById('tickSnd');
+const winSnd = document.getElementById('winSnd');
+
+let currentEmail = localStorage.getItem('wheel_email') || '';
+emailInput.value = currentEmail;
+let tiles = [];
+let highlighted = -1;
+let spinning = false;
+
+/* ===== helpers ===== */
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function nowISO(){ return new Date().toISOString(); }
+function genCode(len=6){ const chars='ABCDEFGHJKMNPQRSTUVWXYZ23456789'; let out=''; for(let i=0;i<len;i++) out += chars.charAt(Math.floor(Math.random()*chars.length)); return out; }
+
+/* create tiles:
+   - build list from OFFERS that match plan
+   - duplicate random offers (including duplicates like the 25ج entries) until reach totalTiles
+   - shuffle
+*/
+function setTilesFromOffers(plan){
+  const source = OFFERS.filter(o => o.plan === plan || o.plan === 'all');
+  tiles = source.slice(); // copy (includes duplicates if defined)
+  // if not enough items, duplicate random existing ones
+  while(tiles.length < CONFIG.totalTiles){
+    const pick = tiles[Math.floor(Math.random()*tiles.length)];
+    tiles.push(Object.assign({}, pick));
+  }
+  // shuffle (Fisher-Yates)
+  for (let i = tiles.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+  }
+  renderTiles();
+}
+
+/* render tiles (no probabilities) */
+function renderTiles(){
+  tilesBoard.innerHTML = '';
+  tiles.forEach((t,i)=>{
+    const div = document.createElement('div');
+    div.className = `tile ${t.type||'coupon'}`;
+    div.dataset.index = i;
+    div.dataset.offerId = t.offerId || '';
+    const valueBadge = (t.type === 'money') ? `<div class="val-badge">${escapeHtml(t.label||'')}</div>` : `<div class="val-badge">${escapeHtml(t.type==='coupon' ? 'قسيمة' : 'هدية')}</div>`;
+    div.innerHTML = `<div class="tile-box">${valueBadge}<div class="tile-label">${escapeHtml(t.label||t.title||'جائزة')}</div></div>`;
+    div.title = `${t.title || t.label}`;
+    tilesBoard.appendChild(div);
+  });
+}
+
+/* pick simple random among weighted pool */
+function pickOfferByWeight(plan){
+  const pool = OFFERS.filter(o => o.plan === plan || o.plan === 'all');
+  if(pool.length === 0) return null;
+  const total = pool.reduce((s,o)=> s + (o.weight || 1), 0);
+  let r = Math.random()*total;
+  for(const o of pool){ r -= (o.weight || 1); if(r <= 0) return o; }
+  return pool[0];
+}
+
+/* animate */
+function animateTilesToTarget(startIndex, targetIndex, onComplete){
+  const totalTiles = tiles.length;
+  const cycles = Math.floor(Math.random()*(CONFIG.animationCyclesMax - CONFIG.animationCyclesMin + 1)) + CONFIG.animationCyclesMin;
+  const steps = cycles * totalTiles + ((targetIndex - startIndex + totalTiles) % totalTiles);
+  const delays = [];
+  for(let i=0;i<=steps;i++){
+    const t = i/steps;
+    const ease = 1 - Math.pow(1 - t, 3);
+    const delay = CONFIG.minDelay + (CONFIG.maxDelay - CONFIG.minDelay) * ease;
+    delays.push(Math.round(delay));
+  }
+  let step = 0;
+  let current = startIndex;
+  function nextStep(){
+    setHighlight(current);
+    try{ tickSnd.currentTime = 0; tickSnd.volume = 0.12; tickSnd.play().catch(()=>{}); }catch(e){}
+    if(step >= steps){ onComplete(current); return; }
+    current = (current + 1) % totalTiles;
+    const delay = delays[step];
+    step++;
+    setTimeout(nextStep, delay);
+  }
+  nextStep();
+}
+
+/* highlight */
+function setHighlight(idx){
+  const children = tilesBoard.children;
+  for(let i=0;i<children.length;i++) children[i].classList.toggle('active', i===idx);
+  highlighted = idx;
+}
+
+/* confetti */
+function spawnConfetti(){
+  confettiHolder.innerHTML = '';
+  const colors = ['#FF5DA2','#7C3AED','#FFD166','#00D4FF','#4EE1A1'];
+  for(let i=0;i<40;i++){
+    const e = document.createElement('div');
+    e.style.position='absolute';
+    e.style.left = `${Math.random()*100}%`;
+    e.style.top = `-10%`;
+    e.style.width = `${6+Math.random()*12}px`;
+    e.style.height = `${4+Math.random()*8}px`;
+    e.style.background = colors[Math.floor(Math.random()*colors.length)];
+    e.style.opacity = 0.95;
+    e.style.borderRadius = '2px';
+    confettiHolder.appendChild(e);
+    const dur = 1000 + Math.random()*1200;
+    e.animate([{transform:`translateY(0) rotate(${Math.random()*360}deg)`, opacity:1},{transform:`translateY(${400+Math.random()*400}px) rotate(${Math.random()*720}deg)`, opacity:0.2}], {duration:dur, easing:'cubic-bezier(.2,.8,.2,1)'});
+    setTimeout(()=> e.remove(), dur+80);
+  }
+}
+
+/* =========================
+   Firestore helpers (simple)
+   ========================= */
+async function getUserDoc(email){
+  try{
+    const ref = doc(db,'wheelUsers', email);
+    const snap = await getDoc(ref);
+    if(!snap.exists()) return null;
+    return { ref, data: snap.data() };
+  }catch(e){ console.error(e); return null; }
+}
+async function ensureUserDoc(email){
+  const ref = doc(db,'wheelUsers', email);
+  const snap = await getDoc(ref);
+  if(!snap.exists()){
+    await setDoc(ref, { email, canSpin:false, spun:false, result:'', plan:'weekly', createdAt: serverTimestamp() });
+    return { ref, data: { email, canSpin:false, spun:false, plan:'weekly' } };
+  }
+  return { ref, data: snap.data() };
+}
+async function saveWinnerRecord(obj){
+  return await addDoc(collection(db,'winners'), obj);
+}
+async function loadLog(){
+  try{
+    const snap = await getDocs(collection(db,'winners'));
+    const items = [];
+    snap.forEach(s=>{ const d=s.data(); items.push({ id:s.id, data:d }); });
+    items.sort((a,b)=>{
+      const ta = a.data.timestamp ? (a.data.timestamp.seconds ? a.data.timestamp.seconds*1000 : new Date(a.data.timestamp).getTime()) : 0;
+      const tb = b.data.timestamp ? (b.data.timestamp.seconds ? b.data.timestamp.seconds*1000 : new Date(b.data.timestamp).getTime()) : 0;
+      return tb - ta;
+    });
+    const top = items.slice(0,40);
+    logBody.innerHTML = '';
+    if(top.length===0){ logBody.innerHTML = '<tr><td colspan="4" style="padding:12px;color:var(--muted)">No records</td></tr>'; return; }
+    top.forEach(it=>{
+      const d = it.data;
+      const dt = d.timestamp ? (d.timestamp.seconds ? new Date(d.timestamp.seconds*1000).toLocaleString() : new Date(d.timestamp).toLocaleString()) : '';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${escapeHtml(d.email||'')}</td><td>${escapeHtml(d.offerSnapshot?.title || d.offerId || '')}</td><td>${escapeHtml(d.code||'')}</td><td>${escapeHtml(dt)}</td>`;
+      logBody.appendChild(tr);
+    });
+  }catch(e){ console.error('loadLog', e); }
+}
+
+/* =========================
+   UI handlers
+   ========================= */
+checkBtn.addEventListener('click', async ()=>{
+  const email = (emailInput.value||'').trim().toLowerCase();
+  if(!email){ status.textContent = 'من فضلك اكتب إيميل صالح.'; spinBtn.disabled = true; return; }
+  currentEmail = email; localStorage.setItem('wheel_email', email);
+  status.textContent = 'جاري الفحص...';
+  try{
+    const u = await ensureUserDoc(email);
+    const plan = (u.data && u.data.plan) ? u.data.plan : 'weekly';
+    setTilesFromOffers(plan);
+    if(u.data.spun){
+      status.innerHTML = `لقد قمت باللف سابقًا — النتيجة: <b>${escapeHtml(u.data.result||'N/A')}</b>`;
+      spinBtn.disabled = true;
+    } else if(u.data.canSpin){
+      status.textContent = `الخطة: ${plan.toUpperCase()} — جاهز للفة!`;
+      spinBtn.disabled = false;
+    } else {
+      status.textContent = `الخطة: ${plan.toUpperCase()} — ليس لديك إذن للفة بعد`;
+      spinBtn.disabled = true;
+    }
+    await loadLog();
+  }catch(e){ console.error(e); status.textContent = 'حصل خطأ أثناء الفحص.'; spinBtn.disabled = true; }
+});
+
+/* spin */
+spinBtn.addEventListener('click', async ()=>{
+  if(spinning) return;
+  spinning = true; spinBtn.disabled = true;
+  try{
+    const u = await getUserDoc(currentEmail);
+    if(!u){ alert('المستخدم غير موجود'); spinning=false; spinBtn.disabled=false; return; }
+    if(u.data.spun){ alert('لقد قمت باللفة مسبقًا'); spinning=false; spinBtn.disabled=true; return; }
+    if(!u.data.canSpin){ alert('غير مسموح لك باللفة حاليا'); spinning=false; spinBtn.disabled=true; return; }
+
+    const plan = u.data.plan || 'weekly';
+    const offer = pickOfferByWeight(plan);
+    if(!offer){ alert('لا توجد عروض متاحة'); spinning=false; spinBtn.disabled=false; return; }
+    const raw = genCode(6);
+    const code = (offer.codePrefix ? offer.codePrefix + '-' : '') + raw;
+
+    // choose a tile index that matches offerId if exists else random
+    const candidates = [];
+    for(let i=0;i<tiles.length;i++){
+      if(tiles[i].offerId && offer.offerId && tiles[i].offerId === offer.offerId) candidates.push(i);
+    }
+    if(candidates.length === 0){
+      for(let i=0;i<tiles.length;i++) if(tiles[i].type === offer.type) candidates.push(i);
+    }
+    const targetIndex = candidates.length ? candidates[Math.floor(Math.random()*candidates.length)] : Math.floor(Math.random()*tiles.length);
+    const startIndex = highlighted >= 0 ? highlighted : 0;
+
+    animateTilesToTarget(startIndex, targetIndex, async (finalIndex)=>{
+      setHighlight(finalIndex);
+      const offerSnapshot = Object.assign({}, offer);
+      try{
+        // save record
+        await saveWinnerRecord({
+          email: currentEmail,
+          offerId: offer.offerId,
+          offerSnapshot,
+          code,
+          plan,
+          timestamp: serverTimestamp(),
+          delivered: false,
+          deliveredAt: null
+        });
+        // update user doc
+        await updateDoc(doc(db,'wheelUsers', currentEmail), { spun:true, canSpin:false, result: offer.label, lastCode: code, updatedAt: serverTimestamp() });
+
+        // UI: confetti + sound + popup
+        spawnConfetti();
+        try{ winSnd.currentTime=0; winSnd.volume=0.28; winSnd.play().catch(()=>{}); }catch(e){}
+        popupTitle.textContent = offer.title || offer.label;
+        popupDesc.textContent = offer.description || '';
+        document.getElementById('popupCode').innerHTML = `الكود: <b id="codeText">${code}</b>`;
+        waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`فزت بـ ${offer.title||offer.label} - الكود: ${code} - الإيميل: ${currentEmail}`)}`;
+        popup.style.display = 'block';
+        await loadLog();
+      }catch(e){ console.error(e); alert('فشل في حفظ النتيجة: '+(e.message||e)); }
+      spinning = false;
+    });
+
+  }catch(e){ console.error(e); spinning=false; spinBtn.disabled=false; alert('حصل خطأ أثناء عملية اللفة.'); }
+});
+
+/* copy */
+copyBtn.addEventListener('click', ()=>{
+  const el = document.getElementById('codeText');
+  if(!el) return;
+  navigator.clipboard.writeText(el.textContent || '').then(()=> {
+    copyBtn.textContent = 'تم النسخ ✓';
+    setTimeout(()=> copyBtn.textContent = 'نسخ الكود', 1600);
+  }).catch(()=> alert('فشل النسخ'));
+});
+
+/* details button: show all offers with subtle hint about monthly vs weekly */
+detailsBtn.addEventListener('click', ()=>{
+  // build list
+  detailsList.innerHTML = '';
+  const planGroups = { monthly:[], weekly:[] };
+  OFFERS.forEach(o=>{
+    const el = document.createElement('div');
+    el.style.padding = '10px';
+    el.style.borderBottom = '1px solid rgba(0,0,0,0.04)';
+    el.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div style="text-align:right">
+          <div style="font-weight:900">${escapeHtml(o.title || o.label)}</div>
+          <div style="color:#333;margin-top:6px;font-size:13px">${escapeHtml(o.description || '')}</div>
+        </div>
+        <div style="text-align:left">
+          <div style="background:linear-gradient(90deg,var(--neon-blue),var(--neon-purple));color:#001;padding:6px 10px;border-radius:8px;font-weight:900">${escapeHtml(o.label)}</div>
+          <div style="margin-top:8px;font-size:12px;color:#333">${escapeHtml(o.codePrefix || '')}</div>
+        </div>
+      </div>
+    `;
+    // subtle hint (non-explicit)
+    const hint = document.createElement('div');
+    hint.style.marginTop='8px';
+    hint.style.color = '#333';
+    hint.style.fontSize='12px';
+    if(o.accessHint === 'monthly'){
+      hint.textContent = 'مناسب للمشتركين لفترة أطول — يُنصح به لمن يريد الاستفادة المستمرة.';
+    } else if(o.accessHint === 'weekly'){
+      hint.textContent = 'مصمم للمتابعين النشطين أسبوعيًا — تجربة سريعة ومباشرة.';
+    } else {
+      hint.textContent = 'متاح لمعظم المستخدمين.';
+    }
+    el.appendChild(hint);
+    detailsList.appendChild(el);
+  });
+  detailsPopup.style.display = 'block';
+});
+closeDetailsBtn.addEventListener('click', ()=> detailsPopup.style.display = 'none');
+
+/* close popups on outside click */
+popup.addEventListener('click', (e)=>{ if(e.target === popup) popup.style.display='none'; });
+detailsPopup.addEventListener('click', (e)=>{ if(e.target === detailsPopup) detailsPopup.style.display='none'; });
+
+/* init */
+window.addEventListener('load', async ()=>{
+  if(currentEmail) emailInput.value = currentEmail;
+  setTilesFromOffers('weekly');
+  await loadLog();
+});
+emailInput.addEventListener('keydown',(e)=>{ if(e.key==='Enter') checkBtn.click(); });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الصفحة الرئيسية</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
+
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Cairo', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: radial-gradient(circle at center, #000010, #000);
+      overflow: hidden;
+      color: white;
+    }
+
+    /* خلفية طاقة متحركة */
+    .energy {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, #00f5ff, #8a2be2, #ff00c8, #00f5ff);
+      animation: rotate 10s linear infinite;
+      filter: blur(150px);
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      text-shadow: 0 0 20px #00f5ff;
+      letter-spacing: 2px;
+    }
+
+    .btn {
+      display: block;
+      width: 250px;
+      margin: 15px auto;
+      padding: 15px 0;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(90deg, #00f5ff, #8a2be2);
+      color: white;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: 0.4s;
+      box-shadow: 0 0 20px #00f5ff99;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #00f5ff, 0 0 40px #8a2be2;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+      transition: 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="energy"></div>
+
+  <div class="container">
+    <h1>✨ مرحبًا بك في عالم الجوائز ✨</h1>
+    <button class="btn" onclick="window.location.href='wheel.html'">🎡 ادخل العجلة</button>
+    <button class="btn" onclick="window.location.href='reward.html'">🎁 جوائزي</button>
+  </div>
+
+</body>
+</html>

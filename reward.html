@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>جوائزي — تحقق من الجوائز</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --accent1:#00f5ff; --accent2:#8a2be2; }
+    *{box-sizing:border-box}
+    body{ margin:0; min-height:100vh; font-family:'Cairo',sans-serif; background: radial-gradient(circle at 20% 10%, #061022 0%, #000010 30%, #000 100%); color:#fff; display:flex; align-items:center; justify-content:center; padding:28px; }
+    .energy{ position:fixed; inset:-20%; width:140%; height:140%; background: conic-gradient(from 90deg, var(--accent1), var(--accent2), #ff00c8, var(--accent1)); filter: blur(140px) saturate(120%); opacity:0.22; z-index:0; animation:spin 18s linear infinite; }
+    @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+    .wrap{ position:relative; z-index:1; width:100%; max-width:980px; }
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border-radius:16px; padding:26px; box-shadow:0 12px 50px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03); backdrop-filter: blur(6px); }
+    h1{ font-size:1.9rem; margin:0 0 8px; text-align:center; text-shadow:0 0 18px rgba(0,245,255,0.12) }
+    p.lead{ margin:0 0 16px; text-align:center; color:rgba(255,255,255,0.82) }
+    .form-row{ display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:14px }
+    input[type="email"]{ flex:1; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.36); color:#fff; font-size:1rem; outline:none }
+    .actions{ display:flex; gap:10px }
+    .btn{ padding:10px 16px; border-radius:999px; border:none; cursor:pointer; font-weight:700; min-width:120px; background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:#001; box-shadow:0 10px 30px rgba(0,0,0,0.45) }
+    .btn.ghost{ background:transparent; color:var(--accent1); border:1px solid rgba(255,255,255,0.06) }
+    .results{ margin-top:18px }
+    .empty{ padding:20px; text-align:center; color:rgba(255,255,255,0.7) }
+    .reward-list{ display:grid; gap:12px }
+    .reward{ display:flex; gap:12px; align-items:center; padding:12px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03) }
+    .badge{ padding:6px 10px; border-radius:999px; font-weight:700; font-size:0.95rem }
+    .badge.yes{ background: linear-gradient(90deg,#16a34a55,#16a34a22); color:#c7f9d5 }
+    .badge.no{ background: linear-gradient(90deg,#ff4d4d33,#ff4d4d22); color:#ffd6d6 }
+    .meta{ flex:1 }
+    .meta h3{ margin:0; font-size:1.03rem }
+    .meta p{ margin:6px 0 0; color:rgba(255,255,255,0.72); font-size:0.92rem }
+    .small{ font-size:0.82rem; color:rgba(255,255,255,0.6) }
+    .support{ display:flex; gap:8px; align-items:center; justify-content:flex-end; margin-top:12px }
+    .support a{ color:var(--accent1); text-decoration:none; font-weight:700 }
+    @media (max-width:640px){ .form-row{ flex-direction:column } .actions{ width:100% } .btn{ width:100% } }
+  </style>
+</head>
+<body>
+  <div class="energy" aria-hidden></div>
+
+  <div class="wrap">
+    <div class="card">
+      <h1>تحقق من جوائزي ✨</h1>
+      <p class="lead">اكتب إيميل الطالب لعرض كل الجوائز المسجلة في مجموعة</p>
+
+      <form id="checkForm" class="form-row" onsubmit="return false;">
+        <input id="emailInput" type="email" placeholder="اكتب الإيميل هنا" required />
+        <div class="actions">
+          <button id="checkBtn" class="btn">تحقق</button>
+          <button id="clearBtn" class="btn ghost" type="button">مسح</button>
+        </div>
+      </form>
+
+      <div id="results" class="results">
+        <div class="empty">لم يتم البحث بعد — أدخل الإيميل واضغط تحقق</div>
+      </div>
+
+      <div class="support small">
+        <div>مشكلة؟ </div>
+        <a id="supportLink" href="#" target="_blank">كلم الدعم عبر واتساب</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // ====== ضع هنا إعدادات Firebase الخاصة بك ======
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYjZ1JN-AFwJjxgEtINzQ0oKRTjUvT6JI",
+  authDomain: "championship-36d6a.firebaseapp.com",
+  projectId: "championship-36d6a",
+  storageBucket: "championship-36d6a.firebasestorage.app",
+  messagingSenderId: "775595993225",
+  appId: "1:775595993225:web:d9cc76b2027e366a277e58",
+  measurementId: "G-1NPG0BYM94"
+    };
+
+    // ====== رقم واتساب الدعم (دولياً بدون +) ======
+    const SUPPORT_WHATSAPP = '201121101238';
+
+    // ====== استيراد وحدات Firebase (v9 modular) ======
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
+    import { getFirestore, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // DOM
+    const emailInput = document.getElementById('emailInput');
+    const checkBtn = document.getElementById('checkBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const results = document.getElementById('results');
+    const supportLink = document.getElementById('supportLink');
+
+    function buildWhatsAppLink(number, subject, body){
+      const num = String(number).replace(/\D/g,'');
+      const text = encodeURIComponent(subject + "\n\n" + body);
+      return `https://wa.me/${num}?text=${text}`;
+    }
+    supportLink.href = buildWhatsAppLink(SUPPORT_WHATSAPP, 'مساعدة في الجوائز', 'مرحبًا الدعم، أحتاج مساعدة في الجوائز.');
+
+    function setLoading(isLoading){
+      checkBtn.disabled = isLoading;
+      checkBtn.textContent = isLoading ? 'جاري البحث...' : 'تحقق';
+    }
+    function clearResults(){
+      results.innerHTML = '<div class="empty">لم يتم البحث بعد — أدخل الإيميل واضغط تحقق</div>';
+    }
+    clearBtn.addEventListener('click', ()=>{ emailInput.value=''; clearResults(); });
+
+    // تجلب وتعرض النتائج من collection 'winners' وتفرزها client-side
+    async function fetchRewardsForEmail(email){
+      setLoading(true);
+      try{
+        const col = collection(db, 'winners'); // اسم الكوليكشن عندك
+        const q = query(col, where('email','==', email)); // لا نستخدم orderBy لتجنب طلب index
+        const snap = await getDocs(q);
+        setLoading(false);
+
+        if(snap.empty){
+          results.innerHTML = `<div class="empty">لم يتم العثور على أي جوائز لهذا الإيميل.</div>`;
+          return;
+        }
+
+        // اجمع العناصر ثم رتبها محليًا حسب timestamp/wonAt
+        const items = [];
+        snap.forEach(d => {
+          const data = d.data();
+
+          // محاولة قراءة الحقول المتاحة عندك
+          let ts = null;
+          if (data.wonAt && typeof data.wonAt.toDate === 'function') ts = data.wonAt.toDate().getTime();
+          else if (data.wonAt) ts = new Date(data.wonAt).getTime();
+          else if (data.timestamp && typeof data.timestamp.toDate === 'function') ts = data.timestamp.toDate().getTime();
+          else if (data.timestamp) ts = new Date(data.timestamp).getTime();
+
+          const prizeName = (data.offerSnapshot && (data.offerSnapshot.title || data.offerSnapshot.label)) || data.prize || data.code || 'جائزة غير معروفة';
+          const spinId = data.wheelSpinId || data.code || d.id;
+          const delivered = data.delivered === true;
+
+          items.push({ id: d.id, data, ts, prizeName, spinId, delivered });
+        });
+
+        // ترتيب نزولي (الأحدث أول)
+        items.sort((a,b) => (b.ts || 0) - (a.ts || 0));
+
+        // بناء الواجهة
+        const list = document.createElement('div');
+        list.className = 'reward-list';
+
+        items.forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'reward';
+
+          const badge = document.createElement('div');
+          badge.className = 'badge ' + (item.delivered ? 'yes' : 'no');
+          badge.textContent = item.delivered ? 'تم التسليم' : 'لم تقم بالاستلام';
+
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          const title = document.createElement('h3');
+          title.textContent = item.prizeName;
+          const details = document.createElement('p');
+          const wonText = item.ts ? new Date(item.ts).toLocaleString('ar-EG', {dateStyle:'medium', timeStyle:'short'}) : 'تاريخ غير متاح';
+          details.textContent = `فاز في: ${wonText} - لفّة: ${item.spinId}`;
+          meta.appendChild(title);
+          meta.appendChild(details);
+
+          const supportBtn = document.createElement('a');
+          supportBtn.className = 'btn';
+          supportBtn.style.minWidth = '110px';
+          supportBtn.textContent = 'كلم الدعم';
+          supportBtn.href = buildWhatsAppLink(SUPPORT_WHATSAPP, `مشكلة في جوائز ${email}`, `مرحبًا الدعم,\n\nأحتاج مساعدة في الجائزة ${item.prizeName} (لفّة ${item.spinId})`);
+          supportBtn.target = '_blank';
+
+          row.appendChild(badge);
+          row.appendChild(meta);
+          row.appendChild(supportBtn);
+
+          list.appendChild(row);
+        });
+
+        results.innerHTML = '';
+        results.appendChild(list);
+
+      }catch(err){
+        setLoading(false);
+        console.error(err);
+        results.innerHTML = `<div class="empty">حصل خطأ أثناء جلب البيانات: ${err.message || err}</div>`;
+      }
+    }
+
+    // أحداث
+    checkBtn.addEventListener('click', ()=>{
+      const email = (emailInput.value || '').trim().toLowerCase();
+      if(!email) return;
+      fetchRewardsForEmail(email);
+    });
+    emailInput.addEventListener('keyup', (e)=>{ if(e.key === 'Enter') checkBtn.click(); });
+
+  </script>
+
+  <!--
+    ملاحظات مهمة:
+    1) هذا الملف لا يحتوي زر لتأكيد التسليم من العميل — التأكيد يتم من قبلك في Firebase Console أو عبر سكربت Admin.
+    2) تأكد من وضع firebaseConfig الحقيقي و SUPPORT_WHATSAPP برقمك.
+    3) إذا أردت سكربت Node واحد يأكّد كل سجلات إيميل معين (يعين delivered:true و deliveredAt) أرسلك السكربت جاهز.
+    4) إن احتجت أمدّلك نسخة مرفوعة على المساحة أو أعدّل ملف الـ canvas مباشرة قولي.
+  -->
+</body>
+</html>

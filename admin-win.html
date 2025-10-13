@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة الأدمن - بحث عن الجوائز</title>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { 
+      getFirestore, collection, query, where, getDocs, updateDoc, doc, serverTimestamp 
+    } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYjZ1JN-AFwJjxgEtINzQ0oKRTjUvT6JI",
+  authDomain: "championship-36d6a.firebaseapp.com",
+  projectId: "championship-36d6a",
+  storageBucket: "championship-36d6a.firebasestorage.app",
+  messagingSenderId: "775595993225",
+  appId: "1:775595993225:web:d9cc76b2027e366a277e58",
+  measurementId: "G-1NPG0BYM94"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const searchBtn = document.getElementById("searchBtn");
+    const emailInput = document.getElementById("emailInput");
+    const tableBody = document.getElementById("tableBody");
+    const loading = document.getElementById("loading");
+
+    // بحث عن الجوائز بإيميل الطالب
+    async function searchWinners() {
+      const email = emailInput.value.trim();
+      if (!email) {
+        alert("⚠️ من فضلك اكتب إيميل الطالب أولاً!");
+        return;
+      }
+
+      loading.style.display = "block";
+      tableBody.innerHTML = "";
+
+      try {
+        const q = query(collection(db, "winners"), where("email", "==", email));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+          tableBody.innerHTML = `<tr><td colspan="6">لا توجد جوائز لهذا الإيميل.</td></tr>`;
+        } else {
+          snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${data.email || "—"}</td>
+              <td>${data.offerSnapshot?.label || "—"}</td>
+              <td>${data.timestamp?.toDate ? data.timestamp.toDate().toLocaleString() : "—"}</td>
+              <td>${data.delivered ? "✅ تم التسليم" : "❌ لم يُسلَّم"}</td>
+              <td>${data.deliveredAt?.toDate ? data.deliveredAt.toDate().toLocaleString() : "—"}</td>
+              <td>
+                ${!data.delivered ? `<button class="deliver-btn" data-id="${docSnap.id}">تسليم</button>` : ""}
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+
+          document.querySelectorAll(".deliver-btn").forEach(btn => {
+            btn.addEventListener("click", () => deliverPrize(btn.dataset.id));
+          });
+        }
+      } catch (err) {
+        console.error(err);
+        alert("حدث خطأ أثناء جلب البيانات!");
+      }
+
+      loading.style.display = "none";
+    }
+
+    // تحديث حالة التسليم في فايربيز
+    async function deliverPrize(id) {
+      try {
+        await updateDoc(doc(db, "winners", id), {
+          delivered: true,
+          deliveredAt: serverTimestamp()
+        });
+        alert("✅ تم تأكيد التسليم بنجاح!");
+        searchWinners(); // إعادة تحميل النتائج بعد التحديث
+      } catch (err) {
+        console.error(err);
+        alert("حدث خطأ أثناء تحديث حالة التسليم!");
+      }
+    }
+
+    searchBtn.addEventListener("click", searchWinners);
+  </script>
+
+  <style>
+    body {
+      font-family: "Cairo", sans-serif;
+      background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      margin: 0;
+      padding: 40px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #00e6a8;
+      text-shadow: 0 0 10px #00e6a8;
+    }
+    .search-box {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      width: 250px;
+      font-size: 16px;
+      outline: none;
+    }
+    button {
+      background: #00e6a8;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-right: 5px;
+    }
+    button:hover {
+      background: #00ffbf;
+      box-shadow: 0 0 10px #00e6a8;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    th {
+      background: rgba(0,0,0,0.3);
+    }
+    tr:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    .deliver-btn {
+      background: #00e6a8;
+      color: #000;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .deliver-btn:hover {
+      background: #00ffbf;
+    }
+    #loading {
+      text-align: center;
+      display: none;
+      margin-top: 15px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>📦 لوحة الأدمن - البحث عن جوائز الطلاب</h1>
+
+  <div class="search-box">
+    <input type="email" id="emailInput" placeholder="اكتب إيميل الطالب هنا..." />
+    <button id="searchBtn">بحث</button>
+  </div>
+
+  <div id="loading">⏳ جارٍ تحميل البيانات...</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>الإيميل</th>
+        <th>الجائزة</th>
+        <th>تاريخ الفوز</th>
+        <th>الحالة</th>
+        <th>تاريخ التسليم</th>
+        <th>إجراء</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</body>
+</html>
