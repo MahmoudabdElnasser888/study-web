@@ -4,7 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Student Choice</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   body{
     font-family:'Poppins', sans-serif;
     margin:0;
@@ -14,127 +19,106 @@
     min-height:100vh;
     padding:50px 20px;
     gap:40px;
-    transition: background 0.5s, color 0.5s;
-  }
-
-  /* Dark mode */
-  body.dark{
-    background: #000;
+    overflow-x: hidden;
     color:#fff;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    background-size: 300% 300%;
+    animation: bgMove 10s ease infinite;
   }
 
-  /* Light mode */
-  body.light{
-    background: #f2f2f2;
-    color:#000;
+  @keyframes bgMove {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
   }
 
-  h1{text-align:center;}
+  h1{
+    text-align:center;
+    font-size: 2rem;
+    text-shadow: 0 0 15px rgba(255,255,255,0.7);
+    animation: fadeInDown 1s ease;
+  }
+
+  @keyframes fadeInDown {
+    from {opacity: 0; transform: translateY(-30px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
 
   .card-container{
     display:flex;
     flex-wrap:wrap;
     gap:40px;
     justify-content:center;
+    animation: fadeInUp 1.2s ease;
   }
 
-  /* Locked card */
-  .card.locked{
+  @keyframes fadeInUp {
+    from {opacity: 0; transform: translateY(40px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  /* Card style */
+  .card {
     padding:40px;
     border-radius:20px;
     width:200px;
     text-align:center;
-    transition: transform 0.3s, box-shadow 0.3s, background 0.5s, color 0.5s;
-    cursor: not-allowed;
+    cursor:pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.5s, color 0.5s;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid transparent;
+    position: relative;
   }
 
-  /* Dark Mode للكارت Locked */
-  body.dark .card.locked {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    background: linear-gradient(45deg, #00f0ff, #ff00f0, #00ff84);
+    background-size: 300% 300%;
+    z-index: -1;
+    border-radius: 20px;
+    filter: blur(5px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: neonMove 5s linear infinite;
   }
 
-  /* Light Mode للكارت Locked */
-  body.light .card.locked {
-    background: rgba(0,0,0,0.05);
-    color: #000;
+  @keyframes neonMove {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
   }
 
-  .card.locked h3{
-    font-size: 20px;
-    margin-top: 10px;
-    color: #ff0000;
-  }
-
-  body.light .card.locked h3{
-    color: #ff0000;
+  .card:hover::before {
+    opacity: 1;
   }
 
   .card i{
     font-size:50px;
     margin-bottom:15px;
+    color:#00f0ff;
+    transition: transform 0.4s ease;
   }
 
-  .card.locked:hover {
-    transform: translateY(0); /* لا يتحرك عند Hover */
-    box-shadow: none;
+  .card:hover i {
+    transform: rotate(10deg) scale(1.2);
   }
 
-  .theme-toggle{
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #ffcc00;
-    border: none;
-    border-radius:50%;
-    width:50px;
-    height:50px;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:24px;
-    transition: background 0.5s, color 0.5s;
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
   }
-
-  body.light .theme-toggle{
-    background:#333;
-    color:#ffcc00;
-  }
-  /* كارت مفتوح */
-.card {
-  padding:40px;
-  border-radius:20px;
-  width:200px;
-  text-align:center;
-  cursor:pointer;
-  transition: transform 0.3s, box-shadow 0.3s, background 0.5s, color 0.5s;
-}
-
-/* Dark Mode للكارت المفتوح */
-body.dark .card {
-  background: rgba(255,255,255,0.1); /* شفاف داكن */
-  color: #fff;
-}
-
-/* Light Mode للكارت المفتوح */
-body.light .card {
-  background: rgba(0,0,0,0.05); /* شفاف فاتح */
-  color: #000;
-}
-
-/* Hover effect */
-.card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
 
   /* Responsive */
   @media(max-width:500px){
     .card-container{
       gap:20px;
     }
-    .card.locked{
+    .card{
       width:150px;
       padding:30px;
     }
@@ -143,65 +127,34 @@ body.light .card {
     }
   }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-<button class="theme-toggle" onclick="toggleTheme()">
-  <i class="fa-solid fa-sun"></i>
-</button>
 
 <h1>Choose Section</h1>
 <div class="card-container">
-  <a href="pdfs.html" class="card">
+  <a href="pdfs.html" class="card" onclick="playClickSound()">
     <i class="fa-solid fa-file-pdf"></i>
-    <h3>Enter</h3>
+    <h3>PDF Section</h3>
   </a>
  
-  <a href="quizmee.html" class="card">
-  <i class="fa-solid fa-question"></i>
-  <h3>Enter</h3>
-</a>
+  <a href="quizmee.html" class="card" onclick="playClickSound()">
+    <i class="fa-solid fa-question"></i>
+    <h3>Quiz Section</h3>
+  </a>
 </div>
 
+<!-- صوت الضغط -->
+<audio id="clickSound" preload="auto">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_8c0b5b8b6f.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-  // تفعيل الوضع حسب Local Storage عند تحميل الصفحة
-  window.onload = function() {
-    const savedTheme = localStorage.getItem('theme');
-    const body = document.body;
-    const icon = document.querySelector('.theme-toggle i');
-
-    if(savedTheme === 'light'){
-      body.classList.add('light');
-      body.classList.remove('dark');
-      icon.classList.remove('fa-sun');
-      icon.classList.add('fa-moon');
-    } else {
-      body.classList.add('dark');
-      body.classList.remove('light');
-      icon.classList.remove('fa-moon');
-      icon.classList.add('fa-sun');
-    }
-  }
-
-  // تبديل الوضع وحفظه
-  function toggleTheme(){
-    const body = document.body;
-    const icon = document.querySelector('.theme-toggle i');
-
-    if(body.classList.contains('dark')){
-      body.classList.remove('dark');
-      body.classList.add('light');
-      icon.classList.remove('fa-sun');
-      icon.classList.add('fa-moon');
-      localStorage.setItem('theme','light');
-    } else {
-      body.classList.remove('light');
-      body.classList.add('dark');
-      icon.classList.remove('fa-moon');
-      icon.classList.add('fa-sun');
-      localStorage.setItem('theme','dark');
-    }
+  function playClickSound() {
+    const sound = document.getElementById('clickSound');
+    sound.currentTime = 0; // يبدأ الصوت من الأول كل مرة
+    sound.play();
   }
 </script>
+
 </body>
 </html>

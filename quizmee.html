@@ -3,126 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quizzes</title>
+<title>الكويزات</title>
 <style>
+  :root {
+    --accent1: #00f5ff;
+    --accent2: #8a2be2;
+    --card-bg: rgba(255, 255, 255, 0.1);
+    --text-light: #fff;
+    --text-muted: #ccc;
+  }
+
   body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg,#075596,#8975e4);
     margin: 0;
     padding: 40px 20px;
-    color: #fff;
-    transition: background 0.5s, color 0.5s;
-  }
-  h1 { text-align: center; margin-bottom: 30px; }
-  .quiz-list {
+    color: var(--text-light);
+    background: linear-gradient(135deg, var(--accent1), var(--accent2), #000);
+    background-size: 400% 400%;
+    animation: bgMove 8s ease infinite;
+    min-height: 100vh;
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    max-width: 900px;
-    margin: auto;
+    flex-direction: column;
+    align-items: center;
   }
+
+  @keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 30px;
+    text-shadow: 0 0 15px rgba(0,245,255,0.7);
+  }
+
+  .quiz-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+  }
+
   .quiz-card {
-    padding: 20px;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
     border-radius: 15px;
-    width: 200px;
+    padding: 20px;
     text-align: center;
     cursor: pointer;
-    transition: transform 0.3s, background 0.3s, color 0.5s;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
+
   .quiz-card:hover {
-    transform: scale(1.05);
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 0 20px rgba(0,245,255,0.6);
   }
+
   .quiz-card h2 {
     margin: 0 0 10px;
     font-size: 18px;
+    color: var(--text-light);
   }
+
   .quiz-card p {
     margin: 0;
     font-size: 14px;
-    color: #ccc;
-  }
-
-  /* Dark mode */
-  body.dark{
-    background: #000;
-    color:#fff;
-  }
-  body.dark .quiz-card{
-    background: rgba(255,255,255,0.1);
-    color:#fff;
-  }
-  body.dark .quiz-card p{
-    color:#ccc;
-  }
-
-  /* Light mode */
-  body.light{
-    background: #f2f2f2;
-    color:#000;
-  }
-  body.light .quiz-card{
-    background: rgba(0,0,0,0.05);
-    color:#000;
-  }
-  body.light .quiz-card p{
-    color:#555;
-  }
-
-  .theme-toggle{
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #ffcc00;
-    border: none;
-    border-radius:50%;
-    width:50px;
-    height:50px;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:24px;
-    transition: background 0.5s, color 0.5s;
-  }
-
-  body.light .theme-toggle{
-    background:#333;
-    color:#ffcc00;
+    color: var(--text-muted);
   }
 
   @media(max-width:500px){
-    .quiz-card{
-      width:150px;
-      padding:15px;
-    }
-    .quiz-card h2{ font-size:16px; }
-    .quiz-card p{ font-size:12px; }
+    h1 { font-size: 1.5em; }
+    .quiz-card h2 { font-size: 16px; }
+    .quiz-card p { font-size: 13px; }
   }
-
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-<button class="theme-toggle" onclick="toggleTheme()">
-  <i class="fa-solid fa-sun"></i>
-</button>
 
-<h1>الكويزات المتاحة</h1>
+<h1>📚 الكويزات المتاحة</h1>
 <div class="quiz-list" id="quizList"></div>
 
 <script>
-  // الكويزات كلها ومعاها المرحلة المطلوبة
+  // الكويزات (عدل أو زوّد هنا براحتك)
   const quizzes = [
-  
+    { name: "كويز اللغة العربية", description: "اختبر مستواك في النحو والصرف", page: "quiz-arabic.html", stage: "1" },
+    { name: "كويز الرياضيات", description: "مسائل متنوعة على الجبر والهندسة", page: "quiz-math.html", stage: "1" },
+    { name: "كويز التاريخ", description: "أسئلة على الوحدة الأولى", page: "quiz-history.html", stage: "2" },
+    { name: "كويز العلوم", description: "مراجعة شاملة للوحدة الثانية", page: "quiz-science.html", stage: "1" }
   ];
 
   const quizList = document.getElementById('quizList');
+  const userStage = localStorage.getItem("stage") || "1"; // افتراضي للمرحلة 1
 
-  // قراءة المرحلة من LocalStorage
-  const userStage = localStorage.getItem("stage"); 
-
-  // فلترة الكويزات للمرحلة فقط
   const filteredQuizzes = quizzes.filter(q => q.stage === userStage);
 
   if(filteredQuizzes.length > 0){
@@ -138,44 +115,7 @@
   } else {
     quizList.innerHTML = "<p>لا يوجد كويزات متاحة لمرحلتك حالياً</p>";
   }
-
-  // تفعيل الوضع حسب Local Storage عند تحميل الصفحة
-  window.onload = function() {
-    const savedTheme = localStorage.getItem('theme');
-    const body = document.body;
-    const icon = document.querySelector('.theme-toggle i');
-
-    if(savedTheme === 'light'){
-      body.classList.add('light');
-      body.classList.remove('dark');
-      icon.classList.remove('fa-sun');
-      icon.classList.add('fa-moon');
-    } else {
-      body.classList.add('dark');
-      body.classList.remove('light');
-      icon.classList.remove('fa-moon');
-      icon.classList.add('fa-sun');
-    }
-  }
-
-  function toggleTheme(){
-    const body = document.body;
-    const icon = document.querySelector('.theme-toggle i');
-
-    if(body.classList.contains('dark')){
-      body.classList.remove('dark');
-      body.classList.add('light');
-      icon.classList.remove('fa-sun');
-      icon.classList.add('fa-moon');
-      localStorage.setItem('theme','light');
-    } else {
-      body.classList.remove('light');
-      body.classList.add('dark');
-      icon.classList.remove('fa-moon');
-      icon.classList.add('fa-sun');
-      localStorage.setItem('theme','dark');
-    }
-  }
 </script>
+
 </body>
 </html>

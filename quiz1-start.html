@@ -7,24 +7,46 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+    :root {
+      --accent1: #00f5ff;
+      --accent2: #8a2be2;
+      --text-light: #fff;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --glow: 0 0 20px rgba(0, 245, 255, 0.6);
+    }
+
     body {
         font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #075596, #8975e4);
+        margin: 0;
+        padding: 20px;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 40px;
-        margin: 0;
-        padding: 20px;
-        color: #fff;
+        gap: 50px;
+        color: var(--text-light);
+        background: linear-gradient(135deg, var(--accent1), var(--accent2), #000);
+        background-size: 400% 400%;
+        animation: bgMove 8s ease infinite;
         text-align: center;
     }
 
+    @keyframes bgMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
     h1 {
-        font-size: 32px;
-        margin-bottom: 20px;
+        font-size: 34px;
+        text-shadow: 0 0 15px rgba(0,245,255,0.8);
+        animation: fadeInDown 1s ease forwards;
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .cards-container {
@@ -34,41 +56,81 @@
         justify-content: center;
         width: 100%;
         max-width: 800px;
+        animation: fadeInUp 1s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .card {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--card-bg);
+        backdrop-filter: blur(15px);
         border-radius: 20px;
-        padding: 40px 30px;
+        padding: 35px 25px;
         width: 250px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 20px;
-        transition: transform 0.3s, background 0.3s;
+        gap: 15px;
+        transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
         cursor: pointer;
-        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        position: relative;
+        overflow: hidden;
     }
 
-    .card:hover {
-        transform: translateY(-10px);
-        background: rgba(255, 255, 255, 0.2);
+    .card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(from 180deg, transparent 0deg, var(--accent1) 90deg, var(--accent2) 180deg, transparent 360deg);
+        animation: rotateGlow 5s linear infinite;
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+
+    @keyframes rotateGlow {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .card:hover::before {
+        opacity: 0.3;
     }
 
     .card i {
         font-size: 50px;
-        color: #ffeb3b;
+        color: var(--accent1);
+        text-shadow: var(--glow);
+        transition: transform 0.3s, text-shadow 0.3s;
+    }
+
+    .card:hover i {
+        transform: scale(1.1);
+        text-shadow: 0 0 30px rgba(138, 43, 226, 0.8);
     }
 
     .card h3 {
         font-size: 22px;
         font-weight: 600;
+        text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
     }
 
     .card p {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 400;
-        color: #fff;
+        color: #ddd;
+    }
+
+    .card:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 0 20px rgba(0,245,255,0.6);
+        background: rgba(255, 255, 255, 0.15);
     }
 
     @media(max-width:768px){
@@ -76,12 +138,16 @@
             flex-direction: column;
             gap: 20px;
         }
+        .card {
+            width: 100%;
+            max-width: 300px;
+        }
     }
 </style>
 </head>
 <body>
 
-<h1>Welcome to Your Quiz Platform</h1>
+<h1>🚀 Welcome to Your Quiz Platform</h1>
 
 <div class="cards-container">
     <div class="card" onclick="window.location.href='add.html'">
