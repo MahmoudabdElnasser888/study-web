@@ -6,232 +6,232 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
   /* خطوط */
-  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
-  :root{
-    --accent1: #00f5ff;
-    --accent2: #8a2be2;
-    --btn-shadow: 0 0 28px rgba(0,245,255,0.28);
-    --bg-dark1: #000010;
-    --bg-dark2: #000;
-    --card-bg: rgba(255,255,255,0.03);
-    --muted: rgba(255, 255, 255, 0.76);
-    --glass: rgba(255,255,255,0.04);
-    --focus: rgba(138,43,226,0.22);
-    --danger: #5900ff;
-  }
+:root{
+  --accent1: #00f5ff;
+  --accent2: #8a2be2;
+  --btn-shadow: 0 0 28px rgba(0,245,255,0.28);
+  --bg-dark1: #000010;
+  --bg-dark2: #000;
+  --card-bg: rgba(255,255,255,0.06);
+  --muted: rgba(255, 255, 255, 0.9);
+  --glass: rgba(255,255,255,0.07);
+  --focus: rgba(138,43,226,0.45);
+  --danger: #9b4dff;
+}
 
-  /* قاعدة عامة */
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;padding:0;font-family:'Cairo', Tahoma, Arial, sans-serif;direction:rtl}
-  body{
-    background: linear-gradient(135deg,var(--bg-dark1),var(--bg-dark2));
-    color: #ffffff;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    overflow:auto;
-  }
+/* قاعدة عامة */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;padding:0;font-family:'Cairo', Tahoma, Arial, sans-serif;direction:rtl}
+body{
+  background: linear-gradient(135deg,var(--bg-dark1),var(--bg-dark2));
+  color: #ffffff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  overflow:auto;
+}
 
-  /* خلفية نيون ديناميكية */
-  .neon-bg {
-    position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
-    background: radial-gradient(circle at 10% 10%, rgba(0,245,255,0.04), transparent 8%),
-                radial-gradient(circle at 90% 90%, rgba(138,43,226,0.04), transparent 8%);
-    mix-blend-mode:screen; opacity:0.9;
-  }
-  .neon-blob{
-    position:absolute;border-radius:50%;filter:blur(110px);opacity:0.28;mix-blend-mode:screen;
-    animation: floaty 16s ease-in-out infinite;
-  }
-  .neon-blob.b1{width:700px;height:700px; left:-12%; top:-18%; background:radial-gradient(circle at 30% 30%, var(--accent2), transparent 40%); animation-duration:18s;}
-  .neon-blob.b2{width:520px;height:520px; right:-8%; bottom:-18%; background:radial-gradient(circle at 70% 70%, var(--accent1), transparent 40%); animation-duration:20s;}
-  .neon-blob.b3{width:360px;height:360px; left:52%; top:4%; background:radial-gradient(circle at 50% 50%, rgba(0,245,255,0.18), transparent 40%); animation-duration:12s; opacity:0.22;}
+/* خلفية نيون ديناميكية */
+.neon-bg {
+  position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  background: radial-gradient(circle at 10% 10%, rgba(0,245,255,0.06), transparent 8%),
+              radial-gradient(circle at 90% 90%, rgba(138,43,226,0.06), transparent 8%);
+  mix-blend-mode:screen; opacity:0.9;
+}
+.neon-blob{
+  position:absolute;border-radius:50%;filter:blur(110px);opacity:0.25;mix-blend-mode:screen;
+  animation: floaty 16s ease-in-out infinite;
+}
+.neon-blob.b1{width:700px;height:700px; left:-12%; top:-18%; background:radial-gradient(circle at 30% 30%, var(--accent2), transparent 40%); animation-duration:18s;}
+.neon-blob.b2{width:520px;height:520px; right:-8%; bottom:-18%; background:radial-gradient(circle at 70% 70%, var(--accent1), transparent 40%); animation-duration:20s;}
+.neon-blob.b3{width:360px;height:360px; left:52%; top:4%; background:radial-gradient(circle at 50% 50%, rgba(0,245,255,0.18), transparent 40%); animation-duration:12s; opacity:0.22;}
 
-  @keyframes floaty{
-    0%{transform:translateY(0) rotate(0)}
-    25%{transform:translateY(-26px) rotate(6deg)}
-    50%{transform:translateY(0) rotate(0)}
-    75%{transform:translateY(20px) rotate(-6deg)}
-    100%{transform:translateY(0) rotate(0)}
-  }
+@keyframes floaty{
+  0%{transform:translateY(0) rotate(0)}
+  25%{transform:translateY(-26px) rotate(6deg)}
+  50%{transform:translateY(0) rotate(0)}
+  75%{transform:translateY(20px) rotate(-6deg)}
+  100%{transform:translateY(0) rotate(0)}
+}
 
-  /* الحاوية الرئيسية */
-  .container{
-    position:relative;
-    z-index:4;
-    width:100%;
-    max-width:420px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border: 1px solid rgba(255,255,255,0.04);
-    border-radius:14px;
-    padding:26px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 8px 28px rgba(138,43,226,0.06);
-    backdrop-filter: blur(6px);
-    transition: transform .18s ease, box-shadow .18s ease;
-    overflow:hidden;
-  }
-  .container:hover{ transform: translateY(-6px); box-shadow: 0 30px 90px rgba(0,0,0,0.7), 0 16px 60px rgba(138,43,226,0.09); }
+/* الحاوية الرئيسية */
+.container{
+  position:relative;
+  z-index:4;
+  width:100%;
+  max-width:420px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius:14px;
+  padding:26px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 8px 28px rgba(138,43,226,0.12);
+  backdrop-filter: blur(8px);
+  transition: transform .18s ease, box-shadow .18s ease;
+  overflow:hidden;
+}
+.container:hover{ transform: translateY(-6px); box-shadow: 0 30px 90px rgba(0,0,0,0.7), 0 16px 60px rgba(138,43,226,0.15); }
 
-  h2{
-    margin:0 0 14px 0;
-    text-align:center;
-    font-size:1.4rem;
-    letter-spacing:1px;
-    color:var(--danger);
-    text-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 18px rgba(255,111,97,0.08);
-  }
+h2{
+  margin:0 0 14px 0;
+  text-align:center;
+  font-size:1.4rem;
+  letter-spacing:1px;
+  color:#ffffff;
+  text-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 18px rgba(255,255,255,0.1);
+}
 
-  /* تأثير الشريط النيون أعلي الحاوية */
-  .container::before{
-    content:"";
-    position:absolute;
-    left:-40%;
-    top:0;
-    width:180%;
-    height:4px;
-    background: linear-gradient(90deg, transparent, var(--accent1), var(--accent2), transparent);
-    filter: blur(12px);
-    opacity:0.85;
-    transform:translateY(-14px);
-    pointer-events:none;
-  }
+/* تأثير الشريط النيون أعلي الحاوية */
+.container::before{
+  content:"";
+  position:absolute;
+  left:-40%;
+  top:0;
+  width:180%;
+  height:4px;
+  background: linear-gradient(90deg, transparent, var(--accent1), var(--accent2), transparent);
+  filter: blur(12px);
+  opacity:0.9;
+  transform:translateY(-14px);
+  pointer-events:none;
+}
 
-  /* الحقول */
-  input, select {
-    width:100%;
-    padding:14px 14px;
-    margin:8px 0;
-    border-radius:10px;
-    border:1px solid rgba(255,255,255,0.04);
-    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
-    color:#1d0974;
-    font-size:15px;
-    outline:none;
-    transition: box-shadow .18s ease, transform .08s ease, border-color .12s ease;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.45) inset;
-  }
+/* الحقول */
+input, select {
+  width:100%;
+  padding:14px 14px;
+  margin:8px 0;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color:#000000;
+  font-size:15px;
+  outline:none;
+  transition: box-shadow .18s ease, transform .08s ease, border-color .12s ease;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.45) inset;
+}
 
-  input::placeholder{ color: rgba(110, 15, 219, 0.726); font-weight:400; }
+input::placeholder{ color: rgba(255, 255, 255, 0.7); font-weight:400; }
 
-  input:focus, select:focus{
-    border-color: var(--focus);
-    box-shadow: 0 6px 40px rgba(0,0,0,0.6), 0 0 40px rgba(138,43,226,0.08), 0 0 18px rgba(0,245,255,0.06) inset;
-    transform: translateY(-2px);
-  }
+input:focus, select:focus{
+  border-color: var(--accent1);
+  box-shadow: 0 0 20px rgba(0,245,255,0.3);
+  transform: translateY(-2px);
+}
 
-  label{
-    display:block;
-    margin-top:10px;
-    margin-bottom:6px;
-    color:var(--muted);
-    font-size:0.95rem;
-  }
+label{
+  display:block;
+  margin-top:10px;
+  margin-bottom:6px;
+  color:#ffffff;
+  font-size:1rem;
+  font-weight:600;
+}
 
-  /* زر الإرسال */
-  button{
-    width:100%;
-    padding:14px 16px;
-    margin-top:16px;
-    border-radius:10px;
-    border: none;
-    cursor:pointer;
-    font-weight:700;
-    font-size:15px;
-    background: linear-gradient(90deg,var(--accent1),var(--accent2));
-    color:#041023;
-    box-shadow: var(--btn-shadow), 0 10px 36px rgba(138,43,226,0.12);
-    transition: transform .12s ease, box-shadow .18s ease, opacity .12s;
-  }
-  button:hover{ transform: translateY(-6px); box-shadow: 0 18px 52px rgba(0,245,255,0.12), 0 8px 36px rgba(138,43,226,0.18); opacity:0.98; }
+/* زر الإرسال */
+button{
+  width:100%;
+  padding:14px 16px;
+  margin-top:16px;
+  border-radius:10px;
+  border: none;
+  cursor:pointer;
+  font-weight:700;
+  font-size:15px;
+  background: linear-gradient(90deg,var(--accent1),var(--accent2));
+  color:#000000;
+  box-shadow: var(--btn-shadow), 0 10px 36px rgba(138,43,226,0.12);
+  transition: transform .12s ease, box-shadow .18s ease, opacity .12s;
+}
+button:hover{ transform: translateY(-6px); box-shadow: 0 18px 52px rgba(0,245,255,0.2), 0 8px 36px rgba(138,43,226,0.25); opacity:0.98; }
 
-  /* small helper text */
-  .small{
-    font-size:0.86rem;
-    color:rgba(231, 238, 233, 0.68);
-    margin-top:8px;
-    text-align:center;
-  }
+/* نص صغير */
+.small{
+  font-size:0.86rem;
+  color:rgba(255, 255, 255, 0.75);
+  margin-top:8px;
+  text-align:center;
+}
 
-  /* شاشة التحميل */
-  .loader-overlay {
-    position: fixed;
-    inset:0;
-    z-index:9999;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    background: linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.86));
-    gap:18px;
-    padding:20px;
-    transition: opacity .18s ease, transform .18s ease;
-  }
+/* شاشة التحميل */
+.loader-overlay {
+  position: fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  background: rgba(0,0,0,0.9);
+  gap:18px;
+  padding:20px;
+  transition: opacity .18s ease, transform .18s ease;
+}
 
-  /* حلقة النيون متعدد الطبقات */
-  .ring{
-    width:110px;
-    height:110px;
-    border-radius:50%;
-    position:relative;
-    display:grid;
-    place-items:center;
-    box-shadow: 0 12px 60px rgba(0,0,0,0.6), 0 0 40px rgba(138,43,226,0.08);
-    background: conic-gradient(from 0deg, rgba(0,0,0,0.0), rgba(0,0,0,0.0));
-  }
-  .ring::before,
-  .ring::after{
-    content:"";
-    position:absolute;
-    border-radius:50%;
-    inset:0;
-    transform:scale(1);
-  }
-  .ring::before{
-    border: 4px solid rgba(255,255,255,0.02);
-    filter: blur(6px);
-  }
-  .ring::after{
-    border: 6px solid transparent;
-    border-top-color: var(--accent1);
-    border-right-color: var(--accent2);
-    animation: spin 1.1s linear infinite;
-    box-shadow: 0 0 30px rgba(0,245,255,0.12), 0 0 40px rgba(138,43,226,0.14);
-  }
+/* حلقة النيون */
+.ring{
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  position:relative;
+  display:grid;
+  place-items:center;
+  box-shadow: 0 12px 60px rgba(0,0,0,0.6), 0 0 40px rgba(138,43,226,0.15);
+  background: conic-gradient(from 0deg, rgba(0,0,0,0.0), rgba(0,0,0,0.0));
+}
+.ring::before,
+.ring::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  inset:0;
+  transform:scale(1);
+}
+.ring::before{
+  border: 4px solid rgba(255,255,255,0.1);
+  filter: blur(6px);
+}
+.ring::after{
+  border: 6px solid transparent;
+  border-top-color: var(--accent1);
+  border-right-color: var(--accent2);
+  animation: spin 1.1s linear infinite;
+  box-shadow: 0 0 30px rgba(0,245,255,0.2), 0 0 40px rgba(138,43,226,0.2);
+}
 
-  /* أيقونة داخل الدائرة (تستخدم صورة المصادر في HTML) */
-  .ring > img, .ring > i {
-    width:50px; height:50px; border-radius:50%; display:block;
-    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6));
-    animation: pulseScale 1.6s ease-in-out infinite;
-  }
+/* أيقونة داخل الدائرة */
+.ring > img, .ring > i {
+  width:50px; height:50px; border-radius:50%; display:block;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6));
+  animation: pulseScale 1.6s ease-in-out infinite;
+}
 
-  @keyframes spin { to{transform:rotate(360deg);} }
-  @keyframes pulseScale { 0%{transform:scale(1)} 50%{transform:scale(1.12)} 100%{transform:scale(1)} }
+@keyframes spin { to{transform:rotate(360deg);} }
+@keyframes pulseScale { 0%{transform:scale(1)} 50%{transform:scale(1.12)} 100%{transform:scale(1)} }
 
-  .loading-text{
-    color:var(--accent1);
-    font-weight:700;
-    letter-spacing:1.2px;
-    font-size:1.05rem;
-    text-shadow: 0 6px 28px rgba(0,0,0,0.6);
-  }
+.loading-text{
+  color:#ffffff;
+  font-weight:700;
+  letter-spacing:1.2px;
+  font-size:1.05rem;
+  text-shadow: 0 6px 28px rgba(0,0,0,0.8);
+}
 
-  /* حالة الإخفاء الافتراضية (script يغير العرض) */
-  .loader-overlay[style*="display: none"]{opacity:0; pointer-events:none}
+/* Responsive */
+@media (max-width:480px){
+  .container{ padding:18px; border-radius:12px; max-width:360px; }
+  h2{ font-size:1.15rem; }
+  input, select{ padding:12px; font-size:14px; }
+  button{ padding:12px; font-size:15px; }
+  .ring{ width:86px; height:86px; }
+  .ring > img{ width:40px; height:40px; }
+}
 
-  /* Responsive */
-  @media (max-width:480px){
-    .container{ padding:18px; border-radius:12px; max-width:360px; }
-    h2{ font-size:1.15rem; }
-    input, select{ padding:12px; font-size:14px; }
-    button{ padding:12px; font-size:15px; }
-    .ring{ width:86px; height:86px; }
-    .ring > img{ width:40px; height:40px; }
-  }
+
   </style>
 
   <!-- Firebase -->

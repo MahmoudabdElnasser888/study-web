@@ -5,115 +5,140 @@
   <title>إرسال الملخص</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    :root {
-      --accent1: #00f5ff;
-      --accent2: #8a2be2;
-      --btn-shadow: 0 0 20px rgba(0,245,255,0.6);
-      --bg-dark1: #000010;
-      --bg-dark2: #000;
-    }
+   :root {
+  --accent1: #00f5ff;
+  --accent2: #8a2be2;
+  --btn-shadow: 0 0 15px rgba(0,245,255,0.4);
+  --bg-dark1: #000010;
+  --bg-dark2: #000;
+}
 
-    body {
-      font-family: "Tajawal", Arial, sans-serif;
-      direction: rtl;
-      padding: 20px;
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--bg-dark1), var(--bg-dark2));
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
+body {
+  font-family: "Tajawal", Arial, sans-serif;
+  direction: rtl;
+  padding: 20px;
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-dark1), var(--bg-dark2));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 
-    /* خلفية متحركة */
-    body::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 20% 20%, var(--accent1) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 80%, var(--accent2) 0%, transparent 50%);
-      animation: bgMove 12s linear infinite;
-      opacity: 0.15;
-      z-index: 0;
-    }
-    @keyframes bgMove {
-      0% { transform: rotate(0deg) scale(1); }
-      50% { transform: rotate(180deg) scale(1.1); }
-      100% { transform: rotate(360deg) scale(1); }
-    }
+/* خلفية بسيطة بخفة الحركة */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle at 30% 30%, var(--accent1) 0%, transparent 70%),
+              radial-gradient(circle at 70% 70%, var(--accent2) 0%, transparent 70%);
+  animation: bgMove 20s ease-in-out infinite alternate;
+  opacity: 0.08;
+  z-index: 0;
+}
 
-    h1 {
-      color: var(--accent1);
-      text-shadow: 0 0 10px var(--accent1);
-      margin-bottom: 20px;
-      z-index: 1;
-    }
+@keyframes bgMove {
+  0% { transform: scale(1) translate(0,0); }
+  100% { transform: scale(1.05) translate(-10px,10px); }
+}
 
-    input, textarea {
-      width: 100%;
-      max-width: 500px;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 16px;
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      background: rgba(255,255,255,0.08);
-      color: white;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 0 5px rgba(255,255,255,0.1);
-      transition: 0.3s;
-      z-index: 1;
-    }
+h1 {
+  color: var(--accent1);
+  text-shadow: 0 0 8px var(--accent1);
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+  z-index: 1;
+  text-align: center;
+}
 
-    input:focus, textarea:focus {
-      box-shadow: 0 0 15px var(--accent1);
-    }
+input, textarea {
+  width: 90%;
+  max-width: 450px;
+  padding: 12px;
+  margin: 8px 0;
+  font-size: 15px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.07);
+  color: white;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 4px rgba(255,255,255,0.1);
+  transition: 0.3s;
+  z-index: 1;
+}
 
-    textarea {
-      height: 200px;
-      resize: vertical;
-    }
+input:focus, textarea:focus {
+  box-shadow: 0 0 10px var(--accent1);
+}
 
-    button {
-      padding: 12px 30px;
-      font-size: 18px;
-      background: linear-gradient(90deg, var(--accent1), var(--accent2));
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 30px;
-      box-shadow: var(--btn-shadow);
-      transition: transform 0.3s, box-shadow 0.3s;
-      margin-top: 10px;
-      z-index: 1;
-    }
+textarea {
+  height: 160px;
+  resize: vertical;
+}
 
-    button:hover:not(:disabled) {
-      transform: scale(1.05);
-      box-shadow: 0 0 30px rgba(0,245,255,0.8);
-    }
+button {
+  padding: 12px 28px;
+  font-size: 16px;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 30px;
+  box-shadow: var(--btn-shadow);
+  transition: transform 0.25s, box-shadow 0.25s;
+  margin-top: 10px;
+  z-index: 1;
+}
 
-    button:disabled {
-      background: #444;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+button:hover:not(:disabled) {
+  transform: scale(1.03);
+  box-shadow: 0 0 25px rgba(0,245,255,0.7);
+}
 
-    #msg {
-      margin-top: 15px;
-      font-weight: bold;
-      text-align: center;
-      font-size: 16px;
-      color: var(--accent1);
-      text-shadow: 0 0 10px var(--accent1);
-      z-index: 1;
-    }
+button:disabled {
+  background: #333;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+#msg {
+  margin-top: 15px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 15px;
+  color: var(--accent1);
+  text-shadow: 0 0 8px var(--accent1);
+  z-index: 1;
+}
+
+/* موبايل */
+@media (max-width: 600px) {
+  body {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  input, textarea {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  button {
+    width: 100%;
+    font-size: 15px;
+    padding: 12px;
+  }
+}
+
   </style>
 </head>
 <body>
