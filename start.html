@@ -24,8 +24,11 @@
 
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;font-family:'Cairo',system-ui,Arial; background:var(--bg); color:#fff; direction:rtl; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
+    /* خفيف Fade-in للصفحة */
+    body { opacity:0; transform: translateY(6px); transition: opacity .5s ease, transform .45s ease; }
+    body.show{ opacity:1; transform: translateY(0); }
 
-    /* ===== animated neon grid background ===== */
+    /* ===== animated neon grid background (خفيف ومُحسّن) ===== */
     .bg-canvas{
       position:fixed; inset:0; z-index:-10; pointer-events:none; overflow:hidden;
       background: radial-gradient(circle at 10% 20%, rgba(0,230,255,0.02), transparent 10%),
@@ -33,44 +36,41 @@
                   #000014;
     }
 
-    /* animated grid using repeating-linear-gradient + motion */
     .neon-grid {
       position:absolute; inset:-20%;
       background-image:
         linear-gradient(0deg, rgba(255,255,255,0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 80px 80px, 80px 80px;
+      background-size: 90px 90px, 90px 90px;
       mix-blend-mode:screen;
-      filter:blur(18px) saturate(150%);
-      opacity:0.12;
-      animation: gridMove 18s linear infinite;
+      filter:blur(12px) saturate(120%);
+      opacity:0.11;
+      animation: gridMove 26s linear infinite;
     }
     @keyframes gridMove {
       0% { transform: translate3d(0,0,0) rotate(0); }
-      50% { transform: translate3d(-60px,-30px,0) rotate(3deg); }
+      50% { transform: translate3d(-40px,-20px,0) rotate(2deg); }
       100% { transform: translate3d(0,0,0) rotate(0); }
     }
 
-    /* soft glowing streak */
     .glow-strip{
       position:absolute; left:-20%; top:10%; width:140%; height:60%;
-      background: radial-gradient(30% 40% at 10% 10%, rgba(0,230,255,0.08), transparent 12%),
-                  radial-gradient(40% 60% at 90% 90%, rgba(155,77,255,0.06), transparent 12%);
-      filter: blur(48px) saturate(140%);
+      background: radial-gradient(30% 40% at 10% 10%, rgba(0,230,255,0.06), transparent 12%),
+                  radial-gradient(40% 60% at 90% 90%, rgba(155,77,255,0.05), transparent 12%);
+      filter: blur(36px) saturate(120%);
       transform: translateZ(0);
-      animation: glowMove 22s linear infinite;
-      opacity:0.28;
+      animation: glowMove 28s linear infinite;
+      opacity:0.24;
     }
-    @keyframes glowMove { 0%{transform: translateX(0)} 50%{transform: translateX(-60px)} 100%{transform: translateX(0)} }
+    @keyframes glowMove { 0%{transform: translateX(0)} 50%{transform: translateX(-40px)} 100%{transform: translateX(0)} }
 
-    /* floating particles */
     .particle {
       position:absolute;border-radius:50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,255,255,0.05));
-      filter: blur(6px); opacity:0.06;
+      background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,255,255,0.05));
+      filter: blur(5px); opacity:0.06;
       animation: floatY linear infinite;
     }
-    @keyframes floatY { 0%{transform: translateY(0)} 50%{transform: translateY(-40px)} 100%{transform: translateY(0)} }
+    @keyframes floatY { 0%{transform: translateY(0)} 50%{transform: translateY(-26px)} 100%{transform: translateY(0)} }
 
     /* ===== header ===== */
     header{ position:sticky; top:0; z-index:40; padding:12px 18px; background: linear-gradient(180deg, rgba(2,4,12,0.55), rgba(2,4,12,0.25)); border-bottom:1px solid rgba(255,255,255,0.03); backdrop-filter: blur(6px) }
@@ -99,6 +99,7 @@
     .hero-right{width:360px;min-width:220px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
     .stat{font-weight:900;color:var(--neon-purple);font-size:1.4rem}
     .stat-label{color:var(--muted);font-size:0.9rem;margin-top:6px}
+    .stats-row{display:flex;gap:12px;align-items:center;justify-content:space-between}
 
     /* ===== content grid ===== */
     .content{max-width:1100px;margin:0 auto;padding:28px 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -136,16 +137,23 @@
 
     /* small tweaks */
     a { color: inherit; }
+
+    /* responsive tweaks for modal and hero stats */
+    @media (max-width:720px) {
+      .modal{ width:86%; }
+      .hero-right{ display:none; } /* hide right panel on small screens to save space */
+      .content { grid-template-columns: 1fr 1fr; gap:12px; }
+      @media (max-width:420px) { .content { grid-template-columns: 1fr; } }
+    }
   </style>
 </head>
 <body>
-
   <!-- background layers -->
-  <div class="bg-canvas" aria-hidden>
-    <div class="neon-grid"></div>
-    <div class="glow-strip"></div>
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="neon-grid" aria-hidden="true"></div>
+    <div class="glow-strip" aria-hidden="true"></div>
 
-    <!-- floating particles (size/position randomized by CSS) -->
+    <!-- floating particles -->
     <div class="particle" style="width:8px;height:8px;left:8%;top:18%;animation-duration:20s"></div>
     <div class="particle" style="width:12px;height:12px;left:22%;top:36%;animation-duration:26s"></div>
     <div class="particle" style="width:10px;height:10px;left:72%;top:22%;animation-duration:24s"></div>
@@ -156,9 +164,9 @@
   <header>
     <div class="header-inner">
       <div class="brand">
-        <div class="logo" aria-hidden>SW</div>
+        <div class="logo" aria-hidden>TF</div>
         <div>
-          <div class="site-title">StudyWeb</div>
+          <div class="site-title">The feature</div>
           <div class="muted-small">منصة التعلم والمكافآت</div>
         </div>
       </div>
@@ -166,7 +174,7 @@
       <div class="header-right">
         <a class="rased" href="pay.html">الرصيد: <span id="balance">0</span> ج</a>
         <div id="subscription-status" class="sub-status">غير مسجل</div>
-        <a class="privacy-btn" href="privacy.html">سياسة الخصوصية</a>
+        <a class="privacy-btn" href="go.html">كيفيه الاستخدام</a>
       </div>
     </div>
   </header>
@@ -182,7 +190,7 @@
         </div>
       </div>
 
-     
+    
     </div>
   </section>
 
@@ -192,18 +200,9 @@
     <article id="todo" class="card">
       <i class="fas fa-list-check"></i>
       <div>
-        <h3>قائمة المهام</h3>
-        <p>نظم مهامك اليومية وتابع تقدمك.</p>
-        <div style="margin-top:10px"><a href="to-do.html"><button class="enter-btn">دخول</button></a></div>
-      </div>
-    </article>
-
-    <article id="quiz" class="card">
-      <i class="fas fa-question-circle"></i>
-      <div>
-        <h3>الاختبارات</h3>
-        <p>اختبر معلوماتك وتحدى زملاءك.</p>
-        <div style="margin-top:10px"><a href="quiz1-start.html"><button class="enter-btn">دخول</button></a></div>
+        <h3>تسهيل الدراسة</h3>
+        <p>العديد من التطبيقات في مكان واحد لتسهيل الدراسه عليك</p>
+        <div style="margin-top:10px"><a href="easy.html"><button class="enter-btn">دخول</button></a></div>
       </div>
     </article>
 
@@ -217,30 +216,12 @@
       <div class="lock-overlay" id="learning-overlay"><i class="fas fa-lock"></i> مُقفل — اشترك</div>
     </article>
 
-    <article id="timer" class="card">
-      <i class="fas fa-stopwatch"></i>
-      <div>
-        <h3>مؤقت الدراسة</h3>
-        <p>تابع جلساتك ومعدل التركيز.</p>
-        <div style="margin-top:10px"><a href="timer.html"><button class="enter-btn">دخول</button></a></div>
-      </div>
-    </article>
-
     <article id="community" class="card">
       <i class="fas fa-users"></i>
       <div>
         <h3>المجتمع</h3>
         <p>انضم للنقاشات وشارك الموارد.</p>
         <div style="margin-top:10px"><a href="community.html"><button class="enter-btn">دخول</button></a></div>
-      </div>
-    </article>
-
-    <article id="note" class="card">
-      <i class="fas fa-sticky-note"></i>
-      <div>
-        <h3>ملاحظات</h3>
-        <p>دوّن ملاحظاتك واحفظها بسهولة.</p>
-        <div style="margin-top:10px"><a href="note.html"><button class="enter-btn">دخول</button></a></div>
       </div>
     </article>
 
@@ -314,7 +295,6 @@
     <div class="footer-inner">
       <div class="socials" role="navigation" aria-label="social links">
         <a class="telegram" href="https://t.me/studyweb1919" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
-        <a class="facebook" href="https://www.facebook.com/YourPage" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
         <a class="whatsapp" href="https://wa.me/201121101238" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
       </div>
       <div class="muted-small">© 2025 StudyWeb — جميع الحقوق محفوظة</div>
@@ -365,7 +345,7 @@
     </div>
   </div>
 
-  <!-- Firebase (v8 to match your existing setup) -->
+  <!-- Firebase (v8) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -385,7 +365,7 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // ---------- UI refs ----------
+    // ---------- UI refs (guarded) ----------
     const balanceSpan = document.getElementById('balance');
     const subStatus = document.getElementById('subscription-status');
     const learningItem = document.getElementById('learning');
@@ -397,6 +377,9 @@
     const modalMsg = document.getElementById('modal-msg');
     const modalConfirm = document.getElementById('modal-confirm');
     const modalCancel = document.getElementById('modal-cancel');
+
+    // safe existence checks for elements that might be missing
+    function el(id) { return document.getElementById(id); }
 
     let currentUser = null;
     let selectedPackageAmount = null;
@@ -420,6 +403,7 @@
 
     // show modal (mode depends on subscription status)
     function showModal() {
+      if(!modalBackdrop || !packageList || !modalMsg || !modalConfirm) return;
       modalMsg.innerText = '';
       selectedPackageAmount = null;
       selectedPackageDays = null;
@@ -431,25 +415,21 @@
       const hasActive = sub && sub.active === true && sub.expiresAt;
       let stillActive = false;
       if(hasActive){
-        // compute expiresMs reliably (Firestore Timestamp or ISO)
         const expiresAt = sub.expiresAt;
-        const expiresMs = (expiresAt && expiresAt.toMillis) ? expiresAt.toMillis() : (new Date(expiresAt).getTime());
+        const expiresMs = (expiresAt && typeof expiresAt.toMillis === 'function') ? expiresAt.toMillis() : (new Date(expiresAt).getTime());
         if(!isNaN(expiresMs) && expiresMs > Date.now()) stillActive = true;
       }
 
       if(stillActive){
-        // show goto mode
         modalMode = 'goto';
         packageList.style.display = 'none';
-        // show remaining time
         const expiresAt = sub.expiresAt;
-        const expiresMs = (expiresAt && expiresAt.toMillis) ? expiresAt.toMillis() : (new Date(expiresAt).getTime());
+        const expiresMs = (expiresAt && typeof expiresAt.toMillis === 'function') ? expiresAt.toMillis() : (new Date(expiresAt).getTime());
         const rem = getRemainingParts(expiresMs);
         modalMsg.style.color = '#0a7b2a';
         modalMsg.innerText = `اشتراك مفعل — باقي ${rem.days} يوم ${pad(rem.hours)}:${pad(rem.mins)}:${pad(rem.secs)}. اضغط "اذهب للمحتوى" للانتقال.`;
         modalConfirm.innerText = 'اذهب للمحتوى';
       } else {
-        // show purchase packages
         modalMode = 'purchase';
         packageList.style.display = 'block';
         modalMsg.style.color = '#c33';
@@ -458,50 +438,54 @@
       }
 
       modalBackdrop.style.display = 'flex';
+      modalBackdrop.setAttribute('aria-hidden', 'false');
     }
     function closeModal() {
+      if(!modalBackdrop || !packageList || !modalMsg) return;
       modalBackdrop.style.display = 'none';
+      modalBackdrop.setAttribute('aria-hidden', 'true');
       packageList.style.display = 'block';
       modalMsg.innerText = '';
     }
 
     // select package (single)
-    packageList.addEventListener('click', (e) => {
-      const pkg = e.target.closest('.package');
-      if(!pkg) return;
-      document.querySelectorAll('.package').forEach(el => el.classList.remove('selected'));
-      pkg.classList.add('selected');
-      selectedPackageAmount = Number(pkg.dataset.amount);
-      selectedPackageDays = Number(pkg.dataset.days);
-      modalMsg.style.color = '#333';
-      modalMsg.innerText = `سيتم خصم ${selectedPackageAmount} ج من رصيدك عند التأكيد. صلاحية: ${selectedPackageDays} يوم.`;
-      modalConfirm.innerText = `ادفع ${selectedPackageAmount} ج`;
-    });
+    if (packageList) {
+      packageList.addEventListener('click', (e) => {
+        const pkg = e.target.closest('.package');
+        if(!pkg) return;
+        document.querySelectorAll('.package').forEach(el => el.classList.remove('selected'));
+        pkg.classList.add('selected');
+        selectedPackageAmount = Number(pkg.dataset.amount);
+        selectedPackageDays = Number(pkg.dataset.days);
+        if(modalMsg) {
+          modalMsg.style.color = '#333';
+          modalMsg.innerText = `سيتم خصم ${selectedPackageAmount} ج من رصيدك عند التأكيد. صلاحية: ${selectedPackageDays} يوم.`;
+        }
+        if(modalConfirm) modalConfirm.innerText = `ادفع ${selectedPackageAmount} ج`;
+      });
+    }
 
-    modalCancel.addEventListener('click', () => { closeModal(); });
+    if (modalCancel) modalCancel.addEventListener('click', () => { closeModal(); });
 
     // confirm purchase or goto content
-    modalConfirm.addEventListener('click', async () => {
+    if (modalConfirm) modalConfirm.addEventListener('click', async () => {
       if(modalMode === 'goto') {
-        // go to content
         closeModal();
         window.location.href = 'student.html';
         return;
       }
 
-      // otherwise purchase flow
       if(!currentUser) {
-        modalMsg.style.color = 'red';
-        modalMsg.innerText = 'يجب تسجيل الدخول أولاً.';
+        if(modalMsg) { modalMsg.style.color = 'red'; modalMsg.innerText = 'يجب تسجيل الدخول أولاً.'; }
         return;
       }
       if(!selectedPackageAmount || !selectedPackageDays) {
-        modalMsg.style.color = 'red';
-        modalMsg.innerText = 'اختر باقة أولاً.';
+        if(modalMsg) { modalMsg.style.color = 'red'; modalMsg.innerText = 'اختر باقة أولاً.'; }
         return;
       }
 
       modalConfirm.disabled = true;
+      const originalText = modalConfirm.innerText;
       modalConfirm.innerText = 'جاري المعالجة...';
 
       const uid = currentUser.uid;
@@ -515,7 +499,7 @@
           const balance = Number(data.balance ?? 0);
           if(balance < selectedPackageAmount) throw new Error('رصيد غير كافٍ');
 
-          // حساب انتهاء الاشتراك باستخدام وقت العميل (مع تعويض بسيط)
+          // use server timestamps for reliability but set expires using client time converted to firestore.Timestamp
           const nowMs = Date.now();
           const expiresAtMs = nowMs + selectedPackageDays * 24 * 60 * 60 * 1000;
           const startsAtTs = firebase.firestore.Timestamp.fromMillis(nowMs);
@@ -535,36 +519,34 @@
           });
         });
 
-        modalMsg.style.color = '#0a7b2a';
-        modalMsg.innerText = 'تم الدفع بنجاح — تم فتح المحتوى.';
-        // اغلاق المودال بعد قليل
+        if(modalMsg) { modalMsg.style.color = '#0a7b2a'; modalMsg.innerText = 'تم الدفع بنجاح — تم فتح المحتوى.'; }
         setTimeout(() => { closeModal(); }, 900);
 
       } catch (err) {
         console.error(err);
-        // توضيح لو السبب قواعد Firestore أو صلاحيات
-        if(err && err.code === 'permission-denied') {
-          modalMsg.style.color = 'red';
-          modalMsg.innerText = 'فشل العملية: صلاحيات قاعدة البيانات تمنع هذا الإجراء. تأكد من قواعد Firestore أو من تسجيل الدخول الصحيح.';
-        } else {
-          modalMsg.style.color = 'red';
-          modalMsg.innerText = 'حصل خطأ: ' + (err.message || err);
+        if(modalMsg) {
+          if(err && err.code === 'permission-denied') {
+            modalMsg.style.color = 'red';
+            modalMsg.innerText = 'فشل العملية: صلاحيات قاعدة البيانات تمنع هذا الإجراء. تأكد من قواعد Firestore أو من تسجيل الدخول الصحيح.';
+          } else {
+            modalMsg.style.color = 'red';
+            modalMsg.innerText = 'حصل خطأ: ' + (err.message || err);
+          }
         }
       } finally {
         modalConfirm.disabled = false;
-        modalConfirm.innerText = (`ادفع ${selectedPackageAmount ? selectedPackageAmount + ' ج' : ''}`).trim() || 'ادفع';
+        modalConfirm.innerText = originalText || 'ادفع';
       }
     });
 
     // update UI from user doc
     function updateUIFromUserData(data) {
       const balance = Number(data.balance ?? 0);
-      balanceSpan.innerText = Math.max(0, balance);
+      if(balanceSpan) balanceSpan.innerText = Math.max(0, balance);
       const sub = data.subscription;
       const active = sub && sub.active === true && sub.expiresAt;
       localUserData = { ...data, subscription: sub };
 
-      // stop previous countdown
       if(countdownInterval) {
         clearInterval(countdownInterval);
         countdownInterval = null;
@@ -572,54 +554,51 @@
       handledExpiredForThisSession = false;
 
       if(active){
-        // compute remaining
         const expiresAt = sub.expiresAt;
-        const expiresMs = (expiresAt && expiresAt.toMillis) ? expiresAt.toMillis() : (new Date(expiresAt).getTime());
+        const expiresMs = (expiresAt && typeof expiresAt.toMillis === 'function') ? expiresAt.toMillis() : (new Date(expiresAt).getTime());
         startSubscriptionCountdown(expiresMs);
-        learningItem.classList.remove('locked');
-        learningOverlay.style.display='none';
+        if (learningItem) learningItem.classList.remove('locked');
+        if (learningOverlay) learningOverlay.style.display='none';
       } else {
-        learningItem.classList.add('locked');
-        learningOverlay.style.display='flex';
-        subStatus.innerText = 'غير مشترك';
+        if (learningItem) learningItem.classList.add('locked');
+        if (learningOverlay) learningOverlay.style.display='flex';
+        if (subStatus) subStatus.innerText = 'غير مشترك';
       }
     }
 
-    // learning button click -> SHOW MODAL (always) (login required)
-    learningEnterBtn.addEventListener('click', () => {
-      if(!currentUser) {
-        // not logged in -> redirect to index/login
-        window.location.href = 'index.html';
-        return;
-      }
-      showModal();
-    });
+    // learning button click -> SHOW MODAL (login required)
+    if (learningEnterBtn) {
+      learningEnterBtn.addEventListener('click', () => {
+        if(!currentUser) {
+          window.location.href = 'index.html';
+          return;
+        }
+        showModal();
+      });
 
-    // also support Enter key when the learning button is focused
-    learningEnterBtn.addEventListener('keydown', (e) => {
-      if(e.key === 'Enter') {
-        e.preventDefault();
-        learningEnterBtn.click();
-      }
-    });
+      learningEnterBtn.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') {
+          e.preventDefault();
+          learningEnterBtn.click();
+        }
+      });
+    }
 
     // auth state listener
     auth.onAuthStateChanged(user => {
       currentUser = user;
       if(!user) {
-        // not logged in — keep page visible but prompt redirect on actions
-        balanceSpan.innerText = '0';
-        subStatus.innerText = 'غير مسجل';
+        if(balanceSpan) balanceSpan.innerText = '0';
+        if(subStatus) subStatus.innerText = 'غير مسجل';
         if(userDocUnsub) userDocUnsub(); userDocUnsub = null;
         return;
       }
-      // subscribe to user's doc
       const userRef = db.collection('users').doc(user.uid);
       if(userDocUnsub) userDocUnsub(); // remove old
       userDocUnsub = userRef.onSnapshot(doc => {
         if(!doc.exists) {
-          // create default doc
-          userRef.set({ balance: 0, subscription: { active: false }, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+          userRef.set({ balance: 0, subscription: { active: false }, createdAt: firebase.firestore.FieldValue.serverTimestamp() })
+            .catch(e => console.error('Error creating default user doc:', e));
           updateUIFromUserData({ balance:0, subscription:{active:false} });
           return;
         }
@@ -630,13 +609,14 @@
     });
 
     // Start button scroll
-    document.querySelector('.start-btn').addEventListener('click',()=>{ document.querySelector('.content').scrollIntoView({behavior:'smooth'}); });
+    const startBtn = document.getElementById('startBtn');
+    if (startBtn) startBtn.addEventListener('click',()=>{ const c = document.querySelector('.content'); if(c) c.scrollIntoView({behavior:'smooth'}); });
 
     // ensure modal hidden on load
-    modalBackdrop.style.display = 'none';
+    if (modalBackdrop) { modalBackdrop.style.display = 'none'; modalBackdrop.setAttribute('aria-hidden','true'); }
 
-    // small safety: close modal on backdrop click
-    modalBackdrop.addEventListener('click', (e)=>{ if(e.target===modalBackdrop) closeModal(); });
+    // close modal on backdrop click
+    if (modalBackdrop) modalBackdrop.addEventListener('click', (e)=>{ if(e.target===modalBackdrop) closeModal(); });
 
     // ---------- Countdown logic ----------
     function startSubscriptionCountdown(expiresMs) {
@@ -644,33 +624,28 @@
         const now = Date.now();
         let diff = expiresMs - now;
         if(diff <= 0) {
-          subStatus.innerText = 'انتهى الاشتراك';
-          // lock content in UI
-          learningItem.classList.add('locked');
-          learningOverlay.style.display='flex';
-          // mark subscription inactive in Firestore once (prevent multiple writes)
+          if (subStatus) subStatus.innerText = 'انتهى الاشتراك';
+          if (learningItem) { learningItem.classList.add('locked'); }
+          if (learningOverlay) { learningOverlay.style.display='flex'; }
           if(currentUser && !handledExpiredForThisSession) {
             handledExpiredForThisSession = true;
             const userRef = db.collection('users').doc(currentUser.uid);
-            // Update only if subscription still exists and expired
             userRef.get().then(doc => {
               if(!doc.exists) return;
               const data = doc.data();
               const sub = data.subscription;
               if(sub && sub.active === true) {
-                // set active false
                 userRef.update({ 'subscription.active': false }).catch(err => console.error('Error setting inactive after expiry:', err));
               }
             }).catch(err => console.error(err));
           }
-          // clear interval
           if(countdownInterval) {
             clearInterval(countdownInterval);
             countdownInterval = null;
           }
           return;
         }
-        // compute days/hours/minutes/seconds
+
         const days = Math.floor(diff / (24*60*60*1000));
         diff -= days * 24*60*60*1000;
         const hours = Math.floor(diff / (60*60*1000));
@@ -679,13 +654,11 @@
         diff -= mins * 60*1000;
         const secs = Math.floor(diff / 1000);
 
-        // display: كتابي عربي
         const daysLabel = days > 0 ? `${days} يوم` : '';
         const timeLabel = `${pad(hours)}:${pad(mins)}:${pad(secs)}`;
-        subStatus.innerText = (`مفعل — باقي ${daysLabel} ${timeLabel}`).trim();
+        if (subStatus) subStatus.innerText = (`مفعل — باقي ${daysLabel} ${timeLabel}`).trim();
       }
 
-      // initial update + interval
       update();
       countdownInterval = setInterval(update, 1000);
     }
@@ -698,13 +671,18 @@
       if(countdownInterval) clearInterval(countdownInterval);
     });
 
-    // small anims for stats
+    // small anims for stats (guarded so no errors)
     function animateCount(el,to){
+      if(!el) return;
       let cur = 0; const step = Math.max(1, Math.floor(to/60));
       const id = setInterval(()=>{ cur+=step; if(cur>=to){ cur=to; el.textContent = '+'+to.toLocaleString(); clearInterval(id); } else el.textContent = '+'+cur.toLocaleString(); }, 14);
     }
-    animateCount(document.getElementById('statUsers'), 2450);
-    animateCount(document.getElementById('statSpins'), 12300);
+
+    // reveal body after load to show nice fade-in
+    window.addEventListener('load', ()=>{ document.body.classList.add('show'); });
+
+    // small defensive log to confirm script ready
+    console.info('StudyWeb main script loaded — optimized build (no console errors expected).');
   </script>
 </body>
 </html>

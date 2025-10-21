@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التمارين - حفظ الكلمات</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: "Cairo", sans-serif;
+      background:linear-gradient(135deg, #207cdd, #6200b3, #3a0a61) #36065e;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      animation: bgmove 8s ease infinite;
+      background-size: 300% 300%;
+    }
+    @keyframes bgmove {
+        0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    h1 {
+      margin: 40px 0 20px;
+      color: #ffffff;
+      font-size: 26px;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      width: 90%;
+      max-width: 1000px;
+      padding: 20px;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.507);
+      border-radius: 16px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      padding: 25px 20px;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .card i {
+      font-size: 45px;
+      color: #007bff;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      margin: 10px 0 5px;
+      color: #ffffff;
+    }
+
+    .card p {
+      color: #ffffff;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .enter-btn {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    .enter-btn:hover {
+      background: #0056b3;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>اختر نوع التمرين</h1>
+
+  <section class="cards-container">
+
+    <article id="learn" class="card">
+      <i class="fas fa-book-open"></i>
+      <div>
+        <h3>To Do list</h3>
+        <p>نظم يومك بالكامل بكل سهوله</p>
+        <div style="margin-top:10px"><a href="to-do.html"><button class="enter-btn">دخول</button></a></div>
+      </div>
+    </article>
+
+    <article id="quiz" class="card">
+      <i class="fas fa-question-circle"></i>
+      <div>
+        <h3>الاختبارات</h3>
+        <p>اختبر معلوماتك وتحدى زملاءك.</p>
+        <div style="margin-top:10px"><a href="quiz1-start.html"><button class="enter-btn">دخول</button></a></div>
+      </div>
+    </article>
+
+    <article id="review" class="card">
+      <i class="fas fa-stopwatch"></i>
+      <div>
+        <h3>Study Timer</h3>
+        <p>تابع جلساتك و معدل تركيزك</p>
+        <div style="margin-top:10px"><a href="timer.html"><button class="enter-btn">دخول</button></a></div>
+      </div>
+    </article>
+
+    <article id="progress" class="card">
+      <i class="fas fa-sticky-note"></i>
+      <div>
+        <h3>sticky Note</h3>
+        <p>دون ملاحظاتك و احفظها بسهولة</p>
+        <div style="margin-top:10px"><a href="note.html"><button class="enter-btn">دخول</button></a></div>
+      </div>
+    </article>
+
+
+
+  </section>
+
+</body>
+</html>

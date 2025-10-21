@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>منصة حفظ الكلمات — العرض السينمائي</title>
+
+  <!-- Font & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    :root {
+      --bg1: #071126;
+      --bg2: #081b2e;
+      --accent-1: #00d4ff;
+      --accent-2: #7f3dff;
+      --glass: rgba(255,255,255,0.06);
+      --neon: rgba(0,212,255,0.12);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body {
+      height:100%;
+      background:linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:#fff;
+      font-family:"Cairo",sans-serif;
+      overflow-x:hidden;
+      transition:background 0.5s;
+    }
+
+    .hero {
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:30px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* تأثير حركة الخلفية */
+    .hero::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at var(--x,50%) var(--y,50%), rgba(0,212,255,0.08), transparent 60%);
+      transition:background 0.2s;
+    }
+
+    .container {
+      display:grid;
+      grid-template-columns:1fr 420px;
+      gap:40px;
+      align-items:center;
+      max-width:1200px;
+      width:100%;
+      position:relative;
+      z-index:5;
+    }
+
+    .eyebrow {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:linear-gradient(90deg,var(--neon),rgba(127,61,255,0.08));
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      color:#dff9ff;
+    }
+    h1 {
+      font-size:42px;
+      font-weight:800;
+      margin:16px 0;
+      text-shadow:0 8px 20px rgba(0,0,0,0.6);
+    }
+    .headline-mark {
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:10px;
+      background:linear-gradient(90deg,rgba(0,212,255,0.12),rgba(127,61,255,0.12));
+      color:var(--accent-1);
+      font-weight:800;
+      margin-left:6px;
+    }
+    .lead {
+      font-size:18px;
+      opacity:0.9;
+      max-width:600px;
+      margin-bottom:20px;
+    }
+
+    .cta-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .btn-primary {
+      background:linear-gradient(90deg,var(--accent-1),var(--accent-2));
+      border:none;
+      padding:12px 20px;
+      border-radius:12px;
+      font-weight:700;
+      color:#021428;
+      cursor:pointer;
+      transition:transform 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform:scale(1.05);
+      box-shadow:0 0 15px var(--accent-1);
+    }
+    .feature-chips {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:15px;
+    }
+    .chip {
+      background:var(--glass);
+      padding:8px 14px;
+      border-radius:999px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.03);
+      transition:transform 0.3s ease;
+    }
+    .chip:hover { transform:translateY(-3px); }
+
+    .hero-right {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      transition:transform 0.4s ease;
+    }
+
+    .mock-card {
+      width:100%;
+      max-width:420px;
+      height:580px;
+      border-radius:28px;
+      background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));
+      box-shadow:0 20px 60px rgba(4,8,20,0.7);
+      backdrop-filter:blur(8px);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.04);
+      cursor:pointer;
+      transition:transform 0.3s ease;
+    }
+    .mock-card:hover {
+      transform:scale(1.02);
+    }
+
+    .mock-top {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:10px 14px;
+    }
+
+    .mock-screen {
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      border-radius:14px;
+      overflow:hidden;
+      margin:0 10px 10px;
+    }
+
+    .mini-controls {
+      display:flex;
+      gap:8px;
+      justify-content:center;
+      padding-bottom:12px;
+    }
+    .mini-controls button {
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.1);
+      padding:8px 12px;
+      border-radius:8px;
+      color:#fff;
+      cursor:pointer;
+      transition:background 0.3s;
+    }
+    .mini-controls button:hover {
+      background:rgba(255,255,255,0.1);
+    }
+
+    /* تكبير الفيديو */
+    .video-overlay {
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.85);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      z-index:999;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity 0.4s ease;
+    }
+    .video-overlay.active {
+      opacity:1;
+      pointer-events:auto;
+    }
+    .video-overlay video {
+      max-width:90%;
+      max-height:85%;
+      border-radius:20px;
+      box-shadow:0 0 40px rgba(0,0,0,0.5);
+    }
+    .close-btn {
+      position:absolute;
+      top:20px;
+      right:30px;
+      font-size:28px;
+      cursor:pointer;
+      color:#fff;
+    }
+
+    @media (max-width:900px){
+      .container{grid-template-columns:1fr;gap:30px;text-align:center}
+      .hero{padding:20px}
+      h1{font-size:30px}
+      .lead{font-size:16px;margin:auto}
+      .hero-right{justify-content:center}
+      .mock-card{width:100%;max-width:340px;height:460px;margin:auto}
+    }
+  </style>
+</head>
+<body>
+
+  <main class="hero" id="hero">
+    <div class="container">
+
+      <!-- النص -->
+      <div class="hero-left">
+        <div class="eyebrow">ادرس اسرع و لكن بذكاء | Thr feature is here to help</div>
+        <h1> النجاح في انتظارك. <span class="headline-mark">الدراسه اصبحت اسهل</span></h1>
+        <p class="lead">أنظمة تكرار ذكي، اختبارات  ومراجعات تفاعلية — كل حاجة معمولها تصميم بتركيز على النجاح.</p>
+        <div class="cta-row">
+          <button id="startBtn" class="btn-primary"><i class="fa-solid fa-rocket"></i> انطلق الآن</button>
+        </div>
+        <div class="feature-chips">
+          <div class="chip"><i class="fa-solid fa-bolt"></i> تفاعلي</div>
+          <div class="chip"><i class="fa-solid fa-brain"></i> ذكي</div>
+          <div class="chip"><i class="fa-solid fa-medal"></i> محفّز</div>
+        </div>
+      </div>
+
+      <!-- الفيديو -->
+      <div class="hero-right" id="heroRight">
+        <div class="mock-card" id="mockCard">
+          <div class="mock-top">
+            <div style="display:flex;gap:6px">
+              <div style="width:10px;height:10px;background:#ff6b6b;border-radius:50%"></div>
+              <div style="width:10px;height:10px;background:#ffd56b;border-radius:50%"></div>
+            </div>
+          </div>
+          <div class="mock-screen">
+            <video id="demoVideo" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;border-radius:14px">
+              <source src="intro.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="mini-controls">
+            <button id="pauseBtn"><i class="fa-solid fa-pause"></i></button>
+            <button id="playBtn"><i class="fa-solid fa-play"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- نافذة تكبير الفيديو -->
+  <div class="video-overlay" id="videoOverlay">
+    <span class="close-btn" id="closeOverlay"><i class="fa-solid fa-xmark"></i></span>
+    <video id="expandedVideo" controls>
+      <source src="intro.mp4" type="video/mp4">
+    </video>
+  </div>
+
+<script>
+/* 🎬 أنيميشن دخول */
+gsap.from('.hero-left',{x:-80,opacity:0,duration:1.2,ease:"power3.out"});
+gsap.from('.hero-right',{x:80,opacity:0,duration:1.2,ease:"power3.out",delay:0.3});
+
+/* 🎨 حركة الماوس للخلفية */
+const hero = document.getElementById("hero");
+hero.addEventListener("mousemove", e => {
+  const x = (e.clientX / window.innerWidth) * 100;
+  const y = (e.clientY / window.innerHeight) * 100;
+  hero.style.setProperty("--x", x + "%");
+  hero.style.setProperty("--y", y + "%");
+});
+
+/* 🎥 التحكم في الفيديو */
+const vid = document.getElementById('demoVideo');
+document.getElementById('pauseBtn').onclick = () => vid.pause();
+document.getElementById('playBtn').onclick = () => vid.play();
+
+/* 🚀 زر البداية */
+document.getElementById('startBtn').onclick = () => {
+  gsap.to('.container',{opacity:0,y:-20,duration:0.6,ease:"power2.in",onComplete:()=>location.href="start.html"});
+};
+
+/* 🔍 تكبير الفيديو */
+const overlay = document.getElementById('videoOverlay');
+const expandedVideo = document.getElementById('expandedVideo');
+document.getElementById('mockCard').addEventListener('click', () => {
+  overlay.classList.add('active');
+  expandedVideo.play();
+});
+document.getElementById('closeOverlay').addEventListener('click', () => {
+  overlay.classList.remove('active');
+  expandedVideo.pause();
+});
+</script>
+</body>
+</html>
