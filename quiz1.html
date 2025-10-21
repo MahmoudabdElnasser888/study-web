@@ -1,137 +1,109 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>اختبار المعلومات</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حل الاختبار</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
     body {
-      font-family: 'Cairo', sans-serif;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      color: #333;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f5f5, #dfe9f3);
       margin: 0;
       padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      text-align: center;
     }
     .container {
+      max-width: 650px;
+      margin: auto;
       background: #fff;
-      max-width: 600px;
-      width: 100%;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       padding: 30px;
-      text-align: center;
-      animation: fadeIn 0.6s ease;
-    }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(10px);}
-      to {opacity: 1; transform: translateY(0);}
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
     h2 {
       margin-bottom: 20px;
-      color: #222;
-    }
-    .question {
-      font-size: 18px;
-      margin-bottom: 20px;
-      font-weight: 600;
+      color: #333;
     }
     button {
-      display: block;
-      width: 100%;
-      margin: 8px 0;
-      padding: 12px;
+      padding: 12px 20px;
+      margin: 10px;
       border: none;
       border-radius: 10px;
-      font-weight: 600;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      color: #fff;
       cursor: pointer;
-      transition: transform 0.2s, opacity 0.3s;
+      font-weight: 600;
+      background: linear-gradient(90deg,#6a11cb,#2575fc);
+      color: white;
+      transition: transform 0.2s, background 0.3s;
     }
-    button:hover {
-      transform: scale(1.03);
-      opacity: 0.9;
-    }
+    button:hover { transform: scale(1.05); }
     .result {
       margin-top: 20px;
-      text-align: left;
+      text-align: right;
     }
     .correct { color: green; font-weight: bold; }
     .wrong { color: red; font-weight: bold; }
-    .actions {
-      margin-top: 25px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
+    #shareBtn {
+      background: linear-gradient(90deg,#00c853,#64dd17);
     }
-    .actions button {
-      width: auto;
-      padding: 10px 20px;
-      font-size: 15px;
-    }
-    @media (max-width: 480px) {
-      .container {
-        padding: 20px;
-      }
-      button {
-        font-size: 15px;
-      }
+    #shareArea {
+      margin-top: 20px;
+      word-wrap: break-word;
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>اختبار المعلومات 🧠</h2>
+    <h2>الاختبار</h2>
     <div id="quizArea"></div>
-    <div id="resultArea" class="result"></div>
-    <div class="actions" id="actions" style="display:none;">
-      <button onclick="restartQuiz()">🔁 إعادة المحاولة</button>
-      <button onclick="shareQuiz()">📤 مشاركة الاختبار</button>
-    </div>
+    <div class="result" id="resultArea"></div>
+    <button id="shareBtn" style="display:none;" onclick="shareQuiz()">📤 مشاركة الاختبار</button>
+    <div id="shareArea"></div>
   </div>
 
   <script>
-    // لو مش موجود بيانات في localStorage هنضيف مثال بسيط
-    if (!localStorage.getItem('quizQuestions')) {
-      const sample = [
-        { text: "ما عاصمة مصر؟", options: ["القاهرة", "الإسكندرية", "أسوان"], correct: 0 },
-        { text: "كم عدد الكواكب في المجموعة الشمسية؟", options: ["7", "8", "9"], correct: 1 },
-        { text: "من مؤسس شركة مايكروسوفت؟", options: ["ستيف جوبز", "بيل غيتس", "إيلون ماسك"], correct: 1 }
-      ];
-      localStorage.setItem('quizQuestions', JSON.stringify(sample));
+    // --- 1️⃣ تحميل الأسئلة من الرابط أو localStorage ---
+    function getQuizData() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const encoded = urlParams.get('data');
+      if (encoded) {
+        try {
+          return JSON.parse(decodeURIComponent(atob(encoded)));
+        } catch (e) {
+          alert("حدث خطأ أثناء تحميل الأسئلة!");
+          return [];
+        }
+      } else {
+        return JSON.parse(localStorage.getItem('quizQuestions') || '[]');
+      }
     }
 
-    let questions = JSON.parse(localStorage.getItem('quizQuestions'));
+    let questions = getQuizData();
     let current = 0;
     let score = 0;
     let answers = [];
 
     const quizArea = document.getElementById('quizArea');
     const resultArea = document.getElementById('resultArea');
-    const actions = document.getElementById('actions');
+    const shareBtn = document.getElementById('shareBtn');
+    const shareArea = document.getElementById('shareArea');
 
     function showQuestion() {
       if (current >= questions.length) {
         showResults();
-        localStorage.removeItem('quizQuestions'); // حذف الأسئلة بعد الحل
         return;
       }
 
       const q = questions[current];
       quizArea.innerHTML = `
-        <div class="question"><strong>س${current + 1}:</strong> ${q.text}</div>
+        <p><strong>س${current+1}:</strong> ${q.text}</p>
         ${q.options.map((opt, i) => `<button onclick="answer(${i})">${opt}</button>`).join('')}
       `;
-      resultArea.innerHTML = '';
     }
 
     function answer(selected) {
@@ -149,42 +121,29 @@
     }
 
     function showResults() {
-      quizArea.innerHTML = `<h3>النتيجة النهائية: ${score} من ${questions.length}</h3>`;
+      quizArea.innerHTML = `<h3>انتهى الاختبار ✅ نتيجتك: ${score}/${questions.length}</h3>`;
       resultArea.innerHTML = answers.map(a => `
-        <p>
-          <strong>${a.question}</strong><br>
-          إجابتك: <span class="${a.isCorrect ? 'correct' : 'wrong'}">${a.selected}</span><br>
-          الإجابة الصحيحة: ${a.correct}
-        </p>
+        <p><strong>${a.question}</strong><br>
+        إجابتك: <span class="${a.isCorrect ? 'correct' : 'wrong'}">${a.selected}</span><br>
+        الإجابة الصحيحة: ${a.correct}</p>
       `).join('');
-      actions.style.display = 'flex';
+
+      // حذف الأسئلة من التخزين بعد الحل
+      localStorage.removeItem('quizQuestions');
+
+      // عرض زر المشاركة
+      shareBtn.style.display = 'inline-block';
     }
 
-    function restartQuiz() {
-      current = 0;
-      score = 0;
-      answers = [];
-      actions.style.display = 'none';
-      localStorage.setItem('quizQuestions', JSON.stringify(questions));
-      showQuestion();
-    }
-
-    async function shareQuiz() {
-      const shareData = {
-        title: "اختبار المعلومات",
-        text: "جرب تجاوب على اختبار المعلومات ده وشوف هتجيب كام 😎",
-        url: window.location.href
-      };
-      try {
-        if (navigator.share) {
-          await navigator.share(shareData);
-        } else {
-          navigator.clipboard.writeText(window.location.href);
-          alert("تم نسخ رابط الامتحان! 🟢");
-        }
-      } catch (err) {
-        alert("حدث خطأ أثناء المشاركة ❌");
-      }
+    // --- 2️⃣ إنشاء رابط مشاركة ---
+    function shareQuiz() {
+      const data = btoa(encodeURIComponent(JSON.stringify(questions)));
+      const shareLink = `${window.location.origin}${window.location.pathname}?data=${data}`;
+      shareArea.style.display = 'block';
+      shareArea.innerHTML = `
+        <p>انسخ الرابط وشاركه مع أصدقائك 👇</p>
+        <input type="text" value="${shareLink}" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;" readonly>
+      `;
     }
 
     showQuestion();
