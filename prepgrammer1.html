@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Unit 1 — Grammar (Interactive)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#000;
+      --panel:#0f0f0f;
+      --gold:goldenrod;
+      --muted:#bdbdbd;
+      --glass: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Cairo',sans-serif;
+      background:linear-gradient(135deg,var(--bg),#080808);
+      color:#fff;
+      padding:18px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      direction:rtl;
+    }
+
+    header{ text-align:center; margin-bottom:12px }
+    h1{ color:var(--gold); margin:6px 0; font-size:22px; letter-spacing:0.6px; text-shadow:0 0 10px rgba(218,165,32,0.12) }
+    p.lead{ color:var(--muted); margin:6px 0 16px; font-size:14px }
+
+    .container{ max-width:1100px; margin:0 auto; }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      padding:14px;
+      margin-bottom:16px;
+      border:1px solid rgba(218,165,32,0.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    /* image gallery */
+    .images{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:12px;
+      align-items:start;
+    }
+    .img-wrap{
+      background:#070707;
+      padding:8px;
+      border-radius:10px;
+      overflow:hidden;
+      border:1px solid var(--glass);
+    }
+    .img-wrap img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      touch-action: manipulation;
+    }
+    .img-caption{ text-align:center; color:var(--muted); font-size:13px; margin-top:8px }
+
+    /* content */
+    .section-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      margin: 8px 0 10px;
+    }
+    .section-title h2{ margin:0; color:var(--gold); font-size:16px }
+    .section-title .badge{ color:#000; background:var(--gold); padding:6px 8px; border-radius:8px; font-weight:700; font-size:13px }
+
+    .rule{
+      padding:10px;
+      border-radius:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+      border:1px solid rgba(255,255,255,0.02);
+      margin-bottom:10px;
+    }
+    .rule h3{ margin:0 0 8px; color:#ffd87a; font-size:15px }
+    .rule p{ margin:0; color:var(--muted); line-height:1.5; font-size:14px; text-align:right }
+
+    /* examples */
+    .examples{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px }
+    .ex{ padding:10px; border-radius:8px; background:#0b0b0b; border:1px solid rgba(255,255,255,0.02); font-size:14px; color:#fff }
+
+    /* quiz */
+    .quiz{ margin-top:12px; }
+    .question{ padding:12px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border:1px solid rgba(255,255,255,0.02); margin-bottom:10px; }
+    .question h4{ margin:0 0 8px; color:var(--gold); font-size:15px }
+    .choices{ display:flex; flex-direction:column; gap:8px }
+    .choice{
+      padding:10px; border-radius:8px; background:#0b0b0b; border:1px solid rgba(255,255,255,0.03); cursor:pointer; text-align:right;
+      transition: all .15s ease;
+      user-select:none;
+    }
+    .choice:hover{ transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,0.6) }
+    .choice.selected{ outline:3px solid rgba(218,165,32,0.18); background:linear-gradient(90deg, rgba(218,165,32,0.03), rgba(218,165,32,0.01)); }
+    .choice.correct{ background:linear-gradient(90deg, rgba(0,150,0,0.06), rgba(0,150,0,0.02)); border-color:rgba(0,150,0,0.2) }
+    .choice.wrong{ background:linear-gradient(90deg, rgba(200,0,0,0.06), rgba(200,0,0,0.02)); border-color:rgba(200,0,0,0.2) }
+
+    .actions{ display:flex; gap:8px; margin-top:10px; justify-content:flex-end; }
+    .btn{
+      background:var(--gold); color:#000; padding:10px 12px; border-radius:10px; border:0; font-weight:700; cursor:pointer;
+      box-shadow:0 8px 18px rgba(218,165,32,0.12);
+    }
+    .btn.ghost{ background:transparent; color:var(--gold); border:1px solid rgba(218,165,32,0.14) }
+
+    footer{ text-align:center; color:var(--muted); margin-top:18px; font-size:13px }
+
+    /* responsive */
+    @media (max-width:900px){
+      .images{ grid-template-columns:1fr; }
+      .examples{ grid-template-columns:1fr; }
+    }
+
+    /* ===== Improved popup zoom styles ===== */
+.popup-zoom {
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1400;
+  padding: 20px;
+  transition: opacity .25s ease;
+  background: linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.88));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.popup-zoom.open { display:flex; opacity:1; }
+
+.popup-zoom .popup-inner {
+  position: relative;
+  max-width: 1100px;
+  width: 92%;
+  max-height: 92%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.03);
+}
+
+/* image */
+.popup-zoom img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 10px;
+  object-fit: contain;
+  box-shadow: 0 28px 60px rgba(0,0,0,0.7), 0 0 30px rgba(218,165,32,0.08);
+  transition: transform .28s cubic-bezier(.2,.9,.3,1), filter .2s ease;
+  cursor: zoom-in;
+  display:block;
+}
+
+/* zoomed state (toggle) */
+.popup-zoom img.zoomed {
+  transform: scale(1.15);
+  cursor: zoom-out;
+}
+
+/* caption */
+.popup-zoom .caption {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  right: 16px;
+  color: #e6d8a0;
+  font-size: 14px;
+  text-align: center;
+  opacity: .95;
+  pointer-events: none;
+}
+
+/* spinner while loading */
+.popup-zoom .spinner {
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  border:6px solid rgba(255,255,255,0.08);
+  border-top-color: rgba(218,165,32,0.95);
+  animation: spin .9s linear infinite;
+  position:absolute;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* controls (circle buttons) */
+.popup-zoom .btn {
+  position:absolute;
+  background: rgba(0,0,0,0.45);
+  border:1px solid rgba(255,255,255,0.06);
+  color:#fff;
+  width:44px; height:44px;
+  border-radius:50%;
+  display:inline-flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  transition: transform .12s ease, background .12s ease;
+  backdrop-filter: blur(4px);
+}
+.popup-zoom .btn:hover { transform: translateY(-3px); background: rgba(218,165,32,0.12); color:#000; }
+
+/* close top-right (RTL visible top-right) */
+.popup-zoom .btn.close {
+  top:12px; right:12px; left:auto; font-size:22px;
+}
+
+/* prev / next side buttons inside container */
+.popup-zoom .btn.prev { left: 8px; top: 50%; transform: translateY(-50%); width:48px; height:48px; font-size:20px; }
+.popup-zoom .btn.next { right: 8px; top: 50%; transform: translateY(-50%); width:48px; height:48px; font-size:20px; }
+
+@media (max-width:900px){
+  .popup-zoom .popup-inner{ padding:8px; max-height:94vh; }
+  .popup-zoom img{ max-height:74vh; }
+  .popup-zoom .btn.prev { left:6px; }
+  .popup-zoom .btn.next { right:6px; }
+  .popup-zoom .btn.close { top:8px; right:8px; }
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Grammar — الوحدة 1 (Present Perfect & Related Usage)</h1>
+      <p class="lead">الشرح كما في الصور الثلاث — عرض حرفي للصور أولاً، ثم الشرح المصقول، وأخيرًا اختبار تفاعلي صغير عشان تثبت المعلومة.</p>
+    </header>
+
+    <!-- IMAGES CARD -->
+    <div class="card">
+      <div class="section-title">
+        <h2>الصور الأصلية للقواعد (انظر بدقة)</h2>
+        <div class="badge">Original</div>
+      </div>
+
+      <div class="images" aria-hidden="false">
+        <div class="img-wrap"><img src="gram4.jpg" alt="grammar image 1" tabindex="0"><div class="img-caption">الصورة 1</div></div>
+        <div class="img-wrap"><img src="gram1.jpg" alt="grammar image 2" tabindex="0"><div class="img-caption">الصورة 2</div></div>
+        <div class="img-wrap"><img src="gram2.jpg" alt="grammar image 3" tabindex="0"><div class="img-caption">الصورة 3</div></div>
+        <div class="img-wrap"><img src="gram3.jpg" alt="grammar image 4" tabindex="0"><div class="img-caption">الصورة 4</div></div>
+      </div>
+
+      <p style="color:var(--muted);margin-top:10px;font-size:13px;text-align:left">الجرامر من كتاب المعاصر</p>
+    </div>
+
+    <!-- EXTRACTED & FORMATTED GRAMMAR -->
+    <div class="card" id="formatted">
+      <div class="section-title"><h2>الشرح المنسق والمفصّل (كما في الصور)</h2><div class="badge">Text</div></div>
+
+      <!-- SECTION: FORM (Present Perfect) -->
+      <div class="rule" id="form">
+        <h3>1. الشكل (Form) — Present Perfect</h3>
+        <p>
+          المضارع التام يُكوَّن من: <strong>have / has + past participle</strong>.<br>
+          أمثلة (affirmative):<br>
+        </p>
+        <div class="examples">
+          <div class="ex"><strong>She has lived</strong> here for two years. — عاشت هنا لمدة عامين.</div>
+          <div class="ex"><strong>They have finished</strong> their homework. — أنهوا واجبهم.</div>
+        </div>
+      </div>
+
+      <!-- SECTION: NEGATIVE -->
+      <div class="rule" id="negative">
+        <h3>2. النفي (Negative)</h3>
+        <p>
+          ضع <strong>not</strong> بعد have/has: <strong>have/has not + past participle</strong>.<br>
+          أمثلة:<br>
+        </p>
+        <div class="examples">
+          <div class="ex"><strong>He has not finished</strong> yet. — لم ينهِ بعد.</div>
+          <div class="ex"><strong>We have not seen</strong> that film. — لم نشاهد ذلك الفيلم.</div>
+        </div>
+      </div>
+
+      <!-- SECTION: QUESTIONS -->
+      <div class="rule" id="questions">
+        <h3>3. الأسئلة (Interrogative)</h3>
+        <p>
+          ضع have/has في بداية الجملة: <strong>Have/Has + subject + past participle?</strong><br>
+          أمثلة:<br>
+        </p>
+        <div class="examples">
+          <div class="ex"><strong>Have you finished</strong> your work? — هل أنهيت عملك؟</div>
+          <div class="ex"><strong>Has she arrived</strong> yet? — هل وصلت؟</div>
+        </div>
+      </div>
+
+      <!-- SECTION: USES -->
+      <div class="rule" id="uses">
+        <h3>4. متى نستخدم Present Perfect؟ (Uses)</h3>
+        <p>
+          - لأحداث بدأت في الماضي ومازالت مستمرة حتى الآن: <em>She has lived here for 5 years.</em><br>
+          - لأعمال تمت في وقت غير محدد في الماضي ذات تأثير على الحاضر: <em>I have lost my keys.</em><br>
+          - مع كلمات مثل <strong>ever, never, already, yet, just, recently, so far, up to now</strong>.<br>
+        </p>
+      </div>
+
+      <!-- SECTION: FOR / SINCE -->
+      <div class="rule" id="for-since">
+        <h3>5. For / Since</h3>
+        <p>
+          - <strong>for</strong> + مدة زمنية (for two months, for years).<br>
+          - <strong>since</strong> + نقطة بداية (since 2019, since Monday).<br>
+          مثال: <em>He has worked here <strong>for</strong> three years.</em><br>
+          مثال: <em>She has known him <strong>since</strong> 2010.</em>
+        </p>
+      </div>
+
+      <!-- SECTION: YET / ALREADY / JUST -->
+      <div class="rule" id="yet-already">
+        <h3>6. Yet / Already / Just</h3>
+        <p>
+          - <strong>yet</strong> (في الجمل السلبية والأسئلة) يأتي غالبًا في نهاية الجملة: <em>Have you finished yet?</em> / <em>I haven't finished yet.</em><br>
+          - <strong>already</strong> (إيجابي) يأتي بين have/has وpast participle أو في نهاية الجملة: <em>She has already eaten.</em><br>
+          - <strong>just</strong> (مؤخرًا) يأتي بين have/has وpast participle: <em>They have just left.</em>
+        </p>
+      </div>
+
+      <!-- SECTION: EVER / NEVER -->
+      <div class="rule" id="ever-never">
+        <h3>7. Ever / Never</h3>
+        <p>
+          - <strong>ever</strong> للسؤال عن التجارب في أي وقت: <em>Have you ever been to London?</em><br>
+          - <strong>never</strong> للنفي: <em>I have never seen that movie.</em>
+        </p>
+      </div>
+
+      <!-- SECTION: Passive / Past participle usage -->
+      <div class="rule" id="passive">
+        <h3>8. التصريف الثالث / Passive (ملاحظات)</h3>
+        <p>
+          - التصريف الثالث (Past Participle) مهم هنا: مثال: <em>write — written, eat — eaten, go — gone</em>.<br>
+          - يُستخدم أيضاً مع المبني للمجهول (Passive) بتركيب: <strong>have/has + been + past participle</strong>.<br>
+          مثال: <em>The work has been done.</em>
+        </p>
+      </div>
+
+      <!-- EXTRA: common mistakes -->
+      <div class="rule" id="common-errors">
+        <h3>9. أخطاء شائعة يجب تجنّبها</h3>
+        <p>
+          - لا تخلط بين <strong>past simple</strong> (I saw him yesterday) و<strong>present perfect</strong> (I have seen him) — استخدم past simple مع زمان محدد في الماضي.<br>
+          - لا تستخدم كلمات زمن محددة مثل <em>yesterday, last year, in 2010</em> مع present perfect.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- QUIZ SECTION -->
+    <div class="card quiz" id="quizSection">
+      <div class="section-title"><h2>اختبر نفسك — Quiz</h2><div class="badge">Interactive</div></div>
+
+      <!-- Question 1 -->
+      <div class="question" data-answer="c">
+        <h4>1) Choose the correct form: "She ___ here for five years."</h4>
+        <div class="choices">
+          <div class="choice" data-key="a">is living</div>
+          <div class="choice" data-key="b">lived</div>
+          <div class="choice" data-key="c">has lived</div>
+          <div class="choice" data-key="d">was living</div>
+        </div>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="question" data-answer="b">
+        <h4>2) Choose the correct sentence:</h4>
+        <div class="choices">
+          <div class="choice" data-key="a">I have seen him yesterday.</div>
+          <div class="choice" data-key="b">I saw him yesterday.</div>
+          <div class="choice" data-key="c">I have saw him yesterday.</div>
+          <div class="choice" data-key="d">I has seen him yesterday.</div>
+        </div>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="question" data-answer="a">
+        <h4>3) "Have you ___ to Paris?"</h4>
+        <div class="choices">
+          <div class="choice" data-key="a">ever been</div>
+          <div class="choice" data-key="b">been ever</div>
+          <div class="choice" data-key="c">ever gone</div>
+          <div class="choice" data-key="d">gone ever</div>
+        </div>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="question" data-answer="d">
+        <h4>4) "They ___ already ___ their lunch."</h4>
+        <div class="choices">
+          <div class="choice" data-key="a">have / ate</div>
+          <div class="choice" data-key="b">have / eat</div>
+          <div class="choice" data-key="c">has / eaten</div>
+          <div class="choice" data-key="d">have / eaten</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="checkBtn">تحقق من الإجابات</button>
+        <button class="btn ghost" id="resetBtn">إعادة الاختبار</button>
+      </div>
+
+      <div id="result" style="margin-top:12px;color:var(--muted);font-size:14px"></div>
+    </div>
+
+    <!-- Improved Popup Zoom (place before footer inside .container) -->
+    <div class="popup-zoom" id="popupZoom" aria-hidden="true" role="dialog" aria-label="Image zoom dialog">
+      <div class="popup-inner" role="document">
+        <div class="spinner" id="popupSpinner" aria-hidden="true" style="display:none;"></div>
+
+        <button class="btn close" id="popupClose" aria-label="إغلاق">&times;</button>
+        <button class="btn prev" id="popupPrev" aria-label="السابق">&#10094;</button>
+        <img id="popupImg" src="" alt="Zoomed grammar image" />
+        <button class="btn next" id="popupNext" aria-label="التالي">&#10095;</button>
+
+        <div class="caption" id="popupCaption"></div>
+      </div>
+    </div>
+
+    <footer>© 2025 Glow Up For Men — إعداد: حموكشه</footer>
+  </div>
+
+  <script>
+    // Interactive quiz logic (lightweight)
+    (function(){
+      const questions = Array.from(document.querySelectorAll('.question'));
+      questions.forEach(q => {
+        q.querySelectorAll('.choice').forEach(choice => {
+          choice.addEventListener('click', () => {
+            // clear previous selection
+            q.querySelectorAll('.choice').forEach(c => c.classList.remove('selected'));
+            choice.classList.add('selected');
+          });
+        });
+      });
+
+      document.getElementById('checkBtn').addEventListener('click', () => {
+        let correct = 0;
+        questions.forEach(q => {
+          const answerKey = q.getAttribute('data-answer');
+          const selected = q.querySelector('.choice.selected');
+          q.querySelectorAll('.choice').forEach(c => c.classList.remove('correct','wrong'));
+          if(!selected){
+            // no selection -> mark all lightly
+            q.querySelectorAll('.choice').forEach(c => c.classList.add('wrong'));
+          } else {
+            const key = selected.getAttribute('data-key');
+            if(key === answerKey){
+              selected.classList.add('correct');
+              correct++;
+            } else {
+              selected.classList.add('wrong');
+              // highlight correct
+              const correctChoice = q.querySelector('.choice[data-key="'+answerKey+'"]');
+              if(correctChoice) correctChoice.classList.add('correct');
+            }
+          }
+        });
+        const total = questions.length;
+        const result = document.getElementById('result');
+        result.innerHTML = 'إجابات صحيحة: ' + correct + ' من ' + total + '.';
+      });
+
+      document.getElementById('resetBtn').addEventListener('click', () => {
+        questions.forEach(q => {
+          q.querySelectorAll('.choice').forEach(c => c.classList.remove('selected','correct','wrong'));
+        });
+        document.getElementById('result').innerHTML = '';
+      });
+    })();
+  </script>
+
+  <script>
+(function(){
+  const imgs = Array.from(document.querySelectorAll('.images img, .img-wrap img'));
+  if(!imgs.length) return;
+
+  const popup = document.getElementById('popupZoom');
+  const popupImg = document.getElementById('popupImg');
+  const popupCaption = document.getElementById('popupCaption');
+  const spinner = document.getElementById('popupSpinner');
+  const btnClose = document.getElementById('popupClose');
+  const btnPrev = document.getElementById('popupPrev');
+  const btnNext = document.getElementById('popupNext');
+
+  let currentIndex = 0;
+  let isZoomed = false;
+
+  function setLoading(on){
+    spinner.style.display = on ? 'block' : 'none';
+    popupImg.style.visibility = on ? 'hidden' : 'visible';
+  }
+
+  function openAt(index){
+    currentIndex = (index + imgs.length) % imgs.length;
+    const src = imgs[currentIndex].currentSrc || imgs[currentIndex].src || imgs[currentIndex].getAttribute('data-src');
+    const alt = imgs[currentIndex].alt || ('Image ' + (currentIndex+1));
+    // show popup
+    popup.classList.add('open');
+    popup.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    // load image with spinner
+    setLoading(true);
+    popupImg.classList.remove('zoomed');
+    isZoomed = false;
+    popupImg.src = ''; // reset to force load
+    popupCaption.textContent = alt;
+    const loader = new Image();
+    loader.onload = function(){
+      popupImg.src = src;
+      setLoading(false);
+      // focus close button for accessibility
+      btnClose.focus();
+    };
+    loader.onerror = function(){
+      setLoading(false);
+      popupCaption.textContent = 'خطأ في تحميل الصورة';
+    };
+    loader.src = src;
+  }
+
+  function closePopup(){
+    popup.classList.remove('open');
+    popup.setAttribute('aria-hidden','true');
+    popupImg.src = '';
+    popupCaption.textContent = '';
+    document.body.style.overflow = '';
+    isZoomed = false;
+    popupImg.classList.remove('zoomed');
+  }
+
+  function showNext(){ openAt(currentIndex + 1); }
+  function showPrev(){ openAt(currentIndex - 1); }
+
+  imgs.forEach((img, i) => {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', (e) => {
+      e.preventDefault();
+      openAt(i);
+    });
+    img.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' ') openAt(i);
+    });
+  });
+
+  // events
+  btnClose.addEventListener('click', closePopup);
+  btnNext.addEventListener('click', (e)=>{ e.stopPropagation(); showNext(); });
+  btnPrev.addEventListener('click', (e)=>{ e.stopPropagation(); showPrev(); });
+
+  // click outside image closes
+  popup.addEventListener('click', (e) => {
+    if(e.target === popup) closePopup();
+  });
+
+  // double click or click image to toggle zoom (inside modal)
+  popupImg.addEventListener('click', (e) => {
+    if(popupImg.src){
+      isZoomed = !isZoomed;
+      popupImg.classList.toggle('zoomed', isZoomed);
+    }
+  });
+
+  // keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if(!popup.classList.contains('open')) return;
+    if(e.key === 'Escape') closePopup();
+    else if(e.key === 'ArrowRight' || e.key === 'ArrowDown') showNext();
+    else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') showPrev();
+    else if(e.key === '+' || e.key === '='){ // zoom in
+      isZoomed = true; popupImg.classList.add('zoomed');
+    } else if(e.key === '-' ){ // zoom out
+      isZoomed = false; popupImg.classList.remove('zoomed');
+    }
+  });
+
+  // support wheel to zoom in/out when hovering image (desktop)
+  popupImg.addEventListener('wheel', function(e){
+    if(!popup.classList.contains('open')) return;
+    e.preventDefault();
+    if(e.deltaY < 0) { isZoomed = true; popupImg.classList.add('zoomed'); }
+    else { isZoomed = false; popupImg.classList.remove('zoomed'); }
+  }, { passive:false });
+
+  // touch swipe support for mobile (left/right)
+  let startX = 0;
+  let startY = 0;
+  popup.addEventListener('touchstart', function(e){
+    if(!popup.classList.contains('open')) return;
+    if(e.touches && e.touches.length === 1){
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }
+  }, {passive:true});
+
+  popup.addEventListener('touchend', function(e){
+    if(!popup.classList.contains('open')) return;
+    const touch = e.changedTouches && e.changedTouches[0];
+    if(!touch) return;
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
+    if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0) showNext();
+      else showPrev();
+    }
+  }, {passive:true});
+
+})();
+</script>
+
+</body>
+</html>
