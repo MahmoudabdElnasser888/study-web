@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>الحركة والسرعة — شرح كامل مع حاسبة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: linear-gradient(135deg,#4f4b4b,#080808);
+      --card:#0b0b0c;
+      --accent:#8460bd;
+      --muted:#e9e4e4;
+      --glass: rgba(255,255,255,0.03);
+      --radius:12px;
+      --maxw:1100px;
+      --soft: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Cairo',sans-serif;
+      background:var(--bg);
+      color:#fff;
+      padding:18px;
+      direction:rtl;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.7;
+    }
+    .container{ max-width:var(--maxw); margin:0 auto; }
+    header{ text-align:center; margin-bottom:16px }
+    h1{ color:var(--accent); margin:6px 0; font-size:24px; font-weight:700 }
+    p.lead{ color:var(--muted); margin:6px 0 16px; font-size:15px }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:16px;
+      margin-bottom:16px;
+      border:1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.6);
+    }
+
+    h2{ color:var(--accent); margin:8px 0; font-size:20px }
+    h3{ color:#ffd87a; margin:8px 0; font-size:16px }
+    p, li{ color:var(--muted); font-size:15px }
+
+    ul{ padding-inline-start:18px; margin:8px 0 12px; }
+
+    /* image placeholders */
+    .images{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
+    .img-wrap{ background:#0b0b0b; border-radius:10px; padding:10px; border:1px solid var(--glass); text-align:center; min-height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .img-wrap img{ max-width:100%; border-radius:6px; display:block; height:auto; }
+    .img-caption{ color:var(--muted); font-size:13px; margin-top:8px; text-align:center }
+
+    .map-placeholder{ width:100%; min-height:140px; border-radius:8px; background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px dashed rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; color:var(--muted); padding:12px; }
+
+    /* calculator */
+    .calc-grid{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; align-items:end; margin-top:12px; }
+    label{ font-size:14px; color:var(--muted); display:block; margin-bottom:6px }
+    input[type="number"]{ width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:rgba(255,255,255,0.01); color:#fff; font-size:15px }
+    .btn-row{ display:flex; gap:8px; justify-content:flex-start; margin-top:10px; flex-wrap:wrap; }
+    button{ background:var(--accent); color:#fff; padding:10px 12px; border-radius:10px; border:0; font-weight:700; cursor:pointer; box-shadow:0 8px 18px rgba(132,89,189,0.08) }
+    button.ghost{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted) }
+
+    .result{ margin-top:12px; font-size:15px; color:var(--muted) }
+
+    /* static svg graphs */
+    .graphs{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; align-items:start; }
+    .graph-card{ background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border-radius:10px; padding:12px; border:1px solid rgba(255,255,255,0.02); text-align:center; }
+    .graph-caption{ color:var(--muted); margin-top:8px; font-size:13px }
+
+    pre.code { background:#080808; padding:12px; border-radius:8px; overflow:auto; font-size:13px; color:#dcdcdc; }
+
+    @media (max-width:900px){
+      .images{ grid-template-columns:1fr; }
+      .graphs{ grid-template-columns:1fr; }
+      .calc-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>الحركة والسرعة — شرح كامل</h1>
+      <p class="lead">تعريف الحركة، السرعة (أنواعها)، القوانين، أمثلة محلولة، حاسبة تفاعلية للسرعة/المسافة/الزمن، ورسوم بيانية ثابتة توضيحية.</p>
+    </header>
+
+    <!-- CONTENT: Definitions and theory -->
+    <article class="card" id="theory">
+      <h2>1. الحركة — تعريف ومفهوم</h2>
+      <p><strong>الحركة</strong>: تغير موضع جسم بالنسبة لموضع جسم آخر ثابت بمرور الزمن.</p>
+      <h3>الحركة في اتجاه واحد</h3>
+      <p>هي التي يتحرك فيها الجسم في مسار واحد (قد يكون مستقيماً أو منحنياً). أبسط أنواعها الحركة في خط مستقيم (مثل حركة القطار أو المترو).</p>
+
+      <h2>2. السرعة — تعريف ووحدة القياس</h2>
+      <p><strong>السرعة (ع)</strong> = المسافة (ف) ÷ الزمن (ز). أي: <strong>ع = ف / ز</strong></p>
+      <ul>
+        <li>المسافة (ف) تقاس بالمتر (م) أو بالكم (كم) أو بالسنتيمتر (سم).</li>
+        <li>الزمن (ز) يقاس بالثانية (ث) أو بالدقيقة أو بالساعة.</li>
+        <li>من وحدات السرعة الشائعة: م/ث (متر/ثانية) وكم/س (كيلومتر/ساعة).</li>
+      </ul>
+
+      <h3>العلاقات (القوانين الأساسية)</h3>
+      <pre class="code">ع = ف / ز
+ف = ع × ز
+ز = ف / ع</pre>
+
+      <h3>ملاحظات سريعة</h3>
+      <ul>
+        <li>علاقة طردية بين المسافة والسرعة عند ثبوت الزمن.</li>
+        <li>علاقة عكسية بين الزمن والسرعة عند ثبوت المسافة.</li>
+      </ul>
+
+      <h3>السرعة المنتظمة وغير المنتظمة</h3>
+      <p><strong>السرعة المنتظمة</strong> — عندما يقطع الجسم مسافات متساوية في أزمنة متساوية. <br>
+         <strong>السرعة غير المنتظمة</strong> — عندما تختلف المسافات المقطوعة في أزمنة متساوية أو العكس.</p>
+
+      <h3>السرعة المتوسطة</h3>
+      <p>السرعة المتوسطة = المسافة الكلية ÷ الزمن الكلي. تُستخدم لوصف حركة غير منتظمة عند الاهتمام بالمعدلات العامة فقط.</p>
+
+      <h3>السرعة النسبية</h3>
+      <p>سرعة جسم بالنسبة لمراقب قد تكون مختلفة حسب حالة المراقب (ساكن أو متحرك). الصيغة العامة عند نفس الإتجاه: <strong>سرعة نسبية = سرعة الجسم - سرعة المراقب</strong>.</p>
+    </article>
+
+
+     
+    </article>
+
+    <!-- GRAPHS: STATIC (do NOT change with calculator) -->
+    <article class="card" id="static-graphs">
+      <h2>رسوم بيانية توضيحية (ثابتة)</h2>
+      <p>الرسوم التالية تمثل الحالة القياسية للمسافة-زمن والسرعة-زمن للحركة المنتظمة (ثابتة السرعة).</p>
+
+      <div class="graphs">
+        <!-- Distance-Time (خط مستقيم مائل) -->
+        <div class="graph-card" aria-hidden="false">
+          <svg width="100%" height="220" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="رسم بياني المسافة مقابل الزمن">
+            <defs>
+              <linearGradient id="grad1" x1="0" x2="1">
+                <stop offset="0" stop-color="#8460bd" stop-opacity="0.9" />
+                <stop offset="1" stop-color="#ffd87a" stop-opacity="0.9" />
+              </linearGradient>
+            </defs>
+            <rect x="30" y="20" width="540" height="230" fill="#071011"/>
+            <!-- axes -->
+            <line x1="60" y1="230" x2="540" y2="230" stroke="#8b8b8b" stroke-width="1"/>
+            <line x1="60" y1="230" x2="60" y2="30" stroke="#8b8b8b" stroke-width="1"/>
+            <!-- labels -->
+            <text x="300" y="260" fill="#e6d8a0" font-size="13" text-anchor="middle">الزمن (س)</text>
+            <text transform="translate(18,150) rotate(-90)" fill="#e6d8a0" font-size="13" text-anchor="middle">المسافة (م)</text>
+            <!-- grid and ticks -->
+            <!-- ticks on x -->
+            <g stroke="#2c2c2c" stroke-width="0.8">
+              <line x1="120" y1="230" x2="120" y2="234"/>
+              <line x1="180" y1="230" x2="180" y2="234"/>
+              <line x1="240" y1="230" x2="240" y2="234"/>
+              <line x1="300" y1="230" x2="300" y2="234"/>
+              <line x1="360" y1="230" x2="360" y2="234"/>
+              <line x1="420" y1="230" x2="420" y2="234"/>
+              <line x1="480" y1="230" x2="480" y2="234"/>
+            </g>
+            <!-- straight distance-time line (مثال: ف = 20 * ز ) -->
+            <polyline points="60,230 120,190 180,150 240,110 300,70 360,40 540, -10"
+                      fill="none" stroke="url(#grad1)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+            <!-- markers -->
+            <circle cx="120" cy="190" r="3" fill="#ffd87a"/>
+            <circle cx="180" cy="150" r="3" fill="#ffd87a"/>
+            <circle cx="240" cy="110" r="3" fill="#ffd87a"/>
+            <text x="120" y="200" fill="#dcdcdc" font-size="12" text-anchor="middle">ز=1</text>
+            <text x="180" y="160" fill="#dcdcdc" font-size="12" text-anchor="middle">ز=2</text>
+            <text x="240" y="120" fill="#dcdcdc" font-size="12" text-anchor="middle">ز=3</text>
+            <text x="460" y="40" fill="#ffd87a" font-size="13" text-anchor="middle">حركة منتظمة — خط مائل</text>
+          </svg>
+          <div class="graph-caption">رسم بياني (المسافة مقابل الزمن) للحركة المنتظمة — مستقيم مائل</div>
+        </div>
+
+        <!-- Speed-Time (خط أفقي لسرعة ثابتة) -->
+        <div class="graph-card" aria-hidden="false">
+          <svg width="100%" height="220" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="رسم بياني السرعة مقابل الزمن">
+            <rect x="30" y="20" width="540" height="230" fill="#071011"/>
+            <line x1="60" y1="230" x2="540" y2="230" stroke="#8b8b8b" stroke-width="1"/>
+            <line x1="60" y1="230" x2="60" y2="30" stroke="#8b8b8b" stroke-width="1"/>
+            <text x="300" y="260" fill="#e6d8a0" font-size="13" text-anchor="middle">الزمن (س)</text>
+            <text transform="translate(18,150) rotate(-90)" fill="#e6d8a0" font-size="13" text-anchor="middle">السرعة (م/ث أو كم/س)</text>
+            <!-- horizontal constant speed -->
+            <line x1="70" y1="120" x2="510" y2="120" stroke="#70d77b" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="70" cy="120" r="3" fill="#70d77b"/>
+            <circle cx="510" cy="120" r="3" fill="#70d77b"/>
+            <text x="300" y="100" fill="#dcdcdc" font-size="13" text-anchor="middle">سرعة ثابتة (منتظمة)</text>
+            <!-- small ticks -->
+            <g stroke="#2c2c2c" stroke-width="0.8">
+              <line x1="120" y1="230" x2="120" y2="234"/>
+              <line x1="240" y1="230" x2="240" y2="234"/>
+              <line x1="360" y1="230" x2="360" y2="234"/>
+              <line x1="480" y1="230" x2="480" y2="234"/>
+            </g>
+          </svg>
+          <div class="graph-caption">رسم بياني (السرعة مقابل الزمن) للحركة المنتظمة — خط أفقي (سرعة ثابتة)</div>
+        </div>
+      </div>
+      <p style="margin-top:10px;color:var(--muted)">ملاحظة: الرسوم السابقة ثابتة توضيحية لحالة الحركة المنتظمة — لا تتغير عند الحسابات.</p>
+    </article>
+
+    <!-- Calculator: separate, does not affect graphs -->
+    <article class="card" id="calculator">
+      <h2>حاسبة السرعة / المسافة / الزمن</h2>
+      <p>املأ خليتين واترك الثالثة فارغة، واضغط "احسب" — سيظهر الناتج بدون تغيير أي رسم.</p>
+
+      <div class="calc-grid">
+        <div>
+          <label for="distance">المسافة (ف) — بالمتر أو الكيلومتر</label>
+          <input id="distance" type="number" inputmode="decimal" min="0" step="any" placeholder="أدخل المسافة (مثال: 100 أو 2.5)" />
+          <small style="color:var(--muted)">أكتب الوحدة بجوار النتيجة إن احتجت (م أو كم)</small>
+        </div>
+
+        <div>
+          <label for="speed">السرعة (ع) — م/ث أو كم/س</label>
+          <input id="speed" type="number" inputmode="decimal" min="0" step="any" placeholder="أدخل السرعة (مثال: 25 أو 60)" />
+        </div>
+
+        <div>
+          <label for="time">الزمن (ز) — بالثانية أو بالساعة</label>
+          <input id="time" type="number" inputmode="decimal" min="0" step="any" placeholder="أدخل الزمن (مثال: 4 أو 1.5)" />
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button id="computeBtn">احسب</button>
+        <button class="ghost" id="clearBtn">مسح الحقول</button>
+        <button class="ghost" id="helpBtn">طريقة الاستخدام</button>
+      </div>
+
+      <div class="result" id="calcResult" aria-live="polite"></div>
+      <p style="margin-top:10px;color:var(--muted)">مثال: إذا كانت المسافة 100 م والزمن 4 ث، فالع = 100 ÷ 4 = 25 م/ث.</p>
+    </article>
+
+    <!-- Examples and exercises -->
+    <article class="card" id="examples">
+      <h2>أمثلة محلولة سريعة</h2>
+      <ol>
+        <li>مثال 1: سيارة تقطع 150 كم في 3 س ـ ما سرعتها؟<br>
+            الحل: ع = ف ÷ ز = 150 ÷ 3 = 50 كم/س.</li>
+        <li>مثال 2: طائرة سرعتها 800 كم/س، ما الزمن لقطع 4000 كم؟<br>
+            الحل: ز = ف ÷ ع = 4000 ÷ 800 = 5 س.</li>
+        <li>مثال 3: متسابق قطع 200 م في 20 ث. ما سرعته بالم/ث؟<br>
+            الحل: ع = 200 ÷ 20 = 10 م/ث.</li>
+      </ol>
+    </article>
+
+    <!-- Tips / accessibility -->
+    <article class="card" id="tips">
+      <h2>نصائح وتعليمات بسيطة</h2>
+      <ul>
+        <li>استخدم نفس الوحدات للمسافة والزمن (م مع ث، أو كم مع س) قبل حساب السرعة.</li>
+      </ul>
+    </article>
+
+   
+  </div>
+
+  <script>
+    // Simple calculator script (does NOT modify graphs)
+    (function(){
+      const distanceEl = document.getElementById('distance');
+      const speedEl = document.getElementById('speed');
+      const timeEl = document.getElementById('time');
+      const resEl = document.getElementById('calcResult');
+      const computeBtn = document.getElementById('computeBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const helpBtn = document.getElementById('helpBtn');
+
+      function isFilled(el){ return el.value !== ''; }
+      function parseVal(el){ return el.value === '' ? null : parseFloat(el.value); }
+
+      computeBtn.addEventListener('click', () => {
+        const f = parseVal(distanceEl);
+        const v = parseVal(speedEl);
+        const t = parseVal(timeEl);
+
+        // count filled
+        const filled = [f,v,t].filter(x => x !== null).length;
+        if(filled < 2){
+          resEl.textContent = 'من فضلك املأ خانتين على الأقل (المسافة والسرعة أو المسافة والزمن أو السرعة والزمن).';
+          return;
+        }
+
+        // Cases
+        if(f === null){
+          // f = v * t
+          if(v === null || t === null){ resEl.textContent = 'خطأ في الحساب. تأكد من القيم.'; return; }
+          const result = v * t;
+          resEl.innerHTML = 'المسافة = السرعة × الزمن = <strong>' + result + '</strong> (استخدم نفس الوحدات، مثال: م أو كم).';
+          return;
+        }
+        if(v === null){
+          // v = f / t
+          if(t === null || t === 0){ resEl.textContent = 'الزمن مطلوب وغير صفري لحساب السرعة.'; return; }
+          const result = f / t;
+          resEl.innerHTML = 'السرعة = المسافة ÷ الزمن = <strong>' + result + '</strong> (استخدم نفس الوحدات، مثال: م/ث أو كم/س).';
+          return;
+        }
+        if(t === null){
+          // t = f / v
+          if(v === 0){ resEl.textContent = 'السرعة لا يمكن أن تكون صفرًا لحساب الزمن.'; return; }
+          const result = f / v;
+          resEl.innerHTML = 'الزمن = المسافة ÷ السرعة = <strong>' + result + '</strong> (استخدم نفس الوحدات، مثال: ث أو س).';
+          return;
+        }
+
+        // if all three provided, check consistency
+        const approx = Math.abs((f) - (v * t)) <= Math.max(1e-6, 0.001 * Math.abs(f));
+        if(approx){
+          resEl.innerHTML = 'القيم متوافقة: <strong>ف = ' + f + '</strong> ، <strong>ع = ' + v + '</strong> ، <strong>ز = ' + t + '</strong>.';
+        } else {
+          resEl.innerHTML = 'القيم المدخلة غير متوافقة (لأن ف ≠ ع × ز). تحقق من الوحدات والقيم.';
+        }
+      });
+
+      clearBtn.addEventListener('click', () => {
+        distanceEl.value = '';
+        speedEl.value = '';
+        timeEl.value = '';
+        resEl.textContent = '';
+      });
+
+      helpBtn.addEventListener('click', () => {
+        resEl.innerHTML = 'مثال: لإيجاد السرعة عندما ف=100 م و ز=4 ث اضغط احسب. النتيجة ستكون ع=25 م/ث. لتغيير الوحدات: استعمل نفس الوحدة للمسافة والزمن (مثلاً كم مع س أو م مع ث).';
+      });
+
+      // Accessibility: enter key to compute if focused in inputs
+      [distanceEl, speedEl, timeEl].forEach(input => {
+        input.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter') computeBtn.click();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار تفاعلي</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #111, #222);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 25px 30px;
+      width: 90%;
+      max-width: 550px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      margin-top: 40px;
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #00ffb3;
+      letter-spacing: 1px;
+    }
+    .question {
+      background: rgba(255,255,255,0.05);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      transition: 0.3s;
+    }
+    .question:hover { background: rgba(255,255,255,0.08); }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 6px 0;
+      cursor: pointer;
+    }
+    .option input { accent-color: #00ffb3; }
+    .option.correct { background: rgba(0,255,128,0.1); border-left: 4px solid #00ff88; }
+    .option.wrong { background: rgba(255,0,76,0.1); border-left: 4px solid #ff004c; }
+    .btn {
+      display: block;
+      background: #00ffb3;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      margin: 15px auto;
+      font-weight: bold;
+      cursor: pointer;
+      color: #000;
+      font-size: 17px;
+      transition: 0.3s;
+    }
+    .btn:hover { background: #00cc8c; }
+    .timer {
+      text-align: center;
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      color: #00ffb3;
+      margin-bottom: 10px;
+    }
+    .result {
+      text-align: center;
+      font-size: 22px;
+      color: #fff;
+      margin-top: 20px;
+    }
+    .old-result {
+      text-align: center;
+      font-size: 16px;
+      color: #ffbb00;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Exam on Unit 3 Vocabulary</h2>
+    <div id="timer" class="timer">الوقت: 10:00</div>
+    <div id="welcome">جارٍ التحقق من الحساب...</div>
+    <div id="quizBox" style="display:none">
+        <!-- UNIT: Artificial Intelligence -->
+
+<div class="question" data-correct="4">
+  <p>1. The ..... is a machine that can move and perform tasks.</p>
+  <label class="option"><input type="radio" name="q1" value="1">robot</label>
+  <label class="option"><input type="radio" name="q1" value="2">computer</label>
+  <label class="option"><input type="radio" name="q1" value="3">brain</label>
+  <label class="option"><input type="radio" name="q1" value="4">program</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>2. ..... Intelligence is the "brain" that allows machines to learn and make decisions.</p>
+  <label class="option"><input type="radio" name="q2" value="1">Human</label>
+  <label class="option"><input type="radio" name="q2" value="2">Natural</label>
+  <label class="option"><input type="radio" name="q2" value="3">Artificial</label>
+  <label class="option"><input type="radio" name="q2" value="4">Simple</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>3. AI is a form of ..... that allows computers to learn and think.</p>
+  <label class="option"><input type="radio" name="q3" value="1">emotion</label>
+  <label class="option"><input type="radio" name="q3" value="2">limit</label>
+  <label class="option"><input type="radio" name="q3" value="3">technology</label>
+  <label class="option"><input type="radio" name="q3" value="4">behavior</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>4. You can ..... a song or a story using your imagination.</p>
+  <label class="option"><input type="radio" name="q4" value="1">compose</label>
+  <label class="option"><input type="radio" name="q4" value="2">destroy</label>
+  <label class="option"><input type="radio" name="q4" value="3">limit</label>
+  <label class="option"><input type="radio" name="q4" value="4">behave</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>5. The creation of new ideas and methods is called .....</p>
+  <label class="option"><input type="radio" name="q5" value="1">pollution</label>
+  <label class="option"><input type="radio" name="q5" value="2">innovation</label>
+  <label class="option"><input type="radio" name="q5" value="3">option</label>
+  <label class="option"><input type="radio" name="q5" value="4">emotion</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>6. AI is used in hospitals to bring ..... to patients.</p>
+  <label class="option"><input type="radio" name="q6" value="1">food</label>
+  <label class="option"><input type="radio" name="q6" value="2">books</label>
+  <label class="option"><input type="radio" name="q6" value="3">medicine</label>
+  <label class="option"><input type="radio" name="q6" value="4">flowers</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>7. AI can create pictures, songs and even .....</p>
+  <label class="option"><input type="radio" name="q7" value="1">robots</label>
+  <label class="option"><input type="radio" name="q7" value="2">stories</label>
+  <label class="option"><input type="radio" name="q7" value="3">humans</label>
+  <label class="option"><input type="radio" name="q7" value="4">schools</label>
+</div>
+
+<div class="question" data-correct="4">
+  <p>8. One benefit of AI is that it reduces human's .....</p>
+  <label class="option"><input type="radio" name="q8" value="1">intelligence</label>
+  <label class="option"><input type="radio" name="q8" value="2">creativity</label>
+  <label class="option"><input type="radio" name="q8" value="3">work</label>
+  <label class="option"><input type="radio" name="q8" value="4">errors</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>9. ..... is the way in which someone or something acts or responds.</p>
+  <label class="option"><input type="radio" name="q9" value="1">Emotion</label>
+  <label class="option"><input type="radio" name="q9" value="2">Behavior</label>
+  <label class="option"><input type="radio" name="q9" value="3">Limit</label>
+  <label class="option"><input type="radio" name="q9" value="4">Task</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>10. Feelings like happiness, sadness, anger, or fear are called .....</p>
+  <label class="option"><input type="radio" name="q10" value="1">innovations</label>
+  <label class="option"><input type="radio" name="q10" value="2">limits</label>
+  <label class="option"><input type="radio" name="q10" value="3">emotions</label>
+  <label class="option"><input type="radio" name="q10" value="4">tasks</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>11. The point where something stops or cannot go further is called .....</p>
+  <label class="option"><input type="radio" name="q11" value="1">task</label>
+  <label class="option"><input type="radio" name="q11" value="2">limit</label>
+  <label class="option"><input type="radio" name="q11" value="3">behavior</label>
+  <label class="option"><input type="radio" name="q11" value="4">emotion</label>
+</div>
+
+<div class="question" data-correct="4">
+  <p>12. "Advanced" is the opposite of "....."</p>
+  <label class="option"><input type="radio" name="q12" value="1">modern</label>
+  <label class="option"><input type="radio" name="q12" value="2">complex</label>
+  <label class="option"><input type="radio" name="q12" value="3">new</label>
+  <label class="option"><input type="radio" name="q12" value="4">undeveloped</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>13. AI makes life smarter and more ..... </p>
+  <label class="option"><input type="radio" name="q13" value="1">efficient</label>
+  <label class="option"><input type="radio" name="q13" value="2">global</label>
+  <label class="option"><input type="radio" name="q13" value="3">expensive</label>
+  <label class="option"><input type="radio" name="q13" value="4">boring</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>14. Artists are often very ..... people.</p>
+  <label class="option"><input type="radio" name="q14" value="1">basic</label>
+  <label class="option"><input type="radio" name="q14" value="2">limited</label>
+  <label class="option"><input type="radio" name="q14" value="3">creative</label>
+  <label class="option"><input type="radio" name="q14" value="4">robotic</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>15. The link between people, things or ideas is called .....</p>
+  <label class="option"><input type="radio" name="q15" value="1">surprise</label>
+  <label class="option"><input type="radio" name="q15" value="2">connection</label>
+  <label class="option"><input type="radio" name="q15" value="3">robot</label>
+  <label class="option"><input type="radio" name="q15" value="4">lesson</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>16. When you are feeling unsure or mixed up, then you are .....</p>
+  <label class="option"><input type="radio" name="q16" value="1">clear</label>
+  <label class="option"><input type="radio" name="q16" value="2">happy</label>
+  <label class="option"><input type="radio" name="q16" value="3">confused</label>
+  <label class="option"><input type="radio" name="q16" value="4">sure</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>17. To ..... means to change something to make it the way you want.</p>
+  <label class="option"><input type="radio" name="q17" value="1">ignore</label>
+  <label class="option"><input type="radio" name="q17" value="2">notice</label>
+  <label class="option"><input type="radio" name="q17" value="3">customize</label>
+  <label class="option"><input type="radio" name="q17" value="4">forget</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>18. Ahmed took Omar's place in the company. This means that Ahmed ..... him.</p>
+  <label class="option"><input type="radio" name="q18" value="1">supported</label>
+  <label class="option"><input type="radio" name="q18" value="2">replaced</label>
+  <label class="option"><input type="radio" name="q18" value="3">connected</label>
+  <label class="option"><input type="radio" name="q18" value="4">helped</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>19. "....." and "instantly" have the same meaning.</p>
+  <label class="option"><input type="radio" name="q19" value="1">Immediately</label>
+  <label class="option"><input type="radio" name="q19" value="2">Finally</label>
+  <label class="option"><input type="radio" name="q19" value="3">Slowly</label>
+  <label class="option"><input type="radio" name="q19" value="4">Later</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>20. A connection is a ..... between people or things.</p>
+  <label class="option"><input type="radio" name="q20" value="1">link</label>
+  <label class="option"><input type="radio" name="q20" value="2">gap</label>
+  <label class="option"><input type="radio" name="q20" value="3">wall</label>
+  <label class="option"><input type="radio" name="q20" value="4">problem</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>21. Hassan didn't catch the bus. He ..... it as he got up late.</p>
+  <label class="option"><input type="radio" name="q21" value="1">passed</label>
+  <label class="option"><input type="radio" name="q21" value="2">missed</label>
+  <label class="option"><input type="radio" name="q21" value="3">lost</label>
+  <label class="option"><input type="radio" name="q21" value="4">posted</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>22. I felt happy ..... the end of the film. It was a nice day.</p>
+  <label class="option"><input type="radio" name="q22" value="1">on</label>
+  <label class="option"><input type="radio" name="q22" value="2">at</label>
+  <label class="option"><input type="radio" name="q22" value="3">next to</label>
+  <label class="option"><input type="radio" name="q22" value="4">of</label>
+</div>
+
+
+    
+        
+      <button class="btn" id="showAnswers">إنهاء الاختبار</button>
+      <div id="result" class="result"></div>
+      <div id="oldResult" class="old-result"></div>
+    </div>
+  </div>
+
+  <!-- Firebase (v8) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+      authDomain: "my-web-c23de.firebaseapp.com",
+      projectId: "my-web-c23de",
+      storageBucket: "my-web-c23de.firebasestorage.app",
+      messagingSenderId: "846339445873",
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    const SUBJECT = "انجليزي تالته يونت تلاته كلمات";
+    const QUIZ_TIME = 10 * 60;
+    let totalSeconds = QUIZ_TIME, timer, userId, userEmail;
+
+    const timerDiv = document.getElementById("timer");
+    const welcome = document.getElementById("welcome");
+    const quizBox = document.getElementById("quizBox");
+    const resultDiv = document.getElementById("result");
+    const oldResultDiv = document.getElementById("oldResult");
+
+    // التحقق من المستخدم
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        userId = user.uid;
+        userEmail = user.email;
+        welcome.innerText = `مرحبًا ${user.displayName || ""} 👋`;
+        await checkOldResult();
+        setTimeout(() => {
+          welcome.style.display = "none";
+          quizBox.style.display = "block";
+          startTimer();
+        }, 1200);
+      } else {
+        welcome.innerText = "⚠️ قم بتسجيل الدخول أولًا.";
+      }
+    });
+
+    async function checkOldResult() {
+      const prev = await db.collection("results")
+        .where("uid", "==", userId)
+        .where("subject", "==", SUBJECT)
+        .get();
+      if (!prev.empty) {
+        const data = prev.docs[0].data();
+        oldResultDiv.innerText = `📋 لقد حللت هذا الامتحان من قبل: ${data.score} / ${data.total}`;
+      }
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        let m = Math.floor(totalSeconds / 60);
+        let s = totalSeconds % 60;
+        timerDiv.textContent = `الوقت المتبقي: ${m}:${s.toString().padStart(2, "0")}`;
+        if (totalSeconds <= 0) {
+          clearInterval(timer);
+          showResults();
+        }
+        totalSeconds--;
+      }, 1000);
+    }
+
+    async function showResults() {
+      clearInterval(timer);
+      const questions = document.querySelectorAll(".question");
+      let score = 0;
+
+      questions.forEach((q, i) => {
+        const correct = parseInt(q.dataset.correct);
+        const selected = q.querySelector(`input[name="q${i + 1}"]:checked`);
+        q.querySelectorAll(".option").forEach(opt => {
+          const val = parseInt(opt.querySelector("input").value);
+          if (val === correct) opt.classList.add("correct");
+          if (selected && parseInt(selected.value) === val && val !== correct) opt.classList.add("wrong");
+        });
+        if (selected && parseInt(selected.value) === correct) score++;
+      });
+
+      resultDiv.innerText = `نتيجتك: ${score} من ${questions.length}`;
+
+      try {
+        const prev = await db.collection("results")
+          .where("uid", "==", userId)
+          .where("subject", "==", SUBJECT)
+          .get();
+        const alreadyTaken = !prev.empty;
+
+        await db.collection("results").add({
+          uid: userId,
+          email: userEmail,
+          subject: SUBJECT,
+          score: score,
+          total: questions.length,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        if (!alreadyTaken) {
+          const userRef = db.collection("users").doc(userId);
+          await db.runTransaction(async (t) => {
+            const userDoc = await t.get(userRef);
+            const old = userDoc.exists && userDoc.data().score ? userDoc.data().score : 0;
+            t.set(userRef, { score: old + score }, { merge: true });
+          });
+          alert("✅ تم حفظ نتيجتك وتحديث مجموعك!");
+        } else {
+          alert("⚠️ لقد أجبت على هذا الامتحان من قبل — لم تُضف نتيجتك مجددًا.");
+        }
+      } catch (e) {
+        alert("⚠️ خطأ أثناء الإرسال: " + e.message);
+      }
+    }
+
+    document.getElementById("showAnswers").addEventListener("click", showResults);
+  </script>
+</body>
+</html>

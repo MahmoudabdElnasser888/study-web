@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>الحركة — السرعة والعجلة والتمثيل البياني</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f6fbf7;
+      --panel:#ffffff;
+      --accent:#2b9348; /* أخضر احترافي */
+      --muted:#45695a;
+      --glass: rgba(43,147,72,0.08);
+      --radius:12px;
+      --maxw:1100px;
+      --text:#0b2b1f;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Cairo',sans-serif;
+      background: linear-gradient(180deg, #f1f9f3 0%, #ecf7ef 100%);
+      color:var(--text);
+      padding:20px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      direction:rtl;
+      line-height:1.7;
+    }
+    .container{ max-width:var(--maxw); margin:0 auto; }
+    header{ text-align:center; margin-bottom:18px }
+    h1{ color:var(--accent); margin:6px 0; font-size:26px; font-weight:700 }
+    p.lead{ color:var(--muted); margin:6px 0 16px; font-size:15px }
+
+    .card{
+      background:var(--panel);
+      border-radius:var(--radius);
+      padding:18px;
+      margin-bottom:16px;
+      border:1px solid var(--glass);
+      box-shadow: 0 8px 20px rgba(13,50,34,0.05);
+    }
+
+    h2{ color:var(--accent); margin:4px 0 10px; font-size:20px }
+    h3{ color:#145a36; margin:8px 0; font-size:16px }
+    strong{ color:#0b3b28 }
+
+    ul{ padding-inline-start:18px; margin:8px 0 12px; color:var(--muted) }
+    li{ margin:6px 0 }
+
+    .examples{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px }
+    .ex{ background:linear-gradient(180deg,#f8fffb,#f1faf5); border-radius:10px; padding:10px; border:1px solid rgba(43,147,72,0.06); color:var(--text) }
+
+    .img-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:12px }
+    .img-wrap{ flex:1 1 240px; background:#fcfff9; border-radius:10px; padding:10px; border:1px dashed rgba(43,147,72,0.12); min-height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .img-wrap img{ max-width:100%; height:auto; border-radius:6px; display:block }
+    .img-caption{ margin-top:8px; color:var(--muted); font-size:13px; text-align:center }
+
+    table{ width:100%; border-collapse:collapse; margin-top:10px; font-size:14px }
+    th,td{ border:1px solid rgba(0,0,0,0.06); padding:8px; text-align:center; color:var(--text) }
+    th{ background:linear-gradient(90deg, rgba(43,147,72,0.07), rgba(43,147,72,0.03)); color:var(--accent) }
+
+    /* graph area */
+    .graphs{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; align-items:start }
+    .graph-card{ background:#fcfff9; border-radius:10px; padding:12px; border:1px solid rgba(43,147,72,0.06) }
+    svg{ width:100%; height:220px; display:block }
+
+    .tools{ display:flex; gap:8px; margin-top:10px; justify-content:flex-start; flex-wrap:wrap }
+    .input{ padding:8px 10px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); min-width:120px }
+    .btn{ background:var(--accent); color:white; padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:700 }
+
+    .note{ background:linear-gradient(180deg,#f2fff6,#ecfbf0); border-left:4px solid var(--accent); padding:10px; border-radius:8px; color:var(--muted); margin-top:10px }
+
+    @media (max-width:900px){
+      .examples{ grid-template-columns:1fr }
+      .graphs{ grid-template-columns:1fr }
+      .img-row{ flex-direction:column }
+    }
+
+    /* small typography helpers */
+    .muted{ color:var(--muted) }
+    .mono{ font-family:monospace, ui-monospace, monospace; background:rgba(0,0,0,0.02); padding:2px 6px; border-radius:6px }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>الحركة — السرعة، العجلة، والتمثيل البياني</h1>
+      <p class="lead">شرح مُرتب ومتكامل لكل مفاهيم الدرس: الحركة، السرعة المنتظمة وغير المنتظمة، السرعة المتوسطة، العجلة، والرسم البياني (مسافة-زمن، سرعة-زمن).</p>
+    </header>
+
+    <!-- INTRO -->
+    <article class="card" id="intro">
+      <h2>مفهوم الحركة وتعريفاتها</h2>
+      <p><strong>الحركة</strong> هي تغير موضع جسم بالنسبة إلى جسم آخر ثابت بمرور الزمن.</p>
+      <p><strong>الحركة في اتجاه واحد</strong> : يعني أن الجسم يتحرك في مسار واحد (قد يكون مستقيماً أو منحنياً). أبسطها الحركة في خط مستقيم — أمثلة: حركة القطار، حركة المترو.</p>
+
+     
+    </article>
+
+    <!-- SPEED -->
+    <article class="card" id="speed">
+      <h2>السرعة (Speed)</h2>
+      <h3>تعريف السرعة</h3>
+      <p>السرعة (ع) = <strong>المسافة (ف)</strong> ÷ <strong>الزمن (ز)</strong></p>
+      <p class="muted">وحدة السرعة تعتمد على وحدات المسافة والزمن؛ شائعة: <span class="mono">م/ث</span> أو <span class="mono">كم/س</span>.</p>
+
+      <h3>أمثلة سريعة</h3>
+      <div class="examples">
+        <div class="ex">
+          <strong>مثال 1</strong><br>
+          سيارة قطعت 100 م في 4 ثوانٍ. ما سرعتها؟<br>
+          الحل: ع = ف/ز = 100 ÷ 4 = <strong>25 م/ث</strong>.
+        </div>
+        <div class="ex">
+          <strong>مثال 2</strong><br>
+          سلحفاة تحركت بسرعة 2 سم/دقيقة لمدة 10 دقائق. المسافة؟<br>
+          ف = ع × ز = 2 × 10 = <strong>20 سم</strong>.
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>ملاحظة مهمة:</strong> السرعة مقدار (كم/س أو م/ث) تعبر عن المعدل الزمنى لتغير المسافة.
+      </div>
+    </article>
+
+    <!-- AVERAGE SPEED -->
+    <article class="card" id="avg-speed">
+      <h2>السرعة المتوسطة (Average Speed)</h2>
+      <p>تستخدم عندما تكون السرعة غير منتظمة. تُحسب هكذا:</p>
+      <p class="mono">السرعة المتوسطة (ع) = المسافة الكلية (ف) ÷ الزمن الكلي (ز)</p>
+      <p class="muted">مثال: سيارة قطعت 100 كم في 2.5 ساعة مع استراحات إجمالية مدتها 0.5 ساعة؛ الزمن الكلي = 3 ساعات → الع = 100 ÷ 3 ≈ 33.3 كم/س.</p>
+    </article>
+
+    <!-- REGULAR / NON REGULAR -->
+    <article class="card" id="regular">
+      <h2>السرعة المنتظمة وغير المنتظمة</h2>
+      <ul>
+        <li><strong>السرعة المنتظمة:</strong> الجسم يقطع مسافات متساوية في أزمنة متساوية.</li>
+        <li><strong>السرعة غير المنتظمة:</strong> الجسم يقطع مسافات غير متساوية في أزمنة متساوية (أو العكس).</li>
+      </ul>
+      <div class="note">عند السرعة المنتظمة: الرسم البياني (مسافة - زمن) يظهر كخط مستقيم مائل يمر بنقطة الأصل؛ أما (سرعة - زمن) فيظهر كخط أفقي.</div>
+    </article>
+
+    <!-- GRAPHS -->
+    <article class="card" id="graphs">
+      <h2>التمثيل البياني — أمثلة مرسومة (مسافة-زمن و سرعة-زمن)</h2>
+
+      <div class="graphs">
+        <div class="graph-card">
+          <h3>رسم: المسافة — الزمن (جسم بسرعة منتظمة)</h3>
+          <!-- SVG distance-time (خط مائل ثابت) -->
+          <svg viewBox="0 0 600 220" role="img" aria-label="رسم المسافة مقابل الزمن">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#eaf8ef"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+            </defs>
+            <rect x="0" y="0" width="100%" height="100%" fill="url(#g1)"></rect>
+            <!-- axes -->
+            <line x1="60" y1="30" x2="60" y2="190" stroke="#8fbf9a" stroke-width="2"/>
+            <line x1="60" y1="190" x2="560" y2="190" stroke="#8fbf9a" stroke-width="2"/>
+            <!-- ticks & labels (ز = الزمن على المحور الأفقي، ف = المسافة على العمودي) -->
+            <text x="50" y="22" font-size="12" fill="#145a36" text-anchor="middle">ف (م)</text>
+            <text x="560" y="208" font-size="12" fill="#145a36" text-anchor="end">ز (ث)</text>
+
+            <!-- grid labels -->
+            <g fill="#2b9348" font-size="11">
+              <text x="40" y="190" text-anchor="end">0</text>
+              <text x="40" y="150" text-anchor="end">20</text>
+              <text x="40" y="110" text-anchor="end">40</text>
+              <text x="40" y="70" text-anchor="end">60</text>
+            </g>
+
+            <!-- line (مثال: ف = 3*z) -->
+            <polyline points="60,190 160,150 260,110 360,70 460,30" fill="none" stroke="#0b6e3a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- points -->
+            <circle cx="160" cy="150" r="3" fill="#145a36"/>
+            <circle cx="260" cy="110" r="3" fill="#145a36"/>
+            <circle cx="360" cy="70" r="3" fill="#145a36"/>
+            <circle cx="460" cy="30" r="3" fill="#145a36"/>
+          </svg>
+          <p class="muted" style="margin-top:8px">ملاحظة: الخط المستقيم المائل يدل على سرعة منتظمة (ميل الخط = السرعة).</p>
+        </div>
+
+        <div class="graph-card">
+          <h3>رسم: السرعة — الزمن</h3>
+          <!-- SVG speed-time: ثابت ثم زيادة (مثال) -->
+          <svg viewBox="0 0 600 220" role="img" aria-label="رسم السرعة مقابل الزمن">
+            <rect x="0" y="0" width="100%" height="100%" fill="url(#g1)"></rect>
+            <line x1="60" y1="30" x2="60" y2="190" stroke="#8fbf9a" stroke-width="2"/>
+            <line x1="60" y1="190" x2="560" y2="190" stroke="#8fbf9a" stroke-width="2"/>
+            <text x="50" y="22" font-size="12" fill="#145a36" text-anchor="middle">ع (م/ث)</text>
+            <text x="560" y="208" font-size="12" fill="#145a36" text-anchor="end">ز (ث)</text>
+
+            <!-- axes ticks -->
+            <g fill="#2b9348" font-size="11">
+              <text x="40" y="190" text-anchor="end">0</text>
+              <text x="40" y="150" text-anchor="end">5</text>
+              <text x="40" y="110" text-anchor="end">10</text>
+              <text x="40" y="70" text-anchor="end">15</text>
+            </g>
+
+            <!-- piecewise speed: ثابت ثم يتزايد -->
+            <polyline points="60,110 200,110 350,80 500,40" fill="none" stroke="#0b6e3a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="200" cy="110" r="3" fill="#145a36"/>
+            <circle cx="350" cy="80" r="3" fill="#145a36"/>
+            <circle cx="500" cy="40" r="3" fill="#145a36"/>
+          </svg>
+          <p class="muted" style="margin-top:8px">مثال: جزء أفقي يعبر عن سرعة ثابتة، صعود في الخط يعبّر عن عجلة موجبة.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>كيف نقرأ الميل (slope) في رسم المسافة-زمن؟</strong>  
+        <br>ميل الخط (Δف/Δز) يساوي السرعة خلال تلك الفترة. مثال في الرسم أعلاه: إذا المسافة ازدادت من 20 إلى 80 م خلال 20 ثانية → ع = 60 ÷ 20 = 3 م/ث.
+      </div>
+    </article>
+
+    <!-- ACCELERATION -->
+    <article class="card" id="acceleration">
+      <h2>العجلة (Acceleration)</h2>
+      <p><strong>التعريف:</strong> العجلة (جـ) = التغير في السرعة ÷ الزمن الذي حدث فيه التغير.</p>
+      <p class="mono">جـ = (ع₂ - ع₁) ÷ (ز₂ - ز₁)</p>
+
+      <h3>أنواع العجلة</h3>
+      <ul>
+        <li>عجلة منتظمة موجبة: سرعة تزداد بمعدّل ثابت.</li>
+        <li>عجلة منتظمة سالبة: سرعة تقل بمعدّل ثابت (كفرملة).</li>
+        <li>عجلة صفر: السرعة ثابتة (حركة منتظمة).</li>
+      </ul>
+
+      <h3>أمثلة حسابية</h3>
+      <div class="examples">
+        <div class="ex">
+          <strong>مثال</strong><br>
+          قطار تقل سرعته من 40 م/ث إلى 0 م/ث بعجلة منتظمة مقدارها -8 م/ث². ما الزمن اللازم للتوقف؟<br>
+          الزمن: Δز = (ع₂ - ع₁) ÷ جـ = (0 - 40) ÷ -8 = 5 ثواني.
+        </div>
+        <div class="ex">
+          <strong>مثال 2</strong><br>
+          جسم بدأ من السكون ووصل إلى 20 م/ث خلال 4 ثوانٍ. ما العجلة؟<br>
+          جـ = (20 - 0) ÷ 4 = 5 م/ث².
+        </div>
+      </div>
+    </article>
+
+    <!-- ACTIVITY TABLE -->
+    <article class="card" id="activity">
+      <h2>نشاط عملي (جدول) — قياس السرعة</h2>
+      <p>يمكنك تسجيل قراءاتك في الجدول التالي عند إجراء النشاط العملي (مثال سيارة لعبة).</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>رقم القياس</th>
+            <th>المسافة f (م)</th>
+            <th>الزمن z (ث)</th>
+            <th>السرعة ع = f ÷ z (م/ث)</th>
+            <th>ملاحظات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td contenteditable>10</td><td contenteditable>0.4</td><td contenteditable>25</td><td contenteditable></td></tr>
+          <tr><td>2</td><td contenteditable>7.5</td><td contenteditable>0.6</td><td contenteditable>12.5</td><td contenteditable></td></tr>
+          <tr><td>3</td><td contenteditable>12</td><td contenteditable>1</td><td contenteditable>12</td><td contenteditable></td></tr>
+          <tr><td>4</td><td contenteditable>20</td><td contenteditable>4</td><td contenteditable>5</td><td contenteditable></td></tr>
+        </tbody>
+      </table>
+
+      <p class="muted" style="margin-top:8px">يمكنك تعديل الخانات مباشرة في المتصفح (خاصية contenteditable) ثم حساب السرعات وإدخالها.</p>
+    </article>
+
+    <!-- FORMULAS -->
+    <article class="card" id="formulas">
+      <h2>ملخص الصيغ (سريعة للنسخ)</h2>
+      <ul>
+        <li><strong>ع (السرعة)</strong> = ف ÷ ز</li>
+        <li><strong>ف (المسافة)</strong> = ع × ز</li>
+        <li><strong>ز (الزمن)</strong> = ف ÷ ع</li>
+        <li><strong>العجلة (جـ)</strong> = (ع₂ - ع₁) ÷ (ز₂ - ز₁)</li>
+        <li><strong>السرعة المتوسطة</strong> = المسافة الكلية ÷ الزمن الكلي</li>
+      </ul>
+
+      <div class="note">
+        <strong>تلميح عملي:</strong> احرص على توحيد الوحدات (مثلاً: متر وثانية أو كيلومتر وساعة) قبل الحساب.
+      </div>
+    </article>
+
+   
+  </div>
+
+  <script>
+    // صغير: حسبة تلقائية لأحد أمثلة الجدول — يحسب العمود الرابع (السرعة) إن كانت المسافة والزمن معطاة.
+    (function(){
+      const table = document.querySelector('#activity table');
+      if(!table) return;
+      const rows = Array.from(table.tBodies[0].rows);
+      function computeAll(){
+        rows.forEach(r=>{
+          const f = parseFloat(r.cells[1].textContent) || parseFloat(r.cells[1].innerText) || 0;
+          const z = parseFloat(r.cells[2].textContent) || parseFloat(r.cells[2].innerText) || 0;
+          const outCell = r.cells[3];
+          if(z !== 0) {
+            outCell.textContent = (f / z).toFixed(3);
+          } else {
+            outCell.textContent = '';
+          }
+        });
+      }
+      // recalc on click (user edits)
+      table.addEventListener('input', computeAll);
+      // initial compute
+      computeAll();
+    })();
+  </script>
+</body>
+</html>

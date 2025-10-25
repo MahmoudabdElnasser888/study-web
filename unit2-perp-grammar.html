@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Unit 1 — Grammar (Interactive)</title>
+  <title>Unit 2 — Past Perfect & Third Conditional</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
@@ -77,14 +77,14 @@
     .section-title .badge{ color:#000; background:var(--gold); padding:6px 8px; border-radius:8px; font-weight:700; font-size:13px }
 
     .rule{
-      padding:10px;
+      padding:12px;
       border-radius:10px;
       background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
       border:1px solid rgba(255,255,255,0.02);
-      margin-bottom:10px;
+      margin-bottom:12px;
     }
     .rule h3{ margin:0 0 8px; color:#ffd87a; font-size:15px }
-    .rule p{ margin:0; color:var(--muted); line-height:1.5; font-size:14px; text-align:right }
+    .rule p{ margin:0; color:var(--muted); line-height:1.6; font-size:14px; text-align:right }
 
     /* examples */
     .examples{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px }
@@ -120,7 +120,7 @@
       .examples{ grid-template-columns:1fr; }
     }
 
-    /* ===== Improved popup zoom styles ===== */
+    /* popup styles kept unchanged */
 .popup-zoom {
   position: fixed;
   inset: 0;
@@ -151,8 +151,6 @@
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   border:1px solid rgba(255,255,255,0.03);
 }
-
-/* image */
 .popup-zoom img {
   width: auto;
   height: auto;
@@ -165,14 +163,10 @@
   cursor: zoom-in;
   display:block;
 }
-
-/* zoomed state (toggle) */
 .popup-zoom img.zoomed {
   transform: scale(1.15);
   cursor: zoom-out;
 }
-
-/* caption */
 .popup-zoom .caption {
   position: absolute;
   bottom: 12px;
@@ -184,8 +178,6 @@
   opacity: .95;
   pointer-events: none;
 }
-
-/* spinner while loading */
 .popup-zoom .spinner {
   width:56px;
   height:56px;
@@ -196,8 +188,6 @@
   position:absolute;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* controls (circle buttons) */
 .popup-zoom .btn {
   position:absolute;
   background: rgba(0,0,0,0.45);
@@ -211,13 +201,7 @@
   backdrop-filter: blur(4px);
 }
 .popup-zoom .btn:hover { transform: translateY(-3px); background: rgba(218,165,32,0.12); color:#000; }
-
-/* close top-right (RTL visible top-right) */
-.popup-zoom .btn.close {
-  top:12px; right:12px; left:auto; font-size:22px;
-}
-
-/* prev / next side buttons inside container */
+.popup-zoom .btn.close { top:12px; right:12px; left:auto; font-size:22px; }
 .popup-zoom .btn.prev { left: 8px; top: 50%; transform: translateY(-50%); width:48px; height:48px; font-size:20px; }
 .popup-zoom .btn.next { right: 8px; top: 50%; transform: translateY(-50%); width:48px; height:48px; font-size:20px; }
 
@@ -233,176 +217,133 @@
 <body>
   <div class="container">
     <header>
-      <h1>Grammar — الوحدة 1 (Present Perfect & Related Usage)</h1>
-      <p class="lead">الشرح كما في الصور الثلاث — عرض حرفي للصور أولاً، ثم الشرح المصقول، وأخيرًا اختبار تفاعلي صغير عشان تثبت المعلومة.</p>
+      <h1>Grammar — الوحدة 2 (Past Perfect & Third Conditional)</h1>
+      <p class="lead">شرح مبسّط للـ Past Perfect والحالة الشرطية الثالثة مع أمثلة وملاحظات واختبار تفاعلي.</p>
     </header>
 
-    <!-- IMAGES CARD -->
-    <div class="card">
-      <div class="section-title">
-        <h2>الصور الأصلية للقواعد (انظر بدقة)</h2>
-        <div class="badge">Original</div>
-      </div>
+    
 
-      <div class="images" aria-hidden="false">
-        <div class="img-wrap"><img src="gram4.jpg" alt="grammar image 1" tabindex="0"><div class="img-caption">الصورة 1</div></div>
-        <div class="img-wrap"><img src="gram1.jpg" alt="grammar image 2" tabindex="0"><div class="img-caption">الصورة 2</div></div>
-        <div class="img-wrap"><img src="gram2.jpg" alt="grammar image 3" tabindex="0"><div class="img-caption">الصورة 3</div></div>
-        <div class="img-wrap"><img src="gram3.jpg" alt="grammar image 4" tabindex="0"><div class="img-caption">الصورة 4</div></div>
-      </div>
-
-      <p style="color:var(--muted);margin-top:10px;font-size:13px;text-align:left">الجرامر من كتاب المعاصر</p>
-    </div>
-
-    <!-- EXTRACTED & FORMATTED GRAMMAR -->
+    <!-- FORMATTED GRAMMAR: Past Perfect -->
     <div class="card" id="formatted">
-      <div class="section-title"><h2>الشرح المنسق والمفصّل (كما في الصور)</h2><div class="badge">Text</div></div>
+      <div class="section-title"><h2>1. Past Perfect (التام للماضي)</h2><div class="badge">Formation</div></div>
 
-      <!-- SECTION: FORM (Present Perfect) -->
-      <div class="rule" id="form">
-        <h3>1. الشكل (Form) — Present Perfect</h3>
+      <div class="rule">
+        <h3>التكوين (Formation)</h3>
         <p>
-          المضارع التام يُكوَّن من: <strong>have / has + past participle</strong>.<br>
-          أمثلة (affirmative):<br>
+          تركيب الجملة الإيجابية: <strong>Subject + had + past participle (p.p.)</strong>.<br>
+          مثال: <em>He had done his homework before he watched TV.</em><br>
+          الجملة السلبية: <strong>Subject + hadn't + past participle</strong>.<br>
+          سؤال: <strong>Had + subject + past participle?</strong>
         </p>
         <div class="examples">
-          <div class="ex"><strong>She has lived</strong> here for two years. — عاشت هنا لمدة عامين.</div>
-          <div class="ex"><strong>They have finished</strong> their homework. — أنهوا واجبهم.</div>
+          <div class="ex"><strong>He had done</strong> his homework before he watched TV. — كان قد أنهى واجبه قبل أن يشاهد التلفاز.</div>
+          <div class="ex"><strong>They had had</strong> their lunch by the time we arrived. — كانوا قد تناولوا غداءهم عندما وصلنا.</div>
         </div>
       </div>
 
-      <!-- SECTION: NEGATIVE -->
-      <div class="rule" id="negative">
-        <h3>2. النفي (Negative)</h3>
+      <div class="rule">
+        <h3>الاستخدام (Usage)</h3>
         <p>
-          ضع <strong>not</strong> بعد have/has: <strong>have/has not + past participle</strong>.<br>
+          نستخدم الـ <strong>Past Perfect</strong> للحديث عن حدث حدث <em>قبل</em> حدث آخر في الماضي. أي: "فعلة أ" حدثت ثم "فعلة ب" — نضع الأولى في Past Perfect.
+        </p>
+        <p>
+          كلمات ربط شائعة: <strong>after, before, by the time, as soon as, until, when</strong>.<br>
+          مثال: <em>I went to the cinema after I had completed my work.</em> — ذهبت إلى السينما بعدما أنهيت عملي.
+        </p>
+      </div>
+
+      <div class="rule">
+        <h3>ملاحظات / Passive و Past Participle</h3>
+        <p>
+          التصريف الثالث (past participle) ضروري: <em>write — written, eat — eaten, go — gone</em>.<br>
+          للمبني للمجهول في الماضي التام: <strong>had + been + past participle</strong> — مثال: <em>The work had been done.</em>
+        </p>
+      </div>
+
+      <hr style="border:0;border-top:1px dashed rgba(255,255,255,0.04);margin:12px 0">
+
+      <!-- THIRD CONDITIONAL -->
+      <div class="section-title" style="margin-top:8px"><h2>2. The Third Conditional (الحالة الشرطية الثالثة)</h2><div class="badge">Formation & Uses</div></div>
+
+      <div class="rule">
+        <h3>التكوين (Formation)</h3>
+        <p>
+          تركيب الشرط الثالث: <br>
+          <strong>If + subject + had + past participle, subject + would/could/might + have + past participle</strong>.<br>
           أمثلة:<br>
-        </p>
-        <div class="examples">
-          <div class="ex"><strong>He has not finished</strong> yet. — لم ينهِ بعد.</div>
-          <div class="ex"><strong>We have not seen</strong> that film. — لم نشاهد ذلك الفيلم.</div>
-        </div>
-      </div>
-
-      <!-- SECTION: QUESTIONS -->
-      <div class="rule" id="questions">
-        <h3>3. الأسئلة (Interrogative)</h3>
-        <p>
-          ضع have/has في بداية الجملة: <strong>Have/Has + subject + past participle?</strong><br>
-          أمثلة:<br>
-        </p>
-        <div class="examples">
-          <div class="ex"><strong>Have you finished</strong> your work? — هل أنهيت عملك؟</div>
-          <div class="ex"><strong>Has she arrived</strong> yet? — هل وصلت؟</div>
-        </div>
-      </div>
-
-      <!-- SECTION: USES -->
-      <div class="rule" id="uses">
-        <h3>4. متى نستخدم Present Perfect؟ (Uses)</h3>
-        <p>
-          - لأحداث بدأت في الماضي ومازالت مستمرة حتى الآن: <em>She has lived here for 5 years.</em><br>
-          - لأعمال تمت في وقت غير محدد في الماضي ذات تأثير على الحاضر: <em>I have lost my keys.</em><br>
-          - مع كلمات مثل <strong>ever, never, already, yet, just, recently, so far, up to now</strong>.<br>
+          <em>If I had studied harder, I would have passed the test.</em><br>
+          أو بديل: <em>If they hadn't slept early, they would have missed their flight.</em>
         </p>
       </div>
 
-      <!-- SECTION: FOR / SINCE -->
-      <div class="rule" id="for-since">
-        <h3>5. For / Since</h3>
+      <div class="rule">
+        <h3>الاستخدام (Usage)</h3>
         <p>
-          - <strong>for</strong> + مدة زمنية (for two months, for years).<br>
-          - <strong>since</strong> + نقطة بداية (since 2019, since Monday).<br>
-          مثال: <em>He has worked here <strong>for</strong> three years.</em><br>
-          مثال: <em>She has known him <strong>since</strong> 2010.</em>
+          1) لتوضيح موقف خيالي أو نتيجة مختلفة كانت ممكنة لكن لم تحدث في الماضي (imaginary past):<br>
+          — <em>We would have bought a new house if we had moved to Canada.</em><br><br>
+          2) للتعبير عن الندم أو الفرص الضائعة:<br>
+          — <em>If I hadn't been nervous, I would have got the job.</em><br><br>
+          3) للتعبير عن الأعذار أو الاعتذارات (excuses):<br>
+          — <em>If you had told me about the concert, I would have come.</em>
         </p>
       </div>
 
-      <!-- SECTION: YET / ALREADY / JUST -->
-      <div class="rule" id="yet-already">
-        <h3>6. Yet / Already / Just</h3>
+      <div class="rule">
+        <h3>ملاحظات مهمة</h3>
         <p>
-          - <strong>yet</strong> (في الجمل السلبية والأسئلة) يأتي غالبًا في نهاية الجملة: <em>Have you finished yet?</em> / <em>I haven't finished yet.</em><br>
-          - <strong>already</strong> (إيجابي) يأتي بين have/has وpast participle أو في نهاية الجملة: <em>She has already eaten.</em><br>
-          - <strong>just</strong> (مؤخرًا) يأتي بين have/has وpast participle: <em>They have just left.</em>
-        </p>
-      </div>
-
-      <!-- SECTION: EVER / NEVER -->
-      <div class="rule" id="ever-never">
-        <h3>7. Ever / Never</h3>
-        <p>
-          - <strong>ever</strong> للسؤال عن التجارب في أي وقت: <em>Have you ever been to London?</em><br>
-          - <strong>never</strong> للنفي: <em>I have never seen that movie.</em>
-        </p>
-      </div>
-
-      <!-- SECTION: Passive / Past participle usage -->
-      <div class="rule" id="passive">
-        <h3>8. التصريف الثالث / Passive (ملاحظات)</h3>
-        <p>
-          - التصريف الثالث (Past Participle) مهم هنا: مثال: <em>write — written, eat — eaten, go — gone</em>.<br>
-          - يُستخدم أيضاً مع المبني للمجهول (Passive) بتركيب: <strong>have/has + been + past participle</strong>.<br>
-          مثال: <em>The work has been done.</em>
-        </p>
-      </div>
-
-      <!-- EXTRA: common mistakes -->
-      <div class="rule" id="common-errors">
-        <h3>9. أخطاء شائعة يجب تجنّبها</h3>
-        <p>
-          - لا تخلط بين <strong>past simple</strong> (I saw him yesterday) و<strong>present perfect</strong> (I have seen him) — استخدم past simple مع زمان محدد في الماضي.<br>
-          - لا تستخدم كلمات زمن محددة مثل <em>yesterday, last year, in 2010</em> مع present perfect.
+          - الشرط الثالث يتعامل دائمًا مع مواقف ماضية لا يمكن تغييرها الآن.<br>
+          - لا نستخدم أفعال زمنية محددة (present simple) في الجملة الشرطية هذه إلا ضمن تركيبها الصحيح.<br>
+          - يمكن استعمال <strong>wouldn't/couldn't/mightn't + have + p.p.</strong> في الجملة الرئيسية لنفي/إظهار احتمال.
         </p>
       </div>
 
     </div>
 
-    <!-- QUIZ SECTION -->
+    <!-- QUIZ SECTION (updated for new grammar) -->
     <div class="card quiz" id="quizSection">
-      <div class="section-title"><h2>اختبر نفسك — Quiz</h2><div class="badge">Interactive</div></div>
+      <div class="section-title"><h2>اختبر نفسك — Quiz (Past Perfect & Third Conditional)</h2><div class="badge">Interactive</div></div>
 
-      <!-- Question 1 -->
-      <div class="question" data-answer="c">
-        <h4>1) Choose the correct form: "She ___ here for five years."</h4>
-        <div class="choices">
-          <div class="choice" data-key="a">is living</div>
-          <div class="choice" data-key="b">lived</div>
-          <div class="choice" data-key="c">has lived</div>
-          <div class="choice" data-key="d">was living</div>
-        </div>
-      </div>
-
-      <!-- Question 2 -->
+      <!-- Q1: Past Perfect formation -->
       <div class="question" data-answer="b">
-        <h4>2) Choose the correct sentence:</h4>
+        <h4>1) Choose the correct form: "By the time we arrived, they ___ dinner."</h4>
         <div class="choices">
-          <div class="choice" data-key="a">I have seen him yesterday.</div>
-          <div class="choice" data-key="b">I saw him yesterday.</div>
-          <div class="choice" data-key="c">I have saw him yesterday.</div>
-          <div class="choice" data-key="d">I has seen him yesterday.</div>
+          <div class="choice" data-key="a">have finished</div>
+          <div class="choice" data-key="b">had finished</div>
+          <div class="choice" data-key="c">finished</div>
+          <div class="choice" data-key="d">were finishing</div>
         </div>
       </div>
 
-      <!-- Question 3 -->
+      <!-- Q2: Negative Past Perfect -->
+      <div class="question" data-answer="c">
+        <h4>2) Choose the correct negative sentence:</h4>
+        <div class="choices">
+          <div class="choice" data-key="a">They not had left.</div>
+          <div class="choice" data-key="b">They haven't left.</div>
+          <div class="choice" data-key="c">They hadn't left.</div>
+          <div class="choice" data-key="d">They didn't have left.</div>
+        </div>
+      </div>
+
+      <!-- Q3: Third conditional -->
       <div class="question" data-answer="a">
-        <h4>3) "Have you ___ to Paris?"</h4>
+        <h4>3) Complete the sentence (Third conditional): "If I ___ earlier, I would have helped you."</h4>
         <div class="choices">
-          <div class="choice" data-key="a">ever been</div>
-          <div class="choice" data-key="b">been ever</div>
-          <div class="choice" data-key="c">ever gone</div>
-          <div class="choice" data-key="d">gone ever</div>
+          <div class="choice" data-key="a">had arrived</div>
+          <div class="choice" data-key="b">arrived</div>
+          <div class="choice" data-key="c">have arrived</div>
+          <div class="choice" data-key="d">was arriving</div>
         </div>
       </div>
 
-      <!-- Question 4 -->
+      <!-- Q4: Third conditional main clause -->
       <div class="question" data-answer="d">
-        <h4>4) "They ___ already ___ their lunch."</h4>
+        <h4>4) "If she had known about the test, she ___ it."</h4>
         <div class="choices">
-          <div class="choice" data-key="a">have / ate</div>
-          <div class="choice" data-key="b">have / eat</div>
-          <div class="choice" data-key="c">has / eaten</div>
-          <div class="choice" data-key="d">have / eaten</div>
+          <div class="choice" data-key="a">would pass</div>
+          <div class="choice" data-key="b">will have passed</div>
+          <div class="choice" data-key="c">has passed</div>
+          <div class="choice" data-key="d">would have passed</div>
         </div>
       </div>
 
@@ -414,7 +355,7 @@
       <div id="result" style="margin-top:12px;color:var(--muted);font-size:14px"></div>
     </div>
 
-    <!-- Improved Popup Zoom (place before footer inside .container) -->
+    <!-- popup zoom -->
     <div class="popup-zoom" id="popupZoom" aria-hidden="true" role="dialog" aria-label="Image zoom dialog">
       <div class="popup-inner" role="document">
         <div class="spinner" id="popupSpinner" aria-hidden="true" style="display:none;"></div>
@@ -427,10 +368,12 @@
         <div class="caption" id="popupCaption"></div>
       </div>
     </div>
+
+    
   </div>
 
   <script>
-    // Interactive quiz logic (lightweight)
+    // Interactive quiz logic
     (function(){
       const questions = Array.from(document.querySelectorAll('.question'));
       questions.forEach(q => {
@@ -450,7 +393,7 @@
           const selected = q.querySelector('.choice.selected');
           q.querySelectorAll('.choice').forEach(c => c.classList.remove('correct','wrong'));
           if(!selected){
-            // no selection -> mark all lightly
+            // no selection -> mark all lightly as wrong
             q.querySelectorAll('.choice').forEach(c => c.classList.add('wrong'));
           } else {
             const key = selected.getAttribute('data-key');
@@ -504,21 +447,18 @@
     currentIndex = (index + imgs.length) % imgs.length;
     const src = imgs[currentIndex].currentSrc || imgs[currentIndex].src || imgs[currentIndex].getAttribute('data-src');
     const alt = imgs[currentIndex].alt || ('Image ' + (currentIndex+1));
-    // show popup
     popup.classList.add('open');
     popup.setAttribute('aria-hidden','false');
     document.body.style.overflow = 'hidden';
-    // load image with spinner
     setLoading(true);
     popupImg.classList.remove('zoomed');
     isZoomed = false;
-    popupImg.src = ''; // reset to force load
+    popupImg.src = '';
     popupCaption.textContent = alt;
     const loader = new Image();
     loader.onload = function(){
       popupImg.src = src;
       setLoading(false);
-      // focus close button for accessibility
       btnClose.focus();
     };
     loader.onerror = function(){
@@ -552,17 +492,14 @@
     });
   });
 
-  // events
   btnClose.addEventListener('click', closePopup);
   btnNext.addEventListener('click', (e)=>{ e.stopPropagation(); showNext(); });
   btnPrev.addEventListener('click', (e)=>{ e.stopPropagation(); showPrev(); });
 
-  // click outside image closes
   popup.addEventListener('click', (e) => {
     if(e.target === popup) closePopup();
   });
 
-  // double click or click image to toggle zoom (inside modal)
   popupImg.addEventListener('click', (e) => {
     if(popupImg.src){
       isZoomed = !isZoomed;
@@ -570,20 +507,15 @@
     }
   });
 
-  // keyboard navigation
   document.addEventListener('keydown', (e) => {
     if(!popup.classList.contains('open')) return;
     if(e.key === 'Escape') closePopup();
     else if(e.key === 'ArrowRight' || e.key === 'ArrowDown') showNext();
     else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') showPrev();
-    else if(e.key === '+' || e.key === '='){ // zoom in
-      isZoomed = true; popupImg.classList.add('zoomed');
-    } else if(e.key === '-' ){ // zoom out
-      isZoomed = false; popupImg.classList.remove('zoomed');
-    }
+    else if(e.key === '+' || e.key === '='){ isZoomed = true; popupImg.classList.add('zoomed'); }
+    else if(e.key === '-' ){ isZoomed = false; popupImg.classList.remove('zoomed'); }
   });
 
-  // support wheel to zoom in/out when hovering image (desktop)
   popupImg.addEventListener('wheel', function(e){
     if(!popup.classList.contains('open')) return;
     e.preventDefault();
@@ -591,7 +523,7 @@
     else { isZoomed = false; popupImg.classList.remove('zoomed'); }
   }, { passive:false });
 
-  // touch swipe support for mobile (left/right)
+  // touch swipe
   let startX = 0;
   let startY = 0;
   popup.addEventListener('touchstart', function(e){

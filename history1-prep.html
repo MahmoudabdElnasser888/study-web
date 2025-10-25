@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>الصراع بين العثمانيين والمماليك والصفويين</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#5c5959;
+      --panel:#0f0f0f;
+      --gold:rgb(132, 89, 189);
+      --muted:#ffffff;
+      --glass: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Cairo',sans-serif;
+      background:linear-gradient(135deg,var(--bg),#080808);
+      color:#fff;
+      padding:18px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      direction:rtl;
+      line-height:1.6;
+    }
+
+    header{ text-align:center; margin-bottom:12px }
+    h1{ color:var(--gold); margin:6px 0; font-size:22px; letter-spacing:0.6px; text-shadow:0 0 10px rgba(218,165,32,0.12) }
+    p.lead{ color:var(--muted); margin:6px 0 16px; font-size:14px }
+
+    .container{ max-width:1100px; margin:0 auto; }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      padding:14px;
+      margin-bottom:16px;
+      border:1px solid rgba(218,165,32,0.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    /* image gallery */
+    .images{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:12px;
+      align-items:start;
+    }
+    .img-wrap{
+      background:#070707;
+      padding:8px;
+      border-radius:10px;
+      overflow:hidden;
+      border:1px solid var(--glass);
+      text-align:center;
+    }
+    .img-wrap img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      touch-action: manipulation;
+    }
+    .img-caption{ text-align:center; color:var(--muted); font-size:13px; margin-top:8px }
+
+    /* content */
+    .section-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      margin: 8px 0 10px;
+    }
+    .section-title h2{ margin:0; color:var(--gold); font-size:18px }
+    .section-title .badge{ color:#000; background:var(--gold); padding:6px 8px; border-radius:8px; font-weight:700; font-size:13px }
+
+    .rule{
+      padding:12px;
+      border-radius:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+      border:1px solid rgba(255,255,255,0.02);
+      margin-bottom:12px;
+    }
+    .rule h3{ margin:0 0 8px; color:#ffd87a; font-size:15px }
+    .rule p{ margin:0; color:var(--muted); line-height:1.6; font-size:14px; text-align:right }
+
+    ul{ padding-inline-start:1.05rem; margin:8px 0 8px 0; }
+
+    /* responsive */
+    @media (max-width:900px){
+      .images{ grid-template-columns:1fr; }
+    }
+
+    /* popup styles (image zoom) */
+.popup-zoom {
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1400;
+  padding: 20px;
+  transition: opacity .25s ease;
+  background: linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.88));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.popup-zoom.open { display:flex; opacity:1; }
+
+.popup-zoom .popup-inner {
+  position: relative;
+  max-width: 1100px;
+  width: 92%;
+  max-height: 92%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.03);
+}
+.popup-zoom img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 10px;
+  object-fit: contain;
+  box-shadow: 0 28px 60px rgba(0,0,0,0.7), 0 0 30px rgba(218,165,32,0.08);
+  transition: transform .28s cubic-bezier(.2,.9,.3,1), filter .2s ease, opacity .2s ease;
+  cursor: zoom-in;
+  display:block;
+  opacity:0;
+  transform: scale(.98);
+}
+.popup-zoom.open img { opacity:1; transform: scale(1); }
+
+.popup-zoom img.zoomed {
+  transform: scale(1.15);
+  cursor: zoom-out;
+}
+.popup-zoom .caption {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  right: 16px;
+  color: #e6d8a0;
+  font-size: 14px;
+  text-align: center;
+  opacity: .95;
+  pointer-events: none;
+}
+.popup-zoom .spinner {
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  border:6px solid rgba(255,255,255,0.08);
+  border-top-color: rgba(218,165,32,0.95);
+  animation: spin .9s linear infinite;
+  position:absolute;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.popup-zoom .btn {
+  position:absolute;
+  background: rgba(0,0,0,0.45);
+  border:1px solid rgba(255,255,255,0.06);
+  color:#fff;
+  width:44px; height:44px;
+  border-radius:50%;
+  display:inline-flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  transition: transform .12s ease, background .12s ease;
+  backdrop-filter: blur(4px);
+}
+.popup-zoom .btn:hover { transform: translateY(-3px); background: rgba(218,165,32,0.12); color:#000; }
+.popup-zoom .btn.close { top:12px; right:12px; left:auto; font-size:22px; }
+.popup-zoom .btn.prev { left: 8px; top: 50%; transform: translateY(-50%); width:48px; height:48px; font-size:20px; }
+.popup-zoom .btn.next { right: 8px; top: 50%; transform: translateY(-50%); width:48px; height:48px; font-size:20px; }
+
+@media (max-width:900px){
+  .popup-zoom .popup-inner{ padding:8px; max-height:94vh; }
+  .popup-zoom img{ max-height:74vh; }
+  .popup-zoom .btn.prev { left:6px; }
+  .popup-zoom .btn.next { right:6px; }
+  .popup-zoom .btn.close { top:8px; right:8px; }
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>الصراع بين العثمانيين، المماليك والصفويين (أواخر القرن 15 — أوائل القرن 16)</h1>
+      <p class="lead">نص مُنسَّق قابِل للطباعة والعرض: شرح مُفصّل للأطراف، الأسباب، المعارك، والآثار في العالم الإسلامي ومصر.</p>
+    </header>
+
+    <!-- IMAGES / MAPS PLACEHOLDERS -->
+    <div class="card">
+      <div class="section-title">
+        <h2>صور وخرائط </h2>
+        <div class="badge">خرائط / صور</div>
+      </div>
+
+      <div class="images" aria-hidden="false">
+        <!-- استبدل src بملفات الصور الفعلية لديك مثل map_region.jpg أو battle_marjdabiq.jpg -->
+        <div class="img-wrap">
+          <img src="map.jpg" alt="خريطة المنطقة: تركيا، إيران، مصر والشام" tabindex="0">
+          <div class="img-caption">خريطة عامة للمنطقة</div>
+        </div>
+        <div class="img-wrap">
+          <img src="marj.jpg" alt="معركة مرج دابق" tabindex="0">
+          <div class="img-caption">معركة مرج دابق و الريدانية</div>
+        </div>
+
+      <p style="color:var(--muted);margin-top:10px;font-size:13px;text-align:left">.</p>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="card">
+      <div class="section-title"><h2>مقدمة عامة</h2><div class="badge">خلاصة</div></div>
+      <div class="rule">
+        <p>شهد العالم الإسلامي أواخر القرن الخامس عشر وأوائل القرن السادس عشر صراعًا حادًا بين ثلاث قوى أساسية: الدولة المملوكية في مصر، الدولة الصفوية في إيران، والدولة العثمانية في الأناضول. سنقدم تعريفًا مختصرًا لكل دولة ثم ننتقل إلى أسباب الصراع، أبرز المعارك ونتائجها، وتأثير ذلك على مصر.</p>
+      </div>
+
+      <div class="rule">
+        <h3>الدولة المملوكية</h3>
+        <p>قامت في مصر وشملت الشام والحجاز وجزءًا من ساحل شرق أفريقيا المطل على البحر الأحمر. في أواخر القرن 15 وبداية القرن 16 تعرضت الدولة المملوكية لأزمات:</p>
+        <ul>
+          <li><strong>أزمات مالية</strong> — السبب: اكتشاف طريق رأس الرجاء الصالح (1498م) وتحويل طرق التجارة البحرية، وهزيمة الأسطول المملوكي في معركة ديو (1509م).</li>
+          <li><strong>أزمات سياسية</strong> — السبب: صراعات داخلية بين أمراء المماليك، كثرة الفتن والثورات، واضطراب الأمن.</li>
+        </ul>
+        <p>كل ذلك أدى إلى إضعاف قوتها العسكرية والسياسية.</p>
+      </div>
+
+      <div class="rule">
+        <h3>الدولة الصفوية</h3>
+        <p>مركزها في بلاد فارس (إيران حالياً)، عاصمتها تبريز في بداياتها، وتأسست على يد إسماعيل الصفوي. كانت إحدى سمات الدولة الصفوية التحول إلى المذهب الشيعي رسمياً، وهي قوة هامة في الشرق الذي اصطدم به العثمانيون.</p>
+      </div>
+
+      <div class="rule">
+        <h3>الدولة العثمانية</h3>
+        <p>تأسَّت على يد عثمان بن أرطغرل، وامتد نفوذها على الأناضول ثم البلقان. مع بداية القرن السادس عشر، وتحت حكم السلطان سليم الأول، اتجهت الدولة العثمانية شرقًا واشتدت صراعاتها مع الصفويين ثم مع المماليك.</p>
+      </div>
+
+      <div class="rule">
+        <h3>اتجاه العثمانيين للشرق — دوافع</h3>
+        <ul>
+          <li>خوف من توسع القوى الأوروبية وتأثيرها الحضاري والعسكري.</li>
+          <li>الرغبة في السيطرة على مصر باعتبارها مركزًا مهمًا للعالم الإسلامي وطرق التجارة.</li>
+          <li>احتواء النفوذ الصفوي في الشرق وتأمين الحدود الجنوبية.</li>
+        </ul>
+      </div>
+
+      <div class="rule">
+        <h3>أهم المعارك والاستيلاء على الشام ومصر</h3>
+        <p>تحرك السلطان سليم الأول تجاه المماليك؛ اشتبك مع جيشهم عند مرج دابق ثم في صحراء العباسية (الريدانية) وصولًا إلى القاهرة:</p>
+        <ul>
+          <li><strong>معركة مرج دابق (أغسطس 1516)</strong>: التقى فيها العثمانيون بقيادة سليم الأول مع المماليك بقيادة السلطان الغوري، وكانت النتيجة هزيمة المماليك وسيطرة العثمانيين على الشام.</li>
+          <li><strong>معركة الريدانية (يناير 1517)</strong>: التقى الجيشان قرب القاهرة، وهزمت القوات المملوكية بقيادة طومان باي، ودخل العثمانيون القاهرة، وانتهت الدولة المملوكية لتصبح مصر ولاية عثمانية.</li>
+        </ul>
+      </div>
+
+      <div class="rule">
+        <h3>أسباب تفوق العثمانيين</h3>
+        <ul>
+          <li>ضعف الاستقرار الداخلي لدى المماليك والصراع على السلطة.</li>
+          <li>التفوق العسكري العثماني واستخدام أساليب قتال وأسلحة أحدث.</li>
+        </ul>
+      </div>
+
+      <div class="rule">
+        <h3>نتائج هزيمة المماليك</h3>
+        <ul>
+          <li>تحولت مصر من دولة مستقلة إلى ولاية عثمانية.</li>
+          <li>انتقلت الخلافة الدينية والسياسية (أمنيًا ومعنويًا) إلى العثمانيين؛ وأعلن سليم الأول نفسه الحامي للحرمين الشريفين.</li>
+          <li>سيطرة العثمانيين على العالم العربي في الاتجاهين الآسيوي والأفريقي.</li>
+        </ul>
+      </div>
+
+      <div class="rule">
+        <h3>خلاصة الجزء السياسي والعسكري</h3>
+        <p>الصراع أدى إلى إعادة تشكيل خارطة السلطة في العالم الإسلامي: صعود عثماني بامتلاك الشام ومصر، وضعف مماليك وانحسار النفوذ الصفوي في بعض المناطق أمام القوة العثمانية في تلك المرحلة.</p>
+      </div>
+    </div>
+
+    <!-- EGYPT UNDER OTTOMANS -->
+    <div class="card">
+      <div class="section-title"><h2>ملامح الحياة في مصر أثناء الحكم العثماني</h2><div class="badge">فترة حكم (~4 قرون)</div></div>
+
+      <div class="rule">
+        <h3>طبيعة الحكم</h3>
+        <p>استمر حكم العثمانيين لمصر نحو أربعة قرون، وكان حكمًا مركزيًا جامدًا في الأغلب. أدى هذا إلى عزلة نسبية لمصر عن التأثيرات الحضارية الحديثة في أوروبا.</p>
+      </div>
+
+      <div class="rule">
+        <h3>أولاً — الحياة السياسية</h3>
+        <p>قام العثمانيون بوضع نظام إداري مركزي تضمن هيئات عديدة:</p>
+        <ul>
+          <li><strong>الوالي (الباشا):</strong> نائب السلطان، مسؤوليته إرسال الضرائب وقيادة الجند عند الحاجة.</li>
+          <li><strong>الديوان:</strong> مجلس من كبار ضباط الحامية والموظفين والعلماء؛ مهمته رقابة الوالي ومتابعة شؤون الولاية.</li>
+          <li><strong>الحامية العثمانية:</strong> فرق عسكرية مهمتها حفظ النظام والدفاع عن الولاية.</li>
+          <li><strong>إدارة الأقاليم:</strong> أسندت كثيرًا لأمراء مماليك سابقين للحفاظ على توازن بين الوالي ورؤساء الحامية.</li>
+        </ul>
+        <p>ومن عوامل ضعف هذا النظام: قصر مدة حكم الولاة (سنة إلى ثلاث سنوات عادةً) وزيادة سلطة الديوان والحامية، مما خلق فرصة لبروز حركات انفصالية مثل حركة علي بك الكبير.</p>
+      </div>
+
+      <div class="rule">
+        <h3>حركة علي بك الكبير (مثال على الاستقلالية)</h3>
+        <p>في عام 1768 استقل علي بك الكبير فعليًا بحكم مصر، تحالف مع ظاهر العمر في الشام، وامتد نفوذه إلى الحجاز، وأرسل محمد بك أبو الدهب لغزو الشام. لكن عدم تنسيق الإنجازات مع السلطان العثماني أدى إلى فشل الحركة وإعادة مصر كولاية عثمانية تحت حكم محمد بك أبو الدهب.</p>
+      </div>
+
+      <div class="rule">
+        <h3>ثانيًا — الحياة الاقتصادية (الزراعة، الصناعة، التجارة)</h3>
+        <p>شهدت مصر تدهورًا اقتصاديًا خلال العصر العثماني:</p>
+        <ul>
+          <li><strong>الزراعة:</strong> الأرض ملك للدولة؛ نظام حق الانتفاع جعل للفلاحين حق الزرع فقط دون حق التصرف. مع ضعف الدولة وظهور نظام الالتزام انحدرت أوضاع الفلاحين بسبب كثرة الضرائب وإهمال الري.</li>
+          <li><strong>الصناعة:</strong> تدهورت الصناعات المحلية، إذ أُرسل أمهر الحرفيين إلى الأستانة وأصبحت الصناعات يدوية بسيطة ورديئة.</li>
+          <li><strong>التجارة:</strong> التجارة الداخلية والخارجية تراجعت بسبب تدهور الزراعة، شرطف الأمن على طرق التجارة، وتحويل الطرق بين الشرق والغرب عبر رأس الرجاء الصالح، ومنح الامتيازات للأجانب.</li>
+        </ul>
+      </div>
+
+      <div class="rule">
+        <h3>ثالثًا — الحياة الاجتماعية</h3>
+        <p>انقسم المجتمع المصري تقليديًا إلى فئتين رئيسيتين:</p>
+        <ul>
+          <li><strong>فئة الحكام:</strong> الأتراك العثمانيون والمماليك الذين تولا السلطة والإدارة والجيش.</li>
+          <li><strong>فئة المحكومين:</strong> تضم المشايخ، علماء الأزهر، التجار، والطبقة الدنيا الممثلة بالفلاحين والصغار الحرفيين وعامة الناس.</li>
+        </ul>
+        <p>عانت الفئات الدنيا من الفقر والظلم وانتشار الأمراض والأوبئة.</p>
+      </div>
+
+      <div class="rule">
+        <h3>رابعًا — الحياة الفكرية والثقافية</h3>
+        <p>اتسمت الحياة الفكرية بالجمود نسبيًا نتيجة العزلة عن محاور التجدد الأوربي والإهمال المؤسسي للتعليم والتجديد. لذلك اعتُبرت حقبة راكدة ثقافيًا بالمقارنة مع المراحل التي تلتها.</p>
+      </div>
+    </div>
+
+    <!-- SUMMARY / TAKEAWAYS -->
+    <div class="card">
+      <div class="section-title"><h2>خاتمة — النقاط الرئيسية</h2><div class="badge">ملخص</div></div>
+      <div class="rule">
+        <ul>
+          <li>أدت الأزمات الاقتصادية والسياسية للمماليك إلى انهيار قدرتهم على المواجهة العسكرية أمام العثمانيين.</li>
+          <li>انتصارات سليم الأول في مرج دابق والريدانية مهدت لسيطرة العثمانيين على الشام ومصر.</li>
+          <li>تحولت مصر إلى ولاية عثمانية، وتبدّل مركز السلطة في العالم الإسلامي لصالح العثمانيين.</li>
+          <li>ظل الحكم العثماني في مصر طويلًا لكنه اتسم بالجمود الإداري والاقتصادي والثقافي نسبيًا.</li>
+        </ul>
+      </div>
+    </div>
+
+    <footer class="card" style="text-align:center">
+      <p style="margin:0;color:var(--muted)">.</p>
+    </footer>
+
+    <!-- popup zoom (reused for image placeholders) -->
+    <div class="popup-zoom" id="popupZoom" aria-hidden="true" role="dialog" aria-label="Image zoom dialog">
+      <div class="popup-inner" role="document">
+        <div class="spinner" id="popupSpinner" aria-hidden="true" style="display:none;"></div>
+
+        <button class="btn close" id="popupClose" aria-label="إغلاق">&times;</button>
+        <button class="btn prev" id="popupPrev" aria-label="السابق">&#10094;</button>
+        <img id="popupImg" src="" alt="Zoomed image" />
+        <button class="btn next" id="popupNext" aria-label="التالي">&#10095;</button>
+
+        <div class="caption" id="popupCaption"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+(function(){
+  // image zoom popup functionality (works with images inside .images)
+  const imgs = Array.from(document.querySelectorAll('.images img, .img-wrap img'));
+  if(!imgs.length) return;
+
+  const popup = document.getElementById('popupZoom');
+  const popupImg = document.getElementById('popupImg');
+  const popupCaption = document.getElementById('popupCaption');
+  const spinner = document.getElementById('popupSpinner');
+  const btnClose = document.getElementById('popupClose');
+  const btnPrev = document.getElementById('popupPrev');
+  const btnNext = document.getElementById('popupNext');
+
+  let currentIndex = 0;
+  let isZoomed = false;
+
+  function setLoading(on){
+    spinner.style.display = on ? 'block' : 'none';
+    popupImg.style.visibility = on ? 'hidden' : 'visible';
+  }
+
+  function openAt(index){
+    currentIndex = (index + imgs.length) % imgs.length;
+    const src = imgs[currentIndex].currentSrc || imgs[currentIndex].src || imgs[currentIndex].getAttribute('data-src');
+    const alt = imgs[currentIndex].alt || ('Image ' + (currentIndex+1));
+    popup.classList.add('open');
+    popup.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    setLoading(true);
+    popupImg.classList.remove('zoomed');
+    isZoomed = false;
+    popupImg.src = '';
+    popupCaption.textContent = alt;
+    const loader = new Image();
+    loader.onload = function(){
+      popupImg.src = src;
+      setLoading(false);
+      btnClose.focus();
+    };
+    loader.onerror = function(){
+      setLoading(false);
+      popupCaption.textContent = 'خطأ في تحميل الصورة';
+    };
+    loader.src = src;
+  }
+
+  function closePopup(){
+    popup.classList.remove('open');
+    popup.setAttribute('aria-hidden','true');
+    popupImg.src = '';
+    popupCaption.textContent = '';
+    document.body.style.overflow = '';
+    isZoomed = false;
+    popupImg.classList.remove('zoomed');
+  }
+
+  function showNext(){ openAt(currentIndex + 1); }
+  function showPrev(){ openAt(currentIndex - 1); }
+
+  imgs.forEach((img, i) => {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', (e) => {
+      e.preventDefault();
+      openAt(i);
+    });
+    img.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' ') openAt(i);
+    });
+  });
+
+  btnClose.addEventListener('click', closePopup);
+  btnNext.addEventListener('click', (e)=>{ e.stopPropagation(); showNext(); });
+  btnPrev.addEventListener('click', (e)=>{ e.stopPropagation(); showPrev(); });
+
+  popup.addEventListener('click', (e) => {
+    if(e.target === popup) closePopup();
+  });
+
+  popupImg.addEventListener('click', (e) => {
+    if(popupImg.src){
+      isZoomed = !isZoomed;
+      popupImg.classList.toggle('zoomed', isZoomed);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(!popup.classList.contains('open')) return;
+    if(e.key === 'Escape') closePopup();
+    else if(e.key === 'ArrowRight' || e.key === 'ArrowDown') showNext();
+    else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') showPrev();
+    else if(e.key === '+' || e.key === '='){ isZoomed = true; popupImg.classList.add('zoomed'); }
+    else if(e.key === '-' ){ isZoomed = false; popupImg.classList.remove('zoomed'); }
+  });
+
+  popupImg.addEventListener('wheel', function(e){
+    if(!popup.classList.contains('open')) return;
+    e.preventDefault();
+    if(e.deltaY < 0) { isZoomed = true; popupImg.classList.add('zoomed'); }
+    else { isZoomed = false; popupImg.classList.remove('zoomed'); }
+  }, { passive:false });
+
+  // simple touch swipe for next/prev
+  let startX = 0;
+  let startY = 0;
+  popup.addEventListener('touchstart', function(e){
+    if(!popup.classList.contains('open')) return;
+    if(e.touches && e.touches.length === 1){
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }
+  }, {passive:true});
+
+  popup.addEventListener('touchend', function(e){
+    if(!popup.classList.contains('open')) return;
+    const touch = e.changedTouches && e.changedTouches[0];
+    if(!touch) return;
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
+    if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0) showNext();
+      else showPrev();
+    }
+  }, {passive:true});
+
+})();
+</script>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Unit 1 — Grammar (Interactive)</title>
+  <title>Grammar — المستقبل البسيط (Active & Passive)</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
@@ -77,14 +77,14 @@
     .section-title .badge{ color:#000; background:var(--gold); padding:6px 8px; border-radius:8px; font-weight:700; font-size:13px }
 
     .rule{
-      padding:10px;
+      padding:12px;
       border-radius:10px;
       background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
       border:1px solid rgba(255,255,255,0.02);
-      margin-bottom:10px;
+      margin-bottom:12px;
     }
     .rule h3{ margin:0 0 8px; color:#ffd87a; font-size:15px }
-    .rule p{ margin:0; color:var(--muted); line-height:1.5; font-size:14px; text-align:right }
+    .rule p{ margin:0; color:var(--muted); line-height:1.6; font-size:14px; text-align:right }
 
     /* examples */
     .examples{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px }
@@ -120,7 +120,7 @@
       .examples{ grid-template-columns:1fr; }
     }
 
-    /* ===== Improved popup zoom styles ===== */
+    /* popup styles */
 .popup-zoom {
   position: fixed;
   inset: 0;
@@ -151,8 +151,6 @@
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   border:1px solid rgba(255,255,255,0.03);
 }
-
-/* image */
 .popup-zoom img {
   width: auto;
   height: auto;
@@ -161,18 +159,18 @@
   border-radius: 10px;
   object-fit: contain;
   box-shadow: 0 28px 60px rgba(0,0,0,0.7), 0 0 30px rgba(218,165,32,0.08);
-  transition: transform .28s cubic-bezier(.2,.9,.3,1), filter .2s ease;
+  transition: transform .28s cubic-bezier(.2,.9,.3,1), filter .2s ease, opacity .2s ease;
   cursor: zoom-in;
   display:block;
+  opacity:0;
+  transform: scale(.98);
 }
+.popup-zoom.open img { opacity:1; transform: scale(1); }
 
-/* zoomed state (toggle) */
 .popup-zoom img.zoomed {
   transform: scale(1.15);
   cursor: zoom-out;
 }
-
-/* caption */
 .popup-zoom .caption {
   position: absolute;
   bottom: 12px;
@@ -184,8 +182,6 @@
   opacity: .95;
   pointer-events: none;
 }
-
-/* spinner while loading */
 .popup-zoom .spinner {
   width:56px;
   height:56px;
@@ -196,8 +192,6 @@
   position:absolute;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* controls (circle buttons) */
 .popup-zoom .btn {
   position:absolute;
   background: rgba(0,0,0,0.45);
@@ -211,13 +205,7 @@
   backdrop-filter: blur(4px);
 }
 .popup-zoom .btn:hover { transform: translateY(-3px); background: rgba(218,165,32,0.12); color:#000; }
-
-/* close top-right (RTL visible top-right) */
-.popup-zoom .btn.close {
-  top:12px; right:12px; left:auto; font-size:22px;
-}
-
-/* prev / next side buttons inside container */
+.popup-zoom .btn.close { top:12px; right:12px; left:auto; font-size:22px; }
 .popup-zoom .btn.prev { left: 8px; top: 50%; transform: translateY(-50%); width:48px; height:48px; font-size:20px; }
 .popup-zoom .btn.next { right: 8px; top: 50%; transform: translateY(-50%); width:48px; height:48px; font-size:20px; }
 
@@ -233,176 +221,132 @@
 <body>
   <div class="container">
     <header>
-      <h1>Grammar — الوحدة 1 (Present Perfect & Related Usage)</h1>
-      <p class="lead">الشرح كما في الصور الثلاث — عرض حرفي للصور أولاً، ثم الشرح المصقول، وأخيرًا اختبار تفاعلي صغير عشان تثبت المعلومة.</p>
+      <h1>Grammar — الزمن: Future Simple (Active & Passive)</h1>
+      <p class="lead">شرح مُبَسَّط لِـ Future Simple في الصيغتين المبني للمعلوم والمبني للمجهول، مع أمثلة وملاحظات واختبار تفاعلي.</p>
     </header>
 
     <!-- IMAGES CARD -->
-    <div class="card">
-      <div class="section-title">
-        <h2>الصور الأصلية للقواعد (انظر بدقة)</h2>
-        <div class="badge">Original</div>
-      </div>
+    
 
-      <div class="images" aria-hidden="false">
-        <div class="img-wrap"><img src="gram4.jpg" alt="grammar image 1" tabindex="0"><div class="img-caption">الصورة 1</div></div>
-        <div class="img-wrap"><img src="gram1.jpg" alt="grammar image 2" tabindex="0"><div class="img-caption">الصورة 2</div></div>
-        <div class="img-wrap"><img src="gram2.jpg" alt="grammar image 3" tabindex="0"><div class="img-caption">الصورة 3</div></div>
-        <div class="img-wrap"><img src="gram3.jpg" alt="grammar image 4" tabindex="0"><div class="img-caption">الصورة 4</div></div>
-      </div>
-
-      <p style="color:var(--muted);margin-top:10px;font-size:13px;text-align:left">الجرامر من كتاب المعاصر</p>
-    </div>
-
-    <!-- EXTRACTED & FORMATTED GRAMMAR -->
+    <!-- FORMATTED GRAMMAR: Future Simple Active & Passive -->
     <div class="card" id="formatted">
-      <div class="section-title"><h2>الشرح المنسق والمفصّل (كما في الصور)</h2><div class="badge">Text</div></div>
+      <div class="section-title"><h2>1. Form — الشكل (Active & Passive)</h2><div class="badge">Future Simple</div></div>
 
-      <!-- SECTION: FORM (Present Perfect) -->
-      <div class="rule" id="form">
-        <h3>1. الشكل (Form) — Present Perfect</h3>
+      <div class="rule">
+        <h3>Affirmative — الإيجاب (المبني للمعلوم)</h3>
         <p>
-          المضارع التام يُكوَّن من: <strong>have / has + past participle</strong>.<br>
-          أمثلة (affirmative):<br>
-        </p>
-        <div class="examples">
-          <div class="ex"><strong>She has lived</strong> here for two years. — عاشت هنا لمدة عامين.</div>
-          <div class="ex"><strong>They have finished</strong> their homework. — أنهوا واجبهم.</div>
-        </div>
-      </div>
-
-      <!-- SECTION: NEGATIVE -->
-      <div class="rule" id="negative">
-        <h3>2. النفي (Negative)</h3>
-        <p>
-          ضع <strong>not</strong> بعد have/has: <strong>have/has not + past participle</strong>.<br>
-          أمثلة:<br>
-        </p>
-        <div class="examples">
-          <div class="ex"><strong>He has not finished</strong> yet. — لم ينهِ بعد.</div>
-          <div class="ex"><strong>We have not seen</strong> that film. — لم نشاهد ذلك الفيلم.</div>
-        </div>
-      </div>
-
-      <!-- SECTION: QUESTIONS -->
-      <div class="rule" id="questions">
-        <h3>3. الأسئلة (Interrogative)</h3>
-        <p>
-          ضع have/has في بداية الجملة: <strong>Have/Has + subject + past participle?</strong><br>
-          أمثلة:<br>
-        </p>
-        <div class="examples">
-          <div class="ex"><strong>Have you finished</strong> your work? — هل أنهيت عملك؟</div>
-          <div class="ex"><strong>Has she arrived</strong> yet? — هل وصلت؟</div>
-        </div>
-      </div>
-
-      <!-- SECTION: USES -->
-      <div class="rule" id="uses">
-        <h3>4. متى نستخدم Present Perfect؟ (Uses)</h3>
-        <p>
-          - لأحداث بدأت في الماضي ومازالت مستمرة حتى الآن: <em>She has lived here for 5 years.</em><br>
-          - لأعمال تمت في وقت غير محدد في الماضي ذات تأثير على الحاضر: <em>I have lost my keys.</em><br>
-          - مع كلمات مثل <strong>ever, never, already, yet, just, recently, so far, up to now</strong>.<br>
+          تركيب الجملة: <strong>Subject (الفاعل) + will + base verb (infinitive)</strong>.<br>
+          مثال: <em>He will plant trees.</em> — سوف يزرع أشجارًا.
         </p>
       </div>
 
-      <!-- SECTION: FOR / SINCE -->
-      <div class="rule" id="for-since">
-        <h3>5. For / Since</h3>
+      <div class="rule">
+        <h3>Affirmative — الإيجاب (المبني للمجهول)</h3>
         <p>
-          - <strong>for</strong> + مدة زمنية (for two months, for years).<br>
-          - <strong>since</strong> + نقطة بداية (since 2019, since Monday).<br>
-          مثال: <em>He has worked here <strong>for</strong> three years.</em><br>
-          مثال: <em>She has known him <strong>since</strong> 2010.</em>
+          تركيب المبني للمجهول: <strong>Object (المفعول) + will + be + past participle (p.p.)</strong>.<br>
+          مثال: <em>Trees will be planted (by him).</em> — سيتم زرع الأشجار (من قِبَلِه).
         </p>
       </div>
 
-      <!-- SECTION: YET / ALREADY / JUST -->
-      <div class="rule" id="yet-already">
-        <h3>6. Yet / Already / Just</h3>
+      <div class="rule">
+        <h3>Negative — النفي</h3>
         <p>
-          - <strong>yet</strong> (في الجمل السلبية والأسئلة) يأتي غالبًا في نهاية الجملة: <em>Have you finished yet?</em> / <em>I haven't finished yet.</em><br>
-          - <strong>already</strong> (إيجابي) يأتي بين have/has وpast participle أو في نهاية الجملة: <em>She has already eaten.</em><br>
-          - <strong>just</strong> (مؤخرًا) يأتي بين have/has وpast participle: <em>They have just left.</em>
+          المبني للمعلوم: <strong>Subject + won't + base verb</strong>.<br>
+          مثال: <em>They won't use AI to fix cars.</em> — لن يستخدموا الذكاء الاصطناعي لإصلاح السيارات.<br><br>
+          المبني للمجهول: <strong>Object + won't + be + past participle</strong>.<br>
+          مثال: <em>AI won't be used to fix cars by them.</em> — لن يُستخدم الذكاء الاصطناعي لإصلاح السيارات من قبلهم.
         </p>
       </div>
 
-      <!-- SECTION: EVER / NEVER -->
-      <div class="rule" id="ever-never">
-        <h3>7. Ever / Never</h3>
+      <div class="rule">
+        <h3>Yes/No Questions — أسئلة نعم / لا</h3>
         <p>
-          - <strong>ever</strong> للسؤال عن التجارب في أي وقت: <em>Have you ever been to London?</em><br>
-          - <strong>never</strong> للنفي: <em>I have never seen that movie.</em>
+          المبني للمعلوم: <strong>Will + subject + base verb... ?</strong><br>
+          مثال: <em>Will people use self-driving cars in the future?</em><br><br>
+          المبني للمجهول: <strong>Will + object + be + past participle ... ?</strong><br>
+          مثال: <em>Will self-driving cars be used in the future (by people)?</em>
         </p>
       </div>
 
-      <!-- SECTION: Passive / Past participle usage -->
-      <div class="rule" id="passive">
-        <h3>8. التصريف الثالث / Passive (ملاحظات)</h3>
+      <div class="rule">
+        <h3>Wh- Questions — أسئلة (متى / أين / لماذا ...)</h3>
         <p>
-          - التصريف الثالث (Past Participle) مهم هنا: مثال: <em>write — written, eat — eaten, go — gone</em>.<br>
-          - يُستخدم أيضاً مع المبني للمجهول (Passive) بتركيب: <strong>have/has + been + past participle</strong>.<br>
-          مثال: <em>The work has been done.</em>
+          ضع أداة السؤال ثم <strong>will</strong> ثم الفاعل ثم بقيّة الجملة.<br>
+          مثال (مبني للمعلوم): <em>When will the doctor do the surgery?</em><br>
+          مثال (مبني للمجهول): <em>When will the surgery be done (by the doctor)?</em>
         </p>
       </div>
 
-      <!-- EXTRA: common mistakes -->
-      <div class="rule" id="common-errors">
-        <h3>9. أخطاء شائعة يجب تجنّبها</h3>
+      <div class="rule">
+        <h3>Usage — متى نستخدم Future Simple؟</h3>
         <p>
-          - لا تخلط بين <strong>past simple</strong> (I saw him yesterday) و<strong>present perfect</strong> (I have seen him) — استخدم past simple مع زمان محدد في الماضي.<br>
-          - لا تستخدم كلمات زمن محددة مثل <em>yesterday, last year, in 2010</em> مع present perfect.
+          - للتنبؤ بالمستقبل: <em>It will rain tomorrow.</em><br>
+          - لقرارات فورية أو وعود: <em>I'll help you.</em><br>
+          - لوصف أحداث ستُنفَّذ في المستقبل (مبني للمجهول عند التركيز على الفعل أو النتيجة): <em>The letters will be sent tomorrow.</em>
         </p>
+      </div>
+
+      <div class="rule">
+        <h3>ملاحظات مهمة</h3>
+        <p>
+          - في المبني للمجهول، ذكر الفاعل (by ...) اختياري ويكون عندما نريد الإشارة إليه.<br>
+          - لا نستخدم صيغة الـ present simple مع 'will' — التركيب ثابت: will + base verb.<br>
+          - الماضي / المستقبل القريب لهما صور أخرى لكن هذه الصفحة تشرح التركيب البسيط بالـ will.
+        </p>
+      </div>
+
+      <div class="examples">
+        <div class="ex"><strong>Active:</strong> He will plant trees next month. — سيزرع أشجارًا الشهر القادم.</div>
+        <div class="ex"><strong>Passive:</strong> Trees will be planted next month by him. — ستُزرع الأشجار الشهر القادم بواسطته.</div>
       </div>
 
     </div>
 
-    <!-- QUIZ SECTION -->
+    <!-- QUIZ SECTION (Future Simple) -->
     <div class="card quiz" id="quizSection">
-      <div class="section-title"><h2>اختبر نفسك — Quiz</h2><div class="badge">Interactive</div></div>
+      <div class="section-title"><h2>اختبر نفسك — Quiz (Future Simple)</h2><div class="badge">Interactive</div></div>
 
-      <!-- Question 1 -->
+      <!-- Q1: Active formation -->
       <div class="question" data-answer="c">
-        <h4>1) Choose the correct form: "She ___ here for five years."</h4>
+        <h4>1) Choose the correct form (active): "He ___ the plants tomorrow."</h4>
         <div class="choices">
-          <div class="choice" data-key="a">is living</div>
-          <div class="choice" data-key="b">lived</div>
-          <div class="choice" data-key="c">has lived</div>
-          <div class="choice" data-key="d">was living</div>
+          <div class="choice" data-key="a">is planting</div>
+          <div class="choice" data-key="b">has planted</div>
+          <div class="choice" data-key="c">will plant</div>
+          <div class="choice" data-key="d">was planting</div>
         </div>
       </div>
 
-      <!-- Question 2 -->
+      <!-- Q2: Passive formation -->
       <div class="question" data-answer="b">
-        <h4>2) Choose the correct sentence:</h4>
+        <h4>2) Complete (passive): "Trees ___ planted by the farmers next week."</h4>
         <div class="choices">
-          <div class="choice" data-key="a">I have seen him yesterday.</div>
-          <div class="choice" data-key="b">I saw him yesterday.</div>
-          <div class="choice" data-key="c">I have saw him yesterday.</div>
-          <div class="choice" data-key="d">I has seen him yesterday.</div>
+          <div class="choice" data-key="a">are</div>
+          <div class="choice" data-key="b">will be</div>
+          <div class="choice" data-key="c">were</div>
+          <div class="choice" data-key="d">have been</div>
         </div>
       </div>
 
-      <!-- Question 3 -->
+      <!-- Q3: Negative passive -->
       <div class="question" data-answer="a">
-        <h4>3) "Have you ___ to Paris?"</h4>
+        <h4>3) Choose the correct negative (passive):</h4>
         <div class="choices">
-          <div class="choice" data-key="a">ever been</div>
-          <div class="choice" data-key="b">been ever</div>
-          <div class="choice" data-key="c">ever gone</div>
-          <div class="choice" data-key="d">gone ever</div>
+          <div class="choice" data-key="a">AI won't be used to fix cars.</div>
+          <div class="choice" data-key="b">AI won't used be to fix cars.</div>
+          <div class="choice" data-key="c">AI not will be used to fix cars.</div>
+          <div class="choice" data-key="d">AI isn't be used.</div>
         </div>
       </div>
 
-      <!-- Question 4 -->
+      <!-- Q4: Yes/No question passive -->
       <div class="question" data-answer="d">
-        <h4>4) "They ___ already ___ their lunch."</h4>
+        <h4>4) Choose the correct passive question: "___ the surgery ___ by the doctor?"</h4>
         <div class="choices">
-          <div class="choice" data-key="a">have / ate</div>
-          <div class="choice" data-key="b">have / eat</div>
-          <div class="choice" data-key="c">has / eaten</div>
-          <div class="choice" data-key="d">have / eaten</div>
+          <div class="choice" data-key="a">Do / done</div>
+          <div class="choice" data-key="b">Did / do</div>
+          <div class="choice" data-key="c">Will / do</div>
+          <div class="choice" data-key="d">Will / be done</div>
         </div>
       </div>
 
@@ -414,7 +358,7 @@
       <div id="result" style="margin-top:12px;color:var(--muted);font-size:14px"></div>
     </div>
 
-    <!-- Improved Popup Zoom (place before footer inside .container) -->
+    <!-- popup zoom -->
     <div class="popup-zoom" id="popupZoom" aria-hidden="true" role="dialog" aria-label="Image zoom dialog">
       <div class="popup-inner" role="document">
         <div class="spinner" id="popupSpinner" aria-hidden="true" style="display:none;"></div>
@@ -427,10 +371,11 @@
         <div class="caption" id="popupCaption"></div>
       </div>
     </div>
+
   </div>
 
   <script>
-    // Interactive quiz logic (lightweight)
+    // Interactive quiz logic
     (function(){
       const questions = Array.from(document.querySelectorAll('.question'));
       questions.forEach(q => {
@@ -450,7 +395,7 @@
           const selected = q.querySelector('.choice.selected');
           q.querySelectorAll('.choice').forEach(c => c.classList.remove('correct','wrong'));
           if(!selected){
-            // no selection -> mark all lightly
+            // no selection -> mark all lightly as wrong
             q.querySelectorAll('.choice').forEach(c => c.classList.add('wrong'));
           } else {
             const key = selected.getAttribute('data-key');
@@ -504,21 +449,18 @@
     currentIndex = (index + imgs.length) % imgs.length;
     const src = imgs[currentIndex].currentSrc || imgs[currentIndex].src || imgs[currentIndex].getAttribute('data-src');
     const alt = imgs[currentIndex].alt || ('Image ' + (currentIndex+1));
-    // show popup
     popup.classList.add('open');
     popup.setAttribute('aria-hidden','false');
     document.body.style.overflow = 'hidden';
-    // load image with spinner
     setLoading(true);
     popupImg.classList.remove('zoomed');
     isZoomed = false;
-    popupImg.src = ''; // reset to force load
+    popupImg.src = '';
     popupCaption.textContent = alt;
     const loader = new Image();
     loader.onload = function(){
       popupImg.src = src;
       setLoading(false);
-      // focus close button for accessibility
       btnClose.focus();
     };
     loader.onerror = function(){
@@ -552,17 +494,14 @@
     });
   });
 
-  // events
   btnClose.addEventListener('click', closePopup);
   btnNext.addEventListener('click', (e)=>{ e.stopPropagation(); showNext(); });
   btnPrev.addEventListener('click', (e)=>{ e.stopPropagation(); showPrev(); });
 
-  // click outside image closes
   popup.addEventListener('click', (e) => {
     if(e.target === popup) closePopup();
   });
 
-  // double click or click image to toggle zoom (inside modal)
   popupImg.addEventListener('click', (e) => {
     if(popupImg.src){
       isZoomed = !isZoomed;
@@ -570,20 +509,15 @@
     }
   });
 
-  // keyboard navigation
   document.addEventListener('keydown', (e) => {
     if(!popup.classList.contains('open')) return;
     if(e.key === 'Escape') closePopup();
     else if(e.key === 'ArrowRight' || e.key === 'ArrowDown') showNext();
     else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') showPrev();
-    else if(e.key === '+' || e.key === '='){ // zoom in
-      isZoomed = true; popupImg.classList.add('zoomed');
-    } else if(e.key === '-' ){ // zoom out
-      isZoomed = false; popupImg.classList.remove('zoomed');
-    }
+    else if(e.key === '+' || e.key === '='){ isZoomed = true; popupImg.classList.add('zoomed'); }
+    else if(e.key === '-' ){ isZoomed = false; popupImg.classList.remove('zoomed'); }
   });
 
-  // support wheel to zoom in/out when hovering image (desktop)
   popupImg.addEventListener('wheel', function(e){
     if(!popup.classList.contains('open')) return;
     e.preventDefault();
@@ -591,7 +525,7 @@
     else { isZoomed = false; popupImg.classList.remove('zoomed'); }
   }, { passive:false });
 
-  // touch swipe support for mobile (left/right)
+  // touch swipe
   let startX = 0;
   let startY = 0;
   popup.addEventListener('touchstart', function(e){

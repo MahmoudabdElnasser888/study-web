@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار تفاعلي</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #111, #222);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 25px 30px;
+      width: 90%;
+      max-width: 550px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      margin-top: 40px;
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #00ffb3;
+      letter-spacing: 1px;
+    }
+    .question {
+      background: rgba(255,255,255,0.05);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      transition: 0.3s;
+    }
+    .question:hover { background: rgba(255,255,255,0.08); }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 6px 0;
+      cursor: pointer;
+    }
+    .option input { accent-color: #00ffb3; }
+    .option.correct { background: rgba(0,255,128,0.1); border-left: 4px solid #00ff88; }
+    .option.wrong { background: rgba(255,0,76,0.1); border-left: 4px solid #ff004c; }
+    .btn {
+      display: block;
+      background: #00ffb3;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      margin: 15px auto;
+      font-weight: bold;
+      cursor: pointer;
+      color: #000;
+      font-size: 17px;
+      transition: 0.3s;
+    }
+    .btn:hover { background: #00cc8c; }
+    .timer {
+      text-align: center;
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      color: #00ffb3;
+      margin-bottom: 10px;
+    }
+    .result {
+      text-align: center;
+      font-size: 22px;
+      color: #fff;
+      margin-top: 20px;
+    }
+    .old-result {
+      text-align: center;
+      font-size: 16px;
+      color: #ffbb00;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Exam on Unit 2 Vocabulary</h2>
+    <div id="timer" class="timer">الوقت: 10:00</div>
+    <div id="welcome">جارٍ التحقق من الحساب...</div>
+    <div id="quizBox" style="display:none">
+        <div class="question" data-correct="1">
+  <p>1. To be ___ to older people is a great quality especially among young people.</p>
+  <label class="option"><input type="radio" name="q1" value="1">a. respectful</label>
+  <label class="option"><input type="radio" name="q1" value="2">b. ignored</label>
+  <label class="option"><input type="radio" name="q1" value="3">c. regretful</label>
+  <label class="option"><input type="radio" name="q1" value="4">d. defeated</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>2. My father is the most important person to me in hard situations.</p>
+  <label class="option"><input type="radio" name="q2" value="1">a. supportive</label>
+  <label class="option"><input type="radio" name="q2" value="2">b. disconnected</label>
+  <label class="option"><input type="radio" name="q2" value="3">c. distant</label>
+  <label class="option"><input type="radio" name="q2" value="4">d. worried</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>3. I prefer to talk to my friends ___ than online.</p>
+  <label class="option"><input type="radio" name="q3" value="1">a. face-to-face</label>
+  <label class="option"><input type="radio" name="q3" value="2">b. late</label>
+  <label class="option"><input type="radio" name="q3" value="3">c. fast</label>
+  <label class="option"><input type="radio" name="q3" value="4">d. loudly</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>4. Keep ___ to be able to solve this problem wisely.</p>
+  <label class="option"><input type="radio" name="q4" value="1">a. fast</label>
+  <label class="option"><input type="radio" name="q4" value="2">b. calm</label>
+  <label class="option"><input type="radio" name="q4" value="3">c. worried</label>
+  <label class="option"><input type="radio" name="q4" value="4">d. stressed</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>5. Social media and texting make it easy to stay in ___.</p>
+  <label class="option"><input type="radio" name="q5" value="1">a. calmness</label>
+  <label class="option"><input type="radio" name="q5" value="2">b. touch</label>
+  <label class="option"><input type="radio" name="q5" value="3">c. shyness</label>
+  <label class="option"><input type="radio" name="q5" value="4">d. place</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>6. Having open and respectful conversations helps to ___ problems and build trust.</p>
+  <label class="option"><input type="radio" name="q6" value="1">a. make</label>
+  <label class="option"><input type="radio" name="q6" value="2">b. cause</label>
+  <label class="option"><input type="radio" name="q6" value="3">c. solve</label>
+  <label class="option"><input type="radio" name="q6" value="4">d. waste</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>7. Taking time to connect with others through kind words helps you feel ___ in your daily life.</p>
+  <label class="option"><input type="radio" name="q7" value="1">a. neglected</label>
+  <label class="option"><input type="radio" name="q7" value="2">b. ignored</label>
+  <label class="option"><input type="radio" name="q7" value="3">c. supported</label>
+  <label class="option"><input type="radio" name="q7" value="4">d. misunderstood</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>8. Communication in Omar's family had almost disappeared due to school stress and phone ___.</p>
+  <label class="option"><input type="radio" name="q8" value="1">a. silence</label>
+  <label class="option"><input type="radio" name="q8" value="2">b. subjects</label>
+  <label class="option"><input type="radio" name="q8" value="3">c. distractions</label>
+  <label class="option"><input type="radio" name="q8" value="4">d. gestures</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>9. The story teaches us that a small act of ___ can help people reconnect.</p>
+  <label class="option"><input type="radio" name="q9" value="1">a. silence</label>
+  <label class="option"><input type="radio" name="q9" value="2">b. communication</label>
+  <label class="option"><input type="radio" name="q9" value="3">c. eating</label>
+  <label class="option"><input type="radio" name="q9" value="4">d. shouting</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>10. If something is "meaningful", it has a deep importance or ___.</p>
+  <label class="option"><input type="radio" name="q10" value="1">a. purpose</label>
+  <label class="option"><input type="radio" name="q10" value="2">b. look</label>
+  <label class="option"><input type="radio" name="q10" value="3">c. sound</label>
+  <label class="option"><input type="radio" name="q10" value="4">d. color</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>11. The ___ yesterday was about safety rules.</p>
+  <label class="option"><input type="radio" name="q11" value="1">a. holiday</label>
+  <label class="option"><input type="radio" name="q11" value="2">b. meeting</label>
+  <label class="option"><input type="radio" name="q11" value="3">c. disagreement</label>
+  <label class="option"><input type="radio" name="q11" value="4">d. discipline</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>12. A smile can be a very ___ gesture of kindness, so keep smiling.</p>
+  <label class="option"><input type="radio" name="q12" value="1">a. meaningless</label>
+  <label class="option"><input type="radio" name="q12" value="2">b. meaningful</label>
+  <label class="option"><input type="radio" name="q12" value="3">c. frustrating</label>
+  <label class="option"><input type="radio" name="q12" value="4">d. awkward</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>13. When life is meaningful, it has ___.</p>
+  <label class="option"><input type="radio" name="q13" value="1">a. problems</label>
+  <label class="option"><input type="radio" name="q13" value="2">b. purposes</label>
+  <label class="option"><input type="radio" name="q13" value="3">c. money</label>
+  <label class="option"><input type="radio" name="q13" value="4">d. anger</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>14. If you speak ___, you tell the truth about how you feel.</p>
+  <label class="option"><input type="radio" name="q14" value="1">a. honestly</label>
+  <label class="option"><input type="radio" name="q14" value="2">b. quietly</label>
+  <label class="option"><input type="radio" name="q14" value="3">c. differently</label>
+  <label class="option"><input type="radio" name="q14" value="4">d. awkwardly</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>15. The opposite of "doubt" is "___".</p>
+  <label class="option"><input type="radio" name="q15" value="1">a. problem</label>
+  <label class="option"><input type="radio" name="q15" value="2">b. uncertainty</label>
+  <label class="option"><input type="radio" name="q15" value="3">c. trust</label>
+  <label class="option"><input type="radio" name="q15" value="4">d. distrust</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>16. “To ___” means to have a conversation about something.</p>
+  <label class="option"><input type="radio" name="q16" value="1">a. argue</label>
+  <label class="option"><input type="radio" name="q16" value="2">b. discuss</label>
+  <label class="option"><input type="radio" name="q16" value="3">c. shout</label>
+  <label class="option"><input type="radio" name="q16" value="4">d. understand</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>17. “To ___” means to create something again.</p>
+  <label class="option"><input type="radio" name="q17" value="1">a. rebuild</label>
+  <label class="option"><input type="radio" name="q17" value="2">b. destroy</label>
+  <label class="option"><input type="radio" name="q17" value="3">c. resolve</label>
+  <label class="option"><input type="radio" name="q17" value="4">d. connect</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>18. “To ___” means to have a disagreement in which people shout at each other.</p>
+  <label class="option"><input type="radio" name="q18" value="1">a. talk</label>
+  <label class="option"><input type="radio" name="q18" value="2">b. agree</label>
+  <label class="option"><input type="radio" name="q18" value="3">c. argue</label>
+  <label class="option"><input type="radio" name="q18" value="4">d. discuss</label>
+</div>
+
+    
+        
+      <button class="btn" id="showAnswers">إنهاء الاختبار</button>
+      <div id="result" class="result"></div>
+      <div id="oldResult" class="old-result"></div>
+    </div>
+  </div>
+
+  <!-- Firebase (v8) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+      authDomain: "my-web-c23de.firebaseapp.com",
+      projectId: "my-web-c23de",
+      storageBucket: "my-web-c23de.firebasestorage.app",
+      messagingSenderId: "846339445873",
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    const SUBJECT = "انجليزي تالته يونت اتنين كلمات";
+    const QUIZ_TIME = 10 * 60;
+    let totalSeconds = QUIZ_TIME, timer, userId, userEmail;
+
+    const timerDiv = document.getElementById("timer");
+    const welcome = document.getElementById("welcome");
+    const quizBox = document.getElementById("quizBox");
+    const resultDiv = document.getElementById("result");
+    const oldResultDiv = document.getElementById("oldResult");
+
+    // التحقق من المستخدم
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        userId = user.uid;
+        userEmail = user.email;
+        welcome.innerText = `مرحبًا ${user.displayName || ""} 👋`;
+        await checkOldResult();
+        setTimeout(() => {
+          welcome.style.display = "none";
+          quizBox.style.display = "block";
+          startTimer();
+        }, 1200);
+      } else {
+        welcome.innerText = "⚠️ قم بتسجيل الدخول أولًا.";
+      }
+    });
+
+    async function checkOldResult() {
+      const prev = await db.collection("results")
+        .where("uid", "==", userId)
+        .where("subject", "==", SUBJECT)
+        .get();
+      if (!prev.empty) {
+        const data = prev.docs[0].data();
+        oldResultDiv.innerText = `📋 لقد حللت هذا الامتحان من قبل: ${data.score} / ${data.total}`;
+      }
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        let m = Math.floor(totalSeconds / 60);
+        let s = totalSeconds % 60;
+        timerDiv.textContent = `الوقت المتبقي: ${m}:${s.toString().padStart(2, "0")}`;
+        if (totalSeconds <= 0) {
+          clearInterval(timer);
+          showResults();
+        }
+        totalSeconds--;
+      }, 1000);
+    }
+
+    async function showResults() {
+      clearInterval(timer);
+      const questions = document.querySelectorAll(".question");
+      let score = 0;
+
+      questions.forEach((q, i) => {
+        const correct = parseInt(q.dataset.correct);
+        const selected = q.querySelector(`input[name="q${i + 1}"]:checked`);
+        q.querySelectorAll(".option").forEach(opt => {
+          const val = parseInt(opt.querySelector("input").value);
+          if (val === correct) opt.classList.add("correct");
+          if (selected && parseInt(selected.value) === val && val !== correct) opt.classList.add("wrong");
+        });
+        if (selected && parseInt(selected.value) === correct) score++;
+      });
+
+      resultDiv.innerText = `نتيجتك: ${score} من ${questions.length}`;
+
+      try {
+        const prev = await db.collection("results")
+          .where("uid", "==", userId)
+          .where("subject", "==", SUBJECT)
+          .get();
+        const alreadyTaken = !prev.empty;
+
+        await db.collection("results").add({
+          uid: userId,
+          email: userEmail,
+          subject: SUBJECT,
+          score: score,
+          total: questions.length,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        if (!alreadyTaken) {
+          const userRef = db.collection("users").doc(userId);
+          await db.runTransaction(async (t) => {
+            const userDoc = await t.get(userRef);
+            const old = userDoc.exists && userDoc.data().score ? userDoc.data().score : 0;
+            t.set(userRef, { score: old + score }, { merge: true });
+          });
+          alert("✅ تم حفظ نتيجتك وتحديث مجموعك!");
+        } else {
+          alert("⚠️ لقد أجبت على هذا الامتحان من قبل — لم تُضف نتيجتك مجددًا.");
+        }
+      } catch (e) {
+        alert("⚠️ خطأ أثناء الإرسال: " + e.message);
+      }
+    }
+
+    document.getElementById("showAnswers").addEventListener("click", showResults);
+  </script>
+</body>
+</html>

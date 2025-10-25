@@ -1,0 +1,357 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Unit 2 — Structure (Ready for content)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#706a6a;
+    --card:#000000;
+    --accent:rgb(168, 131, 36);
+    --muted:#ffffff;
+    --glass: rgba(136, 133, 133, 0.329);
+    --radius:14px;
+    --maxw:1100px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; padding:0; font-family:'Cairo',sans-serif; background:linear-gradient(180deg,var(--bg),#070707); color:#fff; -webkit-font-smoothing:antialiased; direction:rtl;}
+  body{ padding:16px; }
+
+  .wrap{ max-width:var(--maxw); margin:0 auto; }
+
+  header{ text-align:center; margin-bottom:14px; }
+  h1{ margin:6px 0; color:var(--accent); font-size:20px; }
+  p.lead{ color:var(--muted); margin:0; font-size:13px; }
+
+  /* top nav */
+  .topnav{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:12px 0; }
+  .topnav a{
+    background:transparent; color:var(--accent); border:1px solid rgba(218,165,32,0.12);
+    padding:8px 12px; border-radius:10px; text-decoration:none; font-weight:700; font-size:13px;
+  }
+  .topnav a:hover{ background:rgba(218,165,32,0.06); color:#000; }
+
+  /* card */
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:var(--radius); padding:12px; margin-bottom:14px;
+    border:1px solid rgba(218,165,32,0.06); box-shadow:0 8px 26px rgba(0,0,0,0.6);
+  }
+  .card h2{ margin:0 0 8px; color:var(--accent); font-size:16px; display:flex; justify-content:space-between; align-items:center; gap:8px;}
+  .card .subtitle{ color:var(--muted); font-size:13px; margin-top:6px; }
+
+  /* table wrapper to allow horizontal scroll on small screens */
+  .table-wrap{ overflow:auto; -webkit-overflow-scrolling:touch; border-radius:10px; margin-top:10px; padding-bottom:6px; }
+  table{ width:100%; border-collapse:collapse; min-width:700px; }
+  caption{ text-align:right; color:var(--accent); font-weight:700; padding:8px 0; font-size:14px; }
+  thead th{ background:var(--accent); color:#000; padding:10px 12px; font-weight:700; position:sticky; top:0; z-index:2; }
+  th, td{ padding:10px 10px; border-bottom:1px solid rgba(255,255,255,0.04); text-align:center; vertical-align:middle; font-size:14px; }
+  tbody tr:nth-child(even){ background: rgba(255,255,255,0.02); }
+  td.meaning{ text-align:right; direction:rtl; word-break:break-word; }
+  td.type{ color:var(--accent); font-weight:700; white-space:nowrap; }
+
+  /* mobile-friendly: convert rows to cards visually (CSS-only) */
+  @media (max-width:640px){
+    table{ min-width:520px; }
+    .mobile-card tbody tr{ display:block; margin:10px 0; border-radius:10px; padding:10px; background:rgba(255,255,255,0.02); }
+    .mobile-card thead{ display:none; }
+    .mobile-card tbody tr td{ display:block; text-align:right; padding:6px 8px; border-bottom:0; font-size:14px; }
+    .mobile-card tbody tr td::before{ content: attr(data-label); float:right; color:var(--muted); font-weight:700; margin-left:10px; }
+  }
+
+  /* small screens tweaks */
+  @media (max-width:900px){
+    h1{ font-size:18px; }
+    th, td{ font-size:13px; padding:8px; }
+    .card{ padding:10px; }
+  }
+
+  /* subtle footer */
+  footer{ text-align:center; color:var(--muted); margin-top:10px; font-size:13px; }
+
+  /* helper note */
+  .note{ color:var(--muted); font-size:13px; margin-top:8px; text-align:right; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Unit 2 — Vocabulary & Structure</h1>
+      <p class="lead">الهيكل جاهز — ألصق المحتوى تحت كل قسم داخل الأماكن المخصصة (بدون أي JS).</p>
+    </header>
+
+    <nav class="topnav" aria-label="Navigation">
+      <a href="#collocations">متلازمات لفظية (Collocations)</a>
+      <a href="#synonyms">مرادفات ومضادات (Synonyms & Antonyms)</a>
+      <a href="#irregulars">أفعال شاذة (Irregular Verbs)</a>
+      <a href="#expr-prep">تعبيرات وحروف جر (Expressions & Prepositions)</a>
+      <a href="#keyvocab">Key Vocabulary</a>
+    </nav>
+
+    <!-- SECTION: Collocations -->
+    <section id="collocations" class="card" aria-labelledby="collocations-h">
+      <h2 id="collocations-h">المتلازمات اللفظية — Collocations <span style="font-size:12px;color:var(--muted)">.</span></h2>
+
+      <div class="table-wrap" role="region" aria-label="Collocations table">
+        <table class="mobile-card" aria-describedby="collocations-cap">
+          <caption id="collocations-cap">العبارة (EN) — الترجمة / ملاحظات</caption>
+          <thead>
+            <tr><th style="width:6%;">#</th><th>Collocation (EN)</th><th>الترجمة / المعنى بالعربية</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="#">1</td><td data-label="Collocation">do tasks</td><td data-label="Meaning" class="meaning">يؤدي مهام</td></tr>
+            <tr><td data-label="#">2</td><td data-label="Collocation">make art</td><td data-label="Meaning" class="meaning">يصمم أعمال فنية</td></tr>
+            <tr><td data-label="#">3</td><td data-label="Collocation">follow commands</td><td data-label="Meaning" class="meaning">يتبع الأوامر</td></tr>
+            <tr><td data-label="#">4</td><td data-label="Collocation">get tired</td><td data-label="Meaning" class="meaning">يشعر بالتعب</td></tr>
+            <tr><td data-label="#">5</td><td data-label="Collocation">compose music</td><td data-label="Meaning" class="meaning">يؤلف موسيقى</td></tr>
+            <tr><td data-label="#">6</td><td data-label="Collocation">take decisions</td><td data-label="Meaning" class="meaning">يتخذ قرارات</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="note">يمكنك تعديل أو إضافة صفوف بنفس تنسيق `<tr><td data-label="#">...</td>...`</p>
+    </section>
+
+    <!-- SECTION: Synonyms & Antonyms -->
+    <section id="synonyms" class="card" aria-labelledby="synonyms-h">
+      <h2 id="synonyms-h">مرادفات ومضادات — Synonyms & Antonyms</h2>
+
+      <div class="table-wrap" role="region" aria-label="Synonyms table">
+        <table class="mobile-card" aria-describedby="syn-cap">
+          <caption id="syn-cap">الكلمة — المرادف — المضاد — ملاحظة / معنى</caption>
+          <thead>
+            <tr><th style="width:6%;">#</th><th>الكلمة (Word)</th><th>Synonym — المرادف</th><th>Antonym — المضاد</th><th>ملاحظة / المعنى</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="#">1</td><td data-label="Word">intelligence</td><td data-label="Synonym">wit</td><td data-label="Antonym">stupidity / ignorance</td><td data-label="Note" class="meaning">ذكاء</td></tr>
+            <tr><td data-label="#">2</td><td data-label="Word">advanced</td><td data-label="Synonym">developed / modern</td><td data-label="Antonym">undeveloped / backward</td><td data-label="Note" class="meaning">متقدم - متطور</td></tr>
+            <tr><td data-label="#">3</td><td data-label="Word">allow</td><td data-label="Synonym">let / permit</td><td data-label="Antonym">deny / reject / forbid</td><td data-label="Note" class="meaning">يسمح</td></tr>
+            <tr><td data-label="#">4</td><td data-label="Word">expensive</td><td data-label="Synonym">costly</td><td data-label="Antonym">cheap / inexpensive</td><td data-label="Note" class="meaning">غالي الثمن</td></tr>
+            <tr><td data-label="#">5</td><td data-label="Word">smart</td><td data-label="Synonym">wise / intelligent</td><td data-label="Antonym">stupid / slow learner</td><td data-label="Note" class="meaning">ذكي - أنيق</td></tr>
+            <tr><td data-label="#">6</td><td data-label="Word">basic</td><td data-label="Synonym">main / vital / essential</td><td data-label="Antonym">secondary / minor</td><td data-label="Note" class="meaning">أساسي</td></tr>
+            <tr><td data-label="#">7</td><td data-label="Word">reduce</td><td data-label="Synonym">cut down / decrease</td><td data-label="Antonym">increase / enhance</td><td data-label="Note" class="meaning">يقلل - يخفض</td></tr>
+            <tr><td data-label="#">8</td><td data-label="Word">artificial</td><td data-label="Synonym">non-natural</td><td data-label="Antonym">natural</td><td data-label="Note" class="meaning">اصطناعي</td></tr>
+            <tr><td data-label="#">9</td><td data-label="Word">creative</td><td data-label="Synonym">imaginative / innovative</td><td data-label="Antonym">unimaginative / boring</td><td data-label="Note" class="meaning">إبداعي</td></tr>
+            <tr><td data-label="#">10</td><td data-label="Word">respond</td><td data-label="Synonym">react / reply</td><td data-label="Antonym">ignore / avoid</td><td data-label="Note" class="meaning">يستجيب / يرد</td></tr>
+
+            <tr><td data-label="#">11</td><td data-label="Word">surprising</td><td data-label="Synonym">amazing / wonderful</td><td data-label="Antonym">normal / common</td><td data-label="Note" class="meaning">مفاجئ - مدهش</td></tr>
+            <tr><td data-label="#">12</td><td data-label="Word">confused</td><td data-label="Synonym">puzzled / distracted / mixed up</td><td data-label="Antonym">clear / organized</td><td data-label="Note" class="meaning">مرتبك / مشوش الذهن</td></tr>
+            <tr><td data-label="#">13</td><td data-label="Word">instantly</td><td data-label="Synonym">immediately / directly</td><td data-label="Antonym">slowly / gradually</td><td data-label="Note" class="meaning">توا / فورًا</td></tr>
+            <tr><td data-label="#">14</td><td data-label="Word">bright</td><td data-label="Synonym">shiny</td><td data-label="Antonym">dim / dark</td><td data-label="Note" class="meaning">لامع / مشرق</td></tr>
+            <tr><td data-label="#">15</td><td data-label="Word">personalize</td><td data-label="Synonym">modify / customize</td><td data-label="Antonym">generalize</td><td data-label="Note" class="meaning">يعدل / يخصص</td></tr>
+            <tr><td data-label="#">16</td><td data-label="Word">notice</td><td data-label="Synonym">observe / see</td><td data-label="Antonym">ignore / neglect</td><td data-label="Note" class="meaning">يلاحظ</td></tr>
+            <tr><td data-label="#">17</td><td data-label="Word">connection</td><td data-label="Synonym">link / relation</td><td data-label="Antonym">disconnection / separation</td><td data-label="Note" class="meaning">ارتباط</td></tr>
+            <tr><td data-label="#">18</td><td data-label="Word">replace</td><td data-label="Synonym">substitute / exchange / swap</td><td data-label="Antonym">keep</td><td data-label="Note" class="meaning">يستبدل / يحل محل</td></tr>
+            <tr><td data-label="#">19</td><td data-label="Word">aware</td><td data-label="Synonym">wise / knowledgeable</td><td data-label="Antonym">unaware / ignorant</td><td data-label="Note" class="meaning">واع / مدرك</td></tr>
+            <tr><td data-label="#">20</td><td data-label="Word">real</td><td data-label="Synonym">true / original</td><td data-label="Antonym">fake / unreal</td><td data-label="Note" class="meaning">حقيقي</td></tr>
+
+            <tr><td data-label="#">21</td><td data-label="Word">exciting</td><td data-label="Synonym">wonderful / interesting / great</td><td data-label="Antonym">boring</td><td data-label="Note" class="meaning">رائع / مثير</td></tr>
+            <tr><td data-label="#">22</td><td data-label="Word">understand</td><td data-label="Synonym">recognize / see / realize</td><td data-label="Antonym">misunderstand</td><td data-label="Note" class="meaning">يفهم</td></tr>
+            <tr><td data-label="#">23</td><td data-label="Word">definitely</td><td data-label="Synonym">certainly / surely / absolutely</td><td data-label="Antonym">probably / possibly</td><td data-label="Note" class="meaning">بالتأكيد / بلا شك</td></tr>
+            <tr><td data-label="#">24</td><td data-label="Word">powerful</td><td data-label="Synonym">strong / effective</td><td data-label="Antonym">powerless / weak</td><td data-label="Note" class="meaning">قوي / ذو نفوذ</td></tr>
+            <tr><td data-label="#">25</td><td data-label="Word">clear</td><td data-label="Synonym">plain / obvious / apparent</td><td data-label="Antonym">unclear / hidden</td><td data-label="Note" class="meaning">واضح</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION: Irregular Verbs -->
+    <section id="irregulars" class="card" aria-labelledby="irregulars-h">
+      <h2 id="irregulars-h">تصريف الأفعال غير المنتظمة — Irregular Verbs</h2>
+      <div class="table-wrap" role="region" aria-label="Irregular verbs table">
+        <table class="mobile-card" aria-describedby="irreg-cap">
+          <caption id="irreg-cap">Base | Past | Past Participle | المعنى</caption>
+          <thead>
+            <tr><th style="width:6%;">#</th><th>Base (Present)</th><th>Past</th><th>Past Participle</th><th>المعنى</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="#">1</td><td data-label="Base">bring</td><td data-label="Past">brought</td><td data-label="Participle">brought</td><td data-label="Meaning" class="meaning">يحضر / يجلب</td></tr>
+            <tr><td data-label="#">2</td><td data-label="Base">read</td><td data-label="Past">read</td><td data-label="Participle">read</td><td data-label="Meaning" class="meaning">يقرأ</td></tr>
+            <tr><td data-label="#">3</td><td data-label="Base">give</td><td data-label="Past">gave</td><td data-label="Participle">given</td><td data-label="Meaning" class="meaning">يعطي</td></tr>
+            <tr><td data-label="#">4</td><td data-label="Base">teach</td><td data-label="Past">taught</td><td data-label="Participle">taught</td><td data-label="Meaning" class="meaning">يعلم</td></tr>
+            <tr><td data-label="#">5</td><td data-label="Base">lose</td><td data-label="Past">lost</td><td data-label="Participle">lost</td><td data-label="Meaning" class="meaning">يفقد / يخسر</td></tr>
+            <tr><td data-label="#">6</td><td data-label="Base">know</td><td data-label="Past">knew</td><td data-label="Participle">known</td><td data-label="Meaning" class="meaning">يعرف</td></tr>
+            <tr><td data-label="#">7</td><td data-label="Base">forget</td><td data-label="Past">forgot</td><td data-label="Participle">forgotten</td><td data-label="Meaning" class="meaning">ينسى</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION: Expressions & Prepositions -->
+    <section id="expr-prep" class="card" aria-labelledby="expr-prep-h">
+      <h2 id="expr-prep-h">تعبيرات وحروف جر هامة — Expressions & Prepositions</h2>
+      <div class="table-wrap" role="region" aria-label="Expressions table">
+        <table class="mobile-card" aria-describedby="expr-cap">
+          <caption id="expr-cap">Expression / Preposition — الترجمة / ملاحظات</caption>
+          <thead>
+            <tr><th style="width:8%;">#</th><th>Expression / Preposition</th><th>الترجمة / الملاحظة</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="#">1</td><td data-label="Word">solve math problems</td><td data-label="Meaning" class="meaning">يجيب أسئلة حسابية</td></tr>
+            <tr><td data-label="#">2</td><td data-label="Word">change behavior</td><td data-label="Meaning" class="meaning">يُعدل السلوك</td></tr>
+            <tr><td data-label="#">3</td><td data-label="Word">human-made</td><td data-label="Meaning" class="meaning">صنع الإنسان / اصطناعي</td></tr>
+            <tr><td data-label="#">4</td><td data-label="Word">diagnose a disease</td><td data-label="Meaning" class="meaning">يشخِّص مرضًا</td></tr>
+            <tr><td data-label="#">5</td><td data-label="Word">make advertisement</td><td data-label="Meaning" class="meaning">يصنع إعلانًا / يعمل إعلان</td></tr>
+            <tr><td data-label="#">6</td><td data-label="Word">create stories / compose</td><td data-label="Meaning" class="meaning">يؤلف قصصًا</td></tr>
+            <tr><td data-label="#">7</td><td data-label="Word">self-driving car</td><td data-label="Meaning" class="meaning">سيارة ذاتية القيادة</td></tr>
+            <tr><td data-label="#">8</td><td data-label="Word">make decisions</td><td data-label="Meaning" class="meaning">يتخذ قرارات</td></tr>
+            <tr><td data-label="#">9</td><td data-label="Word">personalized learning</td><td data-label="Meaning" class="meaning">التعلم الشخصي</td></tr>
+            <tr><td data-label="#">10</td><td data-label="Word">automating tasks</td><td data-label="Meaning" class="meaning">تنفيذ مهام آليًا</td></tr>
+            <tr><td data-label="#">11</td><td data-label="Word">reduce human errors</td><td data-label="Meaning" class="meaning">يقلل الأخطاء البشرية</td></tr>
+
+            <tr><td data-label="#">12</td><td data-label="Preposition">across many fields</td><td data-label="Meaning" class="meaning">في مجالات عديدة</td></tr>
+            <tr><td data-label="#">13</td><td data-label="Preposition">turn ... into</td><td data-label="Meaning" class="meaning">يحوِّل شيء إلى شيء آخر</td></tr>
+            <tr><td data-label="#">14</td><td data-label="Preposition">know about</td><td data-label="Meaning" class="meaning">يعرف عن</td></tr>
+
+            <tr><td data-label="#">15</td><td data-label="Preposition">in a special way</td><td data-label="Meaning" class="meaning">بشكل مميز</td></tr>
+            <tr><td data-label="#">16</td><td data-label="Preposition">walk into</td><td data-label="Meaning" class="meaning">يدخل إلى</td></tr>
+            <tr><td data-label="#">17</td><td data-label="Preposition">at the end of</td><td data-label="Meaning" class="meaning">في نهاية</td></tr>
+            <tr><td data-label="#">18</td><td data-label="Preposition">wait long for</td><td data-label="Meaning" class="meaning">ينتظر وقتًا طويلًا من أجل</td></tr>
+            <tr><td data-label="#">19</td><td data-label="Preposition">at the front of</td><td data-label="Meaning" class="meaning">في مقدِّمة / أمام</td></tr>
+            <tr><td data-label="#">20</td><td data-label="Preposition">each of</td><td data-label="Meaning" class="meaning">كل من</td></tr>
+            <tr><td data-label="#">21</td><td data-label="Preposition">just for you</td><td data-label="Meaning" class="meaning">لأجلك فقط</td></tr>
+            <tr><td data-label="#">22</td><td data-label="Preposition">aware of</td><td data-label="Meaning" class="meaning">واعي بـ / مدرك لـ</td></tr>
+
+            <tr><td data-label="#">23</td><td data-label="Expression">for sure</td><td data-label="Meaning" class="meaning">بالتأكيد</td></tr>
+            <tr><td data-label="#">24</td><td data-label="Expression">keep ... safe</td><td data-label="Meaning" class="meaning">يحافظ على ... بأمان / يبقي ... بأمان</td></tr>
+            <tr><td data-label="#">25</td><td data-label="Expression">go further</td><td data-label="Meaning" class="meaning">يذهب بعيدًا / يتقدم أكثر</td></tr>
+            <tr><td data-label="#">26</td><td data-label="Expression">That's so exciting</td><td data-label="Meaning" class="meaning">ذلك مثير جدًا</td></tr>
+            <tr><td data-label="#">27</td><td data-label="Expression">sound amazing</td><td data-label="Meaning" class="meaning">يبدو رائعًا</td></tr>
+            <tr><td data-label="#">28</td><td data-label="Expression">make life easier</td><td data-label="Meaning" class="meaning">يُسهِّل الحياة / يجعل الحياة أسهل</td></tr>
+            <tr><td data-label="#">29</td><td data-label="Expression">ease of communication</td><td data-label="Meaning" class="meaning">سهولة التواصل</td></tr>
+            <tr><td data-label="#">30</td><td data-label="Expression">do job</td><td data-label="Meaning" class="meaning">يؤدي وظيفة / يقوم بمهمة</td></tr>
+            <tr><td data-label="#">31</td><td data-label="Expression">grow closer</td><td data-label="Meaning" class="meaning">يقترب أكثر / يزداد تقاربًا</td></tr>
+            <tr><td data-label="#">32</td><td data-label="Expression">take turns</td><td data-label="Meaning" class="meaning">يتبادل الأدوار</td></tr>
+
+            <tr><td data-label="#">33</td><td data-label="Preposition">according to</td><td data-label="Meaning" class="meaning">طبقًا لـ / حسب</td></tr>
+            <tr><td data-label="#">34</td><td data-label="Preposition">hear about</td><td data-label="Meaning" class="meaning">يسمع عن</td></tr>
+            <tr><td data-label="#">35</td><td data-label="Preposition">controlled by</td><td data-label="Meaning" class="meaning">متحكم به من قِبَل / مُتحكَّم به بواسطة</td></tr>
+            <tr><td data-label="#">36</td><td data-label="Preposition">focus on</td><td data-label="Meaning" class="meaning">يركز على</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+     <!-- SECTION: Key Vocabulary -->
+    <section id="keyvocab" class="card" aria-labelledby="keyvocab-h">
+      <h2 id="keyvocab-h">Key Vocabulary — كلمات مهمة</h2>
+      <div class="table-wrap" role="region" aria-label="Key vocabulary table">
+        <table class="mobile-card" aria-describedby="keyvocab-cap">
+          <caption id="keyvocab-cap">الكلمة — النوع — المعنى</caption>
+          <thead>
+            <tr><th style="width:6%;">#</th><th>Word</th><th>Type</th><th>المعنى بالعربية</th></tr>
+          </thead>
+          <tbody>
+            <!-- Lesson 1 -->
+            <tr><td data-label="#">1</td><td data-label="Word">machine</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">آلة - ماكينة</td></tr>
+            <tr><td data-label="#">2</td><td data-label="Word">simple</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">بسيط</td></tr>
+            <tr><td data-label="#">3</td><td data-label="Word">factory</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">مصنع</td></tr>
+            <tr><td data-label="#">4</td><td data-label="Word">surgery</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">عملية جراحية</td></tr>
+            <tr><td data-label="#">5</td><td data-label="Word">medicine</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">دواء - الطب</td></tr>
+            <tr><td data-label="#">6</td><td data-label="Word">smart</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">ذكي - ماهر</td></tr>
+            <tr><td data-label="#">7</td><td data-label="Word">replace</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يحِل محل - يستبدل</td></tr>
+            <tr><td data-label="#">8</td><td data-label="Word">brain</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">مخ</td></tr>
+            <tr><td data-label="#">9</td><td data-label="Word">follow</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يتتبع - يتبع</td></tr>
+            <tr><td data-label="#">10</td><td data-label="Word">basic</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">بسيط - بدائي</td></tr>
+            <tr><td data-label="#">11</td><td data-label="Word">orders</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">أوامر</td></tr>
+            <tr><td data-label="#">12</td><td data-label="Word">program</td><td data-label="Type" class="type">v / n</td><td data-label="Meaning" class="meaning">يبرمج - برنامج</td></tr>
+            <tr><td data-label="#">13</td><td data-label="Word">action</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">فعل - عمل</td></tr>
+            <tr><td data-label="#">14</td><td data-label="Word">control</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يتحكم</td></tr>
+            <tr><td data-label="#">15</td><td data-label="Word">Artificial Intelligence (AI)</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">الذكاء الاصطناعي</td></tr>
+            <tr><td data-label="#">16</td><td data-label="Word">robot</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">إنسان آلي</td></tr>
+            <tr><td data-label="#">17</td><td data-label="Word">limit</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">حد / إطار</td></tr>
+            <tr><td data-label="#">18</td><td data-label="Word">emotion</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">شعور - عاطفة</td></tr>
+            <tr><td data-label="#">19</td><td data-label="Word">task</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">مهمة - وظيفة</td></tr>
+            <tr><td data-label="#">20</td><td data-label="Word">algorithm</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">خوارزمية</td></tr>
+            <tr><td data-label="#">21</td><td data-label="Word">poem</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">قصيدة</td></tr>
+            <tr><td data-label="#">22</td><td data-label="Word">virtual</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">افتراضي</td></tr>
+            <tr><td data-label="#">23</td><td data-label="Word">advanced</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">متطور - متقدم</td></tr>
+            <tr><td data-label="#">24</td><td data-label="Word">behavior</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">سلوك</td></tr>
+            <tr><td data-label="#">25</td><td data-label="Word">vacuum cleaner</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">مكنسة كهربائية</td></tr>
+            <tr><td data-label="#">26</td><td data-label="Word">humans</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">البشر</td></tr>
+            <tr><td data-label="#">27</td><td data-label="Word">innovation</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">ابتكار - إبداع</td></tr>
+            <tr><td data-label="#">28</td><td data-label="Word">compose</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يؤلف</td></tr>
+            <tr><td data-label="#">29</td><td data-label="Word">benefits</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">فوائد</td></tr>
+            <tr><td data-label="#">30</td><td data-label="Word">type</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يكتب باستخدام لوحة مفاتيح</td></tr>
+            <tr><td data-label="#">31</td><td data-label="Word">draft</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">مسودة - صياغة</td></tr>
+            <tr><td data-label="#">32</td><td data-label="Word">creative</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">مبدع - مبتكر</td></tr>
+            <tr><td data-label="#">33</td><td data-label="Word">artist</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">فنان</td></tr>
+            <tr><td data-label="#">34</td><td data-label="Word">replacement</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">بديل</td></tr>
+            <tr><td data-label="#">35</td><td data-label="Word">transform</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يغير - يحول</td></tr>
+            <tr><td data-label="#">36</td><td data-label="Word">healthcare</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">رعاية صحية</td></tr>
+            <tr><td data-label="#">37</td><td data-label="Word">education</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">التعليم</td></tr>
+            <tr><td data-label="#">38</td><td data-label="Word">transportation</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">وسائل المواصلات</td></tr>
+            <tr><td data-label="#">39</td><td data-label="Word">customer service</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">خدمة عملاء</td></tr>
+            <tr><td data-label="#">40</td><td data-label="Word">error</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">خطأ</td></tr>
+            <tr><td data-label="#">41</td><td data-label="Word">efficient</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">فعال / ذو كفاءة</td></tr>
+            <tr><td data-label="#">42</td><td data-label="Word">automate</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يشغّل آليًا</td></tr>
+            <tr><td data-label="#">43</td><td data-label="Word">field</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">مجال</td></tr>
+            <tr><td data-label="#">44</td><td data-label="Word">copy</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">ينسخ - يقلد</td></tr>
+            <tr><td data-label="#">45</td><td data-label="Word">pattern</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">نمط - نموذج</td></tr>
+            <tr><td data-label="#">46</td><td data-label="Word">tool</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">أداة</td></tr>
+            <tr><td data-label="#">47</td><td data-label="Word">incredible</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">مذهل - رائع</td></tr>
+            <tr><td data-label="#">48</td><td data-label="Word">diagnose</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يشخّص (مرض)</td></tr>
+            <tr><td data-label="#">49</td><td data-label="Word">disease</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">مرض</td></tr>
+            <tr><td data-label="#">50</td><td data-label="Word">enhance</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يدعم - يعزز</td></tr>
+            <tr><td data-label="#">51</td><td data-label="Word">reduce</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يقلل</td></tr>
+            <tr><td data-label="#">52</td><td data-label="Word">efficiency</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">كفاءة / جودة</td></tr>
+
+            <!-- Lesson 3 -->
+            <tr><td data-label="#">53</td><td data-label="Word">explain</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يشرح</td></tr>
+            <tr><td data-label="#">54</td><td data-label="Word">check</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يفحص</td></tr>
+            <tr><td data-label="#">55</td><td data-label="Word">feedback</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">تعليق - تغذية راجعة</td></tr>
+            <tr><td data-label="#">56</td><td data-label="Word">return</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يعود</td></tr>
+            <tr><td data-label="#">57</td><td data-label="Word">completely</td><td data-label="Type" class="type">adv</td><td data-label="Meaning" class="meaning">بشكل كلي - بالكامل</td></tr>
+            <tr><td data-label="#">58</td><td data-label="Word">benefit</td><td data-label="Type" class="type">v / n</td><td data-label="Meaning" class="meaning">يستفيد / فائدة</td></tr>
+            <tr><td data-label="#">59</td><td data-label="Word">delay</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">تأجيل</td></tr>
+            <tr><td data-label="#">60</td><td data-label="Word">extra</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">إضافي</td></tr>
+            <tr><td data-label="#">61</td><td data-label="Word">practice</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">تدريب - تمرين</td></tr>
+            <tr><td data-label="#">62</td><td data-label="Word">helpful</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">مفيد - متعاون</td></tr>
+            <tr><td data-label="#">63</td><td data-label="Word">care</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">رعاية - عناية</td></tr>
+            <tr><td data-label="#">64</td><td data-label="Word">hate</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يكره</td></tr>
+            <tr><td data-label="#">65</td><td data-label="Word">congratulate</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يهنئ</td></tr>
+            <tr><td data-label="#">66</td><td data-label="Word">improve</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يحسن - يطور</td></tr>
+
+            <!-- Lesson 5 -->
+            <tr><td data-label="#">67</td><td data-label="Word">recognize</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يدرك - يفهم</td></tr>
+            <tr><td data-label="#">68</td><td data-label="Word">definitely</td><td data-label="Type" class="type">adv</td><td data-label="Meaning" class="meaning">بالتأكيد</td></tr>
+            <tr><td data-label="#">69</td><td data-label="Word">chance</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">فرصة</td></tr>
+
+            <!-- Lesson 6 -->
+            <tr><td data-label="#">70</td><td data-label="Word">discover</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يكتشف</td></tr>
+            <tr><td data-label="#">71</td><td data-label="Word">protect</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يحمي</td></tr>
+            <tr><td data-label="#">72</td><td data-label="Word">special</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">خاص / مميز</td></tr>
+            <tr><td data-label="#">73</td><td data-label="Word">involve</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يتضمن / يشمل</td></tr>
+            <tr><td data-label="#">74</td><td data-label="Word">mistakes</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">أخطاء</td></tr>
+            <tr><td data-label="#">75</td><td data-label="Word">rules</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">قواعد</td></tr>
+            <tr><td data-label="#">76</td><td data-label="Word">assist</td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يساعد</td></tr>
+            <tr><td data-label="#">77</td><td data-label="Word">even though</td><td data-label="Type" class="type">conj / adv</td><td data-label="Meaning" class="meaning">على الرغم من</td></tr>
+            <tr><td data-label="#">78</td><td data-label="Word">maybe</td><td data-label="Type" class="type">adv</td><td data-label="Meaning" class="meaning">ربما</td></tr>
+            <tr><td data-label="#">79</td><td data-label="Word">safe</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">آمن</td></tr>
+            <tr><td data-label="#">80</td><td data-label="Word">worried</td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">قلق</td></tr>
+            <tr><td data-label="#">81</td><td data-label="Word">deliveries</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">عمليات التوصيل</td></tr>
+            <tr><td data-label="#">82</td><td data-label="Word">facts</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">حقائق</td></tr>
+            <tr><td data-label="#">83</td><td data-label="Word">safely</td><td data-label="Type" class="type">adv</td><td data-label="Meaning" class="meaning">بأمان</td></tr>
+            <tr><td data-label="#">84</td><td data-label="Word">programs</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">برامج</td></tr>
+            <tr><td data-label="#">85</td><td data-label="Word">innovation</td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">ابتكار - تجديد</td></tr>
+            <tr><td data-label="#">86</td><td data-label="Word">creativity </td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">ابداع</td></tr>
+            <tr><td data-label="#">87</td><td data-label="Word">control </td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">يتحكم</td></tr>
+            <tr><td data-label="#">88</td><td data-label="Word">advanced </td><td data-label="Type" class="type">v</td><td data-label="Meaning" class="meaning">متطور</td></tr>
+            <tr><td data-label="#">89</td><td data-label="Word">emotion </td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">المشاعر</td></tr>
+            <tr><td data-label="#">90</td><td data-label="Word">powerful </td><td data-label="Type" class="type">adj</td><td data-label="Meaning" class="meaning">قوي</td></tr>
+            <tr><td data-label="#">91</td><td data-label="Word">drone </td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">طائره بدون طيار</td></tr>
+            <tr><td data-label="#">92</td><td data-label="Word">medicine </td><td data-label="Type" class="type">n</td><td data-label="Meaning" class="meaning">ادويه</td></tr>
+            <tr><td data-label="#">93</td><td data-label="Word">carefully </td><td data-label="Type" class="type">adv</td><td data-label="Meaning" class="meaning">بحذر</td></tr>
+            </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
+
+           
+           

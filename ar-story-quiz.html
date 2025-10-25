@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار تفاعلي</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #111, #222);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 25px 30px;
+      width: 90%;
+      max-width: 550px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      margin-top: 40px;
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #00ffb3;
+      letter-spacing: 1px;
+    }
+    .question {
+      background: rgba(255,255,255,0.05);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      transition: 0.3s;
+    }
+    .question:hover { background: rgba(255,255,255,0.08); }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 6px 0;
+      cursor: pointer;
+    }
+    .option input { accent-color: #00ffb3; }
+    .option.correct { background: rgba(0,255,128,0.1); border-left: 4px solid #00ff88; }
+    .option.wrong { background: rgba(255,0,76,0.1); border-left: 4px solid #ff004c; }
+    .btn {
+      display: block;
+      background: #00ffb3;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      margin: 15px auto;
+      font-weight: bold;
+      cursor: pointer;
+      color: #000;
+      font-size: 17px;
+      transition: 0.3s;
+    }
+    .btn:hover { background: #00cc8c; }
+    .timer {
+      text-align: center;
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      color: #00ffb3;
+      margin-bottom: 10px;
+    }
+    .result {
+      text-align: center;
+      font-size: 22px;
+      color: #fff;
+      margin-top: 20px;
+    }
+    .old-result {
+      text-align: center;
+      font-size: 16px;
+      color: #ffbb00;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Exam on Arabic-story1,2 </h2>
+    <div id="timer" class="timer">الوقت: 10:00</div>
+    <div id="welcome">جارٍ التحقق من الحساب...</div>
+    <div id="quizBox" style="display:none">
+    
+        <!-- انسخ هذه الكتل داخل <main> أو داخل ملف الأسئلة الخاص بك -->
+<!-- جميع الأسئلة بصيغة div.question مع attribute data-correct جاهز للتعبئة لاحقاً -->
+
+<div class="question" data-correct="4">
+  <p>(1) أحبت شجر الدر مصر؛ لـ :</p>
+  <label class="option"><input type="radio" name="q1" value="1"> اتساع أراضيها</label>
+  <label class="option"><input type="radio" name="q1" value="2"> كثرة شعبها</label>
+  <label class="option"><input type="radio" name="q1" value="3"> تنوع خيراتها</label>
+  <label class="option"><input type="radio" name="q1" value="4"> كرم شعبها</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(2) أقصى الملك الكامل ابنه نجم الدين عن مصر حيث جعله أميرا على :</p>
+  <label class="option"><input type="radio" name="q2" value="1"> الموصل في العراق</label>
+  <label class="option"><input type="radio" name="q2" value="2"> الثغور فى الشام</label>
+  <label class="option"><input type="radio" name="q2" value="3"> حصن كيفا</label>
+  <label class="option"><input type="radio" name="q2" value="4"> قلعة الكرك بالشام</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(3) أصبحت شجر الدر من الحرائر بعدما :</p>
+  <label class="option"><input type="radio" name="q3" value="1"> استقرت في مصر</label>
+  <label class="option"><input type="radio" name="q3" value="2"> أنجبت ابنها خليلًا</label>
+  <label class="option"><input type="radio" name="q3" value="3"> هزم أهلها التتار</label>
+  <label class="option"><input type="radio" name="q3" value="4"> تزوجت من نجم الدين</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>(4) كان الخوارزمية أتباعًا للسلطان :</p>
+  <label class="option"><input type="radio" name="q4" value="1"> جلال الدين</label>
+  <label class="option"><input type="radio" name="q4" value="2"> الكامل</label>
+  <label class="option"><input type="radio" name="q4" value="3"> سيف الدين</label>
+  <label class="option"><input type="radio" name="q4" value="4"> غياث الدين</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>(5) أكبر العقبات التي تمنع وصول نجم الدين لحكم مصر هي :</p>
+  <label class="option"><input type="radio" name="q5" value="1"> الروم</label>
+  <label class="option"><input type="radio" name="q5" value="2"> التتار</label>
+  <label class="option"><input type="radio" name="q5" value="3"> سوداء بنت الفقيه</label>
+  <label class="option"><input type="radio" name="q5" value="4"> الفرنج</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(6) نقلت سوداء بنت الفقيه ولاية العهد إلى :</p>
+  <label class="option"><input type="radio" name="q6" value="1"> نجم الدين</label>
+  <label class="option"><input type="radio" name="q6" value="2"> سيف الدين</label>
+  <label class="option"><input type="radio" name="q6" value="3"> بدر الدين</label>
+  <label class="option"><input type="radio" name="q6" value="4"> غياث الدين</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(7) أدركت رحمة الله شجر الدر حين :</p>
+  <label class="option"><input type="radio" name="q7" value="1"> تخلصت من سوداء</label>
+  <label class="option"><input type="radio" name="q7" value="2"> اشتراها نجم الدين</label>
+  <label class="option"><input type="radio" name="q7" value="3"> أنجبت ابنها خليلًا</label>
+  <label class="option"><input type="radio" name="q7" value="4"> تولى نجم الدين الحكم</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>(8) من العقبات الداخلية التي منعت وصول نجم الدين إلى حكم مصر :</p>
+  <label class="option"><input type="radio" name="q8" value="1"> طمع الروم في مصر</label>
+  <label class="option"><input type="radio" name="q8" value="2"> إسراع التتار إلى مصر</label>
+  <label class="option"><input type="radio" name="q8" value="3"> خلاف أمراء بنى أيوب</label>
+  <label class="option"><input type="radio" name="q8" value="4"> اختلاف الخوارزمية مع نجم الدين</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>(9) لقب سيف الدين بالملك :</p>
+  <label class="option"><input type="radio" name="q9" value="1"> الصالح</label>
+  <label class="option"><input type="radio" name="q9" value="2"> الكامل</label>
+  <label class="option"><input type="radio" name="q9" value="3"> العادل</label>
+  <label class="option"><input type="radio" name="q9" value="4"> المظفر</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>(10) بدر الدين لؤلؤ أمير مدينة :</p>
+  <label class="option"><input type="radio" name="q10" value="1"> الموصل</label>
+  <label class="option"><input type="radio" name="q10" value="2"> سنجار</label>
+  <label class="option"><input type="radio" name="q10" value="3"> دمشق</label>
+  <label class="option"><input type="radio" name="q10" value="4"> الرحبة</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(11) وثقت شجر الدر علاقة نجم الدين بـ :</p>
+  <label class="option"><input type="radio" name="q11" value="1"> الكامليه</label>
+  <label class="option"><input type="radio" name="q11" value="2"> الخوارزمية</label>
+  <label class="option"><input type="radio" name="q11" value="3"> سيف الدين</label>
+  <label class="option"><input type="radio" name="q11" value="4"> بدر الدين</label>
+</div>
+
+
+
+<div class="question" data-correct="4">
+  <p>(13) أقبلت الأنباء إلى نجم الدين تعلن اتفاق الأمراء على :</p>
+  <label class="option"><input type="radio" name="q13" value="1"> تولية الجواد حكم مصر</label>
+  <label class="option"><input type="radio" name="q13" value="2"> مقتل العادل</label>
+  <label class="option"><input type="radio" name="q13" value="3"> محاربة الخوارزمية</label>
+  <label class="option"><input type="radio" name="q13" value="4"> تولية العادل ملك مصر</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(14) كان نجم الدين منشغلاً بـ ... حين جاءته الأنباء بوفاة أبيه :</p>
+  <label class="option"><input type="radio" name="q14" value="1"> محاربة الخوارزمية</label>
+  <label class="option"><input type="radio" name="q14" value="2"> مواجهة الأعداء</label>
+  <label class="option"><input type="radio" name="q14" value="3"> الاستعداد للسفر</label>
+  <label class="option"><input type="radio" name="q14" value="4"> تخليص البلاد من شر العادل</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>(15) سبب اختلاف نجم الدين مع الخوارزمية :</p>
+  <label class="option"><input type="radio" name="q15" value="1"> كثرة أعدائهم</label>
+  <label class="option"><input type="radio" name="q15" value="2"> كراهيتهم لشجر الدر</label>
+  <label class="option"><input type="radio" name="q15" value="3"> مطامعهم الواسعة</label>
+  <label class="option"><input type="radio" name="q15" value="4"> ولاؤهم للصالح إسماعيل</label>
+</div>
+
+<div class="question" data-correct="4">
+  <p>(16) طلبت شجر الدر من نجم الدين استدعاء قاضِي سنجار لـ :</p>
+  <label class="option"><input type="radio" name="q16" value="1"> تطمئن على صحته</label>
+  <label class="option"><input type="radio" name="q16" value="2"> تكلفه بقيادة الجيش</label>
+  <label class="option"><input type="radio" name="q16" value="3"> تكافئه لأمانته</label>
+  <label class="option"><input type="radio" name="q16" value="4"> يُنفّذ خطتها</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>(17) اختارت شجر الدر القاضي لإرساله لقومها؛ وذلك لـ :</p>
+  <label class="option"><input type="radio" name="q17" value="1"> كِبَر سنه</label>
+  <label class="option"><input type="radio" name="q17" value="2"> معرفة قومها له</label>
+  <label class="option"><input type="radio" name="q17" value="3"> لباقته وقوة بيانه</label>
+  <label class="option"><input type="radio" name="q17" value="4"> كثرة أمواله</label>
+</div>
+
+
+      <button class="btn" id="showAnswers">إنهاء الاختبار</button>
+      <div id="result" class="result"></div>
+      <div id="oldResult" class="old-result"></div>
+    </div>
+  </div>
+
+  <!-- Firebase (v8) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+      authDomain: "my-web-c23de.firebaseapp.com",
+      projectId: "my-web-c23de",
+      storageBucket: "my-web-c23de.firebasestorage.app",
+      messagingSenderId: "846339445873",
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    const SUBJECT = "عربي تالته  اول فصلين قصه  ";
+    const QUIZ_TIME = 12 * 60;
+    let totalSeconds = QUIZ_TIME, timer, userId, userEmail;
+
+    const timerDiv = document.getElementById("timer");
+    const welcome = document.getElementById("welcome");
+    const quizBox = document.getElementById("quizBox");
+    const resultDiv = document.getElementById("result");
+    const oldResultDiv = document.getElementById("oldResult");
+
+    // التحقق من المستخدم
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        userId = user.uid;
+        userEmail = user.email;
+        welcome.innerText = `مرحبًا ${user.displayName || ""} 👋`;
+        await checkOldResult();
+        setTimeout(() => {
+          welcome.style.display = "none";
+          quizBox.style.display = "block";
+          startTimer();
+        }, 1200);
+      } else {
+        welcome.innerText = "⚠️ قم بتسجيل الدخول أولًا.";
+      }
+    });
+
+    async function checkOldResult() {
+      const prev = await db.collection("results")
+        .where("uid", "==", userId)
+        .where("subject", "==", SUBJECT)
+        .get();
+      if (!prev.empty) {
+        const data = prev.docs[0].data();
+        oldResultDiv.innerText = `📋 لقد حللت هذا الامتحان من قبل: ${data.score} / ${data.total}`;
+      }
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        let m = Math.floor(totalSeconds / 60);
+        let s = totalSeconds % 60;
+        timerDiv.textContent = `الوقت المتبقي: ${m}:${s.toString().padStart(2, "0")}`;
+        if (totalSeconds <= 0) {
+          clearInterval(timer);
+          showResults();
+        }
+        totalSeconds--;
+      }, 1000);
+    }
+
+    async function showResults() {
+      clearInterval(timer);
+      const questions = document.querySelectorAll(".question");
+      let score = 0;
+
+      questions.forEach((q, i) => {
+        const correct = parseInt(q.dataset.correct);
+        const selected = q.querySelector(`input[name="q${i + 1}"]:checked`);
+        q.querySelectorAll(".option").forEach(opt => {
+          const val = parseInt(opt.querySelector("input").value);
+          if (val === correct) opt.classList.add("correct");
+          if (selected && parseInt(selected.value) === val && val !== correct) opt.classList.add("wrong");
+        });
+        if (selected && parseInt(selected.value) === correct) score++;
+      });
+
+      resultDiv.innerText = `نتيجتك: ${score} من ${questions.length}`;
+
+      try {
+        const prev = await db.collection("results")
+          .where("uid", "==", userId)
+          .where("subject", "==", SUBJECT)
+          .get();
+        const alreadyTaken = !prev.empty;
+
+        await db.collection("results").add({
+          uid: userId,
+          email: userEmail,
+          subject: SUBJECT,
+          score: score,
+          total: questions.length,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        if (!alreadyTaken) {
+          const userRef = db.collection("users").doc(userId);
+          await db.runTransaction(async (t) => {
+            const userDoc = await t.get(userRef);
+            const old = userDoc.exists && userDoc.data().score ? userDoc.data().score : 0;
+            t.set(userRef, { score: old + score }, { merge: true });
+          });
+          alert("✅ تم حفظ نتيجتك وتحديث مجموعك!");
+        } else {
+          alert("⚠️ لقد أجبت على هذا الامتحان من قبل — لم تُضف نتيجتك مجددًا.");
+        }
+      } catch (e) {
+        alert("⚠️ خطأ أثناء الإرسال: " + e.message);
+      }
+    }
+
+    document.getElementById("showAnswers").addEventListener("click", showResults);
+  </script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Unit 2 — Structure (Ready for content)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#706a6a;
+    --card:#000000;
+    --accent:rgb(168, 131, 36);
+    --muted:#ffffff;
+    --glass: rgba(136, 133, 133, 0.329);
+    --radius:14px;
+    --maxw:1100px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; padding:0; font-family:'Cairo',sans-serif; background:linear-gradient(180deg,var(--bg),#070707); color:#fff; -webkit-font-smoothing:antialiased; direction:rtl;}
+  body{ padding:16px; }
+
+  .wrap{ max-width:var(--maxw); margin:0 auto; }
+
+  header{ text-align:center; margin-bottom:14px; }
+  h1{ margin:6px 0; color:var(--accent); font-size:20px; }
+  p.lead{ color:var(--muted); margin:0; font-size:13px; }
+
+  /* top nav */
+  .topnav{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:12px 0; }
+  .topnav a{
+    background:transparent; color:var(--accent); border:1px solid rgba(218,165,32,0.12);
+    padding:8px 12px; border-radius:10px; text-decoration:none; font-weight:700; font-size:13px;
+  }
+  .topnav a:hover{ background:rgba(218,165,32,0.06); color:#000; }
+
+  /* card */
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:var(--radius); padding:12px; margin-bottom:14px;
+    border:1px solid rgba(218,165,32,0.06); box-shadow:0 8px 26px rgba(0,0,0,0.6);
+  }
+  .card h2{ margin:0 0 8px; color:var(--accent); font-size:16px; display:flex; justify-content:space-between; align-items:center; gap:8px;}
+  .card .subtitle{ color:var(--muted); font-size:13px; margin-top:6px; }
+
+  /* table wrapper to allow horizontal scroll on small screens */
+  .table-wrap{ overflow:auto; -webkit-overflow-scrolling:touch; border-radius:10px; margin-top:10px; padding-bottom:6px; }
+  table{ width:100%; border-collapse:collapse; min-width:700px; }
+  caption{ text-align:right; color:var(--accent); font-weight:700; padding:8px 0; font-size:14px; }
+  thead th{ background:var(--accent); color:#000; padding:10px 12px; font-weight:700; position:sticky; top:0; z-index:2; }
+  th, td{ padding:10px 10px; border-bottom:1px solid rgba(255,255,255,0.04); text-align:center; vertical-align:middle; font-size:14px; }
+  tbody tr:nth-child(even){ background: rgba(255,255,255,0.02); }
+  td.meaning{ text-align:right; direction:rtl; word-break:break-word; }
+  td.type{ color:var(--accent); font-weight:700; white-space:nowrap; }
+
+  /* mobile-friendly: convert rows to cards visually (CSS-only) */
+  @media (max-width:640px){
+    table{ min-width:520px; }
+    .mobile-card tbody tr{ display:block; margin:10px 0; border-radius:10px; padding:10px; background:rgba(255,255,255,0.02); }
+    .mobile-card thead{ display:none; }
+    .mobile-card tbody tr td{ display:block; text-align:right; padding:6px 8px; border-bottom:0; font-size:14px; }
+    .mobile-card tbody tr td::before{ content: attr(data-label); float:right; color:var(--muted); font-weight:700; margin-left:10px; }
+  }
+
+  /* small screens tweaks */
+  @media (max-width:900px){
+    h1{ font-size:18px; }
+    th, td{ font-size:13px; padding:8px; }
+    .card{ padding:10px; }
+  }
+
+  /* subtle footer */
+  footer{ text-align:center; color:var(--muted); margin-top:10px; font-size:13px; }
+
+  /* helper note */
+  .note{ color:var(--muted); font-size:13px; margin-top:8px; text-align:right; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Unit 2 — Vocabulary & Structure</h1>
+      <p class="lead">الهيكل جاهز — ألصق المحتوى تحت كل قسم داخل الأماكن المخصصة (بدون أي JS).</p>
+    </header>
+
+    <nav class="topnav" aria-label="Navigation">
+      <a href="#collocations">متلازمات لفظية (Collocations)</a>
+      <a href="#synonyms">مرادفات ومضادات (Synonyms & Antonyms)</a>
+      <a href="#irregulars">أفعال شاذة (Irregular Verbs)</a>
+      <a href="#expr-prep">تعبيرات وحروف جر (Expressions & Prepositions)</a>
+      <a href="#keyvocab">Key Vocabulary</a>
+      <a href="#misc">أخرى / ملاحظات</a>
+    </nav>
+
+    <!-- SECTION: Collocations -->
+    <section id="collocations" class="card" aria-labelledby="collocations-h">
+      <h2 id="collocations-h">المتلازمات اللفظية — Collocations <span style="font-size:12px;color:var(--muted)">.</span></h2>
+
+      <div class="table-wrap" role="region" aria-label="Collocations table">
+        <table class="mobile-card" aria-describedby="collocations-cap">
+          <caption id="collocations-cap">العبارة (EN) — الترجمة / ملاحظات</caption>
+          <thead>
+            <tr><th style="width:6%;">#</th><th>Collocation (EN)</th><th>الترجمة / المعنى بالعربية</th></tr>
+          </thead>
+          <tbody>
+            <tr><td data-label="#">1</td><td data-label="Collocation">make time</td><td data-label="Meaning">يخصص وقت</td></tr>
+<tr><td data-label="#">2</td><td data-label="Collocation">get worse</td><td data-label="Meaning">يتدهور / يسوء</td></tr>
+<tr><td data-label="#">3</td><td data-label="Collocation">have a conversation</td><td data-label="Meaning">يُجرى محادثة</td></tr>
+<tr><td data-label="#">4</td><td data-label="Collocation">make misunderstanding</td><td data-label="Meaning">يسبب سوء فهم</td></tr>
+
+<!-- المجموعة الثانية -->
+<tr><td data-label="#">5</td><td data-label="Collocation">break silence</td><td data-label="Meaning">يكسر حاجز الصمت</td></tr>
+<tr><td data-label="#">6</td><td data-label="Collocation">nod head</td><td data-label="Meaning">يهز رأسه بالموافقة</td></tr>
+<tr><td data-label="#">7</td><td data-label="Collocation">spend money</td><td data-label="Meaning">ينفق مالًا</td></tr>
+<tr><td data-label="#">8</td><td data-label="Collocation">show emotion</td><td data-label="Meaning">يُظهر العاطفة</td></tr>
+
+            
+          </tbody>
+        </table>
+      </div>
+
+      <p class="note">.</p>
+    </section>
+
+    <!-- SECTION: Synonyms & Antonyms -->
+    <section id="synonyms" class="card" aria-labelledby="synonyms-h">
+      <h2 id="synonyms-h">مرادفات ومضادات — Synonyms & Antonyms</h2>
+
+      <div class="table-wrap" role="region" aria-label="Synonyms table">
+        <table class="mobile-card" aria-describedby="syn-cap">
+          <caption id="syn-cap">الكلمة — المرادف — المضاد — ملاحظات</caption>
+          <thead>
+            <tr><th>الكلمة (Word)</th><th>Synonym — المرادف</th><th>Antonym — المضاد</th><th>ملاحظة</th></tr>
+          </thead>
+          <tbody>
+            <!-- المجموعة الأولى -->
+<tr><td data-label="#">1</td><td data-label="Word">care</td><td data-label="Synonym">بِهتم</td><td data-label="Antonym">بتجاهل</td></tr>
+<tr><td data-label="#">2</td><td data-label="Word">stay in touch</td><td data-label="Synonym">يظل على اتصال</td><td data-label="Antonym">يفقد التواصل</td></tr>
+<tr><td data-label="#">3</td><td data-label="Word">conflict</td><td data-label="Synonym">خلاف / صراع</td><td data-label="Antonym">توافق / انسجام</td></tr>
+<tr><td data-label="#">4</td><td data-label="Word">respectful</td><td data-label="Synonym">محترم للآخرين</td><td data-label="Antonym">غير محترم</td></tr>
+<tr><td data-label="#">5</td><td data-label="Word">upset</td><td data-label="Synonym">قلق / منزعج</td><td data-label="Antonym">مسترخي / سعيد</td></tr>
+<tr><td data-label="#">6</td><td data-label="Word">thoughtful</td><td data-label="Synonym">مراعٍ لشعور الآخرين / عقلاني</td><td data-label="Antonym">غير مراعٍ للآخرين</td></tr>
+<tr><td data-label="#">7</td><td data-label="Word">failure</td><td data-label="Synonym">فشل</td><td data-label="Antonym">نجاح</td></tr>
+<tr><td data-label="#">8</td><td data-label="Word">encouragement</td><td data-label="Synonym">تشجيع</td><td data-label="Antonym">إحباط</td></tr>
+<tr><td data-label="#">9</td><td data-label="Word">imaginary</td><td data-label="Synonym">خيالي / تصوري</td><td data-label="Antonym">واقعي / عادي</td></tr>
+<tr><td data-label="#">10</td><td data-label="Word">serious</td><td data-label="Synonym">جاد / خطير</td><td data-label="Antonym">غير هام</td></tr>
+<tr><td data-label="#">11</td><td data-label="Word">bond</td><td data-label="Synonym">رابطة / قيد</td><td data-label="Antonym">انفصال</td></tr>
+<tr><td data-label="#">12</td><td data-label="Word">honest</td><td data-label="Synonym">أمين</td><td data-label="Antonym">كاذب / مخادع</td></tr>
+<tr><td data-label="#">13</td><td data-label="Word">strengthen</td><td data-label="Synonym">يعزز / يقوّي</td><td data-label="Antonym">يضعف</td></tr>
+
+<!-- المجموعة الثانية -->
+<tr><td data-label="#">14</td><td data-label="Word">silence</td><td data-label="Synonym">صمت / سكوت</td><td data-label="Antonym">ضوضاء / إزعاج</td></tr>
+<tr><td data-label="#">15</td><td data-label="Word">strange</td><td data-label="Synonym">غريب</td><td data-label="Antonym">عادي / شائع</td></tr>
+<tr><td data-label="#">16</td><td data-label="Word">awkward</td><td data-label="Synonym">مربك / غير ملائم</td><td data-label="Antonym">مريح</td></tr>
+<tr><td data-label="#">17</td><td data-label="Word">frustrated</td><td data-label="Synonym">محبط</td><td data-label="Antonym">قانع / راضٍ</td></tr>
+<tr><td data-label="#">18</td><td data-label="Word">distraction</td><td data-label="Synonym">تشتت / عدم انتباه</td><td data-label="Antonym">تركيز</td></tr>
+<tr><td data-label="#">19</td><td data-label="Word">meaningful</td><td data-label="Synonym">ذو معنى / مفيد / هام</td><td data-label="Antonym">بلا معنى</td></tr>
+<tr><td data-label="#">20</td><td data-label="Word">discipline</td><td data-label="Synonym">انضباط / تحكم / نظام</td><td data-label="Antonym">فوضى</td></tr>
+<tr><td data-label="#">21</td><td data-label="Word">embarrassing</td><td data-label="Synonym">محرج / غير مريح</td><td data-label="Antonym">مريح</td></tr>
+
+<!-- المجموعة الثالثة -->
+<tr><td data-label="#">22</td><td data-label="Word">fix</td><td data-label="Synonym">يُصلح / يُرمم</td><td data-label="Antonym">يتلف / يُكسر</td></tr>
+<tr><td data-label="#">23</td><td data-label="Word">glad</td><td data-label="Synonym">سعيد / مسرور</td><td data-label="Antonym">حزين / منزعج</td></tr>
+<tr><td data-label="#">24</td><td data-label="Word">doubt</td><td data-label="Synonym">شك / ريبة</td><td data-label="Antonym">ثقة / إيمان</td></tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION: Irregular Verbs -->
+    <section id="irregulars" class="card" aria-labelledby="irregulars-h">
+      <h2 id="irregulars-h">تصريف الأفعال غير المنتظمة — Irregular Verbs</h2>
+      <div class="table-wrap" role="region" aria-label="Irregular verbs table">
+        <table class="mobile-card" aria-describedby="irreg-cap">
+          <caption id="irreg-cap">Base | Past | Past Participle | المعنى</caption>
+          <thead>
+            <tr><th>Base (Present)</th><th>Past</th><th>Past Participle</th><th>المعنى</th></tr>
+          </thead>
+          <tbody>
+            <!-- المجموعة الأولى -->
+<tr><td data-label="Base">misunderstand</td><td data-label="Past">misunderstood</td><td data-label="Participle">misunderstood</td><td data-label="Meaning">يسيء الفهم</td></tr>
+<tr><td data-label="Base">forgive</td><td data-label="Past">forgave</td><td data-label="Participle">forgiven</td><td data-label="Meaning">يسامح / يغفر</td></tr>
+<tr><td data-label="Base">forget</td><td data-label="Past">forgot</td><td data-label="Participle">forgotten</td><td data-label="Meaning">ينسى</td></tr>
+<tr><td data-label="Base">speak</td><td data-label="Past">spoke</td><td data-label="Participle">spoken</td><td data-label="Meaning">يتحدث</td></tr>
+<tr><td data-label="Base">lead</td><td data-label="Past">led</td><td data-label="Participle">led</td><td data-label="Meaning">يؤدي / يقود</td></tr>
+<tr><td data-label="Base">bring</td><td data-label="Past">brought</td><td data-label="Participle">brought</td><td data-label="Meaning">يحضر</td></tr>
+
+<!-- المجموعة الثانية -->
+<tr><td data-label="Base">sit</td><td data-label="Past">sat</td><td data-label="Participle">sat</td><td data-label="Meaning">يجلس</td></tr>
+<tr><td data-label="Base">break</td><td data-label="Past">broke</td><td data-label="Participle">broken</td><td data-label="Meaning">يكسر / يوقف</td></tr>
+<tr><td data-label="Base">put</td><td data-label="Past">put</td><td data-label="Participle">put</td><td data-label="Meaning">يضع</td></tr>
+<tr><td data-label="Base">become</td><td data-label="Past">became</td><td data-label="Participle">become</td><td data-label="Meaning">يصبح</td></tr>
+
+<!-- المجموعة الثالثة -->
+<tr><td data-label="Base">rebuild</td><td data-label="Past">rebuilt</td><td data-label="Participle">rebuilt</td><td data-label="Meaning">يعيد بناء</td></tr>
+<tr><td data-label="Base">get</td><td data-label="Past">got</td><td data-label="Participle">got</td><td data-label="Meaning">يحصل على</td></tr>
+<tr><td data-label="Base">say</td><td data-label="Past">said</td><td data-label="Participle">said</td><td data-label="Meaning">يقول</td></tr>
+<tr><td data-label="Base">understand</td><td data-label="Past">understood</td><td data-label="Participle">understood</td><td data-label="Meaning">يفهم</td></tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION: Expressions & Prepositions -->
+    <section id="expr-prep" class="card" aria-labelledby="expr-prep-h">
+      <h2 id="expr-prep-h">تعبيرات وحروف جر هامة — Expressions & Prepositions</h2>
+      <div class="table-wrap" role="region" aria-label="Expressions table">
+        <table class="mobile-card" aria-describedby="expr-cap">
+          <caption id="expr-cap">Expression / Preposition — الترجمة / ملاحظات</caption>
+          <thead>
+            <tr><th style="width:8%;">#</th><th>Expression / Preposition</th><th>الترجمة / الملاحظة</th></tr>
+          </thead>
+          <tbody>
+            <!-- Important Expressions -->
+<tr><td data-label="#">1</td><td data-label="Expression">I totally agree</td><td data-label="Meaning">أوافق تمامًا / أتفق كليًا</td></tr>
+<tr><td data-label="#">2</td><td data-label="Expression">at all = absolutely</td><td data-label="Meaning">على الإطلاق</td></tr>
+<tr><td data-label="#">3</td><td data-label="Expression">a big deal</td><td data-label="Meaning">أمر مهم / مشكلة كبيرة</td></tr>
+<tr><td data-label="#">4</td><td data-label="Expression">for sure</td><td data-label="Meaning">بالطبع / بالتأكيد</td></tr>
+<tr><td data-label="#">5</td><td data-label="Expression">get mixed up</td><td data-label="Meaning">يختلط عليه الأمر / يصبح مشوشًا</td></tr>
+<tr><td data-label="#">6</td><td data-label="Expression">I totally get that</td><td data-label="Meaning">أنا أتفهم ذلك تمامًا</td></tr>
+<tr><td data-label="#">7</td><td data-label="Expression">stay close</td><td data-label="Meaning">يبقى قريبًا</td></tr>
+<tr><td data-label="#">8</td><td data-label="Expression">Right?</td><td data-label="Meaning">أليس كذلك؟</td></tr>
+<tr><td data-label="#">9</td><td data-label="Expression">so true</td><td data-label="Meaning">صحيح جدًا / واقعي جدًا</td></tr>
+<tr><td data-label="#">10</td><td data-label="Expression">cause misunderstanding</td><td data-label="Meaning">يسبب سوء فهم</td></tr>
+<tr><td data-label="#">11</td><td data-label="Expression">take courage</td><td data-label="Meaning">يتطلب شجاعة</td></tr>
+<tr><td data-label="#">12</td><td data-label="Expression">take a real conversation</td><td data-label="Meaning">يتطلب حوارًا حقيقيًا</td></tr>
+<tr><td data-label="#">13</td><td data-label="Expression">talk openly</td><td data-label="Meaning">يتحدث بصراحة / بحرية</td></tr>
+<tr><td data-label="#">14</td><td data-label="Expression">no doubt</td><td data-label="Meaning">بلا شك</td></tr>
+
+<!-- Prepositions -->
+<tr><td data-label="#">15</td><td data-label="Preposition">honest about</td><td data-label="Meaning">أمين بشأن</td></tr>
+<tr><td data-label="#">16</td><td data-label="Preposition">end up</td><td data-label="Meaning">ينتهي به الأمر</td></tr>
+<tr><td data-label="#">17</td><td data-label="Preposition">close to</td><td data-label="Meaning">قريب من</td></tr>
+<tr><td data-label="#">18</td><td data-label="Preposition">upset with</td><td data-label="Meaning">متضايق من</td></tr>
+<tr><td data-label="#">19</td><td data-label="Preposition">turn into</td><td data-label="Meaning">يتحول إلى</td></tr>
+
+<!-- More Expressions -->
+<tr><td data-label="#">20</td><td data-label="Expression">seem frustrated</td><td data-label="Meaning">يبدو محبطًا</td></tr>
+<tr><td data-label="#">21</td><td data-label="Expression">feel awkward</td><td data-label="Meaning">يشعر بعدم الارتياح / الحرج</td></tr>
+<tr><td data-label="#">22</td><td data-label="Expression">act of communication</td><td data-label="Meaning">خطوة للتواصل</td></tr>
+<tr><td data-label="#">23</td><td data-label="Expression">pay attention</td><td data-label="Meaning">ينتبه</td></tr>
+<tr><td data-label="#">24</td><td data-label="Expression">feel like</td><td data-label="Meaning">يشعر كما لو</td></tr>
+<tr><td data-label="#">25</td><td data-label="Expression">try something different</td><td data-label="Meaning">يجرب شيئًا مختلفًا</td></tr>
+<tr><td data-label="#">26</td><td data-label="Expression">too busy to talk</td><td data-label="Meaning">مشغول لدرجة لا يستطيع التحدث</td></tr>
+<tr><td data-label="#">27</td><td data-label="Expression">build a relationship</td><td data-label="Meaning">يبني علاقة</td></tr>
+
+<!-- More Prepositions -->
+<tr><td data-label="#">28</td><td data-label="Preposition">across from</td><td data-label="Meaning">أمام / على الجانب الآخر من</td></tr>
+<tr><td data-label="#">29</td><td data-label="Preposition">start of</td><td data-label="Meaning">بداية لـ</td></tr>
+<tr><td data-label="#">30</td><td data-label="Preposition">speak up</td><td data-label="Meaning">يتحدث بصوت عالٍ</td></tr>
+<tr><td data-label="#">31</td><td data-label="Preposition">filled with laughter</td><td data-label="Meaning">مليء بالضحك</td></tr>
+<tr><td data-label="#">32</td><td data-label="Preposition">kind of</td><td data-label="Meaning">نوع من</td></tr>
+<tr><td data-label="#">33</td><td data-label="Preposition">put down</td><td data-label="Meaning">يضع / يخفض</td></tr>
+<tr><td data-label="#">34</td><td data-label="Preposition">argument over</td><td data-label="Meaning">جدال حول</td></tr>
+<tr><td data-label="#">35</td><td data-label="Preposition">instead of</td><td data-label="Meaning">بدلًا من</td></tr>
+<tr><td data-label="#">36</td><td data-label="Preposition">push the food around</td><td data-label="Meaning">يقلب الطعام / يدفعه دون أكل</td></tr>
+<tr><td data-label="#">37</td><td data-label="Preposition">move to</td><td data-label="Meaning">ينتقل إلى</td></tr>
+
+<!-- Last Section -->
+<tr><td data-label="#">38</td><td data-label="Expression">move forward</td><td data-label="Meaning">يتقدم / يمضي قدمًا</td></tr>
+<tr><td data-label="#">39</td><td data-label="Expression">stay in touch</td><td data-label="Meaning">يبقى على اتصال</td></tr>
+<tr><td data-label="#">40</td><td data-label="Expression">active listening</td><td data-label="Meaning">استماع فعّال / إنصات تام</td></tr>
+<tr><td data-label="#">41</td><td data-label="Expression">in person</td><td data-label="Meaning">وجها لوجه / بصورة شخصية</td></tr>
+<tr><td data-label="#">42</td><td data-label="Expression">feel closer</td><td data-label="Meaning">يشعر بالقرب والمودة</td></tr>
+<tr><td data-label="#">43</td><td data-label="Expression">open conversation</td><td data-label="Meaning">حوار مفتوح</td></tr>
+<tr><td data-label="#">44</td><td data-label="Expression">close relationship</td><td data-label="Meaning">علاقة وثيقة / قوية</td></tr>
+<tr><td data-label="#">45</td><td data-label="Expression">express regret</td><td data-label="Meaning">يعبر عن الندم</td></tr>
+<tr><td data-label="#">46</td><td data-label="Expression">feel heard</td><td data-label="Meaning">يشعر بأنه مسموع</td></tr>
+<tr><td data-label="#">47</td><td data-label="Expression">feel respected</td><td data-label="Meaning">يشعر بالاحترام</td></tr>
+<tr><td data-label="#">48</td><td data-label="Preposition">the best way to</td><td data-label="Meaning">أفضل طريقة لـ...</td></tr>
+<tr><td data-label="#">49</td><td data-label="Preposition">to sum up</td><td data-label="Meaning">تلخيصًا / باختصار</td></tr>
+<tr><td data-label="#">50</td><td data-label="Preposition">lead to</td><td data-label="Meaning">يؤدي إلى</td></tr>
+<tr><td data-label="#">51</td><td data-label="Preposition">take time to</td><td data-label="Meaning">يستغرق وقتًا لكي</td></tr>
+<tr><td data-label="#">52</td><td data-label="Preposition">connect with</td><td data-label="Meaning">يتواصل مع</td></tr>
+<tr><td data-label="#">53</td><td data-label="Preposition">good at</td><td data-label="Meaning">جيد في</td></tr>
+<tr><td data-label="#">54</td><td data-label="Preposition">wake up</td><td data-label="Meaning">يستيقظ</td></tr>
+<tr><td data-label="#">55</td><td data-label="Preposition">key to</td><td data-label="Meaning">مفتاح لـ...</td></tr>
+<tr><td data-label="#">56</td><td data-label="Preposition">try to</td><td data-label="Meaning">يحاول أن</td></tr>
+<tr><td data-label="#">57</td><td data-label="Preposition">point of view</td><td data-label="Meaning">وجهة نظر</td></tr>
+<tr><td data-label="#">58</td><td data-label="Preposition">according to</td><td data-label="Meaning">وفقًا لـ / طبقا لـ</td></tr>
+<tr><td data-label="#">59</td><td data-label="Preposition">solution to</td><td data-label="Meaning">حل لـ...</td></tr>
+<tr><td data-label="#">60</td><td data-label="Preposition">in close relationships</td><td data-label="Meaning">في علاقة وثيقة</td></tr>
+
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION: Key Vocabulary -->
+    <section id="keyvocab" class="card" aria-labelledby="keyvocab-h">
+      <h2 id="keyvocab-h">Key Vocabulary — كلمات مهمة</h2>
+      <div class="table-wrap" role="region" aria-label="Key vocabulary table">
+        <table class="mobile-card" aria-describedby="keyvocab-cap">
+          <caption id="keyvocab-cap">الكلمة — النوع — المعنى</caption>
+          <thead>
+            <tr><th>الكلمة (Word)</th><th>Type</th><th>المعنى بالعربية</th></tr>
+          </thead>
+          <tbody>
+            <table>
+  <tr><th>#</th><th>Word</th><th>Meaning</th></tr>
+  <tr><td data-label="#">1</td><td data-label="Word">text message</td><td data-label="Meaning">رسالة نصية</td></tr>
+  <tr><td data-label="#">2</td><td data-label="Word">care (v)</td><td data-label="Meaning">يهتم / يرعى</td></tr>
+  <tr><td data-label="#">3</td><td data-label="Word">upset (adj)</td><td data-label="Meaning">منزعج / حزين</td></tr>
+  <tr><td data-label="#">4</td><td data-label="Word">discussion (n)</td><td data-label="Meaning">مناقشة</td></tr>
+  <tr><td data-label="#">5</td><td data-label="Word">thoughtful (adj)</td><td data-label="Meaning">مراعٍ لشعور الآخرين</td></tr>
+  <tr><td data-label="#">6</td><td data-label="Word">cause (v)</td><td data-label="Meaning">يسبب</td></tr>
+  <tr><td data-label="#">7</td><td data-label="Word">conversation (n)</td><td data-label="Meaning">حديث / حوار</td></tr>
+  <tr><td data-label="#">8</td><td data-label="Word">social media</td><td data-label="Meaning">وسائل التواصل الاجتماعي</td></tr>
+  <tr><td data-label="#">9</td><td data-label="Word">distance (n)</td><td data-label="Meaning">مسافة / بعد</td></tr>
+  <tr><td data-label="#">10</td><td data-label="Word">strengthen (v)</td><td data-label="Meaning">يقوّي / يدعم</td></tr>
+  <tr><td data-label="#">11</td><td data-label="Word">caring (adj)</td><td data-label="Meaning">مهتم / عطوف</td></tr>
+  <tr><td data-label="#">12</td><td data-label="Word">supported (adj)</td><td data-label="Meaning">مؤيد / مدعوم</td></tr>
+  <tr><td data-label="#">13</td><td data-label="Word">communication (n)</td><td data-label="Meaning">تواصل</td></tr>
+  <tr><td data-label="#">14</td><td data-label="Word">connection (n)</td><td data-label="Meaning">اتصال / ارتباط</td></tr>
+  <tr><td data-label="#">15</td><td data-label="Word">relationship (n)</td><td data-label="Meaning">علاقة / صلة</td></tr>
+  <tr><td data-label="#">16</td><td data-label="Word">misunderstand (v)</td><td data-label="Meaning">يسيء الفهم</td></tr>
+  <tr><td data-label="#">17</td><td data-label="Word">misunderstanding (n)</td><td data-label="Meaning">سوء فهم / خلاف</td></tr>
+  <tr><td data-label="#">18</td><td data-label="Word">bond (n)</td><td data-label="Meaning">رابطة / علاقة وثيقة</td></tr>
+  <tr><td data-label="#">19</td><td data-label="Word">calm (adj)</td><td data-label="Meaning">هادئ</td></tr>
+  <tr><td data-label="#">20</td><td data-label="Word">sibling (n)</td><td data-label="Meaning">شقيق / شقيقة</td></tr>
+  <tr><td data-label="#">21</td><td data-label="Word">respectful (adj)</td><td data-label="Meaning">محترم للآخرين</td></tr>
+  <tr><td data-label="#">22</td><td data-label="Word">conflict (n)</td><td data-label="Meaning">صراع / نزاع</td></tr>
+  <tr><td data-label="#">23</td><td data-label="Word">supportive (adj)</td><td data-label="Meaning">داعم / مساند</td></tr>
+  <tr><td data-label="#">24</td><td data-label="Word">resolve (v)</td><td data-label="Meaning">يحل / يفصل</td></tr>
+  <tr><td data-label="#">25</td><td data-label="Word">texting (n)</td><td data-label="Meaning">المراسلة / إرسال الرسائل</td></tr>
+  <tr><td data-label="#">26</td><td data-label="Word">face-to-face</td><td data-label="Meaning">وجها لوجه</td></tr>
+  <tr><td data-label="#">27</td><td data-label="Word">avoid (v)</td><td data-label="Meaning">يتجنب</td></tr>
+  <tr><td data-label="#">28</td><td data-label="Word">miscommunication (n)</td><td data-label="Meaning">سوء التواصل</td></tr>
+  <tr><td data-label="#">29</td><td data-label="Word">facial expressions</td><td data-label="Meaning">تعبيرات الوجه</td></tr>
+  <tr><td data-label="#">30</td><td data-label="Word">body language</td><td data-label="Meaning">لغة الجسد</td></tr>
+  <table>
+  <tr><th>#</th><th>Word</th><th>Meaning</th></tr>
+
+  <tr><td data-label="#">31</td><td data-label="Word">serious (adj)</td><td data-label="Meaning">جاد / خطير</td></tr>
+  <tr><td data-label="#">32</td><td data-label="Word">loudly (adv)</td><td data-label="Meaning">بصوت مرتفع</td></tr>
+  <tr><td data-label="#">33</td><td data-label="Word">ignore (v)</td><td data-label="Meaning">يتجاهل</td></tr>
+  <tr><td data-label="#">34</td><td data-label="Word">issue (n)</td><td data-label="Meaning">موضوع / قضية</td></tr>
+  <tr><td data-label="#">35</td><td data-label="Word">group project</td><td data-label="Meaning">مشروع جماعي</td></tr>
+  <tr><td data-label="#">36</td><td data-label="Word">meaningful (adj)</td><td data-label="Meaning">ذو معنى / مهم</td></tr>
+  <tr><td data-label="#">37</td><td data-label="Word">ride (n)</td><td data-label="Meaning">جولة / رحلة</td></tr>
+  <tr><td data-label="#">38</td><td data-label="Word">solution (n)</td><td data-label="Meaning">حل</td></tr>
+  <tr><td data-label="#">39</td><td data-label="Word">argument (n)</td><td data-label="Meaning">جدال / نقاش حاد</td></tr>
+  <tr><td data-label="#">40</td><td data-label="Word">fork (n)</td><td data-label="Meaning">شوكة</td></tr>
+  <tr><td data-label="#">41</td><td data-label="Word">disappear (v)</td><td data-label="Meaning">يختفي</td></tr>
+  <tr><td data-label="#">42</td><td data-label="Word">stress (n)</td><td data-label="Meaning">توتر / ضغط</td></tr>
+  <tr><td data-label="#">43</td><td data-label="Word">distant (adj)</td><td data-label="Meaning">بعيد / متباعد</td></tr>
+  <tr><td data-label="#">44</td><td data-label="Word">stranger (n)</td><td data-label="Meaning">شخص غريب</td></tr>
+  <tr><td data-label="#">45</td><td data-label="Word">softly (adv)</td><td data-label="Meaning">بهدوء / بلطف</td></tr>
+  <tr><td data-label="#">46</td><td data-label="Word">nod (v)</td><td data-label="Meaning">يومئ برأسه للموافقة</td></tr>
+  <tr><td data-label="#">47</td><td data-label="Word">speech (n)</td><td data-label="Meaning">حديث / خطاب</td></tr>
+  <tr><td data-label="#">48</td><td data-label="Word">act (n)</td><td data-label="Meaning">فعل / تصرف</td></tr>
+  <tr><td data-label="#">49</td><td data-label="Word">laughter (n)</td><td data-label="Meaning">ضحك</td></tr>
+  <tr><td data-label="#">50</td><td data-label="Word">lately (adv)</td><td data-label="Meaning">مؤخراً</td></tr>
+  <tr><td data-label="#">51</td><td data-label="Word">disagreement (n)</td><td data-label="Meaning">نزاع / خلاف</td></tr>
+  <tr><td data-label="#">52</td><td data-label="Word">discipline (n)</td><td data-label="Meaning">انضباط / نظام</td></tr>
+  <tr><td data-label="#">53</td><td data-label="Word">traditions (n)</td><td data-label="Meaning">عادات / تقاليد</td></tr>
+  <tr><td data-label="#">54</td><td data-label="Word">distracted (adj)</td><td data-label="Meaning">مشتت / غير مركز</td></tr>
+  <tr><td data-label="#">55</td><td data-label="Word">physically (adj)</td><td data-label="Meaning">بدنيًا</td></tr>
+  <tr><td data-label="#">56</td><td data-label="Word">meeting (n)</td><td data-label="Meaning">اجتماع</td></tr>
+  <tr><td data-label="#">57</td><td data-label="Word">silence (n)</td><td data-label="Meaning">صمت</td></tr>
+  <tr><td data-label="#">58</td><td data-label="Word">awkward (adj)</td><td data-label="Meaning">غير مريح / غريب</td></tr>
+  <tr><td data-label="#">59</td><td data-label="Word">reconnect (v)</td><td data-label="Meaning">يعيد التواصل</td></tr>
+  <tr><td data-label="#">60</td><td data-label="Word">due to</td><td data-label="Meaning">بسبب</td></tr>
+  <tr><td data-label="#">61</td><td data-label="Word">distraction (n)</td><td data-label="Meaning">تشتيت / تشويش</td></tr>
+  <tr><td data-label="#">62</td><td data-label="Word">frustrated (adj)</td><td data-label="Meaning">محبط / منزعج</td></tr>
+  <tr><td data-label="#">63</td><td data-label="Word">gesture (n)</td><td data-label="Meaning">إشارة / إيماءة</td></tr>
+  <tr><td data-label="#">64</td><td data-label="Word">real (adj)</td><td data-label="Meaning">حقيقي</td></tr>
+  <tr><td data-label="#">65</td><td data-label="Word">flight (n)</td><td data-label="Meaning">رحلة طيران</td></tr>
+  <tr><td data-label="#">66</td><td data-label="Word">differently (adv)</td><td data-label="Meaning">بطريقة مختلفة</td></tr>
+  <tr><td data-label="#">67</td><td data-label="Word">situation (n)</td><td data-label="Meaning">موقف / حالة</td></tr>
+  <tr><td data-label="#">68</td><td data-label="Word">skill (n)</td><td data-label="Meaning">مهارة</td></tr>
+  <tr><td data-label="#">69</td><td data-label="Word">guy (n)</td><td data-label="Meaning">شخص / فرد</td></tr>
+  <tr><td data-label="#">70</td><td data-label="Word">determination (n)</td><td data-label="Meaning">عزيمة / إصرار</td></tr>
+  <tr><td data-label="#">71</td><td data-label="Word">importance (n)</td><td data-label="Meaning">أهمية</td></tr>
+  <tr><td data-label="#">72</td><td data-label="Word">openly (adv)</td><td data-label="Meaning">بصراحة / بوضوح</td></tr>
+  <tr><td data-label="#">73</td><td data-label="Word">absolutely (adv)</td><td data-label="Meaning">بالتأكيد / تمامًا</td></tr>
+  <tr><td data-label="#">74</td><td data-label="Word">proper (adj)</td><td data-label="Meaning">ملائم / مناسب</td></tr>
+  <tr><td data-label="#">75</td><td data-label="Word">glad (adj)</td><td data-label="Meaning">سعيد / مسرور</td></tr>
+  <tr><td data-label="#">76</td><td data-label="Word">feelings (n)</td><td data-label="Meaning">مشاعر</td></tr>
+  <tr><td data-label="#">77</td><td data-label="Word">meaningful (adj)</td><td data-label="Meaning">هادف / ذو مغزى</td></tr>
+  <tr><td data-label="#">78</td><td data-label="Word">misunderstanding (n)</td><td data-label="Meaning">سوء تفاهم</td></tr>
+  <tr><td data-label="#">79</td><td data-label="Word">communicate (v)</td><td data-label="Meaning">يتواصل</td></tr>
+  <tr><td data-label="#">80</td><td data-label="Word">bond (n)</td><td data-label="Meaning">رابط / علاقة</td></tr>
+  <tr><td data-label="#">81</td><td data-label="Word">resolve (v)</td><td data-label="Meaning">يحل / يسوي</td></tr>
+  <tr><td data-label="#">82</td><td data-label="Word">argue (v)</td><td data-label="Meaning">يجادل / يناقش</td></tr>
+  <tr><td data-label="#">83</td><td data-label="Word">honest (adj)</td><td data-label="Meaning">أمين / صادق</td></tr>
+  <tr><td data-label="#">84</td><td data-label="Word">reconnect (v)</td><td data-label="Meaning">يعيد التواصل</td></tr>
+  <tr><td data-label="#">85</td><td data-label="Word">tough (adj)</td><td data-label="Meaning">قاسٍ / صعب</td></tr>
+
+            
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    
+  </div>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار تفاعلي</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #111, #222);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 25px 30px;
+      width: 90%;
+      max-width: 550px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      margin-top: 40px;
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #00ffb3;
+      letter-spacing: 1px;
+    }
+    .question {
+      background: rgba(255,255,255,0.05);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      transition: 0.3s;
+    }
+    .question:hover { background: rgba(255,255,255,0.08); }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 6px 0;
+      cursor: pointer;
+    }
+    .option input { accent-color: #00ffb3; }
+    .option.correct { background: rgba(0,255,128,0.1); border-left: 4px solid #00ff88; }
+    .option.wrong { background: rgba(255,0,76,0.1); border-left: 4px solid #ff004c; }
+    .btn {
+      display: block;
+      background: #00ffb3;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      margin: 15px auto;
+      font-weight: bold;
+      cursor: pointer;
+      color: #000;
+      font-size: 17px;
+      transition: 0.3s;
+    }
+    .btn:hover { background: #00cc8c; }
+    .timer {
+      text-align: center;
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      color: #00ffb3;
+      margin-bottom: 10px;
+    }
+    .result {
+      text-align: center;
+      font-size: 22px;
+      color: #fff;
+      margin-top: 20px;
+    }
+    .old-result {
+      text-align: center;
+      font-size: 16px;
+      color: #ffbb00;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Exam on Unit 1 Grammar</h2>
+    <div id="timer" class="timer">الوقت: 10:00</div>
+    <div id="welcome">جارٍ التحقق من الحساب...</div>
+    <div id="quizBox" style="display:none">
+      <div class="question" data-correct="3">
+  <p>1. Ahmed ..... that movie yet.</p>
+  <label class="option"><input type="radio" name="q1" value="1">didn't see</label>
+  <label class="option"><input type="radio" name="q1" value="2">doesn't see</label>
+  <label class="option"><input type="radio" name="q1" value="3">hasn't seen</label>
+  <label class="option"><input type="radio" name="q1" value="4">wasn't seen</label>
+</div>
+
+<div class="question" data-correct="4">
+  <p>2. We ..... friends since primary school.</p>
+  <label class="option"><input type="radio" name="q2" value="1">were</label>
+  <label class="option"><input type="radio" name="q2" value="2">are</label>
+  <label class="option"><input type="radio" name="q2" value="3">been</label>
+  <label class="option"><input type="radio" name="q2" value="4">have been</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>3. I ..... that book already; you can borrow it.</p>
+  <label class="option"><input type="radio" name="q3" value="1">have read</label>
+  <label class="option"><input type="radio" name="q3" value="2">reading</label>
+  <label class="option"><input type="radio" name="q3" value="3">was reading</label>
+  <label class="option"><input type="radio" name="q3" value="4">am reading</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>4. I ..... English for 12 years.</p>
+  <label class="option"><input type="radio" name="q4" value="1">have spoken</label>
+  <label class="option"><input type="radio" name="q4" value="2">speak</label>
+  <label class="option"><input type="radio" name="q4" value="3">spoken</label>
+  <label class="option"><input type="radio" name="q4" value="4">am speaking</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>5. ..... you ever been to Alexandria?</p>
+  <label class="option"><input type="radio" name="q5" value="1">Did</label>
+  <label class="option"><input type="radio" name="q5" value="2">Has</label>
+  <label class="option"><input type="radio" name="q5" value="3">Have</label>
+  <label class="option"><input type="radio" name="q5" value="4">Were</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>6. The homework ..... yet.</p>
+  <label class="option"><input type="radio" name="q6" value="1">hasn't finished</label>
+  <label class="option"><input type="radio" name="q6" value="2">hasn't been finished</label>
+  <label class="option"><input type="radio" name="q6" value="3">didn't finish</label>
+  <label class="option"><input type="radio" name="q6" value="4">isn't finished</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>7. We have lived in this city ..... 2015.</p>
+  <label class="option"><input type="radio" name="q7" value="1">for</label>
+  <label class="option"><input type="radio" name="q7" value="2">since</label>
+  <label class="option"><input type="radio" name="q7" value="3">at</label>
+  <label class="option"><input type="radio" name="q7" value="4">on</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>8. I haven't seen that film .....</p>
+  <label class="option"><input type="radio" name="q8" value="1">already</label>
+  <label class="option"><input type="radio" name="q8" value="2">just</label>
+  <label class="option"><input type="radio" name="q8" value="3">yet</label>
+  <label class="option"><input type="radio" name="q8" value="4">ever</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>9. Many good changes ..... in our school recently.</p>
+  <label class="option"><input type="radio" name="q9" value="1">has made</label>
+  <label class="option"><input type="radio" name="q9" value="2">have been made</label>
+  <label class="option"><input type="radio" name="q9" value="3">made</label>
+  <label class="option"><input type="radio" name="q9" value="4">were making</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>10. I've known my best friend ..... ten years.</p>
+  <label class="option"><input type="radio" name="q10" value="1">since</label>
+  <label class="option"><input type="radio" name="q10" value="2">for</label>
+  <label class="option"><input type="radio" name="q10" value="3">from</label>
+  <label class="option"><input type="radio" name="q10" value="4">with</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>11. Many students ..... by their helpful teachers this year.</p>
+  <label class="option"><input type="radio" name="q11" value="1">have helped</label>
+  <label class="option"><input type="radio" name="q11" value="2">were helping</label>
+  <label class="option"><input type="radio" name="q11" value="3">have been helped</label>
+  <label class="option"><input type="radio" name="q11" value="4">helped</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>12. He ..... his homework, so he can relax now.</p>
+  <label class="option"><input type="radio" name="q12" value="1">has just finished</label>
+  <label class="option"><input type="radio" name="q12" value="2">just finished</label>
+  <label class="option"><input type="radio" name="q12" value="3">was just finishing</label>
+  <label class="option"><input type="radio" name="q12" value="4">is just finishing</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>13. New cities ..... by the current government.</p>
+  <label class="option"><input type="radio" name="q13" value="1">have built</label>
+  <label class="option"><input type="radio" name="q13" value="2">have been built</label>
+  <label class="option"><input type="radio" name="q13" value="3">built</label>
+  <label class="option"><input type="radio" name="q13" value="4">were building</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>14. My car has been ..... lately, so it's working well now.</p>
+  <label class="option"><input type="radio" name="q14" value="1">repair</label>
+  <label class="option"><input type="radio" name="q14" value="2">repairing</label>
+  <label class="option"><input type="radio" name="q14" value="3">repaired</label>
+  <label class="option"><input type="radio" name="q14" value="4">repairs</label>
+</div>
+
+        
+      <button class="btn" id="showAnswers">إنهاء الاختبار</button>
+      <div id="result" class="result"></div>
+      <div id="oldResult" class="old-result"></div>
+    </div>
+  </div>
+
+  <!-- Firebase (v8) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+      authDomain: "my-web-c23de.firebaseapp.com",
+      projectId: "my-web-c23de",
+      storageBucket: "my-web-c23de.firebasestorage.app",
+      messagingSenderId: "846339445873",
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    const SUBJECT = "انجليزي تالته يونت واحد جرامر";
+    const QUIZ_TIME = 10 * 60;
+    let totalSeconds = QUIZ_TIME, timer, userId, userEmail;
+
+    const timerDiv = document.getElementById("timer");
+    const welcome = document.getElementById("welcome");
+    const quizBox = document.getElementById("quizBox");
+    const resultDiv = document.getElementById("result");
+    const oldResultDiv = document.getElementById("oldResult");
+
+    // التحقق من المستخدم
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        userId = user.uid;
+        userEmail = user.email;
+        welcome.innerText = `مرحبًا ${user.displayName || ""} 👋`;
+        await checkOldResult();
+        setTimeout(() => {
+          welcome.style.display = "none";
+          quizBox.style.display = "block";
+          startTimer();
+        }, 1200);
+      } else {
+        welcome.innerText = "⚠️ قم بتسجيل الدخول أولًا.";
+      }
+    });
+
+    async function checkOldResult() {
+      const prev = await db.collection("results")
+        .where("uid", "==", userId)
+        .where("subject", "==", SUBJECT)
+        .get();
+      if (!prev.empty) {
+        const data = prev.docs[0].data();
+        oldResultDiv.innerText = `📋 لقد حللت هذا الامتحان من قبل: ${data.score} / ${data.total}`;
+      }
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        let m = Math.floor(totalSeconds / 60);
+        let s = totalSeconds % 60;
+        timerDiv.textContent = `الوقت المتبقي: ${m}:${s.toString().padStart(2, "0")}`;
+        if (totalSeconds <= 0) {
+          clearInterval(timer);
+          showResults();
+        }
+        totalSeconds--;
+      }, 1000);
+    }
+
+    async function showResults() {
+      clearInterval(timer);
+      const questions = document.querySelectorAll(".question");
+      let score = 0;
+
+      questions.forEach((q, i) => {
+        const correct = parseInt(q.dataset.correct);
+        const selected = q.querySelector(`input[name="q${i + 1}"]:checked`);
+        q.querySelectorAll(".option").forEach(opt => {
+          const val = parseInt(opt.querySelector("input").value);
+          if (val === correct) opt.classList.add("correct");
+          if (selected && parseInt(selected.value) === val && val !== correct) opt.classList.add("wrong");
+        });
+        if (selected && parseInt(selected.value) === correct) score++;
+      });
+
+      resultDiv.innerText = `نتيجتك: ${score} من ${questions.length}`;
+
+      try {
+        const prev = await db.collection("results")
+          .where("uid", "==", userId)
+          .where("subject", "==", SUBJECT)
+          .get();
+        const alreadyTaken = !prev.empty;
+
+        await db.collection("results").add({
+          uid: userId,
+          email: userEmail,
+          subject: SUBJECT,
+          score: score,
+          total: questions.length,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        if (!alreadyTaken) {
+          const userRef = db.collection("users").doc(userId);
+          await db.runTransaction(async (t) => {
+            const userDoc = await t.get(userRef);
+            const old = userDoc.exists && userDoc.data().score ? userDoc.data().score : 0;
+            t.set(userRef, { score: old + score }, { merge: true });
+          });
+          alert("✅ تم حفظ نتيجتك وتحديث مجموعك!");
+        } else {
+          alert("⚠️ لقد أجبت على هذا الامتحان من قبل — لم تُضف نتيجتك مجددًا.");
+        }
+      } catch (e) {
+        alert("⚠️ خطأ أثناء الإرسال: " + e.message);
+      }
+    }
+
+    document.getElementById("showAnswers").addEventListener("click", showResults);
+  </script>
+</body>
+</html>

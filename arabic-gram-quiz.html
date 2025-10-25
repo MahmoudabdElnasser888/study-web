@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار تفاعلي</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #111, #222);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 25px 30px;
+      width: 90%;
+      max-width: 550px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      margin-top: 40px;
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #00ffb3;
+      letter-spacing: 1px;
+    }
+    .question {
+      background: rgba(255,255,255,0.05);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      transition: 0.3s;
+    }
+    .question:hover { background: rgba(255,255,255,0.08); }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 6px 0;
+      cursor: pointer;
+    }
+    .option input { accent-color: #00ffb3; }
+    .option.correct { background: rgba(0,255,128,0.1); border-left: 4px solid #00ff88; }
+    .option.wrong { background: rgba(255,0,76,0.1); border-left: 4px solid #ff004c; }
+    .btn {
+      display: block;
+      background: #00ffb3;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      margin: 15px auto;
+      font-weight: bold;
+      cursor: pointer;
+      color: #000;
+      font-size: 17px;
+      transition: 0.3s;
+    }
+    .btn:hover { background: #00cc8c; }
+    .timer {
+      text-align: center;
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      color: #00ffb3;
+      margin-bottom: 10px;
+    }
+    .result {
+      text-align: center;
+      font-size: 22px;
+      color: #fff;
+      margin-top: 20px;
+    }
+    .old-result {
+      text-align: center;
+      font-size: 16px;
+      color: #ffbb00;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>امتحان علي اول ثلاث دروس نحو </h2>
+    <div id="timer" class="timer">الوقت: 50:00</div>
+    <div id="welcome">جارٍ التحقق من الحساب...</div>
+    <div id="quizBox" style="display:none">
+        <!-- ======= قسم: المنادى ======= -->
+<div class="question" data-correct="2">
+  <p>(۱) « يا واعظًا غيرك ، ابدأ بنفسك » . نوع المنادى :</p>
+  <label class="option"><input type="radio" name="q1" value="1"> مضاف</label>
+  <label class="option"><input type="radio" name="q1" value="2"> شبيه بالمضاف</label>
+  <label class="option"><input type="radio" name="q1" value="3"> نكرة غير مقصودة</label>
+  <label class="option"><input type="radio" name="q1" value="4"> نكرة مقصودة</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(۲) «أيا متفوقون ، اجتهدوا » . (متفوقون ) منادى :</p>
+  <label class="option"><input type="radio" name="q2" value="1"> مرفوع بالواو</label>
+  <label class="option"><input type="radio" name="q2" value="2"> مبنى على الواو</label>
+  <label class="option"><input type="radio" name="q2" value="3"> مرفوع بثبوت النون</label>
+  <label class="option"><input type="radio" name="q2" value="4"> مبنى على الضم</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>(۳) «أيها المواطنون، العمل أمانة » . المنادى فى الجملة السابقة :</p>
+  <label class="option"><input type="radio" name="q3" value="1"> أى</label>
+  <label class="option"><input type="radio" name="q3" value="2"> ها</label>
+  <label class="option"><input type="radio" name="q3" value="3"> المواطنون</label>
+  <label class="option"><input type="radio" name="q3" value="4"> محذوف</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>(٤) «بنِى مصر، صونوا لها مجدها» . نوع المنادى :</p>
+  <label class="option"><input type="radio" name="q4" value="1"> مضاف</label>
+  <label class="option"><input type="radio" name="q4" value="2"> شبيه بالمضاف</label>
+  <label class="option"><input type="radio" name="q4" value="3"> نكرة مقصودة</label>
+  <label class="option"><input type="radio" name="q4" value="4"> نكرة غير مقصودة</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(0) «يا أيها الغافلون ، انتبهوا » . إعراب (الغافلون) :</p>
+  <label class="option"><input type="radio" name="q5" value="1"> منادى مبنى على الضم</label>
+  <label class="option"><input type="radio" name="q5" value="2"> نعت مرفوع بالواو</label>
+  <label class="option"><input type="radio" name="q5" value="3"> منادى منصوب بالفتحة</label>
+  <label class="option"><input type="radio" name="q5" value="4"> منادى مبنى على الواو</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>(٦) «اللهم ارحمنا واعف عنا » . نوع المنادى في الجملة السابقة :</p>
+  <label class="option"><input type="radio" name="q6" value="1"> علم مفرد</label>
+  <label class="option"><input type="radio" name="q6" value="2"> مضاف</label>
+  <label class="option"><input type="radio" name="q6" value="3"> شبيه بالمضاف</label>
+  <label class="option"><input type="radio" name="q6" value="4"> نكرة مقصودة</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(۷) « يا أخا العرب ، الوحدة العربية صمام الأمان لأمتنا » . نوع المنادى :</p>
+  <label class="option"><input type="radio" name="q7" value="1"> شبيه بالمضاف</label>
+  <label class="option"><input type="radio" name="q7" value="2"> مضاف</label>
+  <label class="option"><input type="radio" name="q7" value="3"> نكرة غير مقصودة</label>
+  <label class="option"><input type="radio" name="q7" value="4"> نكرة مقصودة</label>
+</div>
+
+<div class="question" data-correct="4">
+  <p>(۸) « يا مثقفون ، أنتم أمل الأمة » - «يا مثقفين ، أنتم أمل الأمة » . الحكم الإعرابي للمنادى في الجملتين على الترتيب :</p>
+  <label class="option"><input type="radio" name="q8" value="1"> معرب ، معرب</label>
+  <label class="option"><input type="radio" name="q8" value="2"> معرب ، مبنى</label>
+  <label class="option"><input type="radio" name="q8" value="3"> مبنى ، مبنى</label>
+  <label class="option"><input type="radio" name="q8" value="4"> مبنى ، معرب</label>
+</div>
+
+<div class="question" data-correct="4">
+  <p>(۹) « هيا معلمينا ، أفيدوا من علمكم » . نوع المنادى :</p>
+  <label class="option"><input type="radio" name="q9" value="1"> نكرة غير مقصودة</label>
+  <label class="option"><input type="radio" name="q9" value="2"> نكرة مقصودة</label>
+  <label class="option"><input type="radio" name="q9" value="3"> شبيه بالمضاف</label>
+  <label class="option"><input type="radio" name="q9" value="4"> مضاف</label>
+</div>
+
+<div class="question" data-correct="4">
+  <p>(۱۰) المنادى المعرب مما يلى :</p>
+  <label class="option"><input type="radio" name="q10" value="1"> يا الله ، اصرف عنا السوء</label>
+  <label class="option"><input type="radio" name="q10" value="2"> يا محمدون ، ذاكروا بجد</label>
+  <label class="option"><input type="radio" name="q10" value="3"> يا سائق ، انتبه</label>
+  <label class="option"><input type="radio" name="q10" value="4"> يا عاملين ، اجتهدوا في عملكم</label>
+</div>
+
+<!-- ======= قسم: البدل ======= -->
+<div class="question" data-correct="2">
+  <p>(1) «أحب الإسكندرية معالمها » - «أحب الإسكندرية منظرها » . نوع البدل في الجملتين على الترتيب :</p>
+  <label class="option"><input type="radio" name="q11" value="1"> بعض من كل ، بعض من كل</label>
+  <label class="option"><input type="radio" name="q11" value="2"> بعض من كل ، اشتمال</label>
+  <label class="option"><input type="radio" name="q11" value="3"> مطابق ، بعض من كل</label>
+  <label class="option"><input type="radio" name="q11" value="4"> اشتمال، بعض من كل</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>(۲) «سرنى الطالب خُلقه » - «سرني في الطالب خُلقه » . إعراب ما تحته خط على الترتيب :</p>
+  <label class="option"><input type="radio" name="q12" value="1"> بدل مرفوع ، فاعل مرفوع</label>
+  <label class="option"><input type="radio" name="q12" value="2"> بدل منصوب ، فاعل مرفوع</label>
+  <label class="option"><input type="radio" name="q12" value="3"> فاعل مرفوع ، بدل مرفوع</label>
+  <label class="option"><input type="radio" name="q12" value="4"> بدل مرفوع، بدل مجرور</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>(۳) «ارتقى العالم منزلة » - «ارتقى العالم منزلته » . إعراب ما تحته خط على الترتيب :</p>
+  <label class="option"><input type="radio" name="q13" value="1"> بدل مرفوع ، مفعول به منصوب</label>
+  <label class="option"><input type="radio" name="q13" value="2"> تمييز منصوب ، بدل مرفوع</label>
+  <label class="option"><input type="radio" name="q13" value="3"> تمييز منصوب مفعول به منصوب</label>
+  <label class="option"><input type="radio" name="q13" value="4"> بدل مرفوع ، تمييز منصوب</label>
+</div>
+
+<div class="question" data-correct="4">
+  <p>(٤) «التحلى بروح الابتكار ضرورة، يُقدر ذلك المبدع ». إعراب ما تحته خط :</p>
+  <label class="option"><input type="radio" name="q14" value="1"> بدل مرفوع</label>
+  <label class="option"><input type="radio" name="q14" value="2"> بدل منصوب</label>
+  <label class="option"><input type="radio" name="q14" value="3"> مفعول به منصوب</label>
+  <label class="option"><input type="radio" name="q14" value="4"> فاعل مرفوع</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>(ه) «أدهشني شعب مصر ........... البدل المناسب :</p>
+  <label class="option"><input type="radio" name="q15" value="1"> ولاؤه</label>
+  <label class="option"><input type="radio" name="q15" value="2"> ولاءه</label>
+  <label class="option"><input type="radio" name="q15" value="3"> ولائه</label>
+  <label class="option"><input type="radio" name="q15" value="4"> ولاء</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>٦) «قرأت الكتاب( ... البدل المناسب :</p>
+  <label class="option"><input type="radio" name="q16" value="1"> كله</label>
+  <label class="option"><input type="radio" name="q16" value="2"> ذاته</label>
+  <label class="option"><input type="radio" name="q16" value="3"> معظمه</label>
+  <label class="option"><input type="radio" name="q16" value="4"> عينه</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(۷) «وطننا وطن ذو مكانة مرموقة » . إعراب ما تحته خط :</p>
+  <label class="option"><input type="radio" name="q17" value="1"> بدل</label>
+  <label class="option"><input type="radio" name="q17" value="2"> خبر</label>
+  <label class="option"><input type="radio" name="q17" value="3"> توكيد لفظي</label>
+  <label class="option"><input type="radio" name="q17" value="4"> نعت</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>(۸) شرح المعلم محمود الدرس » - «شرح محمود المعلم الدرس ». إعراب ما تحته خط على الترتيب :</p>
+  <label class="option"><input type="radio" name="q18" value="1"> بدل مرفوع ، نعت مرفوع</label>
+  <label class="option"><input type="radio" name="q18" value="2"> توكيد مرفوع ، بدل مرفوع</label>
+  <label class="option"><input type="radio" name="q18" value="3"> بدل مرفوع ، بدل مجرور</label>
+  <label class="option"><input type="radio" name="q18" value="4"> نعت مرفوع ، بدل مرفوع</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>(۹) كان ذا الميدان فسيحا » . إعراب الميدان :</p>
+  <label class="option"><input type="radio" name="q19" value="1">  بدل مرفوع</label>
+  <label class="option"><input type="radio" name="q19" value="2"> بدل مجرور</label>
+  <label class="option"><input type="radio" name="q19" value="3"> اسم «كان » مرفوع  </label>
+  <label class="option"><input type="radio" name="q19" value="4">  مضاف إليه مجرور</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>(۱۰) بهرنى المصريون حضارتهم » - «المصريون حضارتهم عريقة » . إعراب ما تحته خط على الترتيب :</p>
+  <label class="option"><input type="radio" name="q20" value="1"> مفعول به منصوب ، بدل مرفوع</label>
+  <label class="option"><input type="radio" name="q20" value="2"> بدل مرفوع ، خبر مرفوع</label>
+  <label class="option"><input type="radio" name="q20" value="3"> بدل مرفوع, مبتدأ ثان مرفوع</label>
+  <label class="option"><input type="radio" name="q20" value="4"> مفعول به منصوب، مبتدأ ثان مرفوع</label>
+</div>
+
+<!-- ======= قسم: نعم/بئس والأساليب ======= -->
+<div class="question" data-correct="4">
+  <p>(۱) بئس صفة الغدر» . صورة الفاعل في الجملة السابقة :</p>
+  <label class="option"><input type="radio" name="q21" value="1"> معرف بـ «أل»</label>
+  <label class="option"><input type="radio" name="q21" value="2"> اسم موصول</label>
+  <label class="option"><input type="radio" name="q21" value="3"> مضاف إلى المعرف بـ «أل»</label>
+  <label class="option"><input type="radio" name="q21" value="4"> ضمير مستتر</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>(۲) «نعم من أحترمه المعلم». إعراب (المعلم) :</p>
+  <label class="option"><input type="radio" name="q22" value="1"> فاعل مرفوع</label>
+  <label class="option"><input type="radio" name="q22" value="2"> مفعول به منصوب</label>
+  <label class="option"><input type="radio" name="q22" value="3"> مبتدأ مؤخر مرفوع</label>
+  <label class="option"><input type="radio" name="q22" value="4"> نعت مرفوع</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>(۳) «نعم ما تتصف به الشخصية المصرية الوطنية الصادقة ».المخصوص بالمدح في الجملة السابقة :</p>
+  <label class="option"><input type="radio" name="q23" value="1"> الشخصية</label>
+  <label class="option"><input type="radio" name="q23" value="2"> المصرية</label>
+  <label class="option"><input type="radio" name="q23" value="3"> الوطنية</label>
+  <label class="option"><input type="radio" name="q23" value="4"> الصادقة</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(٤) الجملة التى تشتمل على فاعل مستتر :</p>
+  <label class="option"><input type="radio" name="q24" value="1"> نعم ما تقوم به المذاكرة</label>
+  <label class="option"><input type="radio" name="q24" value="2"> نعم سلوكًا مساعدة الفقراء</label>
+  <label class="option"><input type="radio" name="q24" value="3"> لا حبذا النفاق</label>
+  <label class="option"><input type="radio" name="q24" value="4"> بئس من تصاحب الكذوب</label>
+</div>
+
+<div class="question" data-correct="4">
+  <p>(0) الاجتهاد نعم العمل » - « حبذا الاجتهاد » . حكم المخصوص في الجملتين على الترتيب :</p>
+  <label class="option"><input type="radio" name="q25" value="1"> واجب التأخير، جائز التأخير</label>
+  <label class="option"><input type="radio" name="q25" value="2"> واجب التأخير، واجب التأخير</label>
+  <label class="option"><input type="radio" name="q25" value="3"> جائز التأخير، جائز التأخير</label>
+  <label class="option"><input type="radio" name="q25" value="4"> جائز التأخير، واجب التأخير</label>
+</div>
+
+<div class="question" data-correct="3">
+  <p>(٦) التعبير الصحيح نحويا :</p>
+  <label class="option"><input type="radio" name="q26" value="1"> حبذا قارئون القرآن</label>
+  <label class="option"><input type="radio" name="q26" value="2"> قارئو القرآن حبذا</label>
+  <label class="option"><input type="radio" name="q26" value="3"> حبذا قارئو القرآن</label>
+  <label class="option"><input type="radio" name="q26" value="4"> حبذا قارئي القرآن</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(۷) «تقدمون للوطن العلم النافع » . الاختيار المناسب :</p>
+  <label class="option"><input type="radio" name="q27" value="1"> مَنْ</label>
+  <label class="option"><input type="radio" name="q27" value="2"> ما</label>
+  <label class="option"><input type="radio" name="q27" value="3"> العمل</label>
+  <label class="option"><input type="radio" name="q27" value="4"> عمل الإنسان</label>
+</div>
+
+<div class="question" data-correct="2">
+  <p>(۸) حبذا صحبة الكتاب » . إعراب ما تحته خط :</p>
+  <label class="option"><input type="radio" name="q28" value="1"> فاعل مرفوع</label>
+  <label class="option"><input type="radio" name="q28" value="2"> مبتدأ مؤخر مرفوع</label>
+  <label class="option"><input type="radio" name="q28" value="3"> خبر مرفوع</label>
+  <label class="option"><input type="radio" name="q28" value="4"> مبتدأ ثان مرفوع</label>
+</div>
+
+<div class="question" data-correct="1">
+  <p>(۹) «لا حبذا من يكره لغته » . الفاعل في أسلوب الذم :</p>
+  <label class="option"><input type="radio" name="q29" value="1"> اسم إشارة</label>
+  <label class="option"><input type="radio" name="q29" value="2"> اسم موصول</label>
+  <label class="option"><input type="radio" name="q29" value="3"> اسم من الأسماء الخمسة</label>
+  <label class="option"><input type="radio" name="q29" value="4"> ضمير مستتر</label>
+</div>
+
+    
+
+      <button class="btn" id="showAnswers">إنهاء الاختبار</button>
+      <div id="result" class="result"></div>
+      <div id="oldResult" class="old-result"></div>
+    </div>
+  </div>
+
+  <!-- Firebase (v8) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnXtTg9iLLm_b9zyKBxr0v8aGhXJuR3WE",
+      authDomain: "my-web-c23de.firebaseapp.com",
+      projectId: "my-web-c23de",
+      storageBucket: "my-web-c23de.firebasestorage.app",
+      messagingSenderId: "846339445873",
+      appId: "1:846339445873:web:fc0427a7ad77eceda837d0"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    const SUBJECT = "عربي تالته  اول ثلاث دروس نحو ";
+    const QUIZ_TIME = 50 * 60;
+    let totalSeconds = QUIZ_TIME, timer, userId, userEmail;
+
+    const timerDiv = document.getElementById("timer");
+    const welcome = document.getElementById("welcome");
+    const quizBox = document.getElementById("quizBox");
+    const resultDiv = document.getElementById("result");
+    const oldResultDiv = document.getElementById("oldResult");
+
+    // التحقق من المستخدم
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        userId = user.uid;
+        userEmail = user.email;
+        welcome.innerText = `مرحبًا ${user.displayName || ""} 👋`;
+        await checkOldResult();
+        setTimeout(() => {
+          welcome.style.display = "none";
+          quizBox.style.display = "block";
+          startTimer();
+        }, 1200);
+      } else {
+        welcome.innerText = "⚠️ قم بتسجيل الدخول أولًا.";
+      }
+    });
+
+    async function checkOldResult() {
+      const prev = await db.collection("results")
+        .where("uid", "==", userId)
+        .where("subject", "==", SUBJECT)
+        .get();
+      if (!prev.empty) {
+        const data = prev.docs[0].data();
+        oldResultDiv.innerText = `📋 لقد حللت هذا الامتحان من قبل: ${data.score} / ${data.total}`;
+      }
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        let m = Math.floor(totalSeconds / 60);
+        let s = totalSeconds % 60;
+        timerDiv.textContent = `الوقت المتبقي: ${m}:${s.toString().padStart(2, "0")}`;
+        if (totalSeconds <= 0) {
+          clearInterval(timer);
+          showResults();
+        }
+        totalSeconds--;
+      }, 1000);
+    }
+
+    async function showResults() {
+      clearInterval(timer);
+      const questions = document.querySelectorAll(".question");
+      let score = 0;
+
+      questions.forEach((q, i) => {
+        const correct = parseInt(q.dataset.correct);
+        const selected = q.querySelector(`input[name="q${i + 1}"]:checked`);
+        q.querySelectorAll(".option").forEach(opt => {
+          const val = parseInt(opt.querySelector("input").value);
+          if (val === correct) opt.classList.add("correct");
+          if (selected && parseInt(selected.value) === val && val !== correct) opt.classList.add("wrong");
+        });
+        if (selected && parseInt(selected.value) === correct) score++;
+      });
+
+      resultDiv.innerText = `نتيجتك: ${score} من ${questions.length}`;
+
+      try {
+        const prev = await db.collection("results")
+          .where("uid", "==", userId)
+          .where("subject", "==", SUBJECT)
+          .get();
+        const alreadyTaken = !prev.empty;
+
+        await db.collection("results").add({
+          uid: userId,
+          email: userEmail,
+          subject: SUBJECT,
+          score: score,
+          total: questions.length,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        if (!alreadyTaken) {
+          const userRef = db.collection("users").doc(userId);
+          await db.runTransaction(async (t) => {
+            const userDoc = await t.get(userRef);
+            const old = userDoc.exists && userDoc.data().score ? userDoc.data().score : 0;
+            t.set(userRef, { score: old + score }, { merge: true });
+          });
+          alert("✅ تم حفظ نتيجتك وتحديث مجموعك!");
+        } else {
+          alert("⚠️ لقد أجبت على هذا الامتحان من قبل — لم تُضف نتيجتك مجددًا.");
+        }
+      } catch (e) {
+        alert("⚠️ خطأ أثناء الإرسال: " + e.message);
+      }
+    }
+
+    document.getElementById("showAnswers").addEventListener("click", showResults);
+  </script>
+</body>
+</html>

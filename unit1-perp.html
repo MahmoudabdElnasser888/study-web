@@ -3,193 +3,358 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Unit 1 — Vocabulary + Irregulars + Collocations + Synonyms</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
+  <title>Unit 1 — Complete Vocabulary & Grammar Resources</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ===== Theme & Layout ===== */
     :root{
-      --bg:#8a8686;
-      --panel:#111;
-      --gold: #6134c9;
-      --muted:#000000;
-      --card-shadow: 0 8px 28px rgba(0,0,0,0.6);
+      --bg: #524f4f;
+      --panel: #0f0f12;
+      --card: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      --accent: #74580b; /* warm gold, easy on the eyes */
+      --muted: #ffffff;
+      --glass: rgba(255,255,255,0.03);
+      --radius: 12px;
     }
     *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:'Cairo',sans-serif;
-      background:linear-gradient(135deg,var(--bg),#8a8686);
-      color:#000000;
-      padding:18px;
-      direction:rtl;
-      -webkit-font-smoothing:antialiased;
+    html,body{height:100%; margin:0; padding:0; font-family:'Cairo',sans-serif; background:linear-gradient(135deg,var(--bg),#060606); color:#fff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; direction:rtl;}
+    body{ padding:16px; }
+
+    header{ text-align:center; margin-bottom:12px }
+    h1{ color:var(--accent); margin:6px 0; font-size:20px; letter-spacing:0.4px; }
+    .lead{ color:var(--muted); margin-top:4px; font-size:13px }
+
+    .wrap { max-width:1100px; margin:0 auto; }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding:14px;
+      margin-bottom:14px;
+      border:1px solid rgba(218,165,32,0.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     }
-    header{ text-align:center; margin-bottom:14px }
-    h1{ color:var(--gold); margin:6px 0; font-size:22px; text-shadow:0 0 8px rgba(218,165,32,0.15) }
-    .panel{ max-width:1100px; margin:14px auto; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; padding:12px; box-shadow:var(--card-shadow); border:1px solid rgba(218,165,32,0.06); }
-    table{ width:100%; border-collapse:collapse; margin-top:12px; min-width:680px; }
-    thead th{
-      background:var(--gold);
-      color:#000;
-      padding:12px 10px;
-      text-align:center;
-      font-weight:600;
-      position:sticky;
-      top:0;
+
+    .section-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:8px;
+      flex-wrap:wrap;
     }
-    th, td{
-      padding:10px 8px;
-      border-bottom:1px solid rgba(255,255,255,0.04);
-      text-align:center;
-      vertical-align:middle;
-      font-size:14px;
+    .section-header h2 { margin:0; color:var(--accent); font-size:16px; }
+    .badge { background:var(--accent); color:#000; padding:6px 10px; border-radius:9px; font-weight:700; font-size:13px; }
+
+    /* Table base style */
+    .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:8px; }
+    table { width:100%; border-collapse:collapse; min-width:760px; }
+    caption { text-align:right; color:var(--accent); font-weight:700; padding:6px 0; font-size:15px; }
+    thead th { background:var(--accent); color:#000; padding:10px 12px; text-align:center; font-weight:700; position:sticky; top:0; z-index:2; }
+    th, td { padding:10px 10px; border-bottom:1px solid rgba(255,255,255,0.04); text-align:center; vertical-align:middle; font-size:14px; }
+    tbody tr:nth-child(even){ background: rgba(255,255,255,0.02); }
+    td.meaning { text-align:right; direction:rtl; white-space:normal; word-break:break-word; }
+    td.type { color:var(--accent); font-weight:700; white-space:nowrap; }
+
+    /* Card-style fallback for small screens: transform each row to a card for easier reading */
+    @media (max-width:820px) {
+      table { min-width:520px; } /* still allow horizontal scroll if too wide */
     }
-    tbody tr:nth-child(even){ background:rgba(255,255,255,0.02); }
-    td.type{ color:var(--gold); font-weight:600; white-space:nowrap; }
-    td.meaning{ text-align:right; direction:rtl; }
-    caption{ color:var(--gold); font-weight:700; margin-bottom:6px; font-size:18px; text-align:right; }
-    .section-title{ color:var(--gold); font-weight:700; margin:0 0 6px; text-align:center; font-size:18px; }
-    .subnote{ color:var(--muted); font-size:13px; margin-top:6px; text-align:center }
+    @media (max-width:560px) {
+      /* Show table as horizontally scrollable but also present rows as stacked cards */
+      .table-wrap { overflow-x:auto; }
+      table { min-width:520px; }
+
+      /* Mobile card view: each row becomes block for readability */
+      .mobile-card tbody tr {
+        display:block;
+        margin:10px 0;
+        border-radius:10px;
+        padding:10px;
+        background: rgba(255,255,255,0.02);
+      }
+      .mobile-card tbody tr td { display:block; text-align:right; padding:6px 8px; border-bottom:0; font-size:14px; }
+      .mobile-card tbody tr td::before { content: attr(data-label); float:right; font-weight:700; color:var(--muted); margin-left:8px; }
+      thead{ display:none } /* hide header in mobile card mode */
+    }
+
+    /* small tweaks */
     @media (max-width:900px){
-      thead th{ font-size:13px; padding:10px 6px }
-      th, td{ font-size:13px; padding:8px 6px }
-      .panel{ padding:10px }
+      h1{ font-size:18px }
+      th, td{ font-size:13px; padding:8px 8px; }
+      .card{ padding:12px; }
     }
-    @media (max-width:640px){
-      body{ padding:12px }
-      table{ min-width:560px }
-    }
-    footer{ text-align:center; color:var(--muted); margin-top:16px; font-size:13px }
+
+    .note { color:var(--muted); font-size:13px; text-align:center; margin-top:6px; }
+
+    footer{ text-align:center; color:var(--muted); margin-top:12px; font-size:13px }
+
+    /* Accessibility */
+    table, th, td { -webkit-tap-highlight-color: rgba(0,0,0,0); }
+    .kbd { background:rgba(255,255,255,0.03); padding:4px 8px; border-radius:6px; font-weight:600; color:var(--muted); }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Unit 1 — Vocabulary</h1>
-    <div class="subnote">مفردات الوحدة + تصاريف الأفعال غير المنتظمة + متلازمات لفظية + مرادفات ومضادات</div>
-  </header>
+  <div class="wrap">
+    <header>
+      <h1>Unit 1 — Vocabulary & Resources</h1>
+      <div class="lead">.</div>
+    </header>
 
-  <main class="panel" role="main" aria-label="Unit 1 content">
+    <!-- Vocabulary -->
+    <section class="card" aria-labelledby="vocab">
+      <div class="section-header">
+        <h2 id="vocab">Vocabulary — الكلمات (مفصلة)</h2>
+        <div class="badge">Unit 1</div>
+      </div>
 
-    <!-- Vocabulary (short / already included previously) -->
-    <section aria-labelledby="vocab-title">
-      <h2 id="vocab-title" class="section-title">Vocabulary — الكلمات</h2>
-      <table aria-describedby="vocab-caption" class="vocab-table">
-        <caption id="vocab-caption">الكلمة — النوع — المعنى بالعربية</caption>
-        <thead>
-          <tr><th>الكلمة (Word)</th><th>النوع (Type)</th><th>المعنى بالعربية (Meaning)</th></tr>
-        </thead>
-        <tbody>
-          <!-- (يمكنك تحديث/استبدال هذا البلوك بكلماتك الكاملة كما سبق) -->
-<tr><td>look</td><td class="type">(v)</td><td class="meaning">ينظر / يشاهد / يطلع إلى</td></tr>
-<tr><td>identity</td><td class="type">(n)</td><td class="meaning">هوية / شخصية / انتماء</td></tr>
-<tr><td>belief</td><td class="type">(n)</td><td class="meaning">اعتقاد / إيمان / رأي</td></tr>
-<tr><td>unique</td><td class="type">(adj)</td><td class="meaning">فريد من نوعه / مميز / لا مثيل له</td></tr>
-<tr><td>self-discovery</td><td class="type">(n)</td><td class="meaning">اكتشاف الذات / معرفة النفس</td></tr>
-<tr><td>strength</td><td class="type">(n)</td><td class="meaning">قوة / متانة / شدة</td></tr>
-<!-- يمكنك تمديد الجدول هنا بكل الكلمات اللي عندك -->
-        </tbody>
-      </table>
+      <div class="table-wrap">
+        <table class="mobile-card" aria-describedby="vocab-caption" role="table">
+          <caption id="vocab-caption">الكلمة — النوع — المعنى بالعربية</caption>
+          <thead>
+            <tr><th>الكلمة (Word)</th><th>النوع (Type)</th><th>المعنى بالعربية (Meaning)</th></tr>
+          </thead>
+          <tbody>
+            <!-- Full vocabulary (all items you provided, with Arabic meanings where included/known) -->
+<tr><td data-label="الكلمة">look</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">ينظر / يشاهد / يطلع إلى</td></tr>
+<tr><td data-label="الكلمة">identity</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">هوية / شخصية / انتماء</td></tr>
+<tr><td data-label="الكلمة">belief</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">اعتقاد / إيمان / رأي</td></tr>
+<tr><td data-label="الكلمة">unique</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">فريد من نوعه / مميز / لا مثيل له</td></tr>
+<tr><td data-label="الكلمة">self-discovery</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">اكتشاف الذات / معرفة النفس</td></tr>
+<tr><td data-label="الكلمة">strength</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">قوة / نقطة قوة / متانة</td></tr>
+<tr><td data-label="الكلمة">personality</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">شخصية / طبع</td></tr>
+<tr><td data-label="الكلمة">individuality</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">تفرد / استقلالية الشخصية</td></tr>
+<tr><td data-label="الكلمة">growth</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">نمو / تطور / ازدهار</td></tr>
+<tr><td data-label="الكلمة">background</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">خلفية / أصل / بيئة النشأة</td></tr>
+<tr><td data-label="الكلمة">value</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">قيمة / شأن / تقدير</td></tr>
+<tr><td data-label="الكلمة">real (true)</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">حقيقي / واقعي / صادق</td></tr>
+<tr><td data-label="الكلمة">confidence</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">ثقة بالنفس / اطمئنان</td></tr>
+<tr><td data-label="الكلمة">self-respect</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">احترام الذات / كرامة النفس</td></tr>
+<tr><td data-label="الكلمة">weakness</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">ضعف / نقطة ضعف</td></tr>
+<tr><td data-label="الكلمة">heart diseases</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">أمراض القلب</td></tr>
+<tr><td data-label="الكلمة">act</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يتصرف / يقوم بفعل / يمثل</td></tr>
+<tr><td data-label="الكلمة">kindness</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">لطف / طيبة / إحسان</td></tr>
+<tr><td data-label="الكلمة">character</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">شخصية / طبع / خصال</td></tr>
+<tr><td data-label="الكلمة">popular</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">شائع / محبوب / مشهور</td></tr>
+<tr><td data-label="الكلمة">shape</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">شكل / هيئة / قوام</td></tr>
+<tr><td data-label="الكلمة">dress</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يرتدي / يلبس</td></tr>
+<tr><td data-label="الكلمة">remind</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يذكّر / ينبه / يسترجع</td></tr>
+<tr><td data-label="الكلمة">confident</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">واثق من نفسه / مطمئن</td></tr>
+<tr><td data-label="الكلمة">challenge (goals = purposes)</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">تحدٍّ / أهداف / غايات</td></tr>
+<tr><td data-label="الكلمة">affect</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يؤثر على / يحدث أثرًا</td></tr>
+<tr><td data-label="الكلمة">realness</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">أصالة / واقعية / صدق</td></tr>
+<tr><td data-label="الكلمة">die</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يموت / يفارق الحياة</td></tr>
+<tr><td data-label="الكلمة">social media</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">وسائل التواصل الاجتماعي / منصات التواصل</td></tr>
+<tr><td data-label="الكلمة">strange</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">غريب / غير مألوف / عجيب</td></tr>
+<tr><td data-label="الكلمة">overcome</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يتغلب على / يتخطّى / يقهر</td></tr>
+
+<tr><td data-label="الكلمة">score</td><td data-label="النوع" class="type">(v,n)</td><td data-label="المعنى" class="meaning">يحرز - يسجل (فعل) — نتيجة / درجة (اسم)</td></tr>
+<tr><td data-label="الكلمة">believe</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يعتقد - يصدّق - يؤمن</td></tr>
+<tr><td data-label="الكلمة">stressed</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">مجهد - مرهق - متوتر</td></tr>
+<tr><td data-label="الكلمة">power</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">قوة / طاقة / سلطة</td></tr>
+<tr><td data-label="الكلمة">journey</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">رحلة / مسار طويل</td></tr>
+<tr><td data-label="الكلمة">traditions</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">عادات - تقاليد</td></tr>
+<tr><td data-label="الكلمة">influence</td><td data-label="النوع" class="type">(n,v)</td><td data-label="المعنى" class="meaning">يؤثر / تأثير / نفوذ</td></tr>
+<tr><td data-label="الكلمة">honestly</td><td data-label="النوع" class="type">(adv)</td><td data-label="المعنى" class="meaning">بأمانة - بصراحة</td></tr>
+<tr><td data-label="الكلمة">realize</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يدرك - يعرف - يعي</td></tr>
+<tr><td data-label="الكلمة">celebrate</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يحتفل - يحيي مناسبة</td></tr>
+<tr><td data-label="الكلمة">explore</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يستكشف - يكتشف - يفحص</td></tr>
+<tr><td data-label="الكلمة">fixed</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">ثابت - محدد</td></tr>
+<tr><td data-label="الكلمة">inspiring</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">ملهم - محفّز</td></tr>
+<tr><td data-label="الكلمة">experience</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">تجربة - خبرة</td></tr>
+<tr><td data-label="الكلمة">medicine</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">طِب / دواء</td></tr>
+<tr><td data-label="الكلمة">describe</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يصف - يبيّن - يشرح</td></tr>
+<tr><td data-label="الكلمة">volunteering</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">تطوع - عمل تطوعي</td></tr>
+<tr><td data-label="الكلمة">encourage</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يشجّع - يحفّز - يدعم</td></tr>
+<tr><td data-label="الكلمة">advice</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">نصيحة - إرشاد</td></tr>
+<tr><td data-label="الكلمة">patient</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">صبور - متحمل</td></tr>
+<tr><td data-label="الكلمة">differences</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">اختلافات - فروق</td></tr>
+<tr><td data-label="الكلمة">support</td><td data-label="النوع" class="type">(v,n)</td><td data-label="المعنى" class="meaning">يدعم / يساند — دعم / مساندة</td></tr>
+<tr><td data-label="الكلمة">quality</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">جودة / سِمَة / مستوى</td></tr>
+<tr><td data-label="الكلمة">curiosity</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">فضول / رغبة في المعرفة</td></tr>
+
+<tr><td data-label="الكلمة">identity map / خريطة الهوية</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">خريطة الهوية — مخطط يوضّح عناصر الهوية</td></tr>
+<tr><td data-label="الكلمة">strong / قوي</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">قوي / شديد / ذو بنية أو شخصية قوية</td></tr>
+<tr><td data-label="الكلمة">creative / مبدع</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">مبدع / خلاق / مبتكر</td></tr>
+<tr><td data-label="الكلمة">portrait / صورة فنية للوجه</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">بورتريه / صورة فنية للوجه</td></tr>
+<tr><td data-label="الكلمة">ashamed / يشعر بالخجل</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">خجلان / مستحي / يشعر بالخجل</td></tr>
+<tr><td data-label="الكلمة">mirror / مرآة</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">مرآة / سطح يعكس الصور</td></tr>
+<tr><td data-label="الكلمة">adjust / يضبط - يعدل</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يضبط / يعدّل / يكيّف</td></tr>
+<tr><td data-label="الكلمة">curious / فضولي</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">فضولي / محب للاستطلاع</td></tr>
+<tr><td data-label="الكلمة">panic (ked) / يضطرب - يفزع</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يفزع / يذعر</td></tr>
+
+<tr><td data-label="الكلمة">blazer</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">بليزر / سترة رسمية</td></tr>
+<tr><td data-label="الكلمة">curls</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">خصلات شعر مجعّدة</td></tr>
+<tr><td data-label="الكلمة">unlike</td><td data-label="النوع" class="type">(adv/prep)</td><td data-label="المعنى" class="meaning">بخلاف / على عكس</td></tr>
+<tr><td data-label="الكلمة">comfort</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">راحة / سكينة</td></tr>
+<tr><td data-label="الكلمة">perfect</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">مثالي / كامل</td></tr>
+<tr><td data-label="الكلمة">introduce</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يقدّم / يعرّف / يعرض</td></tr>
+<tr><td data-label="الكلمة">hand-drawn</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">مرسوم يدوياً</td></tr>
+<tr><td data-label="الكلمة">blend</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يمزج / يخلط / يدمج</td></tr>
+<tr><td data-label="الكلمة">click</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">ينقر / يطقطق</td></tr>
+<tr><td data-label="الكلمة">outgoing</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">اجتماعي / منفتح / ودود</td></tr>
+<tr><td data-label="الكلمة">sketchbook</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">دفتر رسم / دفتر اسكتشات</td></tr>
+<tr><td data-label="الكلمة">beauty</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">جمال / حسّ الجمال</td></tr>
+<tr><td data-label="الكلمة">create</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يصنع / يبتكر / ينشئ</td></tr>
+<tr><td data-label="الكلمة">dream</td><td data-label="النوع" class="type">(v,n)</td><td data-label="المعنى" class="meaning">يحلم / حلم / طموح</td></tr>
+<tr><td data-label="الكلمة">imperfection</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">عيب / نقص</td></tr>
+<tr><td data-label="الكلمة">thumbs-up</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">إشارة الإبهام للأعلى (موافقة)</td></tr>
+<tr><td data-label="الكلمة">decisions</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">قرارات</td></tr>
+<tr><td data-label="الكلمة">talent</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">موهبة</td></tr>
+<tr><td data-label="الكلمة">assignment</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">واجب - مهمة</td></tr>
+<tr><td data-label="الكلمة">special</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">خاص - مميز - استثنائي</td></tr>
+<tr><td data-label="الكلمة">personal</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">شخصي / خاص بالفرد</td></tr>
+<tr><td data-label="الكلمة">improve</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يحسّن / يتحسّن / يطوّر</td></tr>
+<tr><td data-label="الكلمة">accepted</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">مقبول / معتمد</td></tr>
+<tr><td data-label="الكلمة">eye contact</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">التواصل بالنظر / اتصال العين</td></tr>
+<tr><td data-label="الكلمة">experiences</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">تجارب حياتية / خبرات</td></tr>
+<tr><td data-label="الكلمة">body language</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">لغة الجسد / تعابير الجسد</td></tr>
+<tr><td data-label="الكلمة">caring</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">مهتم / لطيف / عطوف</td></tr>
+<tr><td data-label="الكلمة">classmate</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">زميل الصف</td></tr>
+<tr><td data-label="الكلمة">journalist</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">صحفي / مراسل أخبار</td></tr>
+<tr><td data-label="الكلمة">absent</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">غائب / غير حاضر</td></tr>
+<tr><td data-label="الكلمة">movie</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">فيلم / سينما</td></tr>
+<tr><td data-label="الكلمة">notice</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يلاحظ / ينتبه</td></tr>
+<tr><td data-label="الكلمة">copy</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">ينسخ / يقلّد</td></tr>
+<tr><td data-label="الكلمة">focus</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يركّز على / يضع تركيزه</td></tr>
+<tr><td data-label="الكلمة">fairness</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">عدالة / مساواة / إنصاف</td></tr>
+<tr><td data-label="الكلمة">task</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">مهمة / عمل مطلوب</td></tr>
+<tr><td data-label="الكلمة">brave</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">شجاع / جريء</td></tr>
+<tr><td data-label="الكلمة">trust</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">ثقة / اعتماد / أمانة</td></tr>
+<tr><td data-label="الكلمة">honesty</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">أمانة / صدق / نزاهة</td></tr>
+<tr><td data-label="الكلمة">accept</td><td data-label="النوع" class="type">(v)</td><td data-label="المعنى" class="meaning">يقبل / يوافق</td></tr>
+<tr><td data-label="الكلمة">trusted</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">موثوق فيه / محل ثقة</td></tr>
+<tr><td data-label="الكلمة">choice</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">اختيار / بديل</td></tr>
+<tr><td data-label="الكلمة">positive</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">إيجابي / متفائل</td></tr>
+<tr><td data-label="الكلمة">action</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">فعل / إجراء</td></tr>
+<tr><td data-label="الكلمة">responsibility</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">مسؤولية / واجب</td></tr>
+<tr><td data-label="الكلمة">supportive</td><td data-label="النوع" class="type">(adj)</td><td data-label="المعنى" class="meaning">داعم / مؤازر</td></tr>
+<tr><td data-label="الكلمة">self-respect (مكرر)</td><td data-label="النوع" class="type">(n)</td><td data-label="المعنى" class="meaning">احترام الذات</td></tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">.</div>
     </section>
 
-    <!-- Irregular Verbs -->
-    <section aria-labelledby="ir-title" style="margin-top:18px;">
-      <h2 id="ir-title" class="section-title">Irregular Verbs — التصريفات غير المنتظمة</h2>
-      <table aria-label="Irregular verbs" class="irregular">
-        <thead>
-          <tr><th>Base (Present)</th><th>Past</th><th>Past Participle</th><th>المعنى بالعربية</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>show</td><td>showed</td><td>shown</td><td class="meaning">يوضح / يظهر</td></tr>
-          <tr><td>understand</td><td>understood</td><td>understood</td><td class="meaning">يفهم</td></tr>
-          <tr><td>teach</td><td>taught</td><td>taught</td><td class="meaning">يعلم</td></tr>
-          <tr><td>grow</td><td>grew</td><td>grown</td><td class="meaning">ينمو / يكبر</td></tr>
-          <tr><td>begin</td><td>began</td><td>begun</td><td class="meaning">يبدأ</td></tr>
-          <tr><td>keep</td><td>kept</td><td>kept</td><td class="meaning">يبقى / يحتفظ بـ</td></tr>
-          <tr><td>stand</td><td>stood</td><td>stood</td><td class="meaning">يقف / يثبت</td></tr>
-          <tr><td>feel</td><td>felt</td><td>felt</td><td class="meaning">يشعر</td></tr>
-          <tr><td>draw</td><td>drew</td><td>drawn</td><td class="meaning">يرسم</td></tr>
-          <tr><td>find</td><td>found</td><td>found</td><td class="meaning">يجد / يكتسب</td></tr>
-          <tr><td>overcome</td><td>overcame</td><td>overcome</td><td class="meaning">يتغلب على / يقهر</td></tr>
-          <tr><td>make</td><td>made</td><td>made</td><td class="meaning">يصنع / يجعل</td></tr>
-          <tr><td>think</td><td>thought</td><td>thought</td><td class="meaning">يفكر / يعتقد</td></tr>
-        </tbody>
-      </table>
+    <!-- Irregular verbs / conjugation -->
+    <section class="card" aria-labelledby="irregular">
+      <div class="section-header">
+        <h2 id="irregular">Irregular Verbs — تصريف الأفعال غير المنتظمة</h2>
+        <div class="badge">Conjugation</div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mobile-card" aria-label="Irregular verbs">
+          <caption>Base | Past | Past Participle | المعنى</caption>
+          <thead>
+            <tr><th>Base (Present)</th><th>Past</th><th>Past Participle</th><th>المعنى</th></tr>
+          </thead>
+          <tbody>
+<tr><td data-label="Base">show</td><td data-label="Past">showed</td><td data-label="Participle">shown</td><td data-label="المعنى" class="meaning">يوضح / يظهر</td></tr>
+<tr><td data-label="Base">understand</td><td data-label="Past">understood</td><td data-label="Participle">understood</td><td data-label="المعنى" class="meaning">يفهم</td></tr>
+<tr><td data-label="Base">teach</td><td data-label="Past">taught</td><td data-label="Participle">taught</td><td data-label="المعنى" class="meaning">يعلم</td></tr>
+<tr><td data-label="Base">grow</td><td data-label="Past">grew</td><td data-label="Participle">grown</td><td data-label="المعنى" class="meaning">ينمو / يكبر</td></tr>
+
+<tr><td data-label="Base">begin</td><td data-label="Past">began</td><td data-label="Participle">begun</td><td data-label="المعنى" class="meaning">يبدأ</td></tr>
+<tr><td data-label="Base">keep</td><td data-label="Past">kept</td><td data-label="Participle">kept</td><td data-label="المعنى" class="meaning">يبقى / يحتفظ بـ</td></tr>
+<tr><td data-label="Base">stand</td><td data-label="Past">stood</td><td data-label="Participle">stood</td><td data-label="المعنى" class="meaning">يقف</td></tr>
+<tr><td data-label="Base">feel</td><td data-label="Past">felt</td><td data-label="Participle">felt</td><td data-label="المعنى" class="meaning">يشعر</td></tr>
+<tr><td data-label="Base">draw</td><td data-label="Past">drew</td><td data-label="Participle">drawn</td><td data-label="المعنى" class="meaning">يرسم</td></tr>
+
+<tr><td data-label="Base">find</td><td data-label="Past">found</td><td data-label="Participle">found</td><td data-label="المعنى" class="meaning">يجد / يكتسب</td></tr>
+<tr><td data-label="Base">overcome</td><td data-label="Past">overcame</td><td data-label="Participle">overcome</td><td data-label="المعنى" class="meaning">يتغلب على / يقهر</td></tr>
+<tr><td data-label="Base">make</td><td data-label="Past">made</td><td data-label="Participle">made</td><td data-label="المعنى" class="meaning">يصنع / يجعل</td></tr>
+<tr><td data-label="Base">think</td><td data-label="Past">thought</td><td data-label="Participle">thought</td><td data-label="المعنى" class="meaning">يفكر / يعتقد</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <!-- Collocations -->
-    <section aria-labelledby="col-title" style="margin-top:20px;">
-      <h2 id="col-title" class="section-title">Collocations — متلازمات لفظية</h2>
-      <table aria-label="Collocations">
-        <thead>
-          <tr><th style="width:6%;">#</th><th>Collocation (EN)</th><th>الترجمة / المعنى بالعربي</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>1</td><td>solve a problem</td><td class="meaning">يحل مشكلة</td></tr>
-          <tr><td>2</td><td>enter a fair</td><td class="meaning">يشارك في معرض</td></tr>
-          <tr><td>3</td><td>stay confident</td><td class="meaning">يحافظ على ثقته بنفسه</td></tr>
-          <tr><td>4</td><td>in mind</td><td class="meaning">يبقى عالقًا في الذهن / في الحسبان</td></tr>
-          <tr><td>5</td><td>face a challenge</td><td class="meaning">يواجه تحدّى</td></tr>
-          <tr><td>6</td><td>build/gain confidence</td><td class="meaning">يكتسب الثقة بالنفس</td></tr>
-          <tr><td>7</td><td>feel confident</td><td class="meaning">يشعر بالثقة بالنفس</td></tr>
-          <tr><td>8</td><td>feel stressed</td><td class="meaning">يشعر بالتوتر / مرهق</td></tr>
-          <tr><td>9</td><td>give an assignment</td><td class="meaning">يعطي واجب / يكلف بمهمة</td></tr>
-          <tr><td>10</td><td>a thumbs-up</td><td class="meaning">إشارة الإبهام للأعلى (للموافقة)</td></tr>
-          <tr><td>11</td><td>have a look</td><td class="meaning">يلقي نظرة / يتفقد</td></tr>
-          <tr><td>12</td><td>feel unsure</td><td class="meaning">يشعر بعدم الثقة / غير متأكد</td></tr>
-          <tr><td>13</td><td>find comfort</td><td class="meaning">يجد الراحة / السلوى</td></tr>
-          <tr><td>14</td><td>stand before</td><td class="meaning">يقف أمام (شخص/حالة)</td></tr>
-          <tr><td>15</td><td>have experiences</td><td class="meaning">يمتلك خبرات / لديه تجارب</td></tr>
-          <tr><td>16</td><td>build experiences</td><td class="meaning">يبني / يكوّن خبرات</td></tr>
-          <tr><td>17</td><td>trust</td><td class="meaning">ثقة / يثق</td></tr>
-          <tr><td>18</td><td>accept differences</td><td class="meaning">يقبل الاختلاف / يتقبل الفروق</td></tr>
-          <tr><td>19</td><td>make changes</td><td class="meaning">يحدث تغييرات / يجري تغييرات</td></tr>
-          <tr><td>20</td><td>stand before a crowd</td><td class="meaning">يقف أمام جمهور (مثال لاستخدام 'stand before')</td></tr>
-        </tbody>
-      </table>
+    <section class="card" aria-labelledby="colloc">
+      <div class="section-header">
+        <h2 id="colloc">Collocations — متلازمات لفظية</h2>
+        <div class="badge">Phrases</div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mobile-card" aria-label="Collocations">
+          <caption>عبارات ومقترناتها</caption>
+          <thead><tr><th>#</th><th>Collocation (EN)</th><th>الترجمة / المعنى بالعربي</th></tr></thead>
+          <tbody>
+<tr><td data-label="#">1</td><td data-label="Collocation">solve a problem</td><td data-label="المعنى" class="meaning">يحل مشكلة</td></tr>
+<tr><td data-label="#">2</td><td data-label="Collocation">enter a fair</td><td data-label="المعنى" class="meaning">يشارك في معرض</td></tr>
+<tr><td data-label="#">3</td><td data-label="Collocation">stay confident</td><td data-label="المعنى" class="meaning">يحافظ على ثقته بنفسه</td></tr>
+<tr><td data-label="#">4</td><td data-label="Collocation">in mind</td><td data-label="المعنى" class="meaning">يبقى عالقًا في الذهن / في الحسبان</td></tr>
+<tr><td data-label="#">5</td><td data-label="Collocation">face a challenge</td><td data-label="المعنى" class="meaning">يواجه تحدّى</td></tr>
+<tr><td data-label="#">6</td><td data-label="Collocation">build/gain confidence</td><td data-label="المعنى" class="meaning">يكتسب الثقة بالنفس</td></tr>
+<tr><td data-label="#">7</td><td data-label="Collocation">feel confident</td><td data-label="المعنى" class="meaning">يشعر بالثقة بالنفس</td></tr>
+<tr><td data-label="#">8</td><td data-label="Collocation">feel stressed</td><td data-label="المعنى" class="meaning">يشعر بالتوتر / مرهق</td></tr>
+<tr><td data-label="#">9</td><td data-label="Collocation">give an assignment</td><td data-label="المعنى" class="meaning">يعطي واجب / يكلف بمهمة</td></tr>
+<tr><td data-label="#">10</td><td data-label="Collocation">a thumbs-up</td><td data-label="المعنى" class="meaning">إشارة الإبهام للأعلى (للموافقة)</td></tr>
+<tr><td data-label="#">11</td><td data-label="Collocation">have a look</td><td data-label="المعنى" class="meaning">يلقي نظرة / يتفقد</td></tr>
+<tr><td data-label="#">12</td><td data-label="Collocation">feel unsure</td><td data-label="المعنى" class="meaning">يشعر بعدم الثقة / غير متأكد</td></tr>
+<tr><td data-label="#">13</td><td data-label="Collocation">find comfort</td><td data-label="المعنى" class="meaning">يجد الراحة / السلوى</td></tr>
+<tr><td data-label="#">14</td><td data-label="Collocation">stand before</td><td data-label="المعنى" class="meaning">يقف أمام (شخص/حالة)</td></tr>
+<tr><td data-label="#">15</td><td data-label="Collocation">have experiences</td><td data-label="المعنى" class="meaning">يمتلك خبرات / لديه تجارب</td></tr>
+<tr><td data-label="#">16</td><td data-label="Collocation">build experiences</td><td data-label="المعنى" class="meaning">يبني / يكوّن خبرات</td></tr>
+<tr><td data-label="#">17</td><td data-label="Collocation">trust</td><td data-label="المعنى" class="meaning">يثق / ثقة</td></tr>
+<tr><td data-label="#">18</td><td data-label="Collocation">accept differences</td><td data-label="المعنى" class="meaning">يقبل الاختلاف / يتقبل الفروق</td></tr>
+<tr><td data-label="#">19</td><td data-label="Collocation">make changes</td><td data-label="المعنى" class="meaning">يُحدث تغييرات</td></tr>
+<tr><td data-label="#">20</td><td data-label="Collocation">stand before a crowd</td><td data-label="المعنى" class="meaning">يقف أمام جمهور</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
-    <!-- NEW: Synonyms & Antonyms Table -->
-    <section aria-labelledby="syn-title" style="margin-top:20px;">
-      <h2 id="syn-title" class="section-title">Synonyms & Antonyms — المرادفات والمضادات</h2>
+    <!-- Synonyms & Antonyms -->
+    <section class="card" aria-labelledby="syn">
+      <div class="section-header">
+        <h2 id="syn">Synonyms & Antonyms — المرادفات والمضادات</h2>
+        <div class="badge">Words</div>
+      </div>
 
-      <table aria-label="Synonyms and Antonyms">
-        <thead>
-          <tr><th>الكلمة (Word)</th><th>المعنى بالعربية</th><th>Synonym — المرادف</th><th>Antonym — المضاد</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>strength</td><td class="meaning">قوة - نقطة قوة</td><td>power</td><td>weakness (ضعف / نقطة ضعف)</td></tr>
-          <tr><td>unique</td><td class="meaning">فريد - مميز</td><td>different / rare / special</td><td>common / ordinary / normal (شائع / عادي)</td></tr>
-          <tr><td>simple</td><td class="meaning">بسيط - سهل</td><td>easy / plain</td><td>complicated / difficult (معقد)</td></tr>
-          <tr><td>real</td><td class="meaning">حقيقي / واقعي</td><td>true</td><td>fake (مزيف)</td></tr>
-          <tr><td>confident</td><td class="meaning">واثق بنفسه / متأكد</td><td>sure / certain</td><td>unsure / uncertain (غير واثق)</td></tr>
-          <tr><td>value</td><td class="meaning">يقيم / يقدر</td><td>appreciate / evaluate</td><td>undervalue / disregard (يستخف بـ)</td></tr>
-          <tr><td>stressed</td><td class="meaning">مضغوط</td><td>worried / anxious</td><td>quiet / relaxed (هادئ / مسترخٍ)</td></tr>
-          <tr><td>negative</td><td class="meaning">سلبي</td><td>bad / weak</td><td>positive (إيجابي)</td></tr>
-          <tr><td>support</td><td class="meaning">يساند - يساعد</td><td>help / encourage</td><td>prevent / oppose (يمنع / يعارض)</td></tr>
+      <div class="table-wrap">
+        <table class="mobile-card" aria-label="Synonyms and Antonyms">
+          <caption>الكلمة — المعنى — المرادف — المضاد</caption>
+          <thead>
+            <tr><th>الكلمة</th><th>المعنى</th><th>Synonym — المرادف</th><th>Antonym — المضاد</th></tr>
+          </thead>
+          <tbody>
+<tr><td data-label="الكلمة">strength</td><td data-label="المعنى" class="meaning">قوة - نقطة قوة</td><td data-label="مرادف">power</td><td data-label="مضاد">weakness (ضعف)</td></tr>
+<tr><td data-label="الكلمة">unique</td><td data-label="المعنى" class="meaning">فريد - مميز</td><td data-label="مرادف">different / rare / special</td><td data-label="مضاد">common / ordinary / normal</td></tr>
+<tr><td data-label="الكلمة">simple</td><td data-label="المعنى" class="meaning">بسيط - سهل</td><td data-label="مرادف">easy / plain</td><td data-label="مضاد">complicated / difficult</td></tr>
+<tr><td data-label="الكلمة">real</td><td data-label="المعنى" class="meaning">حقيقي / واقعي</td><td data-label="مرادف">true</td><td data-label="مضاد">fake</td></tr>
+<tr><td data-label="الكلمة">confident</td><td data-label="المعنى" class="meaning">واثق بنفسه / متأكد</td><td data-label="مرادف">sure / certain</td><td data-label="مضاد">unsure / uncertain</td></tr>
+<tr><td data-label="الكلمة">value</td><td data-label="المعنى" class="meaning">يقيم / يقدّر</td><td data-label="مرادف">appreciate / evaluate</td><td data-label="مضاد">undervalue / disregard</td></tr>
+<tr><td data-label="الكلمة">stressed</td><td data-label="المعنى" class="meaning">مضغوط / متوتر</td><td data-label="مرادف">worried / anxious</td><td data-label="مضاد">quiet / relaxed</td></tr>
+<tr><td data-label="الكلمة">negative</td><td data-label="المعنى" class="meaning">سلبي</td><td data-label="مرادف">bad / weak</td><td data-label="مضاد">positive</td></tr>
+<tr><td data-label="الكلمة">support</td><td data-label="المعنى" class="meaning">يساند - يساعد</td><td data-label="مرادف">help / encourage</td><td data-label="مضاد">prevent / oppose</td></tr>
 
-          <tr><td>ideal</td><td class="meaning">كامل / مثالي</td><td>perfect</td><td>imperfect (غير كامل / ذو عيب)</td></tr>
-          <tr><td>quiet</td><td class="meaning">هادىء</td><td>peaceful / calm</td><td>noisy / loud (مزعج / صاخب)</td></tr>
-          <tr><td>outgoing</td><td class="meaning">اجتماعي</td><td>sociable</td><td>shy (خجول)</td></tr>
-          <tr><td>comfort</td><td class="meaning">راحة / سكينة</td><td>well-being / happiness</td><td>discomfort (عدم الراحة)</td></tr>
-          <tr><td>curious</td><td class="meaning">محب للاستطلاع / فضولي</td><td>inquisitive / interested</td><td>uninterested (غير مهتم)</td></tr>
-          <tr><td>colorful</td><td class="meaning">ملون / زاهي</td><td>bright</td><td>plain / سادة</td></tr>
-          <tr><td>sure</td><td class="meaning">متأكد</td><td>certain</td><td>unsure (غير متأكد)</td></tr>
-          <tr><td>adjust</td><td class="meaning">يتكيف / يعدّل</td><td>adapt</td><td>disturb / يضطرب</td></tr>
+<tr><td data-label="الكلمة">ideal</td><td data-label="المعنى" class="meaning">كامل / مثالي</td><td data-label="مرادف">perfect</td><td data-label="مضاد">imperfect</td></tr>
+<tr><td data-label="الكلمة">quiet</td><td data-label="المعنى" class="meaning">هادئ</td><td data-label="مرادف">peaceful / calm</td><td data-label="مضاد">noisy / loud</td></tr>
+<tr><td data-label="الكلمة">outgoing</td><td data-label="المعنى" class="meaning">اجتماعي</td><td data-label="مرادف">sociable</td><td data-label="مضاد">shy</td></tr>
+<tr><td data-label="الكلمة">comfort</td><td data-label="المعنى" class="meaning">راحة / سكينة</td><td data-label="مرادف">well-being / happiness</td><td data-label="مضاد">discomfort</td></tr>
+<tr><td data-label="الكلمة">curious</td><td data-label="المعنى" class="meaning">فضولي</td><td data-label="مرادف">inquisitive / interested</td><td data-label="مضاد">uninterested</td></tr>
+<tr><td data-label="الكلمة">colorful</td><td data-label="المعنى" class="meaning">ملون / زاهي</td><td data-label="مرادف">bright</td><td data-label="مضاد">plain</td></tr>
+<tr><td data-label="الكلمة">sure</td><td data-label="المعنى" class="meaning">متأكد</td><td data-label="مرادف">certain</td><td data-label="مضاد">unsure</td></tr>
+<tr><td data-label="الكلمة">adjust</td><td data-label="المعنى" class="meaning">يتكيّف / يعدّل</td><td data-label="مرادف">adapt</td><td data-label="مضاد">disturb</td></tr>
 
-          <tr><td>personal</td><td class="meaning">شخصي</td><td>private</td><td>public (عام)</td></tr>
-          <tr><td>accept</td><td class="meaning">يقبل</td><td>agree / accept</td><td>reject / refuse / يرفض</td></tr>
-          <tr><td>improve</td><td class="meaning">يحسن</td><td>develop</td><td>damage / harm (يُضر)</td></tr>
-          <tr><td>supportive</td><td class="meaning">داعم / مساند</td><td>helpful / encouraging</td><td>unsupportive / unhelpful (غير داعم)</td></tr>
-          <tr><td>self-respect</td><td class="meaning">احترام الذات</td><td>self-confidence</td><td>self-distrust / shyness (عدم الثقة بالنفس)</td></tr>
-          <tr><td>trust</td><td class="meaning">يثق</td><td>believe</td><td>distrust (يفقد الثقة)</td></tr>
-          <tr><td>absent</td><td class="meaning">غائب</td><td>missing / removed</td><td>present / attendant (حاضر)</td></tr>
-          <tr><td>evidence</td><td class="meaning">دليل / إثبات</td><td>proof</td><td>disproof (إنكار)</td></tr>
+<tr><td data-label="الكلمة">personal</td><td data-label="المعنى" class="meaning">شخصي</td><td data-label="مرادف">private</td><td data-label="مضاد">public</td></tr>
+<tr><td data-label="الكلمة">accept</td><td data-label="المعنى" class="meaning">يقبل</td><td data-label="مرادف">agree / accept</td><td data-label="مضاد">reject / refuse</td></tr>
+<tr><td data-label="الكلمة">improve</td><td data-label="المعنى" class="meaning">يحسّن</td><td data-label="مرادف">develop</td><td data-label="مضاد">damage / harm</td></tr>
+<tr><td data-label="الكلمة">supportive</td><td data-label="المعنى" class="meaning">داعم / مساند</td><td data-label="مرادف">helpful / encouraging</td><td data-label="مضاد">unsupportive / unhelpful</td></tr>
+<tr><td data-label="الكلمة">self-respect</td><td data-label="المعنى" class="meaning">احترام الذات</td><td data-label="مرادف">self-confidence</td><td data-label="مضاد">self-distrust / shyness</td></tr>
+<tr><td data-label="الكلمة">trust</td><td data-label="المعنى" class="meaning">يثق</td><td data-label="مرادف">believe</td><td data-label="مضاد">distrust</td></tr>
+<tr><td data-label="الكلمة">absent</td><td data-label="المعنى" class="meaning">غائب</td><td data-label="مرادف">missing / removed</td><td data-label="مضاد">present / attendant</td></tr>
+<tr><td data-label="الكلمة">evidence</td><td data-label="المعنى" class="meaning">دليل / إثبات</td><td data-label="مرادف">proof</td><td data-label="مضاد">disproof</td></tr>
 
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </section>
-
-  </main>
-
-  
+  </div>
 </body>
 </html>
